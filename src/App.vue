@@ -3,20 +3,18 @@
     <!-- <v-app-bar app absolute elevation="2"></v-app-bar> -->
 
     <v-card flat tile style="z-index: 999">
-      <v-toolbar>
+      <v-toolbar :dark="modeDark.value">
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
         <v-toolbar-title>Title</v-toolbar-title>
 
         <v-spacer></v-spacer>
-
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
+        
+        <v-switch
+          v-model="modeDark.value"
+          :label="modeDark.label"
+          class="mt-6 mr-5"
+        ></v-switch>
 
         <v-btn icon>
           <v-icon>mdi-dots-vertical</v-icon>
@@ -24,9 +22,9 @@
       </v-toolbar>
     </v-card>
     
-    <v-card height="100%" class="mt-0">
+    <v-card height="100%" class="mt-0" :dark="modeDark.value">
       <div style="height: 100%; display: flex; width: 100%;">
-        <v-navigation-drawer permanent elevation="1">
+        <v-navigation-drawer  permanent elevation="1" height="100%">
           <template v-slot:prepend>
             <v-list-item two-line>
               <v-list-item-avatar>
@@ -42,7 +40,7 @@
 
           <v-divider></v-divider>
 
-          <v-card class="mx-auto" max-width="300" heigth="100%" elevation="0" tile>
+          <v-card class="mx-auto" max-width="300" heigth="100%" style="height: 100%;" elevation="0" tile>
             <v-list dense>
               <v-subheader>REPORTS</v-subheader>
 
@@ -82,7 +80,7 @@
           </div>
           <v-divider class="my-5"></v-divider>
 
-          <v-card class="mt-2 py-3 px-3" elevation="2" min-height="500">d</v-card>
+          <v-card class="mt-2 py-3 px-3" :color="modeDark.value ? '#333' : ''" elevation="2" min-height="500">d</v-card>
 
           <p class="caption text-center text--disabled mt-5" x-small>Todos os direitos reservados à MGE Tech - Siscomge - 2021</p>
         </div>
@@ -97,6 +95,10 @@ export default {
   name: 'App',
 
   data: () => ({
+    modeDark: {
+      value: false,
+      label: 'Modo Escuro'
+    },
     selectedItem: 0,
       items: [
         { text: 'Real-Time', icon: 'mdi-clock' },
@@ -146,10 +148,15 @@ export default {
         },
       ],
   }),
+  watch: {
+    ['modeDark.value']() {
+      this.modeDark.value ? this.modeDark.label = 'Modo Claro' : this.modeDark.label = 'Modo Escuro';
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style>
 .main {
   height: 100%;
   width: 95%;
@@ -164,6 +171,11 @@ export default {
 
 .content-main {
   width: 100%;
-  background-color: red
+}
+
+.v-navigation-drawer__content {
+    height: 100%;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
 }
 </style>
