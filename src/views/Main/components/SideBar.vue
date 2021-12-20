@@ -21,14 +21,14 @@
 
         <v-list-group v-for="item in items2"  class="mt-1 pt-0 body-2" :key="item.title" v-model="item.active" :prepend-icon="item.action">
           <template v-slot:activator>
-            <v-list-item-content class="pt-1" dense>
-              <v-list-item-action v-text="item.title"></v-list-item-action>
+            <v-list-item-content class="pt-1">
+              <v-list-item-action v-text="item.title" />
             </v-list-item-content>
           </template>
 
-          <v-list-item v-for="child in item.items" class="ml-14" :key="child.title">
+          <v-list-item link v-for="child in item.items" :class="['pl-14', {'item-active': child.active}]" :key="child.title">
             <v-list-item-content>
-              <v-list-item-action v-text="child.title"></v-list-item-action>
+              <v-list-item-action v-text="child.title" class="pt-0" />
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -48,21 +48,21 @@ export default {
         {
           active: false,
           action: 'mdi-ticket',
-          items: [{ title: 'List Item' }],
+          items: [{ title: 'List Item', active: false }],
           title: 'Attractions',
         },
         {
           action: 'mdi-silverware-fork-knife',
           items: [
-            { title: 'Breakfast & brunch' },
-            { title: 'New American' },
-            { title: 'Sushi' },
+            { title: 'Breakfast & brunch', active: true },
+            { title: 'New American', active: false },
+            { title: 'Sushi', active: false },
           ],
           title: 'Dining',
         },
         {
           action: 'mdi-school',
-          items: [{ title: 'List Item' }],
+          items: [{ title: 'List Item', active: false }],
           title: 'Education',
         },
       ],
@@ -72,5 +72,9 @@ export default {
 </script>
 
 <style>
+
+.item-active {
+  background: #ebebeb !important;
+}
 
 </style>
