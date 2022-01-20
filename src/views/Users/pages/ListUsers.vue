@@ -2,7 +2,7 @@
   <div>
     <PageHeader :schema="schema" />
     <PageContent>
-      <DynamicListPageNew :schema="schema" />
+      <DynamicListPage :schema="schema" />
     </PageContent>
   </div>
 </template>
@@ -11,11 +11,11 @@
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import UserSchema from '../schemas/UserSchema';
-import DynamicListPageNew from '@/components/DynamicListPageNew';
+import DynamicListPage from '@/components/DynamicListPage';
 
 export default {
   name: 'ListUser',
-  components: { PageHeader, PageContent, DynamicListPageNew },
+  components: { PageHeader, PageContent, DynamicListPage },
   props: {},
   data() {
     return {
