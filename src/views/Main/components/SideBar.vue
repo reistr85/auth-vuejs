@@ -13,22 +13,18 @@
       </v-list-item>
     </template>
 
-    <v-divider></v-divider>
-
     <v-card class="mx-auto" max-width="300" heigth="100%" style="height: 100%;" elevation="0" tile>
       <v-list dense>
-        <v-subheader>REPORTS</v-subheader>
-
-        <v-list-group v-for="item in items2"  class="mt-1 pt-0 body-2" :key="item.title" v-model="item.active" :prepend-icon="item.action">
+        <v-list-group v-model="item.active" v-for="item in items" :key="item.title" :prepend-icon="item.action" no-action dense class="mt-2">
           <template v-slot:activator>
-            <v-list-item-content class="pt-1">
-              <v-list-item-action v-text="item.title" />
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
             </v-list-item-content>
           </template>
 
-          <v-list-item link v-for="child in item.items" :class="['pl-14', {'item-active': child.active}]" :key="child.title">
+          <v-list-item v-for="child in item.items" :key="child.title" link @click="menuNavigator(child)">
             <v-list-item-content>
-              <v-list-item-action v-text="child.title" class="pt-0" />
+              <v-list-item-title v-text="child.title"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -43,29 +39,25 @@ export default {
   name: 'SideBar',
   data() {
     return {
-      selectedItem: 0,
-      items2: [
+      items: [
+        {
+          active: true,
+          action: 'mdi-ticket',
+          items: [{ title: 'Dashboard', route: 'home' }],
+          title: 'Início',
+        },
         {
           active: false,
           action: 'mdi-ticket',
-          items: [{ title: 'List Item', active: false }],
-          title: 'Attractions',
-        },
-        {
-          action: 'mdi-silverware-fork-knife',
-          items: [
-            { title: 'Breakfast & brunch', active: true },
-            { title: 'New American', active: false },
-            { title: 'Sushi', active: false },
-          ],
-          title: 'Dining',
-        },
-        {
-          action: 'mdi-school',
-          items: [{ title: 'List Item', active: false }],
-          title: 'Education',
+          items: [{ title: 'Listar Usuários', route: 'users' }],
+          title: 'Usuários',
         },
       ],
+    }
+  },
+  methods: {
+    menuNavigator(item) {
+      this.$router.push({ name: item.route })
     }
   }
 }
@@ -73,6 +65,9 @@ export default {
 
 <style>
 
+.v-list-item--active {
+  border-left: 3px solid red;
+}
 .item-active {
   background: #ebebeb !important;
 }
