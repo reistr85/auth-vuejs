@@ -7,9 +7,14 @@
       </div>
 
       <div>
-        <v-btn color="primary" class="white--text" v-if="schema.createBtn" :to="{ name: schema.routes.create.name }">
+        <v-btn color="primary" class="white--text" v-if="schema.createBtn && typePage === 'list'" :to="{ name: schema.routes.create.name }">
           <v-icon left dark>{{ icons.plusOutline }}</v-icon>
           {{  schema.createBtn }}
+        </v-btn>
+
+        <v-btn color="primary" class="white--text" v-if="typePage === 'create'" :to="{ name: schema.routes.list.name }">
+          <v-icon left dark>{{ icons.arrowLeft }}</v-icon>
+          Voltar
         </v-btn>
       </div>
     </div>
@@ -18,7 +23,7 @@
 </template>
 
 <script>
-import { plusOutline } from '@/utils/icons';
+import { plusOutline, arrowLeft } from '@/utils/icons';
 
 export default {
   name: 'PageHeader',
@@ -31,8 +36,14 @@ export default {
   data() {
     return {
       icons: {
-        plusOutline: plusOutline
+        plusOutline: plusOutline,
+        arrowLeft: arrowLeft,
       }
+    }
+  },
+  computed: {
+    typePage() {
+      return this.$route.name.split('-').length === 2 ? 'create' : 'list';
     }
   }
 }

@@ -1,4 +1,5 @@
 const address = 'mdi-map-marker-outline';
+const arrowLeft = 'mdi-arrow-left-bold';
 const cellPhone = 'mdi-cellphone';
 const check = 'mdi-check-bold';
 const close = 'mdi-close';
@@ -11,6 +12,7 @@ const dotsVertical = 'mdi-dots-vertical';
 const download = 'mdi-download-box-outline';
 const edit = 'mdi-pencil';
 const email = 'mdi-email-outline';
+const home = 'mdi-home-alert-outline'
 const lockOutline = 'mdi-lock-outline'; 
 const money = 'mdi-currency-usd'; 
 const note = 'mdi-file-send-outline'; 
@@ -22,6 +24,7 @@ const plusOutline = 'mdi-plus-circle-outline';
 const printer = 'mdi-printer';
 const refresh = 'mdi-refresh'; 
 const security = 'mdi-shield-lock';
+const search = 'mdi-magnify';
 const origin = 'mdi-share-all';
 const users = 'mdi-account-settings';
 const view = 'mdi-eye';
@@ -29,6 +32,7 @@ const web = 'mdi-web';
 
 export {
   address,
+  arrowLeft,
   databaseSearch,
   dataRegisters,
   destroy,
@@ -41,6 +45,7 @@ export {
   copy,
   edit,
   email,
+  home,
   phone,
   plus,
   plusOutline,
@@ -52,6 +57,7 @@ export {
   printer,
   refresh,
   security,
+  search,
   origin,
   users,
   view,

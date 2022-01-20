@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { home, users } from '@/utils/icons';
+
 export default {
   name: 'SideBar',
   data() {
@@ -42,13 +44,13 @@ export default {
       items: [
         {
           active: true,
-          action: 'mdi-ticket',
+          action: home,
           items: [{ title: 'Dashboard', route: 'home' }],
           title: 'Início',
         },
         {
           active: false,
-          action: 'mdi-ticket',
+          action: users,
           items: [{ title: 'Listar Usuários', route: 'users' }],
           title: 'Usuários',
         },
