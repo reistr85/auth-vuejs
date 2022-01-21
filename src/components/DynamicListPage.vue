@@ -65,7 +65,10 @@ export default {
     schema: {
       type: Object,
       required: true
-    }
+    },
+    service: {
+      type: Object,
+    },
   },
   data() {
     return {
@@ -80,25 +83,24 @@ export default {
       loading: false,
       loadingDestroy: false,
       search: '',
-      headers: [
-        {}
-      ],
-      localItems: {
-        data: [
-          {
-            id: 1,
-            name: 'Renan Reis',
-            email: 'reistr85@gmail.com',
-            type_formatted: 'Administrador'
-          }
-        ]
-      },
+      headers: [],
+      localItems: {},
       options: {},
       totalLocalItems: 10,
+      noGetDynamicItems: false,
     }
   },
   mounted() {
     this.setHeaders();
+    this.getAll();
+  },
+  watch: {
+    options: {
+      handler () {
+        this.getAll();
+      },
+      deep: true,
+    },
   },
   methods: {
     setHeaders() {
@@ -121,12 +123,49 @@ export default {
         this.headers.push({ text: 'Ações', value: 'actions', sortable: false, align: 'end'});
       }
     },
+    getAll() {
+      this.loading = true;
+
+      const params = {
+        page: this.options.page,
+        totalItemsPerPage: this.options.itemsPerPage,
+        customSearch: this.search,
+      }
+
+      this.service.index(params).then((res) => {
+        this.localItems = res.data;
+        this.totalLocalItems = res.data.total;
+        this.loading = false;
+        
+        if(this.schema.business != undefined)
+          this.schema.business.beforeList(this.localItems, this.schema);
+      }).catch((err) => {
+        console.error(`DynamicListPage GetDataFromApi error: ${err}`)
+        this.loading = false;
+        this.$noty.error('Erro ao receber os itens.');
+      });
+    },
     openDialogDestroy(item) {
       this.selected.push(item);
       this.dialog = true;
     },
     destroy() {
-      this.loadingDestroy = true;
+      if(!this.noGetDynamicItems){
+        const { id } = this.selected[0].item;
+
+        this.service.delete(id).then(() => {
+          // this.$noty.success('Registro excluído com sucesso!');
+          this.loadingDestroy = true;
+          this.getAll();
+        }).catch((err) => {
+          this.$noty.error(err);
+        });
+
+        this.clearProps();
+      }else{
+        this.loadingDestroy = true;
+        this.clearProps();
+      }
       this.clearProps();
     },
     clearProps() {

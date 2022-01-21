@@ -2,7 +2,7 @@
   <div>
     <PageHeader :schema="schema" />
     <PageContent>
-      <DynamicListPage :schema="schema" />
+      <DynamicListPage :schema="schema" :service="service" />
     </PageContent>
   </div>
 </template>
@@ -12,6 +12,7 @@ import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import UserSchema from '../schemas/UserSchema';
 import DynamicListPage from '@/components/DynamicListPage';
+import UsersService from '../services/UsersService';
 
 export default {
   name: 'ListUser',
@@ -20,6 +21,7 @@ export default {
   data() {
     return {
       schema: UserSchema,
+      service: UsersService,
     }
   },
   methods: {}

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import axios from '../service';
+import axios from './';
 import { messageErrors } from '@/utils';
 
 const DynamicService = (endpoint, options = {}) => ({
@@ -119,21 +119,7 @@ const DynamicService = (endpoint, options = {}) => ({
     let response = [];
 
     let last_search = { domain: params.domain, search: params.search };
-    
-    // if(params.search != "") {
-    //   localStorage.setItem(`${process.env.VUE_APP_NAME}.last_search_${params.domain}`, 
-    //     JSON.stringify({ domain: params.domain, search: params.search }));
-    //   last_search = JSON.parse(localStorage.getItem(`${process.env.VUE_APP_NAME}.last_search_${params.domain}`));
-    // }else{
-    //   const local_last_search = JSON.parse(localStorage.getItem(`${process.env.VUE_APP_NAME}.last_search_${params.domain}`));
-      
-    //   if(local_last_search) {
-    //     if(local_last_search?.domain && local_last_search?.search) {
-    //       last_search = JSON.parse(localStorage.getItem(`${process.env.VUE_APP_NAME}.last_search_${params.domain}`));
-    //     }
-    //   }
-    // }
-    
+
     let payload = {
       domain: last_search.domain,
       search: last_search.search,

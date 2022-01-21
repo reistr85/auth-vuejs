@@ -36,7 +36,7 @@ export default {
     },
     fields: [
       {
-        title: 'Dados do Produto',
+        title: 'Dados do Usuário',
         items: [
           {
             type: 'text',
