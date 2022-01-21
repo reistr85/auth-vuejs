@@ -1,5 +1,6 @@
 const address = 'mdi-map-marker-outline';
 const arrowLeft = 'mdi-arrow-left-bold';
+const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
 const check = 'mdi-check-bold';
 const close = 'mdi-close';
@@ -12,6 +13,7 @@ const dotsVertical = 'mdi-dots-vertical';
 const download = 'mdi-download-box-outline';
 const edit = 'mdi-pencil';
 const email = 'mdi-email-outline';
+const filter = 'mdi-filter-menu-outline';
 const home = 'mdi-home-alert-outline'
 const lockOutline = 'mdi-lock-outline'; 
 const money = 'mdi-currency-usd'; 
@@ -33,18 +35,20 @@ const web = 'mdi-web';
 export {
   address,
   arrowLeft,
+  cancel,
+  cellPhone,
+  check,
+  close,
+  copy,
   databaseSearch,
   dataRegisters,
   destroy,
   domain,
   dotsVertical,
   download,
-  cellPhone,
-  check,
-  close,
-  copy,
   edit,
   email,
+  filter,
   home,
   phone,
   plus,

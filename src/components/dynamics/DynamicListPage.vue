@@ -1,7 +1,13 @@
 <template>
   <div>
-    <div class="mb-5">
-      <TextField v-model="search" label="Pesquisar" :append-icon="icons.search" />
+    <div class="mb-5 d-flex justify-space-between">
+      <div class="d-flex flex-wrap  justify-start">
+        <Chip label="Nome: Teste" dense />
+        <Chip label="Email: test@gmail.com" dense />
+      </div>
+      <div>
+        <SearchListPage :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
+      </div>
     </div>
 
     <v-data-table
@@ -54,13 +60,14 @@
 </template>
 
 <script>
-import { search, view, destroy, dotsVertical } from '@/utils/icons';
-import TextField from '@/components/vuetify/TextField';
+import { search, view, destroy, dotsVertical, filter, cancel } from '@/utils/icons';
 import DialogConfirmation from '@/components/DialogConfirmation';
+import SearchListPage from './components/SearchListPage';
+import Chip from '@/components/vuetify/Chip';
 
 export default {
   name: 'DynamicListPage',
-  components: { TextField, DialogConfirmation },
+  components: { DialogConfirmation, SearchListPage,Chip },
   props: {
     schema: {
       type: Object,
@@ -76,7 +83,9 @@ export default {
         search: search,
         view: view,
         destroy: destroy,
-        dotsVertical: dotsVertical
+        dotsVertical: dotsVertical,
+        filter: filter,
+        cancel: cancel,
       },
       selected: [],
       dialog: false,
@@ -144,6 +153,9 @@ export default {
         this.loading = false;
         this.$noty.error('Erro ao receber os itens.');
       });
+    },
+    searchItems(search) {
+      console.log(search)
     },
     openDialogDestroy(item) {
       this.selected.push(item);

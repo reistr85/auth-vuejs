@@ -11,7 +11,7 @@
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import UserSchema from '../schemas/UserSchema';
-import DynamicListPage from '@/components/DynamicListPage';
+import DynamicListPage from '@/components/dynamics/DynamicListPage';
 import UsersService from '../services/UsersService';
 
 export default {

@@ -34,6 +34,23 @@ export default {
         ]
       },
     },
+    filters: {
+      has: true,
+      items: [
+        {
+          type: 'text',
+          label: 'Nome',
+          field: 'name',
+          md: 6,
+        },
+        {
+          type: 'text',
+          label: 'E-mail',
+          field: 'email',
+          md: 6,
+        }
+      ]
+    },
     fields: [
       {
         title: 'Dados do Usuário',
