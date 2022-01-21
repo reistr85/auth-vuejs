@@ -1,4 +1,6 @@
-import { search } from '@/utils/icons';
+import { search, text, calendar } from '@/utils/icons';
+import { required } from '@/utils/rules';
+import { typeUser } from '@/utils/options';
 
 export default {
     domain: 'users',
@@ -41,24 +43,28 @@ export default {
           type: 'text',
           label: 'Nome',
           field: 'name',
+          icon: text,
           md: 6,
         },
         {
           type: 'text',
           label: 'E-mail',
           field: 'email',
+          icon: text,
           md: 6,
         },
         {
           type: 'select',
           label: 'Tipo Usuário',
           field: 'type',
+          icon: text,
           md: 6,
         },
         {
           type: 'dataPicker',
           label: 'Data de Cadastro',
           field: 'created_at',
+          icon: calendar,
           md: 6,
         }
       ]
@@ -73,9 +79,12 @@ export default {
             formattedName: 'name',
             label: 'Nome',
             align: '',
-            md: '5',
-            required: true,
+            md: '4',
+            rules: [required],
             list: true,
+            readonly: false,
+            disabled: false,
+            counter: 100,
           },
           {
             type: 'text',
@@ -83,19 +92,38 @@ export default {
             formattedName: 'email',
             label: 'E-mail',
             align: '',
-            md: '5',
-            required: true,
+            md: '4',
+            rules: [required],
             list: true,
+            readonly: false,
+            disabled: false,
           },
           {
-            type: 'text',
+            type: 'select',
             name: 'type',
             formattedName: 'type_formatted',
             label: 'Tipo Usuário',
             align: '',
-            md: '5',
-            required: true,
+            md: '4',
+            rules: [required],
             list: true,
+            readonly: false,
+            disabled: false,
+            items: typeUser,
+            itemText: 'text',
+            itemValue: 'value'
+          },
+          {
+            type: 'password',
+            name: 'password',
+            formattedName: 'password',
+            label: 'Senha',
+            align: '',
+            md: '4',
+            rules: [required],
+            list: true,
+            readonly: false,
+            disabled: false,
           },
         ],
       }

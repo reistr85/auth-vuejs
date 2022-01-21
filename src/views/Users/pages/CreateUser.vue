@@ -2,7 +2,7 @@
   <div>
     <PageHeader :schema="schema" />
     <PageContent>
-      Create Users
+      <DynamicFormPage :schema="schema" />
     </PageContent>
   </div>
 </template>
@@ -11,10 +11,11 @@
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import UserSchema from '../schemas/UserSchema';
+import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 
 export default {
   name: 'CreateUser',
-  components: { PageHeader, PageContent },
+  components: { PageHeader, PageContent, DynamicFormPage },
   props: {},
   data() {
     return {
