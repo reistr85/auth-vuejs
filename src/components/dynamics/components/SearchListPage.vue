@@ -1,8 +1,8 @@
 <template>
-  <v-menu v-model="menu" :nudge-width="600" bottom left offset-y :close-on-content-click="false">
+  <v-menu v-model="menu" :max-width="650" bottom left offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn icon v-bind="attrs" v-on="on">
-        <v-icon>{{ icons.filter }}</v-icon>
+      <v-btn text v-bind="attrs" v-on="on">
+        FILTROS <v-icon class="ml-3">{{ icons.filter }}</v-icon>
       </v-btn>
     </template>
 
@@ -13,7 +13,7 @@
       <v-card-text>
         <v-row>
           <v-col :md="item.md" v-for="(item, index) in items" :key="index">
-            <TextField v-model="search" :label="item.label" />
+            <component :is="getComponent(item)" v-model="search" v-bind="getPropsComponent(item)" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -33,12 +33,20 @@
 </template>
 
 <script>
-import { search, filter } from '@/utils/icons';
+import { search, filter, text } from '@/utils/icons';
 import TextField from '@/components/vuetify/TextField';
+import Select from '@/components/vuetify/Select';
+import DataPicker from '@/components/vuetify/DataPicker';
+
+const TYPES_COMPONENT = Object.freeze({
+  text: TextField,
+  select: Select,
+  dataPicker: DataPicker,
+})
 
 export default {
   name: 'SearchListPage',
-  components: { TextField },
+  components: {},
   props: {
     items: {
       type: Array,
@@ -50,12 +58,21 @@ export default {
       icons: {
         search: search,
         filter: filter,
+        text: text,
       },
       menu: false,
       search: '',
+      textField: TextField,
     }
   },
   methods: {
+    getComponent(item) {
+      item
+      return TYPES_COMPONENT[item.type];
+    },
+    getPropsComponent(item) {
+      return { icon: this.icons.text, label: item.label, items: [] }
+    },
     clearFilters() {
       this.search = '';
       this.menu = false;

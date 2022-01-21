@@ -1,7 +1,7 @@
 import DynamicService from '@/service/DynamicService';
 
-const formatResponse = (user) => {
-  user
+const formatResponse = (item) => {
+  item.type_formatted = 'Administrador';
 }
 
 const UserService = DynamicService('users', {

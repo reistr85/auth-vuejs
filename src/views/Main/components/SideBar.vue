@@ -24,7 +24,7 @@
 
           <v-list-item v-for="child in item.items" :key="child.title" link @click="menuNavigator(child)">
             <v-list-item-content>
-              <v-list-item-title v-text="child.title"></v-list-item-title>
+              <v-list-item-title color="primary" v-text="child.title" class="childActive"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -43,7 +43,7 @@ export default {
     return {
       items: [
         {
-          active: true,
+          active: false,
           action: home,
           items: [{ title: 'Dashboard', route: 'home' }],
           title: 'Início',
@@ -51,7 +51,7 @@ export default {
         {
           active: false,
           action: users,
-          items: [{ title: 'Listar Usuários', route: 'users' }],
+          items: [{ title: 'Listar Usuários', route: 'users', active: false }],
           title: 'Usuários',
         },
       ],
@@ -59,6 +59,7 @@ export default {
   },
   methods: {
     menuNavigator(item) {
+      item.active = true;
       this.$router.push({ name: item.route })
     }
   }
@@ -69,9 +70,13 @@ export default {
 
 .v-list-item--active {
   border-left: 3px solid red;
+  background-color: #ebebeb;
 }
 .item-active {
   background: #ebebeb !important;
+}
+.childActive {
+  color: red
 }
 
 </style>

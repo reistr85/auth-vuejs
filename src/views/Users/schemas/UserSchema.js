@@ -48,6 +48,18 @@ export default {
           label: 'E-mail',
           field: 'email',
           md: 6,
+        },
+        {
+          type: 'select',
+          label: 'Tipo Usuário',
+          field: 'type',
+          md: 6,
+        },
+        {
+          type: 'dataPicker',
+          label: 'Data de Cadastro',
+          field: 'created_at',
+          md: 6,
         }
       ]
     },

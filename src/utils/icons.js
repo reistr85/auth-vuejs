@@ -28,6 +28,7 @@ const refresh = 'mdi-refresh';
 const security = 'mdi-shield-lock';
 const search = 'mdi-magnify';
 const origin = 'mdi-share-all';
+const text = 'mdi-format-text-rotation-none';
 const users = 'mdi-account-settings';
 const view = 'mdi-eye';
 const web = 'mdi-web';
@@ -63,6 +64,7 @@ export {
   security,
   search,
   origin,
+  text,
   users,
   view,
   web,

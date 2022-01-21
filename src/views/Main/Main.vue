@@ -25,14 +25,25 @@ export default {
     ContentMain
   },
   data: () => ({
+    appName: process.env.VUE_APP_NAME,
     modeDark: {
       value: false,
       label: 'Modo Escuro'
     },
   }),
+  mounted() {
+    if (!localStorage.getItem(`${this.appName}.themeMode`)) localStorage.setItem(`${this.appName}.themeMode`, 'light')
+    localStorage.getItem(`${this.appName}.themeMode`) === 'dark' ? this.modeDark.value = true : this.modeDark.value = false;
+  },
   watch: {
     ['modeDark.value']() {
-      this.modeDark.value ? this.modeDark.label = 'Modo Claro' : this.modeDark.label = 'Modo Escuro';
+      if (this.modeDark.value) {
+        this.modeDark.label = 'Modo Claro';
+        localStorage.setItem(`${this.appName}.themeMode`, 'dark')
+      }else{
+        this.modeDark.label = 'Modo Escuro';
+        localStorage.setItem(`${this.appName}.themeMode`, 'light')
+      }
     }
   }
 };
