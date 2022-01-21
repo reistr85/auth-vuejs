@@ -2,7 +2,7 @@
   <div>
     <PageHeader :schema="schema" />
     <PageContent>
-      <DynamicFormPage :schema="schema" />
+      <DynamicFormPage :schema="schema" :service="service" />
     </PageContent>
   </div>
 </template>
@@ -11,6 +11,7 @@
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import UserSchema from '../schemas/UserSchema';
+import UsersService from '../services/UsersService';
 import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 
 export default {
@@ -20,6 +21,7 @@ export default {
   data() {
     return {
       schema: UserSchema,
+      service: UsersService,
     }
   },
   methods: {}

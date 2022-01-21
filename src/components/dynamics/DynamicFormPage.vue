@@ -7,7 +7,7 @@
         </v-expansion-panel-header>
 
         <v-expansion-panel-content>
-          <v-form ref="refsForm">
+          <v-form v-model="valid" ref='form' lazy-validation>
             <v-row>
               <v-col :md="item.md" v-for="(item, iItem) in group.items" :key="iItem">
                 <component
@@ -22,7 +22,7 @@
     </v-expansion-panels>
 
     <div class="mt-5">
-      <Button label="Salvar" color="primary" :icon="icons.save" @click="save" />
+      <Button label="Salvar" color="primary" :icon="icons.save" :loading="loadingSave" @click="save" />
     </div>
   </div>
 </template>
@@ -53,9 +53,15 @@ export default {
         save: save,
       },
       panel: [0],
+      valid: true,
       form: {},
       typesComponents: typesComponents,
       loadingSave: false,
+    }
+  },
+  computed: {
+    typePage() {
+      return this.$route.name.split('-').length === 2 ? 'create' : 'list';
     }
   },
   methods: {
@@ -80,9 +86,6 @@ export default {
       _.set(this.form, name, value);
     },
     save() {
-      if(!this.$refs.refsForm.validate())
-        return;
-
       this.loadingSave = true;
       const { id } = this.$route.params;
 
@@ -91,25 +94,25 @@ export default {
           this.schema.business.beforeSave(this.localItem)
       }
 
-      this.typePage === 'create' ? this.create(this.localItem) : this.update(id, this.localItem);
+      this.typePage === 'create' ? this.create() : this.update(id);
     },
-    create(item){
-      this.service.create(item).then(() => {
-        this.$noty.success('Registro salvo com sucesso!');
+    create(){
+      this.service.create(this.form).then(() => {
+        // this.$noty.success('Registro salvo com sucesso!');
         this.$router.push({name: this.schema.routes.list.name});
         this.loadingSave = false;
-      }).catch((err) => {
+      }).catch(() => {
         this.loadingSave = false;
-        this.$noty.error(err);
+        // this.$noty.error(err);
       });
     },
     update(id, item) {
       this.service.update(id, item).then(() => {
-        this.$noty.success('Registro alterado com sucesso!');
+        // this.$noty.success('Registro alterado com sucesso!');
         this.$router.push({name: this.schema.routes.list.name});
         this.loadingSave = false;
-      }).catch((err) => {
-        this.$noty.error(err);
+      }).catch(() => {
+        // this.$noty.error(err);
         this.loadingSave = false;
       });
     },

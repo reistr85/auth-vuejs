@@ -4,8 +4,8 @@ const formatResponse = (item) => {
   item.type_formatted = 'Administrador';
 }
 
-const UserService = DynamicService('users', {
+const UsersService = DynamicService('users', {
   formatResponse,
 });
 
-export default UserService;
+export default UsersService;
