@@ -1,7 +1,8 @@
 <template>
   <v-btn
     v-bind="$attrs"
-    v-on="$listeners">
+    v-on="$listeners"
+    :outlined="outlined">
     <v-icon small class="mr-2">{{ icon }}</v-icon>
     {{ label }}
   </v-btn>
@@ -18,6 +19,10 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    outlined: {
+      type: Boolean,
+      default: false
     }
   }
 }
