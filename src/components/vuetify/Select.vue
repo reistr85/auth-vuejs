@@ -1,6 +1,8 @@
 <template>
-  <v-select 
+  <v-select
     hide-details="auto"
+    v-bind="$attrs"
+    v-on="$listeners"
     :ref="refs"
     :id="id"
     :type="type" 
@@ -72,11 +74,11 @@ export default {
     },
     itemText: {
       type: String,
-      default: '',
+      default: 'text',
     },
     itemValue: {
       type: String,
-      default: '',
+      default: 'value',
     },
     loading: {
       type: Boolean,

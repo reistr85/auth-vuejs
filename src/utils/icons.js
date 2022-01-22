@@ -1,5 +1,6 @@
 const address = 'mdi-map-marker-outline';
 const arrowLeft = 'mdi-arrow-left-bold';
+const calendar = 'mdi-calendar';
 const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
 const check = 'mdi-check-bold';
@@ -25,6 +26,7 @@ const plus = 'mdi-plus';
 const plusOutline = 'mdi-plus-circle-outline';
 const printer = 'mdi-printer';
 const refresh = 'mdi-refresh'; 
+const save = 'mdi-content-save';
 const security = 'mdi-shield-lock';
 const search = 'mdi-magnify';
 const origin = 'mdi-share-all';
@@ -36,6 +38,7 @@ const web = 'mdi-web';
 export {
   address,
   arrowLeft,
+  calendar,
   cancel,
   cellPhone,
   check,
@@ -61,6 +64,7 @@ export {
   lockOutline,
   printer,
   refresh,
+  save,
   security,
   search,
   origin,

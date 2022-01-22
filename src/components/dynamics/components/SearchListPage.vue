@@ -1,9 +1,7 @@
 <template>
   <v-menu v-model="menu" :max-width="650" bottom left offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn text v-bind="attrs" v-on="on">
-        FILTROS <v-icon class="ml-3">{{ icons.filter }}</v-icon>
-      </v-btn>
+      <Button v-bind="attrs" v-on="on" label="FILTROS" text :icon="icons.filter" @click="clearFilters" />
     </template>
 
     <v-card>
@@ -19,14 +17,8 @@
       </v-card-text>
 
       <v-card-actions class="px-4 py-4 d-flex justify-end">
-        <v-btn text color="primary" @click="clearFilters">
-          Limpar
-        </v-btn>
-
-        <v-btn color="primary" @click="$emit('searchItems', search), menu = false">
-          <v-icon>{{ icons.search }}</v-icon>
-          Pesquisar
-        </v-btn>
+        <Button label="Limpar" text color="primary" @click="clearFilters" />
+        <Button label="Pesquisar" color="primary" :icon="icons.search" @click="$emit('searchItems', search), menu = false" />
       </v-card-actions>
     </v-card>
   </v-menu>
@@ -36,6 +28,7 @@
 import { search, filter, text } from '@/utils/icons';
 import TextField from '@/components/vuetify/TextField';
 import Select from '@/components/vuetify/Select';
+import Button from '@/components/vuetify/Button';
 import DataPicker from '@/components/vuetify/DataPicker';
 
 const TYPES_COMPONENT = Object.freeze({
@@ -46,7 +39,7 @@ const TYPES_COMPONENT = Object.freeze({
 
 export default {
   name: 'SearchListPage',
-  components: {},
+  components: { Button },
   props: {
     items: {
       type: Array,
@@ -71,7 +64,7 @@ export default {
       return TYPES_COMPONENT[item.type];
     },
     getPropsComponent(item) {
-      return { icon: this.icons.text, label: item.label, items: [] }
+      return { label: item.label, items: [], icon: item.icon }
     },
     clearFilters() {
       this.search = '';

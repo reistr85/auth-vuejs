@@ -5,21 +5,19 @@
       :close-on-content-click="true"
       :nudge-right="40"
       :disabled="readonly"
-      transition="scale-transition"
       offset-y
       min-width="auto">
       
       <template v-slot:activator="{ on, attrs }">
-        <v-text-field
+        <TextField 
           v-model="dateFormatted"
+          v-on="on"
+          v-bind="attrs"
           :outlined="outlined"
           :dense="dense"
           :label="label"
-          :prepend-icon="icon"
+          :icon="icon"
           :readonly="readonly"
-          v-mask="'##/##/####'"
-          v-bind="attrs"
-          v-on="on"
           @change="changeDate()" />
       </template>
       <v-date-picker
@@ -30,11 +28,13 @@
 </template>
 
 <script>
-import * as Utils from '@/utils';
+import { formatDate, formatDateEN } from '@/utils';
 import { mask } from "vue-the-mask";
+import TextField from '@/components/vuetify/TextField';
 
 export default {
-  name: 'DataPick',
+  name: 'DataPicker',
+  components: { TextField },
   props: {
     label: {
       type: String,
@@ -52,9 +52,9 @@ export default {
       type: Boolean,
       default: true,
     },
-    noIcon: {
-      type: Boolean,
-      default: false,
+    icon: {
+      type: String,
+      default: '',
     },
     noInitial: {
       type: Boolean,
@@ -72,25 +72,17 @@ export default {
   watch: {
     model: {
       handler() {
-        this.dateFormatted = Utils.formatDate(this.model);
+        this.dateFormatted = formatDate(this.model);
       },
       deep: true,
     },
     date: {
       handler() {
-        this.dateFormatted = Utils.formatDate(this.date);
+        this.dateFormatted = formatDate(this.date);
         this.$emit('changeDataPick', { model: this.modelName, date: this.date });
       },
       deep: true,
     },
-  },
-  computed: {
-    icon() {
-      if(this.noIcon)
-        return '';
-      
-      return  'mdi-calendar';
-    }
   },
   directives: {
     mask,
@@ -99,13 +91,13 @@ export default {
     return {
       menu: false,
       date: new Date().toISOString().substr(0, 10),
-      dateFormatted: this.noInitial ? null : Utils.formatDate(new Date().toISOString().substr(0, 10)),
+      dateFormatted: this.noInitial ? null : formatDate(new Date().toISOString().substr(0, 10)),
     }
   },
   methods: {
     changeDate() {
       this.menu = false;
-      this.$emit('changeDataPick', { model: this.modelName, date: Utils.formatDateEN(this.dateFormatted) });
+      this.$emit('changeDataPick', { model: this.modelName, date: formatDateEN(this.dateFormatted) });
     }
   }
 }
