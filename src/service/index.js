@@ -29,7 +29,7 @@ axios.interceptors.response.use(
       const url = window.location.href.toString().split('/')
 
       if(url[url.length - 1] != 'login')
-        window.location = `${window.location.href}`;
+        window.location = `${process.env.VUE_APP_URL}/login`;
       return Promise.reject(error)
     }
 

@@ -1,5 +1,5 @@
 <template>
-  <v-icon>{{ icon }}</v-icon>
+  <v-icon :dense="dense">{{ icon }}</v-icon>
 </template>
 
 <script>
@@ -10,6 +10,10 @@ export default {
       type: String,
       required: true,
     },
+    dense: {
+      type: Boolean,
+      default: false,
+    }
   }
 }
 </script>

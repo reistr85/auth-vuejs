@@ -17,6 +17,12 @@ const AuthService = {
       });
     })
   },
+  logout() {
+    return new Promise((resolve) => {
+      this.clearLocalStorage();
+      resolve(true)
+    })
+  },
   clearLocalStorage() {
     localStorage.removeItem(`${process.env.VUE_APP_NAME}.access_token`)
     localStorage.removeItem(`${process.env.VUE_APP_NAME}.user`)

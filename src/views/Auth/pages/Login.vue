@@ -69,7 +69,7 @@ export default {
         this.loading = true;
 
         AuthService.login(this.user).then(() => {
-          window.location = process.env.VUE_APP_BASE_URL
+          window.location = process.env.VUE_APP_URL;
         }).catch((err) => {
           console.error(err)
         });

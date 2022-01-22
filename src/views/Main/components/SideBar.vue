@@ -15,7 +15,7 @@
 
     <v-card class="mx-auto" max-width="300" heigth="100%" style="height: 100%;" elevation="0" tile>
       <v-list dense>
-        <v-list-group v-model="item.active" v-for="item in items" :key="item.title" :prepend-icon="item.action" no-action dense class="mt-2">
+        <v-list-group v-model="item.active" v-for="item in items" :key="item.title" :prepend-icon="item.icon" no-action dense class="mt-2">
           <template v-slot:activator>
             <v-list-item-content>
               <v-list-item-title v-text="item.title"></v-list-item-title>
@@ -24,7 +24,10 @@
 
           <v-list-item v-for="child in item.items" :key="child.title" link @click="menuNavigator(child)">
             <v-list-item-content>
-              <v-list-item-title color="primary" v-text="child.title" class="childActive"></v-list-item-title>
+              <v-list-item-title color="primary" :prepend-icon="item.icon" class="childActiv">
+                <Icon :icon="item.icon" class="mr-3" dense />
+                {{ child.title }}
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -35,33 +38,29 @@
 </template>
 
 <script>
-import { home, users, account } from '@/utils/icons';
+import { home, account } from '@/utils/icons';
+import Icon from '@/components/vuetify/Icon'
 
 export default {
   name: 'SideBar',
+  components: { Icon },
   data() {
     return {
       items: [
         {
           active: false,
-          action: home,
+          icon: home,
           items: [{ title: 'Dashboard', route: 'home' }],
           title: 'Início',
         },
         {
           active: false,
-          action: account,
+          icon: account,
           items: [
             { title: 'Cadastros', route: 'registers', active: false },
             { title: 'Categorias', route: 'alltypes', active: false }
             ],
           title: 'Cadastros',
-        },
-        {
-          active: false,
-          action: users,
-          items: [{ title: 'Usuários', route: 'users', active: false }],
-          title: 'Usuários',
         },
       ],
     }

@@ -20,6 +20,7 @@ const google = 'mdi-google-plus'
 const filter = 'mdi-filter-menu-outline';
 const home = 'mdi-home-alert-outline'
 const lockOutline = 'mdi-lock-outline'; 
+const logout = 'mdi-logout';
 const money = 'mdi-currency-usd'; 
 const note = 'mdi-file-send-outline'; 
 const noteMultiple = 'mdi-note-multiple'; 
@@ -60,6 +61,8 @@ export {
   google,
   filter,
   home,
+  lockOutline,
+  logout,
   phone,
   plus,
   plusOutline,
@@ -67,7 +70,6 @@ export {
   note,
   noteMultiple,
   numeric,
-  lockOutline,
   printer,
   refresh,
   save,
