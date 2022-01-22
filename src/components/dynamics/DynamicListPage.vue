@@ -229,7 +229,7 @@ export default {
 
         this.service.delete(id).then(() => {
           // this.$noty.success('Registro excluído com sucesso!');
-          this.loadingDestroy = true;
+          this.loadingDestroy = false;
           this.getAll();
         }).catch((err) => {
           this.$noty.error(err);

@@ -4,6 +4,7 @@ import { routes as home } from '@/views/Home/Dashboard';
 import { routes as registers } from '@/views/Registers/Registers';
 import { routes as settings } from '@/views/Settings/Companies';
 import { routes as users } from '@/views/Settings/Users';
+import { routes as services } from '@/views/Services';
 
 
 
@@ -13,5 +14,6 @@ export default [
   ...home,
   ...registers,
   ...settings,
+  ...services,
   ...users,
 ]
