@@ -24,8 +24,12 @@ axios.interceptors.response.use(
     if(error.response.status == 401){
       localStorage.removeItem(`${process.env.VUE_APP_NAME}.access_token`);
       localStorage.removeItem(`${process.env.VUE_APP_NAME}.user`);
-      localStorage.setItem(`${process.env.VUE_APP_NAME}.last_router_name`, 'sale-orders')
-      window.location = `${window.location.href}`;
+      localStorage.removeItem(`${process.env.VUE_APP_NAME}.company`);
+
+      const url = window.location.href.toString().split('/')
+
+      if(url[url.length - 1] != 'login')
+        window.location = `${window.location.href}`;
       return Promise.reject(error)
     }
 

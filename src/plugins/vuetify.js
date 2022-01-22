@@ -1,15 +1,14 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
-import colors from 'vuetify/lib/util/colors'
 
 Vue.use(Vuetify, {
 });
 
 const light = {
     primary: {
-      base: colors.red.accent3,
+      base: '#FE715F',
     },
-    secondary: colors.blue.base,
+    secondary: '#3B5998',
   }
 
 export default new Vuetify({
