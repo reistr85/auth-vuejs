@@ -50,17 +50,17 @@ export default {
         {
           active: false,
           icon: home,
-          items: [{ title: 'Dashboard', route: 'home' }],
           title: 'Início',
+          items: [{ title: 'Dashboard', route: 'home' }],
         },
         {
           active: false,
           icon: account,
-          items: [
-            { title: 'Cadastros', route: 'registers', active: false },
-            { title: 'Categorias', route: 'alltypes', active: false }
-            ],
           title: 'Cadastros',
+          items: [
+            { title: 'Registros', route: 'registers', active: false },
+            { title: 'Tipos Gerais', route: 'alltypes', active: false }
+          ],
         },
       ],
     }

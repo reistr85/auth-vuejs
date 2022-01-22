@@ -21,8 +21,8 @@
         <v-form v-model="valid" ref="form" lazy-validation v-on:submit.prevent="login()">
           <div class="content-login--form---right----form">
             <TextField v-model="user.email" label="E-mail" />
-            <TextField v-model="user.password" label="Senha" type="password" />
-            <Button label="Entrar" color="primary" class="btn-login" @click="login()" />
+            <TextField v-model="user.password" label="Senha" type="password" v-on:keyup.enter="login()" />
+            <Button label="Entrar" color="primary" class="btn-login" :loading="loading" @click="login()" />
           </div>
         </v-form>
 
@@ -50,7 +50,8 @@ export default {
       user: {
         email: '',
         password: '',
-      }
+      },
+      loading: false,
     }
   },
   computed: {
@@ -69,8 +70,10 @@ export default {
         this.loading = true;
 
         AuthService.login(this.user).then(() => {
+          this.loading = false;
           window.location = process.env.VUE_APP_URL;
         }).catch((err) => {
+          this.loading = false;
           console.error(err)
         });
       }
