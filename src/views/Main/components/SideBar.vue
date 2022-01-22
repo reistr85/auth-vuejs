@@ -51,6 +51,12 @@ export default {
         {
           active: false,
           action: users,
+          items: [{ title: 'Listar Cadastros', route: 'registers', active: false }],
+          title: 'Cadastros',
+        },
+        {
+          active: false,
+          action: users,
           items: [{ title: 'Listar Usuários', route: 'users', active: false }],
           title: 'Usuários',
         },
