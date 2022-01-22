@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { home, users } from '@/utils/icons';
+import { home, users, account } from '@/utils/icons';
 
 export default {
   name: 'SideBar',
@@ -50,14 +50,17 @@ export default {
         },
         {
           active: false,
-          action: users,
-          items: [{ title: 'Listar Cadastros', route: 'registers', active: false }],
+          action: account,
+          items: [
+            { title: 'Cadastros', route: 'registers', active: false },
+            { title: 'Categorias', route: 'alltypes', active: false }
+            ],
           title: 'Cadastros',
         },
         {
           active: false,
           action: users,
-          items: [{ title: 'Listar Usuários', route: 'users', active: false }],
+          items: [{ title: 'Usuários', route: 'users', active: false }],
           title: 'Usuários',
         },
       ],
