@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     isLoginPage() {
-      return true
+      return this.$route.name === 'login'
     }
   },
   watch: {

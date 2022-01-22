@@ -18,11 +18,13 @@
 
         <v-divider class="my-5"></v-divider>
 
-        <div class="content-login--form---right----form">
-          <TextField label="E-mail" />
-          <TextField label="Senha" type="password" />
-          <Button label="Entrar" color="primary" class="btn-login" />
-        </div>
+        <v-form v-model="valid" ref="form" lazy-validation v-on:submit.prevent="login()">
+          <div class="content-login--form---right----form">
+            <TextField v-model="user.email" label="E-mail" />
+            <TextField v-model="user.password" label="Senha" type="password" />
+            <Button label="Entrar" color="primary" class="btn-login" @click="login()" />
+          </div>
+        </v-form>
 
         <p>Ainda não é cadastrado? <router-link to="/register">Clique aqui</router-link></p>
       </div>
@@ -34,6 +36,7 @@
 import { google, facebook } from '@/utils/icons'
 import Button from '@/components/vuetify/Button'
 import TextField from '@/components/vuetify/TextField'
+import AuthService from '../services/AuthService';
 
 export default {
   name: 'Login',
@@ -43,6 +46,33 @@ export default {
       icons: {
         google: google,
         facebook: facebook
+      },
+      user: {
+        email: '',
+        password: '',
+      }
+    }
+  },
+  computed: {
+    valid: {
+      get() {
+        return this.user.email && this.user.password ? true : false
+      },
+      set() {
+        return true;
+      }
+    }
+  },
+  methods: {
+    login() {
+      if(this.valid) {
+        this.loading = true;
+
+        AuthService.login(this.user).then(() => {
+          window.location = process.env.VUE_APP_BASE_URL
+        }).catch((err) => {
+          console.error(err)
+        });
       }
     }
   }
