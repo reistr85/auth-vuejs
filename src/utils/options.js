@@ -12,7 +12,25 @@ const typeRegister = [
   {id: 4, text: 'Funcionário', value: 'employee'},
 ];
 
+const typeYesNo = [
+  {id: 1, text: 'Sim', value: 'yes'},
+  {id: 2, text: 'Não', value: 'no'}
+];
+
+const typeActive = [
+  {id: 1, text: 'Ativo', value: 'active'},
+  {id: 2, text: 'Desativo', value: 'desactive'}
+];
+
+const typeAllTypes = [
+  {id: 1, text: 'Categoria', value: 'category'},
+  {id: 2, text: 'Sub-Categoria', value: 'sub-category'}
+];
+
 export { 
   typeUser,
   typeRegister,
+  typeYesNo,
+  typeActive,
+  typeAllTypes,
 }

@@ -1,3 +1,4 @@
+const account = 'mdi-account-plus';
 const address = 'mdi-map-marker-outline';
 const arrowLeft = 'mdi-arrow-left-bold';
 const calendar = 'mdi-calendar';
@@ -36,6 +37,7 @@ const view = 'mdi-eye';
 const web = 'mdi-web';
 
 export {
+  account,
   address,
   arrowLeft,
   calendar,
