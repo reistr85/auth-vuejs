@@ -1,13 +1,18 @@
 <template>
   <v-app>
-    <NavBar :mode-dark="modeDark" />
-    
-    <v-card height="100%" class="mt-0" :dark="modeDark.value">
-      <div class="main">
-        <SideBar />
-        <ContentMain :mode-dark="modeDark" />
-      </div>
-    </v-card>
+    <div style="heigth: 100%" v-if="!isLoginPage">
+      <NavBar :mode-dark="modeDark" />
+      
+      <v-card height="100%" class="mt-0" :dark="modeDark.value">
+        <div class="main">
+          <SideBar />
+          <ContentMain :mode-dark="modeDark" />
+        </div>
+      </v-card>
+    </div>
+    <div style="heigth: 100%" v-else>
+      <router-view></router-view>
+    </div>
 
   </v-app>
 </template>
@@ -34,6 +39,11 @@ export default {
   mounted() {
     if (!localStorage.getItem(`${this.appName}.themeMode`)) localStorage.setItem(`${this.appName}.themeMode`, 'light')
     localStorage.getItem(`${this.appName}.themeMode`) === 'dark' ? this.modeDark.value = true : this.modeDark.value = false;
+  },
+  computed: {
+    isLoginPage() {
+      return this.$route.name === 'login'
+    }
   },
   watch: {
     ['modeDark.value']() {

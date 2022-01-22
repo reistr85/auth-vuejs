@@ -14,6 +14,8 @@ const dotsVertical = 'mdi-dots-vertical';
 const download = 'mdi-download-box-outline';
 const edit = 'mdi-pencil';
 const email = 'mdi-email-outline';
+const facebook = 'mdi-facebook';
+const google = 'mdi-google-plus'
 const filter = 'mdi-filter-menu-outline';
 const home = 'mdi-home-alert-outline'
 const lockOutline = 'mdi-lock-outline'; 
@@ -52,6 +54,8 @@ export {
   download,
   edit,
   email,
+  facebook,
+  google,
   filter,
   home,
   phone,
