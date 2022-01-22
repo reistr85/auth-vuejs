@@ -5,6 +5,14 @@ const typeUser = [
   {id: 4, text: 'Caixa', value: 'box'},
 ];
 
+const typeRegister = [
+  {id: 1, text: 'Cliente', value: 'client'},
+  {id: 2, text: 'Fornecedor', value: 'provider'},
+  {id: 3, text: 'Vendedor', value: 'seller'},
+  {id: 4, text: 'Funcionário', value: 'employee'},
+];
+
 export { 
   typeUser,
+  typeRegister,
 }
