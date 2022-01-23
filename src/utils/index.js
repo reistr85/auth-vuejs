@@ -153,3 +153,5 @@ export function limitCharacters(string, length = 50) {
     
   return `${string.substr(0, length)}...`;
 }
+
+export const isLogged = localStorage.getItem(`${process.env.VUE_APP_NAME}.access_token`) ? true : false;

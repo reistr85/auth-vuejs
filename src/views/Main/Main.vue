@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div style="heigth: 100%" v-if="!isLoginPage">
+    <div style="heigth: 100%" v-if="!isLoginRegisterPage">
       <NavBar :mode-dark="modeDark" />
       
       <v-card height="100%" class="mt-0" :dark="modeDark.value">
@@ -41,8 +41,8 @@ export default {
     localStorage.getItem(`${this.appName}.themeMode`) === 'dark' ? this.modeDark.value = true : this.modeDark.value = false;
   },
   computed: {
-    isLoginPage() {
-      return this.$route.name === 'login'
+    isLoginRegisterPage() {
+      return this.$route.name === 'login' || this.$route.name === 'register'
     }
   },
   watch: {
