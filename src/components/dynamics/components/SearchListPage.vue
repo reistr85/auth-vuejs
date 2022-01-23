@@ -31,6 +31,7 @@
 
 <script>
 import _ from 'lodash';
+import { getText, formatDate } from '@/utils';
 import { search, filter, text } from '@/utils/icons';
 import TextField from '@/components/vuetify/TextField';
 import Select from '@/components/vuetify/Select';
@@ -71,10 +72,30 @@ export default {
       return TYPES_COMPONENT[item.type];
     },
     getPropsComponent(item) {
-      return { label: item.label, items: [], icon: item.icon }
+      return { 
+        label: item.label,
+        items: item.items?.data,
+        icon: item.icon,
+        noInitial: true,
+      }
     },
     setFormValue(field, value) {
-      _.set(this.form, field.name, { name: field.name, label: field.label, value: value});
+      _.set(this.form, field.name, { 
+          name: field.name,
+          label: field.label,
+          value: value,
+          formattedValue: this.getFomattedValues(field, value),
+        });
+    },
+    getFomattedValues(field, value) {
+      let formattedValue = '';
+      switch(field.type) {
+        case 'select': formattedValue =getText(field.items.data, value); break;
+        case 'dataPicker': formattedValue = formatDate(value); break;
+        default: formattedValue = value;
+      }
+
+      return formattedValue;
     },
     clearFilters() {
       // this.form = '';

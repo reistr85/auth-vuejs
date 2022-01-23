@@ -1,3 +1,4 @@
+import { typePage } from '@/utils';
 import { search, text, calendar } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeUser } from '@/utils/options';
@@ -11,14 +12,17 @@ export default {
     list: {
       name: 'users',
       path: '/usuarios',
+      meta: { typePage: typePage.list }
     },
     create: {
-      name: 'usercreate',
+      name: 'user-create',
       path: '/usuarios/novo',
+      meta: { typePage: typePage.create }
     },
     show: {
-      name: 'usershow',
+      name: 'user-show',
       path: '/usuarios/:id',
+      meta: { typePage: typePage.show }
     }
   },
   listActions: {
@@ -59,6 +63,9 @@ export default {
         label: 'Tipo Usuário',
         icon: text,
         md: 6,
+        items: {
+          data: typeUser
+        }
       },
       {
         type: 'dataPicker',
@@ -121,7 +128,7 @@ export default {
           align: '',
           md: '4',
           rules: [required],
-          list: true,
+          list: false,
           readonly: false,
           disabled: false,
         },

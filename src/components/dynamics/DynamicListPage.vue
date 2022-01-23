@@ -6,7 +6,7 @@
         <Chip 
           dense
           v-for="(item, index) in searches" :key="index"
-          :label="`${item.label}: ${item.value}`" 
+          :label="`${item.label}: ${item.formattedValue}`" 
           @click:close="closeChip(item)" />
       </div>
       <div>
@@ -189,7 +189,8 @@ export default {
             domain: this.schema.domain,
             name: search[item].name,
             label: search[item].label,
-            value: search[item].value
+            value: search[item].value,
+            formattedValue: search[item].formattedValue,
           }
         })
 

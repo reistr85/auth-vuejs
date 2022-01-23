@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { typePage } from '@/utils';
 import { plusOutline, arrowLeft } from '@/utils/icons';
 
 export default {
@@ -43,7 +44,7 @@ export default {
   },
   computed: {
     typePage() {
-      return this.$route.name.split('-').length === 2 ? 'create' : 'list';
+      return this.$route.meta.typePage === typePage.create ? 'create' : 'list';
     }
   }
 }

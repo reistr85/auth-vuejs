@@ -8,6 +8,7 @@ export default [
     name: UserSchema.routes.list.name,
     component: ListUsers,
     meta:{
+      ...UserSchema.routes.list.meta,
       requiresAuth: true,
     }
   },
@@ -16,6 +17,7 @@ export default [
     name: UserSchema.routes.create.name,
     component: CreateUser,
     meta:{
+      ...UserSchema.routes.create.meta,
       requiresAuth: true,
     }
   },
@@ -24,6 +26,7 @@ export default [
     name: UserSchema.routes.show.name,
     component: CreateUser,
     meta:{
+      ...UserSchema.routes.show.meta,
       requiresAuth: true,
     }
   },

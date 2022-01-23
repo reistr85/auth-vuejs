@@ -79,7 +79,7 @@ export default {
     date: {
       handler() {
         this.dateFormatted = formatDate(this.date);
-        this.$emit('changeDataPick', { model: this.modelName, date: this.date });
+        this.$emit('change', this.date);
       },
       deep: true,
     },
