@@ -1,4 +1,4 @@
-import { typePage } from '@/utils';
+import { typePageOptions } from '@/utils';
 import { search, text, calendar } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeUser } from '@/utils/options';
@@ -12,17 +12,17 @@ export default {
     list: {
       name: 'users',
       path: '/usuarios',
-      meta: { typePage: typePage.list }
+      meta: { typePage: typePageOptions.list, requiresAuth: true, }
     },
     create: {
       name: 'user-create',
       path: '/usuarios/novo',
-      meta: { typePage: typePage.create }
+      meta: { typePage: typePageOptions.create, requiresAuth: true, }
     },
     show: {
       name: 'user-show',
       path: '/usuarios/:id',
-      meta: { typePage: typePage.show }
+      meta: { typePage: typePageOptions.show, requiresAuth: true, }
     }
   },
   listActions: {

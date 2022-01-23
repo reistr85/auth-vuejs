@@ -11,6 +11,7 @@
             <v-row>
               <v-col :md="item.md" v-for="(item, iItem) in group.items" :key="iItem">
                 <component
+                  v-model="localItem[item.name]"
                   v-bind="getProps(item)"
                   :is="typesComponents[item.type]" 
                   @change="setFormValue(item.name, $event)" />
@@ -30,6 +31,8 @@
 <script>
 import _ from 'lodash';
 import { save } from '@/utils/icons';
+import locales from '@/locales/pt-BR';
+import TypePageMixin from '@/mixins/TypePageMixin';
 import Icon from '@/components/vuetify/Icon';
 import typesComponents from '@/utils/typesComponents'
 import Button from '@/components/vuetify/Button';
@@ -57,13 +60,14 @@ export default {
       form: {},
       typesComponents: typesComponents,
       loadingSave: false,
+      localItem: {}
     }
   },
-  computed: {
-    typePage() {
-      return this.$route.name.split('-').length === 2 ? 'create' : 'list';
-    }
+  mounted() {
+    if(this.typePage === this.typePageOptions.show)
+      this.show();
   },
+  mixins: [TypePageMixin],
   methods: {
     getProps(item) {
       return { 
@@ -85,34 +89,50 @@ export default {
     setFormValue(name, value) {
       _.set(this.form, name, value);
     },
+    show() {
+      const { id } = this.$route.params;
+      this.service.show(id).then((res) => {
+        let form = {}
+        this.schema.fields.forEach((group) => {
+          group.items.forEach((item) => {
+            form[item.name] = res[item.name]
+          })
+        })
+        this.localItem = form
+      }).catch((err) => {
+        this.$noty.error(err);
+        this.$router.push({name: this.schema.routes.list.name});
+      });
+    },
     save() {
       this.loadingSave = true;
-      const { id } = this.$route.params;
 
       if(this.schema.business){
         if ( typeof this.schema.business.beforeSave === 'function' )
           this.schema.business.beforeSave(this.localItem)
       }
 
-      this.typePage === 'create' ? this.create() : this.update(id);
+      this.typePage === this.typePageOptions.create ? this.create() : this.update();
     },
     create(){
       this.service.create(this.form).then(() => {
-        // this.$noty.success('Registro salvo com sucesso!');
+        this.$noty.success(locales.alerts.createdRegister);
         this.$router.push({name: this.schema.routes.list.name});
         this.loadingSave = false;
-      }).catch(() => {
+      }).catch((err) => {
         this.loadingSave = false;
-        // this.$noty.error(err);
+        this.$noty.error(err);
       });
     },
-    update(id, item) {
-      this.service.update(id, item).then(() => {
-        // this.$noty.success('Registro alterado com sucesso!');
+    update() {
+      const { id } = this.$route.params;
+
+      this.service.update(id, this.localItem).then(() => {
+        this.$noty.success(locales.alerts.updatedRegister)
         this.$router.push({name: this.schema.routes.list.name});
         this.loadingSave = false;
-      }).catch(() => {
-        // this.$noty.error(err);
+      }).catch((err) => {
+        this.$noty.error(err);
         this.loadingSave = false;
       });
     },

@@ -156,7 +156,7 @@ export function limitCharacters(string, length = 50) {
 
 export const isLogged = localStorage.getItem(`${process.env.VUE_APP_NAME}.access_token`) ? true : false;
 
-export const typePage = {
+export const typePageOptions = {
   list: 'list',
   create: 'create',
   show: 'show',

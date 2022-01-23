@@ -7,12 +7,13 @@
       </div>
 
       <div>
-        <v-btn color="primary" class="white--text" v-if="schema.createBtn && typePage === 'list'" :to="{ name: schema.routes.create.name }">
+        <v-btn color="primary" class="white--text" v-if="schema.createBtn && typePage === typePageOptions.list" :to="{ name: schema.routes.create.name }">
           <v-icon left dark>{{ icons.plusOutline }}</v-icon>
           {{  schema.createBtn }}
         </v-btn>
 
-        <v-btn color="primary" class="white--text" v-if="typePage === 'create'" :to="{ name: schema.routes.list.name }">
+        <v-btn color="primary" class="white--text" v-if="typePage === typePageOptions.create || typePage === typePageOptions.show" 
+          :to="{ name: schema.routes.list.name }">
           <v-icon left dark>{{ icons.arrowLeft }}</v-icon>
           Voltar
         </v-btn>
@@ -23,7 +24,7 @@
 </template>
 
 <script>
-import { typePage } from '@/utils';
+import TypePageMixin from '@/mixins/TypePageMixin';
 import { plusOutline, arrowLeft } from '@/utils/icons';
 
 export default {
@@ -42,11 +43,7 @@ export default {
       }
     }
   },
-  computed: {
-    typePage() {
-      return this.$route.meta.typePage === typePage.create ? 'create' : 'list';
-    }
-  }
+  mixins: [TypePageMixin],
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer  permanent elevation="1" height="100%">
+  <v-navigation-drawer  permanent elevation="1" height="100%" style="border-right: 1px solid #c">
     <template v-slot:prepend>
       <v-list-item two-line>
         <v-list-item-avatar>
@@ -68,7 +68,7 @@ export default {
   methods: {
     menuNavigator(item) {
       item.active = true;
-      this.$router.push({ name: item.route })
+      this.$router.push({ name: item.route }).catch(() => {})
     }
   }
 }
@@ -85,6 +85,10 @@ export default {
 }
 .childActive {
   color: red
+}
+
+.v-list-group__items > .v-list-item {
+  padding-left: 35px !important;
 }
 
 </style>

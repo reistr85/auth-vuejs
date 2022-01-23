@@ -7,24 +7,18 @@ export default [
     path: AllTypeSchema.routes.list.path,
     name: AllTypeSchema.routes.list.name,
     component: ListAllTypes,
-    meta:{
-      requiresAuth: true,
-    }
+    meta: AllTypeSchema.routes.list.meta,
   },
   {
     path: AllTypeSchema.routes.create.path,
     name: AllTypeSchema.routes.create.name,
     component: CreateAllType,
-    meta:{
-      requiresAuth: true,
-    }
+    meta: AllTypeSchema.routes.create.meta,
   },
   {
     path: AllTypeSchema.routes.show.path,
     name: AllTypeSchema.routes.show.name,
     component: CreateAllType,
-    meta:{
-      requiresAuth: true,
-    }
+    meta: AllTypeSchema.routes.show.meta,
   },
 ]
