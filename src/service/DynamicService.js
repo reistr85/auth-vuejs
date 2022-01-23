@@ -115,39 +115,76 @@ const DynamicService = (endpoint, options = {}) => ({
       });
     })
   },
-  async filters(params, paginate = ''){
-    let response = [];
+  async filters(params = null, searches){
+    let items = {}
+    let page = 1;
+    let totalItemsPerPage = 10;
+    let url = '';
+    let paramsFilter = '';
+    let endpoint = '';
 
-    let last_search = { domain: params.domain, search: params.search };
+    searches.forEach((item) => {
+      paramsFilter += `&filter[${item.name}]=${item.value}`
+    })
 
-    let payload = {
-      domain: last_search.domain,
-      search: last_search.search,
-      ordering: params.ordering,
-      q: params.q
+    endpoint = `filters?domain=users${paramsFilter}`;
+
+    if(params){
+      page = params.page;
+      totalItemsPerPage = params.totalItemsPerPage;
+      url = `${endpoint}&page=${page}&per_page=${totalItemsPerPage}`;
     }
 
-    if(paginate)
-      paginate = `?${paginate}`;
+    if(!params)
+      url = `${endpoint}`;
 
-    await axios.post(`filters${paginate}`, payload).then((res) => {
+    await axios.get(url).then((res) => {
       if (options.formatResponse && typeof options.formatResponse === 'function') {
-        let responseData = null;
-        
-        responseData = res.data.data;
-        res.data.data = responseData.map((item) => {
+        res.data.data.forEach((item) => {
           options.formatResponse(item);
-          return item;
         });
       }
 
-      response = res;
+      items = res;
     }).catch((err) => {
-      console.error(`DynamicService Filters error: ${err}`)
+      console.error(`DynamicService Index error: ${err}`)
     });
 
-    return response;
+    return items;
   },
+  // async filters(params, paginate = ''){
+  //   let response = [];
+
+  //   let last_search = { domain: params.domain, search: params.search };
+
+  //   let payload = {
+  //     domain: last_search.domain,
+  //     search: last_search.search,
+  //     ordering: params.ordering,
+  //     q: params.q
+  //   }
+
+  //   if(paginate)
+  //     paginate = `?${paginate}`;
+
+  //   await axios.post(`filters${paginate}`, payload).then((res) => {
+  //     if (options.formatResponse && typeof options.formatResponse === 'function') {
+  //       let responseData = null;
+        
+  //       responseData = res.data.data;
+  //       res.data.data = responseData.map((item) => {
+  //         options.formatResponse(item);
+  //         return item;
+  //       });
+  //     }
+
+  //     response = res;
+  //   }).catch((err) => {
+  //     console.error(`DynamicService Filters error: ${err}`)
+  //   });
+
+  //   return response;
+  // },
 });
 
 export default DynamicService;

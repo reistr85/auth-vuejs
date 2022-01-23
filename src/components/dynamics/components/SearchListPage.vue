@@ -14,6 +14,7 @@
             <component 
               :is="getComponent(item)"
               v-bind="getPropsComponent(item)"
+              v-model="localItem[item.name]"
               @change="setFormValue(item, $event)"
               @keyup.enter="$emit('searchItems', form), menu = false" />
           </v-col>
@@ -21,7 +22,7 @@
       </v-card-text>
 
       <v-card-actions class="px-4 py-4 d-flex justify-end">
-        <Button label="Limpar" text color="primary" @click="clearFilters" />
+        <!-- <Button label="Limpar" text color="primary" @click="clearFilters" /> -->
         <Button label="Pesquisar" color="primary" :icon="icons.search" @click="$emit('searchItems', form), menu = false" />
       </v-card-actions>
     </v-card>
@@ -60,7 +61,8 @@ export default {
       },
       menu: false,
       search: '',
-      form: {}
+      form: {},
+      localItem: {}
     }
   },
   methods: {
@@ -75,8 +77,9 @@ export default {
       _.set(this.form, field.name, { name: field.name, label: field.label, value: value});
     },
     clearFilters() {
-      this.search = '';
-      this.menu = false;
+      // this.form = '';
+      // this.menu = false;
+      // this.$emit('searchItems', this.form);
     }
   }
 }

@@ -1,12 +1,16 @@
+<!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
 <template>
   <div>
     <div class="mb-5 d-flex justify-space-between">
       <div class="d-flex flex-wrap  justify-start">
-        <Chip :label="`${item.label}: ${item.value}`" dense v-for="(item, index) in searches" :key="index" />
-        <!-- <Chip label="Email: test@gmail.com" dense /> -->
+        <Chip 
+          dense
+          v-for="(item, index) in searches" :key="index"
+          :label="`${item.label}: ${item.value}`" 
+          @click:close="closeChip(item)" />
       </div>
       <div>
-        <SearchListPage :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
+        <SearchListPage ref="searchListPage" :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
       </div>
     </div>
 
@@ -96,6 +100,7 @@ export default {
       options: {},
       totalLocalItems: 10,
       noGetDynamicItems: false,
+      chips: {}
     }
   },
   mounted() {
@@ -153,13 +158,50 @@ export default {
         this.$noty.error('Erro ao receber os itens.');
       });
     },
+    getFilters() {
+      this.loading = true;
+
+      const params = {
+        page: this.options.page,
+        totalItemsPerPage: this.options.itemsPerPage,
+        customSearch: this.search,
+      }
+
+      this.service.filters(params, this.searches).then((res) => {
+        this.localItems = res.data;
+        this.totalLocalItems = res.data.total;
+        this.loading = false;
+        
+        if(this.schema.business != undefined)
+          this.schema.business.beforeList(this.localItems, this.schema);
+      }).catch((err) => {
+        console.error(`DynamicListPage GetDataFromApi error: ${err}`)
+        this.loading = false;
+        this.$noty.error('Erro ao receber os itens.');
+      });
+    },
     searchItems(search) {
       this.searches = [];
       this.searches = Object.keys(search)
         .filter((item) =>  search[item].value)
         .map((item) => {
-          return { label: search[item].label, value: search[item].value }
+          return {
+            domain: this.schema.domain,
+            name: search[item].name,
+            label: search[item].label,
+            value: search[item].value
+          }
         })
+
+      this.getFilters();
+    },
+    closeChip(value) {
+      this.searches = this.searches.filter((item) => {
+        if (item.name === value.name) this.$refs.searchListPage.localItem[item.name] = '';
+        return item.name != value.name
+      });
+
+      this.getFilters();
     },
     openDialogDestroy(item) {
       this.selected.push(item);

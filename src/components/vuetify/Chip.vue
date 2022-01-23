@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-chip v-if="chip1" v-bind="$attrs" v-on="$listeners" class="ma-2" close @click:close="chip1 = false">
+    <v-chip v-bind="$attrs" v-on="$listeners" class="ma-2" close @click:close="chip1 = false">
       {{ label }}
     </v-chip>
   </div>
