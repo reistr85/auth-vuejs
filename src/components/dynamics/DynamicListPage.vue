@@ -2,8 +2,8 @@
   <div>
     <div class="mb-5 d-flex justify-space-between">
       <div class="d-flex flex-wrap  justify-start">
-        <Chip label="Nome: Teste" dense />
-        <Chip label="Email: test@gmail.com" dense />
+        <Chip :label="`${item.label}: ${item.value}`" dense v-for="(item, index) in searches" :key="index" />
+        <!-- <Chip label="Email: test@gmail.com" dense /> -->
       </div>
       <div>
         <SearchListPage :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
@@ -15,7 +15,6 @@
       item-key="id"
       dense
       :loading="loading"
-      :search="search"
       :headers="headers"
       :items="localItems.data"
       :options.sync="options"
@@ -91,7 +90,7 @@ export default {
       dialog: false,
       loading: false,
       loadingDestroy: false,
-      search: '',
+      searches: '',
       headers: [],
       localItems: {},
       options: {},
@@ -155,7 +154,12 @@ export default {
       });
     },
     searchItems(search) {
-      console.log(search)
+      this.searches = [];
+      this.searches = Object.keys(search)
+        .filter((item) =>  search[item].value)
+        .map((item) => {
+          return { label: search[item].label, value: search[item].value }
+        })
     },
     openDialogDestroy(item) {
       this.selected.push(item);

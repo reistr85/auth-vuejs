@@ -41,29 +41,29 @@ export default {
     items: [
       {
         type: 'text',
+        name: 'name',
         label: 'Nome',
-        field: 'name',
         icon: text,
         md: 6,
       },
       {
         type: 'text',
+        name: 'email',
         label: 'Email',
-        field: 'email',
         icon: text,
         md: 6,
       },
       {
         type: 'select',
+        name: 'type',
         label: 'Tipo Usuário',
-        field: 'type',
         icon: text,
         md: 6,
       },
       {
         type: 'dataPicker',
+        name: 'created_at',
         label: 'Data de Cadastro',
-        field: 'created_at',
         icon: calendar,
         md: 6,
       }

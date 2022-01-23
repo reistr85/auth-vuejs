@@ -11,20 +11,25 @@
       <v-card-text>
         <v-row>
           <v-col :md="item.md" v-for="(item, index) in items" :key="index">
-            <component :is="getComponent(item)" v-model="search" v-bind="getPropsComponent(item)" />
+            <component 
+              :is="getComponent(item)"
+              v-bind="getPropsComponent(item)"
+              @change="setFormValue(item, $event)"
+              @keyup.enter="$emit('searchItems', form), menu = false" />
           </v-col>
         </v-row>
       </v-card-text>
 
       <v-card-actions class="px-4 py-4 d-flex justify-end">
         <Button label="Limpar" text color="primary" @click="clearFilters" />
-        <Button label="Pesquisar" color="primary" :icon="icons.search" @click="$emit('searchItems', search), menu = false" />
+        <Button label="Pesquisar" color="primary" :icon="icons.search" @click="$emit('searchItems', form), menu = false" />
       </v-card-actions>
     </v-card>
   </v-menu>
 </template>
 
 <script>
+import _ from 'lodash';
 import { search, filter, text } from '@/utils/icons';
 import TextField from '@/components/vuetify/TextField';
 import Select from '@/components/vuetify/Select';
@@ -55,7 +60,7 @@ export default {
       },
       menu: false,
       search: '',
-      textField: TextField,
+      form: {}
     }
   },
   methods: {
@@ -65,6 +70,9 @@ export default {
     },
     getPropsComponent(item) {
       return { label: item.label, items: [], icon: item.icon }
+    },
+    setFormValue(field, value) {
+      _.set(this.form, field.name, { name: field.name, label: field.label, value: value});
     },
     clearFilters() {
       this.search = '';
