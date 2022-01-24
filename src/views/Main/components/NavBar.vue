@@ -4,9 +4,8 @@
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
       <v-toolbar-title>Company</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-switch v-model="modeDark.value" :label="modeDark.label" class="mt-6 mr-5"></v-switch>
+      <VSwitch :label="modeDark.label" class="mt-6 mr-5" @click="modeDark.value = !modeDark.value" />
       <Menu :width="200">
-
         <h3>Salão de Beleza Mais</h3>
         <p>reistr85@gmail.com</p>
         <v-divider class="mb-"></v-divider>
@@ -29,14 +28,15 @@
 </template>
 
 <script>
-import { dotsVertical, logout, users } from '@/utils/icons';
+import { dotsVertical, logout, users, industry } from '@/utils/icons';
 import Menu from '@/components/vuetify/Menu';
 import Button from '@/components/vuetify/Button';
+import VSwitch from '@/components/vuetify/VSwitch';
 import AuthService from '@/views/Auth/services/AuthService';
 
 export default {
   name: 'NavBar',
-  components: { Menu, Button },
+  components: { Menu, Button, VSwitch },
   props: {
     modeDark: {
       type: Object,
@@ -51,7 +51,7 @@ export default {
         logout: logout,
       },
       items: [
-        {icon: logout, label: 'Empresa', route: 'companies'},
+        {icon: industry, label: 'Empresa', route: 'companies'},
         {icon: users, label: 'Usuários', route: 'users'},
       ]
     }

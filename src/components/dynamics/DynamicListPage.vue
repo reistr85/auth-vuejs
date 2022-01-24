@@ -4,8 +4,10 @@
     <div class="mb-5 d-flex justify-space-between">
       <div class="d-flex flex-wrap  justify-start">
         <Chip 
-          dense
           v-for="(item, index) in searches" :key="index"
+          dense
+          close
+          class="mr-2"
           :label="`${item.label}: ${item.formattedValue}`" 
           @click:close="closeChip(item)" />
       </div>
@@ -26,6 +28,15 @@
       :single-select="schema.singleSelect"
       :show-select="schema.checkItem"
       class="elevation-1">
+
+      <template v-slot:[`item.use_nickname_formatted`]="{ item }">
+        <Chip :label="item.use_nickname_formatted" small :color="item.use_nickname === 'yes' ? 'success' : 'light'" />
+      </template>
+
+      <template v-slot:[`item.situation_formatted`]="{ item }">
+        <Chip :label="item.situation_formatted" small :color="item.situation === 'active' ? 'success' : 'light'" />
+      </template>
+
       <template v-slot:[`item.actions`]="props">
         <div style="min-width: 70px;">
           <v-menu :disabled="props.item.disableMoreActions" :nudge-width="200" bottom left offset-y v-if="schema.listActions.more.has">
@@ -64,6 +75,7 @@
 
 <script>
 import { search, view, destroy, dotsVertical, filter, cancel } from '@/utils/icons';
+import { typeActive } from '@/utils/options';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
 import Chip from '@/components/vuetify/Chip';
@@ -89,6 +101,9 @@ export default {
         dotsVertical: dotsVertical,
         filter: filter,
         cancel: cancel,
+      },
+      types: {
+        typeActive: typeActive
       },
       selected: [],
       dialog: false,

@@ -15,17 +15,20 @@
 
     <v-card class="mx-auto" max-width="300" heigth="100%" style="height: 100%;" elevation="0" tile>
       <v-list dense>
-        <v-list-group v-model="item.active" v-for="item in items" :key="item.title" :prepend-icon="item.icon" no-action dense class="mt-2">
+        <v-list-group v-model="item.active" v-for="item in items" :key="item.title" no-action dense class="mt-2">
           <template v-slot:activator>
             <v-list-item-content>
-              <v-list-item-title v-text="item.title"></v-list-item-title>
+              <v-list-item-title>
+                <Icon :icon="item.icon" class="mr-3" dense />
+                {{ item.title }}
+              </v-list-item-title>
             </v-list-item-content>
           </template>
 
-          <v-list-item v-for="child in item.items" :key="child.title" link @click="menuNavigator(child)">
+          <v-list-item v-for="child in item.items" :class="{ 'childActive': child.active }" :key="child.title" link @click="menuNavigator(item, child)">
             <v-list-item-content>
-              <v-list-item-title color="primary" :prepend-icon="item.icon" class="childActiv">
-                <Icon :icon="item.icon" class="mr-3" dense />
+              <v-list-item-title color="primary" :prepend-icon="item.icon">
+                <Icon :icon="child.icon" class="mr-3" dense />
                 {{ child.title }}
               </v-list-item-title>
             </v-list-item-content>
@@ -38,7 +41,7 @@
 </template>
 
 <script>
-import { home, account } from '@/utils/icons';
+import { home, account, chart, sale, accountSettings, list, tune, calendar } from '@/utils/icons';
 import Icon from '@/components/vuetify/Icon'
 
 export default {
@@ -49,26 +52,71 @@ export default {
       items: [
         {
           active: false,
+          menuGroupName: 'home',
           icon: home,
           title: 'Início',
-          items: [{ title: 'Dashboard', route: 'home' }],
+          items: [{ icon: chart, title: 'Dashboard', route: 'home' }],
         },
         {
           active: false,
+          menuGroupName: 'register',
           icon: account,
           title: 'Cadastros',
           items: [
-            { title: 'Registros', route: 'registers', active: false },
-            { title: 'Tipos Gerais', route: 'alltypes', active: false }
+            { icon: accountSettings, title: 'Registros', route: 'registers', active: false },
+            { icon: list, title: 'Tipos Gerais', route: 'alltypes', active: false },
+            { icon: tune, title: 'Serviços', route: 'alltypes', active: false },
+          ],
+        },
+        {
+          active: false,
+          menuGroupName: 'operations',
+          icon: sale,
+          title: 'Operações',
+          items: [
+            { icon: calendar, title: 'Agendamentos', route: 'registers', active: false },
+            { icon: tune, title: 'Ordem de Serviços', route: 'alltypes', active: false },
+          ],
+        },
+        {
+          active: false,
+          menuGroupName: 'reports',
+          icon: chart,
+          title: 'Relatórios',
+          items: [
+            { icon: calendar, title: 'Agendamentos', route: 'registers', active: false },
+            { icon: tune, title: 'Ordem de Serviços', route: 'alltypes', active: false },
+            { icon: sale, title: 'Caixa', route: 'alltypes', active: false },
+            { icon: account, title: 'Clientes', route: 'alltypes', active: false },
           ],
         },
       ],
     }
   },
+  mounted() {
+    const menuGroupName = localStorage.getItem(`${process.env.VUE_APP_NAME}.menuGroupName`);
+
+    if(menuGroupName) {
+      this.items.forEach((item) => {
+        if(item.menuGroupName === menuGroupName) {
+          item.active = true;
+        }
+      });
+    }
+  },
   methods: {
-    menuNavigator(item) {
+    menuNavigator(item, child) {console.log(item, child)
+      localStorage.setItem(`${process.env.VUE_APP_NAME}.menuGroupName`, item.menuGroupName)
+
+      this.items.forEach((i) => {
+        i.items.forEach((c) => {
+          c.active = false;
+        });
+      })
+
       item.active = true;
-      this.$router.push({ name: item.route }).catch(() => {})
+      child.active = true;
+      this.$router.push({ name: child.route }).catch(() => {})
     }
   }
 }
@@ -83,12 +131,13 @@ export default {
 .item-active {
   background: #ebebeb !important;
 }
-.childActive {
-  color: red
-}
 
 .v-list-group__items > .v-list-item {
   padding-left: 35px !important;
+}
+
+.childActive {
+  background-color: #F6F6F6;
 }
 
 </style>

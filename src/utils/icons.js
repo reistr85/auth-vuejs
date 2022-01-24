@@ -1,9 +1,11 @@
-const account = 'mdi-account-plus';
+const account = 'mdi-account-plus-outline';
+const accountSettings = 'mdi-account-settings-outline';
 const address = 'mdi-map-marker-outline';
 const arrowLeft = 'mdi-arrow-left-bold';
-const calendar = 'mdi-calendar';
+const calendar = 'mdi-calendar-month-outline';
 const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
+const chart = 'mdi-chart-box-outline';
 const check = 'mdi-check-bold';
 const close = 'mdi-close';
 const copy = 'mdi-content-copy';
@@ -19,6 +21,8 @@ const facebook = 'mdi-facebook';
 const google = 'mdi-google-plus'
 const filter = 'mdi-filter-menu-outline';
 const home = 'mdi-home-alert-outline'
+const industry = 'mdi-factory';
+const list = 'mdi-format-list-bulleted-type';
 const lockOutline = 'mdi-lock-outline'; 
 const logout = 'mdi-logout';
 const money = 'mdi-currency-usd'; 
@@ -30,22 +34,26 @@ const plus = 'mdi-plus';
 const plusOutline = 'mdi-plus-circle-outline';
 const printer = 'mdi-printer';
 const refresh = 'mdi-refresh'; 
+const sale = 'mdi-point-of-sale';
 const save = 'mdi-content-save';
 const security = 'mdi-shield-lock';
 const search = 'mdi-magnify';
 const origin = 'mdi-share-all';
 const text = 'mdi-format-text-rotation-none';
+const tune = 'mdi-tune-vertical-variant';
 const users = 'mdi-account-settings';
 const view = 'mdi-eye';
 const web = 'mdi-web';
 
 export {
   account,
+  accountSettings,
   address,
   arrowLeft,
   calendar,
   cancel,
   cellPhone,
+  chart,
   check,
   close,
   copy,
@@ -61,6 +69,8 @@ export {
   google,
   filter,
   home,
+  industry,
+  list,
   lockOutline,
   logout,
   phone,
@@ -72,11 +82,13 @@ export {
   numeric,
   printer,
   refresh,
+  sale,
   save,
   security,
   search,
   origin,
   text,
+  tune,
   users,
   view,
   web,
