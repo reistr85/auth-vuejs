@@ -61,6 +61,7 @@ export default {
           active: false,
           menuGroupName: 'register',
           icon: account,
+          action: account,
           title: 'Cadastros',
           items: [
             { icon: accountSettings, title: 'Registros', route: 'registers', active: false },
