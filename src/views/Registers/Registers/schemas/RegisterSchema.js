@@ -1,5 +1,5 @@
 import { typePageOptions } from '@/utils';
-import { search, text, calendar, address } from '@/utils/icons';
+import { search, text, calendar, address, list } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeRegister } from '@/utils/options';
 
@@ -76,6 +76,7 @@ export default {
     },
     fields: [
       {
+        icon: list,
         title: 'Dados do Cadastro',
         items: [
           {
@@ -116,7 +117,7 @@ export default {
             disabled: false,
           },
           {
-            type: 'text',
+            type: 'simpleMask',
             name: 'cnpj',
             formattedName: 'cnpj',
             label: 'CNPJ',
@@ -126,9 +127,14 @@ export default {
             list: true,
             readonly: false,
             disabled: false,
+            clearable: true,
+            inputMask: '##.###.###/####-##',
+            outputMask: '##############',
+            applyAfter: false,
+            empty: null,
           },
           {
-            type: 'text',
+            type: 'simpleMask',
             name: 'cpf',
             formattedName: 'cpf',
             label: 'CPF',
@@ -138,6 +144,10 @@ export default {
             list: true,
             readonly: false,
             disabled: false,
+            inputMask: '###.###.###-##',
+            outputMask: '###########',
+            applyAfter: false,
+            empty: null,
           },
           {
             type: 'text',
@@ -167,7 +177,7 @@ export default {
             itemValue: 'value'
           },
           {
-            type: 'text',
+            type: 'simpleMask',
             name: 'telephone',
             formattedName: 'telephone',
             label: 'Telefone',
@@ -177,6 +187,10 @@ export default {
             list: true,
             readonly: false,
             disabled: false,
+            inputMask: '(##)#####-####',
+            outputMask: '###########',
+            applyAfter: false,
+            empty: null,
           },
           {
             type: 'text',

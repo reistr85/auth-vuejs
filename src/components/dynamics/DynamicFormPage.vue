@@ -7,7 +7,6 @@
         </v-expansion-panel-header>
 
         <v-expansion-panel-content v-if="!group.address">
-          
           <v-form v-model="valid" ref='form' lazy-validation>
             <v-row>
               <v-col :md="item.md" v-for="(item, iItem) in group.items" :key="iItem">
@@ -89,6 +88,7 @@ export default {
         ...item.type === 'percent' && { clearable: item.clearable, suffix: item.suffix, length: item.length, precision: item.precision, empty: item.empty },
         ...item.type === 'money' && { clearable: item.clearable, prefix: item.prefix, length: item.length, precision: item.precision, empty: item.empty },
         ...item.type === 'integer' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
+        ...item.type === 'simpleMask' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
       }
       return test;
     },
