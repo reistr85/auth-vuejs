@@ -9,7 +9,9 @@ const typeRegister = [
   {id: 1, text: 'Cliente', value: 'client'},
   {id: 2, text: 'Fornecedor', value: 'provider'},
   {id: 3, text: 'Vendedor', value: 'seller'},
-  {id: 4, text: 'Funcionário', value: 'employee'},
+  {id: 4, text: 'Prestador', value: 'provider'},
+  {id: 5, text: 'Colaboradores', value: 'collaborator' },
+  {id: 6, text: 'Outros', value: 'others' },
 ];
 
 const typeYesNo = [
@@ -26,8 +28,6 @@ const typeAllTypes = [
   {id: 1, text: 'Categoria', value: 'category'},
   {id: 2, text: 'Sub-Categoria', value: 'sub-category'}
 ];
-
-
 
 const UF = [
   {id: 1, text: 'AC', value: 'AC' },

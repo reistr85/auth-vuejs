@@ -7,24 +7,18 @@ export default [
     path: RegisterSchema.routes.list.path,
     name: RegisterSchema.routes.list.name,
     component: ListRegisters,
-    meta:{
-      requiresAuth: true,
-    }
+    meta: RegisterSchema.routes.list.meta,
   },
   {
     path: RegisterSchema.routes.create.path,
     name: RegisterSchema.routes.create.name,
     component: CreateRegister,
-    meta:{
-      requiresAuth: true,
-    }
+    meta: RegisterSchema.routes.create.meta,
   },
   {
     path: RegisterSchema.routes.show.path,
     name: RegisterSchema.routes.show.name,
     component: CreateRegister,
-    meta:{
-      requiresAuth: true,
-    }
+    meta: RegisterSchema.routes.show.meta,
   },
 ]
