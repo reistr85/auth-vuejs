@@ -1,5 +1,5 @@
 import { typePageOptions } from '@/utils';
-import { search, text, calendar } from '@/utils/icons';
+import { search, text, calendar, address } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeRegister } from '@/utils/options';
 
@@ -8,6 +8,7 @@ export default {
     title: 'Cadastros',
     description: 'Lista de todos os cadastros no sistema',
     createBtn: 'Novo Cadastro',
+    formAddress: true,
     routes: {
       list: {
         name: 'registers',
@@ -214,6 +215,12 @@ export default {
             disabled: false,
           },
         ],
+      },
+      {
+        title: 'Dados de Endereço',
+        address: true,
+        icon: address,
+        items: []
       }
     ],
     footer: [
