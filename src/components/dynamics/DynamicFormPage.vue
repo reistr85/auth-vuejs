@@ -3,10 +3,10 @@
     <v-expansion-panels v-model="panel" multiple>
       <v-expansion-panel v-for="(group, iGroup) in schema.fields" :key="iGroup">
         <v-expansion-panel-header>
-          <h3><Icon icon="mdi-calendar" class="mr-3" /> {{ group.title }}</h3>
+          <h3><Icon :icon="group.icon" class="mr-3" /> {{ group.title }}</h3>
         </v-expansion-panel-header>
 
-        <v-expansion-panel-content>
+        <v-expansion-panel-content v-if="!group.address">
           <v-form v-model="valid" ref='form' lazy-validation>
             <v-row>
               <v-col :md="item.md" v-for="(item, iItem) in group.items" :key="iItem">
@@ -19,6 +19,10 @@
             </v-row>
           </v-form>
         </v-expansion-panel-content>
+
+        <v-expansion-panel-content v-if="group.address">
+          <AddressFormPage :address="address" />
+        </v-expansion-panel-content>
       </v-expansion-panel>      
     </v-expansion-panels>
 
@@ -30,16 +34,18 @@
 
 <script>
 import _ from 'lodash';
+import { mask } from 'vue-the-mask';
 import { save } from '@/utils/icons';
 import locales from '@/locales/pt-BR';
 import TypePageMixin from '@/mixins/TypePageMixin';
 import Icon from '@/components/vuetify/Icon';
 import typesComponents from '@/utils/typesComponents'
 import Button from '@/components/vuetify/Button';
+import AddressFormPage from './components/AddressFormPage';
 
 export default {
   name: 'DynamicFormPage',
-  components: { Icon, Button },
+  components: { Icon, Button, AddressFormPage },
   props: {
     schema: {
       type: Object,
@@ -50,6 +56,7 @@ export default {
       required: true
     }
   },
+  directives: { mask },
   data() {
     return {
       icons: {
@@ -60,7 +67,8 @@ export default {
       form: {},
       typesComponents: typesComponents,
       loadingSave: false,
-      localItem: {}
+      localItem: {},
+      address: {},
     }
   },
   mounted() {
@@ -85,6 +93,9 @@ export default {
     },
     getEvents() {
       return { input: this.setValueForm, change: this.setValueForm }
+    },
+    getMasks(item) {
+      return item.masks;
     },
     setFormValue(name, value) {
       _.set(this.form, name, value);
@@ -115,6 +126,7 @@ export default {
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
     },
     create(){
+      if(this.schema.formAddress) this.form.address = this.address;
       this.service.create(this.form).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
         this.$router.push({name: this.schema.routes.list.name});
@@ -126,6 +138,7 @@ export default {
     },
     update() {
       const { id } = this.$route.params;
+      if(this.schema.formAddress) this.localItem.address = this.address;
 
       this.service.update(id, this.localItem).then(() => {
         this.$noty.success(locales.alerts.updatedRegister)

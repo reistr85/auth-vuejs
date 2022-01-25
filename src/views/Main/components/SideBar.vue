@@ -65,7 +65,7 @@ export default {
           items: [
             { icon: accountSettings, title: 'Registros', route: 'registers', active: false },
             { icon: list, title: 'Tipos Gerais', route: 'alltypes', active: false },
-            { icon: tune, title: 'Serviços', route: 'alltypes', active: false },
+            { icon: tune, title: 'Serviços', route: 'services', active: false },
           ],
         },
         {
@@ -74,8 +74,8 @@ export default {
           icon: sale,
           title: 'Operações',
           items: [
-            { icon: calendar, title: 'Agendamentos', route: 'registers', active: false },
-            { icon: tune, title: 'Ordem de Serviços', route: 'alltypes', active: false },
+            { icon: calendar, title: 'Agendamentos', route: 'appointments', active: false },
+            { icon: tune, title: 'Ordem de Serviços', route: 'orderservices', active: false },
           ],
         },
         {
@@ -84,10 +84,10 @@ export default {
           icon: chart,
           title: 'Relatórios',
           items: [
-            { icon: calendar, title: 'Agendamentos', route: 'registers', active: false },
-            { icon: tune, title: 'Ordem de Serviços', route: 'alltypes', active: false },
-            { icon: sale, title: 'Caixa', route: 'alltypes', active: false },
-            { icon: account, title: 'Clientes', route: 'alltypes', active: false },
+            { icon: calendar, title: 'Agendamentos', route: 'reportappointments', active: false },
+            { icon: tune, title: 'Ordem de Serviços', route: 'reportorderservices', active: false },
+            { icon: sale, title: 'Caixa', route: 'reportboxes', active: false },
+            { icon: account, title: 'Clientes', route: 'reportcustomers', active: false },
           ],
         },
       ],
@@ -100,6 +100,10 @@ export default {
       this.items.forEach((item) => {
         if(item.menuGroupName === menuGroupName) {
           item.active = true;
+          item.items.forEach((c) => {
+            c.active = false;
+            if(c.route === this.$route.name) c.active = true;
+          });
         }
       });
     }
