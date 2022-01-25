@@ -1,4 +1,5 @@
-import { search, text, calendar } from '@/utils/icons';
+import { typePageOptions } from '@/utils';
+import { search, text, calendar, address } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeRegister } from '@/utils/options';
 
@@ -7,18 +8,22 @@ export default {
     title: 'Cadastros',
     description: 'Lista de todos os cadastros no sistema',
     createBtn: 'Novo Cadastro',
+    formAddress: true,
     routes: {
       list: {
         name: 'registers',
         path: '/cadastros',
+        meta: { typePage: typePageOptions.list, requiresAuth: true, }
       },
       create: {
         name: 'register-create',
         path: '/cadastros/novo',
+        meta: { typePage: typePageOptions.create, requiresAuth: true, }
       },
       show: {
         name: 'register-show',
         path: '/cadastros/:id',
+        meta: { typePage: typePageOptions.show, requiresAuth: true, }
       }
     },
     listActions: {
@@ -154,7 +159,7 @@ export default {
             align: '',
             md: '3',
             rules: [required],
-            list: false,
+            list: true,
             readonly: false,
             disabled: false,
             items: typeRegister,
@@ -210,6 +215,12 @@ export default {
             disabled: false,
           },
         ],
+      },
+      {
+        title: 'Dados de Endereço',
+        address: true,
+        icon: address,
+        items: []
       }
     ],
     footer: [
