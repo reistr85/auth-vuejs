@@ -7,14 +7,14 @@
         </v-expansion-panel-header>
 
         <v-expansion-panel-content v-if="!group.address">
+          
           <v-form v-model="valid" ref='form' lazy-validation>
             <v-row>
               <v-col :md="item.md" v-for="(item, iItem) in group.items" :key="iItem">
                 <component
                   v-model="localItem[item.name]"
                   v-bind="getProps(item)"
-                  :is="typesComponents[item.type]" 
-                  @change="setFormValue(item.name, $event)" />
+                  :is="typesComponents[item.type]" />
               </v-col>
             </v-row>
           </v-form>
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
 import { mask } from 'vue-the-mask';
 import { save } from '@/utils/icons';
 import locales from '@/locales/pt-BR';
@@ -59,6 +58,7 @@ export default {
   directives: { mask },
   data() {
     return {
+      value: 0,
       icons: {
         save: save,
       },
@@ -78,27 +78,19 @@ export default {
   mixins: [TypePageMixin],
   methods: {
     getProps(item) {
-      return { 
-        type: item.type,
+      const test =  { 
         label: item.label,
         readonly: item.readonly,
         disabled: item.disabled,
         rules: item.rules,
-        items: item.items,
-        itemText: item.itemText,
-        itemValue: item.itemValue,
-        counter: item.counter,
-        maxLength: item.counter
+        ...item.type === 'text' && { type: item.type, counter: item.counter, maxLength: item.counter },
+        ...item.type === 'password' && { type: item.type, counter: item.counter, maxLength: item.counter },
+        ...item.type === 'select' && { items: item.items, itemText: item.itemText, itemValue: item.itemValue, },
+        ...item.type === 'percent' && { clearable: item.clearable, suffix: item.suffix, length: item.length, precision: item.precision, empty: item.empty },
+        ...item.type === 'money' && { clearable: item.clearable, prefix: item.prefix, length: item.length, precision: item.precision, empty: item.empty },
+        ...item.type === 'integer' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
       }
-    },
-    getEvents() {
-      return { input: this.setValueForm, change: this.setValueForm }
-    },
-    getMasks(item) {
-      return item.masks;
-    },
-    setFormValue(name, value) {
-      _.set(this.form, name, value);
+      return test;
     },
     show() {
       const { id } = this.$route.params;
@@ -127,7 +119,7 @@ export default {
     },
     create(){
       if(this.schema.formAddress) this.form.address = this.address;
-      this.service.create(this.form).then(() => {
+      this.service.create(this.localItem).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
         this.$router.push({name: this.schema.routes.list.name});
         this.loadingSave = false;
