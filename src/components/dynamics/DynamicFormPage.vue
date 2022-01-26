@@ -20,7 +20,7 @@
         </v-expansion-panel-content>
 
         <v-expansion-panel-content v-if="group.address">
-          <AddressFormPage :address="address" />
+          <AddressFormPage :address="address" @setAddressByZipCode="setAddressByZipCode" />
         </v-expansion-panel-content>
       </v-expansion-panel>      
     </v-expansion-panels>
@@ -102,6 +102,7 @@ export default {
           })
         })
         this.localItem = form
+        this.address = res.address;
       }).catch((err) => {
         this.$noty.error(err);
         this.$router.push({name: this.schema.routes.list.name});
@@ -141,6 +142,12 @@ export default {
         this.loadingSave = false;
       });
     },
+    setAddressByZipCode(address) {
+      if(!address)
+        return;
+
+      this.address = { ...address }
+    }
   }
 }
 </script>
