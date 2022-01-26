@@ -1,28 +1,28 @@
 <template>
   <v-form v-model="valid" ref='form' lazy-validation>
     <v-row>
-      <v-col md="2">
-        <TextField v-model="address.zip_code" label="CEP" v-mask="[masks.zipCode]" />
+      <v-col md="3">
+        <TextFieldSimpleMask ref="refZipCode" v-model="address.zip_code" label="CEP" v-bind="propsZipCode" :loading="loading" />
       </v-col>
       <v-col md="2">
-        <Select v-model="address.uf" label="UF" :items="options.UF" itemText="text" itemValue="value" />
+        <Select v-model="address.uf" label="UF" :items="options.UF" itemText="text" itemValue="value" :loading="loading" />
+      </v-col>
+      <v-col md="3">
+        <TextField v-model="address.city" label="Cidade" :loading="loading" />
       </v-col>
       <v-col md="4">
-        <TextField v-model="address.city" label="Cidade" />
-      </v-col>
-      <v-col md="4">
-        <TextField v-model="address.street" label="Endereço" />
+        <TextField v-model="address.street" label="Endereço" :loading="loading" />
       </v-col>
     </v-row>
     <v-row>
       <v-col md="3">
-        <TextField v-model="address.neighborhood" label="Bairro" />
+        <TextField v-model="address.neighborhood" label="Bairro" :loading="loading" />
       </v-col>
       <v-col md="2">
-        <TextField v-model="address.number" label="Número" />
+        <TextField v-model="address.number" label="Número" :loading="loading" />
       </v-col>
       <v-col md="7">
-        <TextField v-model="address.complement" label="Complemento" />
+        <TextField v-model="address.complement" label="Complemento" :loading="loading" />
       </v-col>
     </v-row>
   </v-form>
@@ -34,11 +34,13 @@ import { mask } from 'vue-the-mask';
 import { zipCode } from '@/utils/masks';
 import { UF } from '@/utils/options';
 import TextField from '@/components/vuetify/TextField'
+import TextFieldSimpleMask from '@/components/vuetify/TextFieldSimpleMask'
 import Select from '@/components/vuetify/Select'
+import axios from 'axios';
 
 export default {
   name: 'AddresFormPages',
-  components: { TextField, Select },
+  components: { TextField, Select, TextFieldSimpleMask },
   props: {
     address: {
       type: Object,
@@ -59,8 +61,50 @@ export default {
       },
       panel: [0],
       valid: false,
+      loading: false,
     }
   },
+  computed: {
+    propsZipCode() {
+      return { 
+        required: true,
+        list: true,
+        readonly: false,
+        disabled: false,
+        inputMask: '##.###-###',
+        outputMask: '########',
+        applyAfter: false,
+        empty: null,
+      }
+    }
+  },
+  watch: {
+    ['address.zip_code']: {
+      handler() {
+        if(this.address.zip_code.length === 8) {
+          this.loading = true;
+          setTimeout(() => {
+            this.getAddress();
+          }, 5000);
+        }
+      },
+      deep: true
+    }
+  },
+  methods: {
+    getAddress() {
+      console.log(123)
+      axios.get(`zip-code-open?zip_code=${this.address.zip_code}`).then((res) => {
+        this.$refs.refZipCode.focus = false;
+        this.loading = false;
+        this.$emit('setAddressByZipCode', res.data);
+      }).catch(() => {
+        this.$noty.error('Erro ao localizar o Endereço')
+        this.loading = false;
+        this.$emit('setAddressByZipCode', null);
+      })
+    }
+  }
 }
 </script>
 

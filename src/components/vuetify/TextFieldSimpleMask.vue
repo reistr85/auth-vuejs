@@ -2,7 +2,7 @@
   <v-text-field-simplemask
     v-bind="$attrs"
     v-on="$listeners"
-    v-model="value"
+    v-model="$attrs.value"
     v-bind:label="label"
     v-bind:properties="{
       id: id,
@@ -32,6 +32,9 @@ export default {
     return {
       value: '',
     };
+  },
+  computed: {
+
   },
   props: {
     id: {
