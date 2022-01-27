@@ -1,7 +1,8 @@
 import DynamicService from '@/service/DynamicService';
 
 const formatResponse = (item) => {
-  item.type_formatted = 'Administrador';
+  item.category_formatted = item.category.description;
+  item.sub_category_formatted = item.sub_category.description;
 }
 
 const ServicesService = DynamicService('services', {

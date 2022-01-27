@@ -117,7 +117,13 @@ export default {
           list: true,
           readonly: false,
           disabled: false,
-          items: typeUser,
+          items: [],
+          service: {
+            has: true,
+            verb: 'get',
+            endpoint: 'filters',
+            queryParams: 'domain=all-types&filter[type]=category',
+          },
           itemText: 'text',
           itemValue: 'value'
         },

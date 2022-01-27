@@ -1,5 +1,5 @@
 import { typePageOptions } from '@/utils';
-import { search, text, calendar } from '@/utils/icons';
+import { search, text, calendar, list } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeYesNo, typeActive, typeAllTypes } from '@/utils/options';
 
@@ -75,6 +75,7 @@ export default {
     },
     fields: [
       {
+        icon: list,
         title: 'Dados do Tipo Geral',
         items: [
           {

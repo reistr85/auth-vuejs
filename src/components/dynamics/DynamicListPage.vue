@@ -38,34 +38,12 @@
       </template>
 
       <template v-slot:[`item.actions`]="props">
-        <div style="min-width: 70px;">
-          <v-menu :disabled="props.item.disableMoreActions" :nudge-width="200" bottom left offset-y v-if="schema.listActions.more.has">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon>{{ icons.dotsVertical }}</v-icon>
-              </v-btn>
-            </template>
-
-            <v-card>
-              <v-list v-for="(i, index) in schema.listActions.more.items" :key="index" dense>
-                <v-list-item link @click="actionMoreActions(props, i)">
-                  <v-list-item-icon>
-                    <v-icon class="icon-side-bar">{{ i.icon }}</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-title class="text-side-bar">{{ i.label }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-card>
-          </v-menu>
-
-          <v-btn icon v-if="!schema.listActions.noShow" class="my-1" fab color="secondary" x-small :to="{name: schema.routes.show.name, params: {id: props.item.id}}">
-            <v-icon dark>{{ icons.view }}</v-icon>
-          </v-btn>
-          
-          <v-btn icon v-if="!schema.listActions.noDestroy" class="my-1" fab color="red" x-small @click="openDialogDestroy(props)">
-            <v-icon dark>{{ icons.destroy }}</v-icon>
-          </v-btn>
-        </div>
+        <ActionsListPage 
+          :schema="schema" 
+          :icons="icons" 
+          :data-list-props="props"
+          @openDialogDestroy="openDialogDestroy"
+          @actionMoreActions="actionMoreActions" />
       </template>
     </v-data-table>
 
@@ -78,11 +56,12 @@ import { search, view, destroy, dotsVertical, filter, cancel } from '@/utils/ico
 import { typeActive } from '@/utils/options';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
+import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
 
 export default {
   name: 'DynamicListPage',
-  components: { DialogConfirmation, SearchListPage,Chip },
+  components: { DialogConfirmation, SearchListPage, ActionsListPage, Chip },
   props: {
     schema: {
       type: Object,

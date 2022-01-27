@@ -10,10 +10,7 @@
           <v-form v-model="valid" ref='form' lazy-validation>
             <v-row>
               <v-col :md="item.md" v-for="(item, iItem) in group.items" :key="iItem">
-                <component
-                  v-model="localItem[item.name]"
-                  v-bind="getProps(item)"
-                  :is="typesComponents[item.type]" />
+                <component v-model="localItem[item.name]" v-bind="getProps(item)" :is="typesComponents[item.type]" />
               </v-col>
             </v-row>
           </v-form>
@@ -32,6 +29,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mask } from 'vue-the-mask';
 import { save } from '@/utils/icons';
 import locales from '@/locales/pt-BR';
@@ -68,29 +66,32 @@ export default {
       loadingSave: false,
       localItem: {},
       address: {},
+      itemsSelect: {
+      }
     }
   },
   mounted() {
     if(this.typePage === this.typePageOptions.show)
       this.show();
+
+    this.mountItemsSelects();
   },
   mixins: [TypePageMixin],
   methods: {
     getProps(item) {
-      const test =  { 
+      return { 
         label: item.label,
         readonly: item.readonly,
         disabled: item.disabled,
         rules: item.rules,
         ...item.type === 'text' && { type: item.type, counter: item.counter, maxLength: item.counter },
         ...item.type === 'password' && { type: item.type, counter: item.counter, maxLength: item.counter },
-        ...item.type === 'select' && { items: item.items, itemText: item.itemText, itemValue: item.itemValue, },
+        ...item.type === 'select' && { items: this.itemsSelect[item.name], itemText: item.itemText, itemValue: item.itemValue, },
         ...item.type === 'percent' && { clearable: item.clearable, suffix: item.suffix, length: item.length, precision: item.precision, empty: item.empty },
         ...item.type === 'money' && { clearable: item.clearable, prefix: item.prefix, length: item.length, precision: item.precision, empty: item.empty },
         ...item.type === 'integer' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
         ...item.type === 'simpleMask' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
       }
-      return test;
     },
     show() {
       const { id } = this.$route.params;
@@ -102,7 +103,7 @@ export default {
           })
         })
         this.localItem = form
-        this.address = res.address;
+        this.address = res.address || {};
       }).catch((err) => {
         this.$noty.error(err);
         this.$router.push({name: this.schema.routes.list.name});
@@ -119,7 +120,7 @@ export default {
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
     },
     create(){
-      if(this.schema.formAddress) this.form.address = this.address;
+      if(this.schema.formAddress) this.localItem.address = this.address;
       this.service.create(this.localItem).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
         this.$router.push({name: this.schema.routes.list.name});
@@ -147,6 +148,23 @@ export default {
         return;
 
       this.address = { ...address }
+    },
+    async mountItemsSelects() {
+      this.schema.fields.forEach((field) => {
+        field.items.forEach((item) => {
+          if(item.type === 'select' && item.service?.has) {
+            axios[item.service.verb](`${item.service.endpoint}?${item.service.queryParams}`).then((res) => {
+              const items = res.data.data.map((i) => {
+                return { [item.itemText]: i[item.itemText], [item.itemValue]: i[item.itemValue] }
+              });
+              items.unshift({ [item.itemText]: '', [item.itemValue]: 0 });
+              this.$set(this.itemsSelect, item.name, items);
+            }).catch((err) => {
+              console.error(err)
+            });
+          }
+        });
+      });
     }
   }
 }

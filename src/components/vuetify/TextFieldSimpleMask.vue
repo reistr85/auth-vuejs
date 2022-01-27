@@ -2,7 +2,7 @@
   <v-text-field-simplemask
     v-bind="$attrs"
     v-on="$listeners"
-    v-model="$attrs.value"
+    v-model="value"
     v-bind:label="label"
     v-bind:properties="{
       id: id,
@@ -30,7 +30,7 @@ export default {
   name: 'TextFieldSimpleMask',
   data() {
     return {
-      value: '',
+      value: this.$attrs.value || '',
     };
   },
   computed: {
