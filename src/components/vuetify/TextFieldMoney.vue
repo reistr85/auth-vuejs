@@ -13,6 +13,7 @@
       outlined: outlined,
       clearable: clearable,
       dense: dense,
+      rules: rules,
     }"
     v-bind:options="{
       locale: 'pt-BR',
@@ -78,6 +79,10 @@ export default {
     empty: {
       type: String,
       default: null,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   }
 }

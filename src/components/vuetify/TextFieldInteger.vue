@@ -13,6 +13,7 @@
       outlined: outlined,
       clearable: clearable,
       dense: dense,
+      rules: rules,
     }"
     v-bind:options="{
       inputMask: inputMask,
@@ -84,6 +85,10 @@ export default {
     empty: {
       type: String,
       default: null,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   }
 }

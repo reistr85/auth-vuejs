@@ -1,6 +1,6 @@
 import { typePageOptions } from '@/utils';
 import { search, text, calendar, list } from '@/utils/icons';
-import { required } from '@/utils/rules';
+import { required, money } from '@/utils/rules';
 
 export default {
     domain: 'services',
@@ -192,7 +192,7 @@ export default {
             label: 'Valor Venda',
             align: '',
             md: '2',
-            rules: [],
+            rules: [money],
             list: true,
             readonly: false,
             disabled: false,

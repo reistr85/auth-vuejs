@@ -1,30 +1,30 @@
 <template>
   <div>
-    <v-expansion-panels v-model="panel" multiple>
-      <v-expansion-panel v-for="(group, iGroup) in schema.fields" :key="iGroup">
-        <v-expansion-panel-header>
-          <h3><Icon :icon="group.icon" class="mr-3" /> {{ group.title }}</h3>
-        </v-expansion-panel-header>
+    <v-form v-model="valid" ref="form" lazy-validation>
+      <v-expansion-panels v-model="panel" multiple>
+        <v-expansion-panel v-for="(group, iGroup) in schema.fields" :key="iGroup">
+          <v-expansion-panel-header>
+            <h3><Icon :icon="group.icon" class="mr-3" /> {{ group.title }}</h3>
+          </v-expansion-panel-header>
 
-        <v-expansion-panel-content v-if="!group.address">
-          <v-form v-model="valid" ref='form' lazy-validation>
-            <v-row>
-              <v-col sm="12" md="6" :lg="item.md" v-for="(item, iItem) in group.items" :key="iItem">
-                <component v-model="localItem[item.name]" v-bind="getProps(item)" :is="typesComponents[item.type]" />
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-expansion-panel-content>
+          <v-expansion-panel-content v-if="!group.address">
+              <v-row>
+                <v-col sm="12" md="6" :lg="item.md" v-for="(item, iItem) in group.items" :key="iItem">
+                  <component v-model="localItem[item.name]" v-bind="getProps(item)" :is="typesComponents[item.type]" />
+                </v-col>
+              </v-row>
+          </v-expansion-panel-content>
+          
+          <v-expansion-panel-content v-if="group.address">
+            <AddressFormPage :address="address" @setAddressByZipCode="setAddressByZipCode" />
+          </v-expansion-panel-content>
+        </v-expansion-panel>      
+      </v-expansion-panels>
 
-        <v-expansion-panel-content v-if="group.address">
-          <AddressFormPage :address="address" @setAddressByZipCode="setAddressByZipCode" />
-        </v-expansion-panel-content>
-      </v-expansion-panel>      
-    </v-expansion-panels>
-
-    <div class="mt-5">
-      <Button label="Salvar" color="primary" :icon="icons.save" :loading="loadingSave" @click="save" />
-    </div>
+      <div class="mt-5">
+        <Button label="Salvar" color="primary" :icon="icons.save" :loading="loadingSave" @click="save" />
+      </div>
+    </v-form>
   </div>
 </template>
 
@@ -110,6 +110,9 @@ export default {
       });
     },
     save() {
+      if(!this.$refs.form.validate())
+        return;
+
       this.loadingSave = true;
 
       if(this.schema.business){
