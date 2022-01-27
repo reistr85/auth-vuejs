@@ -9,7 +9,7 @@
         <v-expansion-panel-content v-if="!group.address">
           <v-form v-model="valid" ref='form' lazy-validation>
             <v-row>
-              <v-col :md="item.md" v-for="(item, iItem) in group.items" :key="iItem">
+              <v-col sm="12" md="6" :lg="item.md" v-for="(item, iItem) in group.items" :key="iItem">
                 <component v-model="localItem[item.name]" v-bind="getProps(item)" :is="typesComponents[item.type]" />
               </v-col>
             </v-row>
@@ -149,7 +149,7 @@ export default {
 
       this.address = { ...address }
     },
-    async mountItemsSelects() {
+    mountItemsSelects() {
       this.schema.fields.forEach((field) => {
         field.items.forEach((item) => {
           if(item.type === 'select' && item.service?.has) {
@@ -162,6 +162,8 @@ export default {
             }).catch((err) => {
               console.error(err)
             });
+          }else{
+            this.$set(this.itemsSelect, item.name, item.items);
           }
         });
       });
