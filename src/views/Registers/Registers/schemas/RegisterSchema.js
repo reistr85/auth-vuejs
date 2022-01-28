@@ -92,6 +92,7 @@ export default {
       {
         icon: list,
         title: 'Dados do Cadastro',
+        openGroup: true,
         items: [
           {
             type: 'select',
@@ -245,9 +246,10 @@ export default {
         ],
       },
       {
-        title: 'Dados de Endereço',
-        address: true,
         icon: address,
+        title: 'Dados de Endereço',
+        openGroup: true,
+        address: true,
         required: true,
         items: []
       }

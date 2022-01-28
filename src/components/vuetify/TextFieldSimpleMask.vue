@@ -29,13 +29,15 @@
 <script>
 export default {
   name: 'TextFieldSimpleMask',
-  data() {
-    return {
-      value: this.$attrs.value || '',
-    };
-  },
   computed: {
-
+    value: {
+      get() {
+        return this.$attrs.value || ''
+      },
+      set() {
+        
+      }
+    }
   },
   props: {
     id: {

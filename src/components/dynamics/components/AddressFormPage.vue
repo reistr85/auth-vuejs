@@ -1,27 +1,28 @@
 <template>
   <v-form v-model="valid" ref='form' lazy-validation>
     <v-row>
-      <v-col md="3">
+      <v-col sm="12" md="6" lg="3">
         <TextFieldSimpleMask v-model="address.zip_code" label="CEP" v-bind="propsZipCode" :loading="loading" />
       </v-col>
-      <v-col md="2">
+      <v-col sm="12" md="6" lg="2">
         <Select v-model="address.uf" label="UF" :items="options.UF" itemText="text" itemValue="value" :loading="loading" />
       </v-col>
-      <v-col md="3">
+      <v-col sm="12" md="6" lg="4">
         <TextField v-model="address.city" label="Cidade" :loading="loading" />
       </v-col>
-      <v-col md="4">
-        <TextField v-model="address.street" label="Endereço" :loading="loading" />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col md="3">
+      <v-col sm="12" md="6" lg="3">
         <TextField v-model="address.neighborhood" label="Bairro" :loading="loading" />
       </v-col>
-      <v-col md="2">
+    </v-row>
+    
+    <v-row>
+      <v-col sm="12" md="6" lg="6">
+        <TextField v-model="address.street" label="Endereço" :loading="loading" />
+      </v-col>
+      <v-col sm="12" md="6" lg="2">
         <TextField v-model="address.number" label="Número" :loading="loading" />
       </v-col>
-      <v-col md="7">
+      <v-col sm="12" md="6" lg="4">
         <TextField v-model="address.complement" label="Complemento" :loading="loading" />
       </v-col>
     </v-row>

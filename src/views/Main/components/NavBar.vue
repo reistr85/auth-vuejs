@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile style="z-index: 999">
     <v-toolbar :dark="modeDark.value">
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="$emit('openCloseSideBar')"></v-app-bar-nav-icon>
       <v-toolbar-title>Company</v-toolbar-title>
       <v-spacer></v-spacer>
       <VSwitch :label="modeDark.label" class="mt-6 mr-5" @click="modeDark.value = !modeDark.value" />
@@ -53,7 +53,7 @@ export default {
       items: [
         {icon: industry, label: 'Empresa', route: 'companies'},
         {icon: users, label: 'Usuários', route: 'users'},
-      ]
+      ],
     }
   },
   methods: {

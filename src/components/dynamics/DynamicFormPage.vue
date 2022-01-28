@@ -8,11 +8,11 @@
           </v-expansion-panel-header>
 
           <v-expansion-panel-content v-if="!group.address">
-              <v-row>
-                <v-col sm="12" md="6" :lg="item.md" v-for="(item, iItem) in group.items" :key="iItem">
-                  <component v-model="localItem[item.name]" v-bind="getProps(item)" :is="typesComponents[item.type]" />
-                </v-col>
-              </v-row>
+            <v-row>
+              <v-col cols="12" xs="12" sm="12" md="6" :lg="item.md" v-for="(item, iItem) in group.items" :key="iItem">
+                <component v-model="localItem[item.name]" v-bind="getProps(item)" :is="typesComponents[item.type]" />
+              </v-col>
+            </v-row>
           </v-expansion-panel-content>
           
           <v-expansion-panel-content v-if="group.address">
@@ -22,6 +22,7 @@
       </v-expansion-panels>
 
       <div class="mt-5">
+        <Button label="Voltar" color="light" class="mr-2" :icon="icons.arrowLeft" :loading="loadingSave" @click="$router.push({ name: schema.routes.list.name })" />
         <Button label="Salvar" color="primary" :icon="icons.save" :loading="loadingSave" @click="save" />
       </div>
     </v-form>
@@ -31,7 +32,7 @@
 <script>
 import axios from 'axios';
 import { mask } from 'vue-the-mask';
-import { save } from '@/utils/icons';
+import { save, arrowLeft } from '@/utils/icons';
 import locales from '@/locales/pt-BR';
 import TypePageMixin from '@/mixins/TypePageMixin';
 import Icon from '@/components/vuetify/Icon';
@@ -58,8 +59,9 @@ export default {
       value: 0,
       icons: {
         save: save,
+        arrowLeft: arrowLeft,
       },
-      panel: [0],
+      panel: [],
       valid: true,
       form: {},
       typesComponents: typesComponents,
@@ -153,7 +155,10 @@ export default {
       this.address = { ...address }
     },
     mountItemsSelects() {
-      this.schema.fields.forEach((field) => {
+      this.schema.fields.forEach((field, index) => {
+        if(field.openGroup)
+          this.panel.push(index)
+
         field.items.forEach((item) => {
           if(item.type === 'select' && item.service?.has) {
             axios[item.service.verb](`${item.service.endpoint}?${item.service.queryParams}`).then((res) => {

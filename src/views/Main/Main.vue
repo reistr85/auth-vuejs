@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <div style="heigth: 100%" v-if="!isLoginRegisterPage">
-      <NavBar :mode-dark="modeDark" />
+      <NavBar :mode-dark="modeDark" @openCloseSideBar="openCloseSideBar" />
       
       <v-card height="100%" class="mt-0" :dark="modeDark.value">
         <div class="main">
-          <SideBar />
+          <SideBar ref="refsSideBar" />
           <ContentMain :mode-dark="modeDark" />
         </div>
       </v-card>
@@ -54,6 +54,11 @@ export default {
         this.modeDark.label = 'Modo Escuro';
         localStorage.setItem(`${this.appName}.themeMode`, 'light')
       }
+    },
+  },
+  methods: {
+    openCloseSideBar() {
+      this.$refs.refsSideBar.drawerEvent();
     }
   }
 };
