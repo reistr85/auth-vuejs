@@ -1,11 +1,11 @@
 <template>
-  <div class="content-login" style="background-color: #FE715F;">
-    <div class="content-login--form">
-      <div class="content-login--form---left">
+  <div class="content-login px-5" style="background-color: #FE715F;">
+    <div :class="['content-login--form', height < 500 ? 'content-login--form---mobile' : '']">
+      <div class="content-login--form---left" v-if="height >= 500">
         <img src="@/assets/ilustration-login.png" width="350" alt="">
         <p>Seu negócio na palma de sua mão.</p>
       </div>
-      <div class="content-login--form---right">
+      <div :class="['content-login--form---right', height < 500 ? 'content-login--form---right----mobile' : '']">
         <div class="content-login--form---right----title">
           <h3>Começar agora.</h3>
           <p>Preencha o formuário ou faça o login social abaixo.</p>
@@ -38,6 +38,7 @@ import { isLogged } from '@/utils'
 import Button from '@/components/vuetify/Button'
 import TextField from '@/components/vuetify/TextField'
 import AuthService from '../services/AuthService';
+import BreakPointMixin from '@/mixins/BreakPointMixin';
 
 export default {
   name: 'Login',
@@ -55,6 +56,7 @@ export default {
       loading: false,
     }
   },
+  mixins: [BreakPointMixin],
   mounted() {
     if(isLogged)
       this.$router.push({ name: 'home' })

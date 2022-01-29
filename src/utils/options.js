@@ -19,9 +19,9 @@ const typeYesNo = [
   {id: 2, text: 'Não', value: 'no'}
 ];
 
-const typeActive = [
+const typeSituation = [
   {id: 1, text: 'Ativo', value: 'active'},
-  {id: 2, text: 'Desativo', value: 'desactive'}
+  {id: 2, text: 'Desativado', value: 'disabled'}
 ];
 
 const typeAllTypes = [
@@ -64,7 +64,7 @@ export {
   typeUser,
   typeRegister,
   typeYesNo,
-  typeActive,
+  typeSituation,
   typeAllTypes,
   UF,
 }

@@ -1,5 +1,5 @@
 import { typePageOptions } from '@/utils';
-import { search, text, calendar, users } from '@/utils/icons';
+import { check, text, calendar, users } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeUser } from '@/utils/options';
 
@@ -33,15 +33,17 @@ export default {
       has: true,
       items: [
         {
-          icon: search,
-          label: 'Alterar Permisões',
-          action: 'alterPermitions'
+          icon: check,
+          label: 'Ativar/Desativar',
+          action: 'activateDisable'
         }
       ]
     },
   },
   filters: {
     has: true,
+    title: 'Title',
+    openGroup: true,
     items: [
       {
         type: 'text',

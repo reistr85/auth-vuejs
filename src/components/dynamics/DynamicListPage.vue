@@ -19,6 +19,7 @@
     <v-data-table
       v-model="selected"
       item-key="id"
+      class="elevation-1"
       dense
       :loading="loading"
       :headers="headers"
@@ -26,8 +27,7 @@
       :options.sync="options"
       :server-items-length="totalLocalItems"
       :single-select="schema.singleSelect"
-      :show-select="schema.checkItem"
-      class="elevation-1">
+      :show-select="schema.checkItem">
 
       <template v-slot:[`item.use_nickname_formatted`]="{ item }">
         <Chip :label="item.use_nickname_formatted" small :color="item.use_nickname === 'yes' ? 'success' : 'light'" />
@@ -53,7 +53,7 @@
 
 <script>
 import { search, view, destroy, dotsVertical, filter, cancel } from '@/utils/icons';
-import { typeActive } from '@/utils/options';
+import { typeSituation } from '@/utils/options';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
 import ActionsListPage from './components/ActionsListPage';
@@ -82,7 +82,7 @@ export default {
         cancel: cancel,
       },
       types: {
-        typeActive: typeActive
+        typeSituation: typeSituation
       },
       selected: [],
       dialog: false,
@@ -226,8 +226,24 @@ export default {
       this.loadingDestroy = false;
       this.dialog = false;
     },
-    actionMoreActions(item, index) {
-      console.log(item, index)
+    actionMoreActions(item) {
+      if(item.i.action === 'activateDisable') {
+        this.activateDisable(item);
+        return;
+      }
+    },
+    activateDisable(item) {
+      this.loading = true;
+      let situation = this.types.typeSituation[0].value;
+      item.dataListProps.item.situation === this.types.typeSituation[0].value ? situation = this.types.typeSituation[1].value : situation = this.types.typeSituation[0].value;
+      
+      this.service.update(item.dataListProps.item.id, { situation: situation }).then(() => {
+        this.getAll();
+        this.loading = false;
+      }).catch(() => {
+        this.loading = false;
+        this.$noty.error('Erro ao atualizar a situação.');
+      });
     }
   }
 }

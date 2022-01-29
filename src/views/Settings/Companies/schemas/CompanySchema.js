@@ -1,7 +1,6 @@
 import { address, industry } from '@/utils/icons';
 import { typePageOptions } from '@/utils';
 import { required } from '@/utils/rules';
-// import { typeActive } from '@/utils/options';
 
 export default {
   domain: 'companies',

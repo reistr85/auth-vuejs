@@ -11,19 +11,19 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-//   const access_token = localStorage.getItem(`${process.env.VUE_APP_NAME}.access_token`);
+  const access_token = localStorage.getItem(`${process.env.VUE_APP_NAME}.access_token`);
 
-//   if(to.name === 'login'){
-//     if(access_token){
-//       next({name: 'home'});
-//     }
-//   }
+  if(to.name === 'login'){
+    if(access_token){
+      next({name: 'home'});
+    }
+  }
 
-//   if(to.matched.some(record => record.meta.requiresAuth)) {
-//       if(!access_token){
-//         next({name: 'login'});
-//       }
-//   }
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+      if(!access_token){
+        next({name: 'login'});
+      }
+  }
 
   next();
 })

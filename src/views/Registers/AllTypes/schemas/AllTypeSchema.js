@@ -1,7 +1,7 @@
 import { typePageOptions } from '@/utils';
-import { search, text, calendar, list } from '@/utils/icons';
+import { text, list, check } from '@/utils/icons';
 import { required } from '@/utils/rules';
-import { typeYesNo, typeActive, typeAllTypes } from '@/utils/options';
+import { typeYesNo, typeSituation, typeAllTypes } from '@/utils/options';
 
 export default {
     domain: 'all-types',
@@ -33,9 +33,9 @@ export default {
         has: true,
         items: [
           {
-            icon: search,
-            label: 'Alterar Permisões',
-            action: 'alterPermitions'
+            icon: check,
+            label: 'Ativar/Desativar',
+            action: 'activateDisable'
           }
         ]
       },
@@ -44,10 +44,13 @@ export default {
       has: true,
       items: [
         {
-          type: 'text',
-          label: 'Descrição',
-          name: 'description',
-          icon: text,
+          type: 'select',
+          label: 'Tipo',
+          name: 'type',
+          icon: list,
+          items: {
+            data: typeAllTypes,
+          },
           md: 6,
         },
         {
@@ -58,25 +61,19 @@ export default {
           md: 6,
         },
         {
-          type: 'select',
-          label: 'Tipo',
-          name: 'type',
-          icon: calendar,
-          md: 6,
+          type: 'text',
+          label: 'Descrição',
+          name: 'description',
+          icon: text,
+          md: 12,
         },
-        {
-          type: 'dataPicker',
-          label: 'Data do Cadastro',
-          name: 'created_at',
-          icon: calendar,
-          md: 6,
-        }
       ]
     },
     fields: [
       {
         icon: list,
         title: 'Dados do Tipo Geral',
+        openGroup: true,
         items: [
           {
             type: 'select',
@@ -130,6 +127,7 @@ export default {
             readonly: false,
             disabled: false,
             items: typeYesNo,
+            default: 'no',
             itemText: 'text',
             itemValue: 'value'
           },
@@ -140,11 +138,12 @@ export default {
             label: 'Situação',
             align: '',
             md: '3',
-            rules: [required],
+            rules: [],
             list: true,
             readonly: false,
             disabled: false,
-            items: typeActive,
+            noForm: true,
+            items: typeSituation,
             itemText: 'text',
             itemValue: 'value'
           },

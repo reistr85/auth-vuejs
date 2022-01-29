@@ -74,9 +74,10 @@ export default {
     getPropsComponent(item) {
       return { 
         label: item.label,
-        items: item.items?.data,
         icon: item.icon,
-        noInitial: true,
+        ...item.type === 'text' && { type: item.type, },
+        ...item.type === 'select' && { items: item.items?.data, },
+        ...item.type === 'dataPicker' && { noInitial: true, },
       }
     },
     setFormValue(field, value) {
