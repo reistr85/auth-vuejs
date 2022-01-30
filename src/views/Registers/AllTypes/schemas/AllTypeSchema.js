@@ -1,6 +1,7 @@
 import { typePageOptions } from '@/utils';
-import { text, list, check } from '@/utils/icons';
+import { text, list } from '@/utils/icons';
 import { required } from '@/utils/rules';
+import locales from '@/locales/pt-BR';
 import { typeYesNo, typeSituation, typeAllTypes } from '@/utils/options';
 
 export default {
@@ -32,11 +33,7 @@ export default {
       more: {
         has: true,
         items: [
-          {
-            icon: check,
-            label: 'Ativar/Desativar',
-            action: 'activateDisable'
-          }
+          { ...locales.dynamicListPage.listActions, },
         ]
       },
     },

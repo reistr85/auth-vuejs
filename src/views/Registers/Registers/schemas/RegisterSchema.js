@@ -1,7 +1,7 @@
 import { typePageOptions } from '@/utils';
 import { search, text, calendar, address, list } from '@/utils/icons';
 import { required } from '@/utils/rules';
-import { typeRegister } from '@/utils/options';
+import { typeRegister, typePerson } from '@/utils/options';
 
 export default {
     domain: 'registers',
@@ -105,7 +105,24 @@ export default {
             list: true,
             readonly: false,
             disabled: false,
+            multiple: true,
             items: typeRegister,
+            itemText: 'text',
+            itemValue: 'value'
+          },
+          {
+            type: 'select',
+            name: 'type_person',
+            formattedName: 'type_person_formatted',
+            label: 'Tipo Pessoa',
+            align: '',
+            md: '3',
+            rules: [required],
+            list: false,
+            readonly: false,
+            disabled: false,
+            items: typePerson,
+            default: typePerson[0].value,
             itemText: 'text',
             itemValue: 'value'
           },

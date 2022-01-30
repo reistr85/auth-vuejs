@@ -6,12 +6,17 @@ const typeUser = [
 ];
 
 const typeRegister = [
-  {id: 1, text: 'Cliente', value: 'client'},
+  {id: 1, text: 'Cliente', value: 'customer'},
   {id: 2, text: 'Fornecedor', value: 'provider'},
   {id: 3, text: 'Vendedor', value: 'seller'},
   {id: 4, text: 'Prestador', value: 'provider'},
   {id: 5, text: 'Colaboradores', value: 'collaborator' },
   {id: 6, text: 'Outros', value: 'others' },
+];
+
+const typePerson = [
+  {id: 1, text: 'Física', value: 'F'},
+  {id: 2, text: 'Jurídica', value: 'J'},
 ];
 
 const typeYesNo = [
@@ -62,6 +67,7 @@ const UF = [
 
 export { 
   typeUser,
+  typePerson,
   typeRegister,
   typeYesNo,
   typeSituation,

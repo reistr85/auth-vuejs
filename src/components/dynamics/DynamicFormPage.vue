@@ -88,7 +88,7 @@ export default {
         rules: item.rules,
         ...item.type === 'text' && { type: item.type, counter: item.counter, maxLength: item.counter },
         ...item.type === 'password' && { type: item.type, counter: item.counter, maxLength: item.counter },
-        ...item.type === 'select' && { items: this.itemsSelect[item.name], default: item.default, itemText: item.itemText, itemValue: item.itemValue, },
+        ...item.type === 'select' && { items: this.itemsSelect[item.name], default: item.default, itemText: item.itemText, itemValue: item.itemValue, multiple: item.multiple, },
         ...item.type === 'percent' && { clearable: item.clearable, suffix: item.suffix, length: item.length, precision: item.precision, empty: item.empty },
         ...item.type === 'money' && { clearable: item.clearable, prefix: item.prefix, length: item.length, precision: item.precision, empty: item.empty },
         ...item.type === 'integer' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
@@ -104,6 +104,7 @@ export default {
             form[item.name] = res[item.name]
           })
         })
+        
         this.localItem = form
         this.address = res.address || {};
       }).catch((err) => {

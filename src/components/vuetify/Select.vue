@@ -16,7 +16,8 @@
     :loading="loading"
     :items="items"
     :item-text="itemText" 
-    :item-value="itemValue">
+    :item-value="itemValue"
+    :multiple="multiple">
   </v-select>
 </template>
 
@@ -87,6 +88,10 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
     },
   },
 }
