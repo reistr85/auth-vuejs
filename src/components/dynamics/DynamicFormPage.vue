@@ -81,7 +81,7 @@ export default {
   mixins: [TypePageMixin],
   methods: {
     getProps(item) {
-      return { 
+      return  { 
         label: item.label,
         readonly: item.readonly,
         disabled: item.disabled,
@@ -102,6 +102,7 @@ export default {
         this.schema.fields.forEach((group) => {
           group.items.forEach((item) => {
             form[item.name] = res[item.name]
+            if(item.type === 'select' && item.multiple) form[item.name] = res[item.name].split(', ');
           })
         })
         
