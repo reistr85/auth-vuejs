@@ -1,6 +1,6 @@
 import { typePageOptions } from '@/utils';
-import { search, text, calendar, address, list } from '@/utils/icons';
-import { required } from '@/utils/rules';
+import { search, text, address, list } from '@/utils/icons';
+import { required, requiredSelectMultiple } from '@/utils/rules';
 import { typeRegister, typePerson } from '@/utils/options';
 
 export default {
@@ -45,6 +45,13 @@ export default {
       has: true,
       items: [
         {
+          type: 'select',
+          label: 'Tipo de Cadastro',
+          name: 'type',
+          icon: list,
+          md: 6,
+        },
+        {
           type: 'text',
           label: 'Nome',
           name: 'name',
@@ -53,8 +60,8 @@ export default {
         },
         {
           type: 'text',
-          label: 'Apelido',
-          name: 'nickname',
+          label: 'Nome Fantasia',
+          name: 'social_name',
           icon: text,
           md: 6,
         },
@@ -68,24 +75,17 @@ export default {
         {
           type: 'text',
           label: 'Telefone',
-          name: 'telephone',
+          name: 'phone',
           icon: text,
           md: 6,
         },
         {
-          type: 'select',
-          label: 'Tipo de Cadastro',
-          name: 'type',
-          icon: calendar,
+          type: 'text',
+          label: 'Celular',
+          name: 'cell_phone',
+          icon: text,
           md: 6,
         },
-        {
-          type: 'dataPicker',
-          label: 'Data do Cadastro',
-          name: 'created_at',
-          icon: calendar,
-          md: 6,
-        }
       ]
     },
     fields: [
@@ -101,7 +101,7 @@ export default {
             label: 'Tipo de Cadastro',
             align: '',
             md: '3',
-            rules: [required],
+            rules: [requiredSelectMultiple],
             list: true,
             readonly: false,
             disabled: false,
@@ -133,7 +133,6 @@ export default {
             label: 'Código',
             align: '',
             md: '2',
-            required: true,
             list: true,
             readonly: false,
             disabled: false,
@@ -153,12 +152,11 @@ export default {
           },
           {
             type: 'text',
-            name: 'nickname',
-            formattedName: 'nickname',
-            label: 'Apelido',
+            name: 'social_name',
+            formattedName: 'social_name',
+            label: 'Nome Fantasia',
             align: '',
             md: '3',
-            required: true,
             list: false,
             readonly: false,
             disabled: false,
@@ -170,7 +168,6 @@ export default {
             label: 'CNPJ',
             align: '',
             md: '3',
-            required: true,
             list: false,
             readonly: false,
             disabled: false,
@@ -187,7 +184,6 @@ export default {
             label: 'CPF',
             align: '',
             md: '3',
-            required: true,
             list: false,
             readonly: false,
             disabled: false,
@@ -203,7 +199,6 @@ export default {
             label: 'E-mail',
             align: '',
             md: '3',
-            required: true,
             list: true,
             readonly: false,
             disabled: false,
@@ -215,7 +210,6 @@ export default {
             label: 'Telefone',
             align: '',
             md: '3',
-            required: true,
             list: true,
             readonly: false,
             disabled: false,
@@ -231,7 +225,6 @@ export default {
             label: 'Facebook',
             align: '',
             md: '3',
-            required: true,
             list: false,
             readonly: false,
             disabled: false,
@@ -243,7 +236,6 @@ export default {
             label: 'Instagram',
             align: '',
             md: '3',
-            required: true,
             list: false,
             readonly: false,
             disabled: false,
@@ -255,10 +247,26 @@ export default {
             label: 'Twitter',
             align: '',
             md: '3',
-            required: true,
             list: false,
             readonly: false,
             disabled: false,
+          },
+          {
+            type: 'percent',
+            name: 'commission_percentage',
+            formattedName: 'commission_percentage',
+            label: 'Percentual Comissão',
+            align: '',
+            md: '3',
+            rules: [],
+            list: false,
+            readonly: false,
+            disabled: false,
+            clearable: false,
+            suffix: '%',
+            length: 4,
+            precision: 2,
+            empty: null,
           },
         ],
       },
