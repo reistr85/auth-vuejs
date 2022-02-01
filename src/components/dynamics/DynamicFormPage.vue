@@ -10,7 +10,8 @@
           <v-expansion-panel-content v-if="!group.address">
             <v-row>
               <v-col cols="12" xs="12" sm="12" md="6" :lg="item.md" v-for="(item, iItem) in group.items" :key="iItem">
-                <component v-model="localItem[item.name]" :is="typesComponents[item.type]" v-if="!item.noForm" v-bind="getProps(item)" />
+                <component v-model="localItem[item.name]" :is="typesComponents[item.type]" v-if="!item.noForm" 
+                  v-bind="getProps(item)" v-on="getEvents(item)" />
               </v-col>
             </v-row>
           </v-expansion-panel-content>
@@ -92,8 +93,12 @@ export default {
         ...item.type === 'percent' && { clearable: item.clearable, suffix: item.suffix, length: item.length, precision: item.precision, empty: item.empty },
         ...item.type === 'money' && { clearable: item.clearable, prefix: item.prefix, length: item.length, precision: item.precision, empty: item.empty },
         ...item.type === 'integer' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
-        ...item.type === 'simpleMask' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
+        ...item.type === 'simpleMask' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty, alphanumeric: item.alphanumeric },
+        ...item.type === 'dataPicker' && { model: item.name, noInitial: item.noInitial, now: item.now  },
       }
+    },
+    getEvents(item) {
+      return  { change: () => this.changeBusiness(item) }
     },
     show() {
       const { id } = this.$route.params;
@@ -108,6 +113,8 @@ export default {
         
         this.localItem = form
         this.address = res.address || {};
+
+        if(this.schema.business?.beforeForm) this.schema.business?.beforeForm(this.localItem, this.schema.fields)
       }).catch((err) => {
         this.$noty.error(err);
         this.$router.push({name: this.schema.routes.list.name});
@@ -179,11 +186,10 @@ export default {
           }
         });
       });
+    },
+    changeBusiness(item) {
+      if(this.schema.business?.changes[item.name]) this.schema.business?.changes[item.name](this.localItem, this.schema.fields, item)
     }
   }
 }
 </script>
-
-<style>
-
-</style>

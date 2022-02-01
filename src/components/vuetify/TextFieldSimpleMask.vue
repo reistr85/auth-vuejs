@@ -20,7 +20,7 @@
       outputMask: outputMask,
       applyAfter: applyAfter,
       empty: empty,
-      alphanumeric: true,
+      alphanumeric: alphanumeric,
     }"
   />
 </template>
@@ -91,6 +91,10 @@ export default {
     empty: {
       type: String,
       default: null,
+    },
+    alphanumeric: {
+      type: Boolean,
+      default: false,
     },
     rules: {
       type: Array,
