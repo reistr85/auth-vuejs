@@ -4,7 +4,7 @@
       v-model="menu"
       :close-on-content-click="true"
       :nudge-right="40"
-      :disabled="readonly"
+      :disabled="disabled"
       offset-y
       min-width="auto">
       
@@ -18,17 +18,19 @@
           :label="label"
           :icon="icon"
           :readonly="readonly"
+          :disabled="disabled"
           @change="changeDate()" />
       </template>
       <v-date-picker
-        v-model="date"
+        v-bind="$attrs"
+        v-on="$listeners"
         @input="menu = false" />
     </v-menu>
   </div>
 </template>
 
 <script>
-import { formatDate, formatDateEN } from '@/utils';
+import { formatDate } from '@/utils';
 import { mask } from "vue-the-mask";
 import TextField from '@/components/vuetify/TextField';
 
@@ -64,6 +66,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     model: {
       type: String,
       default: '',
@@ -76,30 +82,26 @@ export default {
       },
       deep: true,
     },
-    date: {
-      handler() {
-        this.dateFormatted = formatDate(this.date);
-        this.$emit('change', this.date);
-      },
-      deep: true,
-    },
   },
   directives: {
     mask,
   },
+  computed: {
+    dateFormatted() {
+      if(this.noInitial) {
+        return null;
+      }else if(this.now) {
+        return formatDate(new Date().toISOString().substr(0, 10))
+      }else{
+        return formatDate(this.$attrs.value)
+      }
+    }
+  },
   data() {
     return {
       menu: false,
-      date: new Date().toISOString().substr(0, 10),
-      dateFormatted: this.noInitial ? null : formatDate(new Date().toISOString().substr(0, 10)),
     }
   },
-  methods: {
-    changeDate() {
-      this.menu = false;
-      this.$emit('changeDataPick', { model: this.modelName, date: formatDateEN(this.dateFormatted) });
-    }
-  }
 }
 </script>
 

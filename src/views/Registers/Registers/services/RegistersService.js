@@ -12,7 +12,8 @@ const formatResponse = (item) => {
   
   item.cnpj_formatted = formatCpfCnpj(item.cnpj);
   item.cpf_formatted = formatCpfCnpj(item.cpf);
-  item.telephone_formatted = formatPhone(item.telephone);
+  item.phone_formatted = formatPhone(item.phone);
+  item.cell_phone_formatted = formatPhone(item.cell_phone);
 }
 
 const RegistersService = DynamicService('registers', {
