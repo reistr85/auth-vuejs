@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { search, view, destroy, dotsVertical, filter, cancel } from '@/utils/icons';
+import { search, view, destroy, dotsVertical, filter, cancel, check } from '@/utils/icons';
 import { typeSituation } from '@/utils/options';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
@@ -80,6 +80,7 @@ export default {
         dotsVertical: dotsVertical,
         filter: filter,
         cancel: cancel,
+        check: check,
       },
       types: {
         typeSituation: typeSituation
@@ -125,6 +126,17 @@ export default {
           }
         });
       });
+
+      if(this.schema.listActions.activateDisable) {
+        this.headers.push(
+          {
+            text: 'Situação',
+            value: 'situation_formatted',
+            align: 'start',
+            sortable: true,
+          }
+        );
+      }
 
       if(this.schema.listActions.has) {
         this.headers.push({ text: 'Ações', value: 'actions', sortable: false, align: 'end'});
