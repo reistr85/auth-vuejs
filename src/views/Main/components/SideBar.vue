@@ -113,7 +113,7 @@ export default {
   },
   mixins: [BreakPointMixin],
   methods: {
-    menuNavigator(item, child) {console.log(item, child)
+    menuNavigator(item, child) {
       localStorage.setItem(`${process.env.VUE_APP_NAME}.menuGroupName`, item.menuGroupName)
 
       this.items.forEach((i) => {
