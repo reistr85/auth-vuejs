@@ -208,6 +208,21 @@ export default {
           outputMask: '###########',
           applyAfter: false,
           empty: null,
+          alphanumeric: true
+        },
+        {
+          type: 'dataPicker',
+          name: 'birth',
+          formattedName: 'birth',
+          label: 'Nascimento',
+          align: '',
+          md: '2',
+          rules: [],
+          list: false,
+          readonly: false,
+          disabled: false,
+          noInitial: false,
+          now: false,
         },
       ],
     }
