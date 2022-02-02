@@ -3,6 +3,11 @@
     <v-toolbar :dark="modeDark.value">
       <v-app-bar-nav-icon @click="$emit('openCloseSideBar')"></v-app-bar-nav-icon>
       <v-toolbar-title>Company</v-toolbar-title>
+      
+      <div class="ml-10">
+        <Button label='Agendamento' rounded color='primary' :icon="icons.calendar" />
+      </div>
+
       <v-spacer></v-spacer>
       <VSwitch :label="modeDark.label" class="mt-6 mr-5" @click="modeDark.value = !modeDark.value" />
       <Menu :width="200">
@@ -24,19 +29,32 @@
         <Button label="Sair" color="secondary" style="width: 100%" :icon="icons.logout" @click="logout()" />
       </Menu>
     </v-toolbar>
+
+    <Dialog dialog :maxWidth="parseInt(700)">
+      <div slot="content" class="content-appointments">
+        <h4 class="title">Selecione o Cliente</h4>
+        <img src="@/assets/ilustration-customer.png" alt="" width="400">
+
+        <div class="mt-10">
+          <Button label='cancelar' outlined color='primary' />
+          <Button label='avançar' color='primary' class="ml-3" />
+        </div>
+      </div>
+    </Dialog>
   </v-card>
 </template>
 
 <script>
-import { dotsVertical, logout, users, industry } from '@/utils/icons';
+import { dotsVertical, logout, users, industry, calendar } from '@/utils/icons';
 import Menu from '@/components/vuetify/Menu';
 import Button from '@/components/vuetify/Button';
 import VSwitch from '@/components/vuetify/VSwitch';
+import Dialog from '@/components/vuetify/Dialog';
 import AuthService from '@/views/Auth/services/AuthService';
 
 export default {
   name: 'NavBar',
-  components: { Menu, Button, VSwitch },
+  components: { Menu, Button, VSwitch, Dialog },
   props: {
     modeDark: {
       type: Object,
@@ -49,6 +67,7 @@ export default {
       icons: {
         dotsVertical: dotsVertical,
         logout: logout,
+        calendar: calendar,
       },
       items: [
         {icon: industry, label: 'Empresa', route: 'companies'},
@@ -68,6 +87,18 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.content-appointments {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
+  .title {
+    font-size: 28px !important;
+    font-weight: normal;
+    color: #069
+  }
+}
 </style>
