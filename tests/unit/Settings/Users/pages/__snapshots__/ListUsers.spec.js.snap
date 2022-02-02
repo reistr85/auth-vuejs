@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests component ListUsers should contais components PageHeader, PageContent and DynamicListPage 1`] = `
+<div>
+  <pageheader-stub schema="[object Object]"></pageheader-stub>
+  <pagecontent-stub>
+    <dynamiclistpage-stub schema="[object Object]" service="[object Object]"></dynamiclistpage-stub>
+  </pagecontent-stub>
+</div>
+`;

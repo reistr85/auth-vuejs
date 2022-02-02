@@ -219,7 +219,7 @@ export default {
         const { id } = this.selected[0].item;
 
         this.service.delete(id).then(() => {
-          // this.$noty.success('Registro excluído com sucesso!');
+          this.$noty.success('Registro excluído com sucesso!');
           this.loadingDestroy = false;
           this.getAll();
         }).catch((err) => {

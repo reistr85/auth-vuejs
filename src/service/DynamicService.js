@@ -152,39 +152,6 @@ const DynamicService = (endpoint, options = {}) => ({
 
     return items;
   },
-  // async filters(params, paginate = ''){
-  //   let response = [];
-
-  //   let last_search = { domain: params.domain, search: params.search };
-
-  //   let payload = {
-  //     domain: last_search.domain,
-  //     search: last_search.search,
-  //     ordering: params.ordering,
-  //     q: params.q
-  //   }
-
-  //   if(paginate)
-  //     paginate = `?${paginate}`;
-
-  //   await axios.post(`filters${paginate}`, payload).then((res) => {
-  //     if (options.formatResponse && typeof options.formatResponse === 'function') {
-  //       let responseData = null;
-        
-  //       responseData = res.data.data;
-  //       res.data.data = responseData.map((item) => {
-  //         options.formatResponse(item);
-  //         return item;
-  //       });
-  //     }
-
-  //     response = res;
-  //   }).catch((err) => {
-  //     console.error(`DynamicService Filters error: ${err}`)
-  //   });
-
-  //   return response;
-  // },
 });
 
 export default DynamicService;
