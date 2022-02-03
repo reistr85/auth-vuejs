@@ -6,7 +6,7 @@
     class="dialog-custom"
   >
     <v-card class="">
-      <v-card-title>
+      <v-card-title v-if="!noTitle">
         <slot name="title" />
       </v-card-title>
       <v-divider></v-divider>
@@ -28,12 +28,16 @@ export default {
   props: {
     dialog: {
       type: Boolean,
-      default: true
+      default: false
     },
     maxWidth: {
       type: Number,
       default: 800
-    }
+    },
+    noTitle: {
+      type: Boolean,
+      default: false
+    },
   }
 }
 </script>

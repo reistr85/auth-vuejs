@@ -30,15 +30,10 @@
       </Menu>
     </v-toolbar>
 
-    <Dialog dialog :maxWidth="parseInt(700)">
+    <Dialog dialog :maxWidth="parseInt(1000)" no-title>
       <div slot="content" class="content-appointments">
-        <h4 class="title">Selecione o Cliente</h4>
-        <img src="@/assets/ilustration-customer.png" alt="" width="400">
-
-        <div class="mt-10">
-          <Button label='cancelar' outlined color='primary' />
-          <Button label='avançar' color='primary' class="ml-3" />
-        </div>
+        <Wizard />
+        
       </div>
     </Dialog>
   </v-card>
@@ -51,10 +46,11 @@ import Button from '@/components/vuetify/Button';
 import VSwitch from '@/components/vuetify/VSwitch';
 import Dialog from '@/components/vuetify/Dialog';
 import AuthService from '@/views/Auth/services/AuthService';
+import Wizard from '@/views/Operations/Appointments/components/Wizard';
 
 export default {
   name: 'NavBar',
-  components: { Menu, Button, VSwitch, Dialog },
+  components: { Menu, Button, VSwitch, Dialog, Wizard },
   props: {
     modeDark: {
       type: Object,
@@ -86,19 +82,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.content-appointments {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  .title {
-    font-size: 28px !important;
-    font-weight: normal;
-    color: #069
-  }
-}
-</style>
