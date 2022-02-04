@@ -1,8 +1,9 @@
 import { typePageOptions } from '@/utils';
 import { text, address, list } from '@/utils/icons';
 import { required, requiredSelectMultiple } from '@/utils/rules';
-import { typeRegister, typePerson } from '@/utils/options';
+import { typeRegister, typePerson, typeSituation } from '@/utils/options';
 import RegisterBusiness from '@/business/Register';
+import locales from '@/locales/pt-BR';
 
 export default {
     domain: 'registers',
@@ -319,6 +320,22 @@ export default {
             length: 4,
             precision: 2,
             empty: null,
+          },
+          {
+            type: 'select',
+            name: 'situation',
+            formattedName: 'situation_formatted',
+            label: 'Situação',
+            align: '',
+            md: '3',
+            rules: [],
+            list: true,
+            readonly: false,
+            disabled: false,
+            noForm: true,
+            items: typeSituation,
+            itemText: 'text',
+            itemValue: 'value'
           },
         ],
       },
