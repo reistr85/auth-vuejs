@@ -1,5 +1,5 @@
 import { typePageOptions } from '@/utils';
-import { search, text, calendar, list } from '@/utils/icons';
+import { text, calendar, list } from '@/utils/icons';
 import { required, money } from '@/utils/rules';
 
 export default {
@@ -28,15 +28,10 @@ export default {
       has: true,
       noShow: false,
       noDestroy: false,
+      activateDisable: true,
       more: {
         has: true,
-        items: [
-          {
-            icon: search,
-            label: 'Alterar Permisões',
-            action: 'alterPermitions'
-          }
-        ]
+        items: []
       },
     },
     filters: {
@@ -76,6 +71,7 @@ export default {
       {
         icon: list,
         title: 'Dados do Serviço',
+        openGroup: true,
         items: [
           {
             type: 'text',
@@ -171,7 +167,7 @@ export default {
           {
             type: 'money',
             name: 'cost_value',
-            formattedName: 'cost_value',
+            formattedName: 'cost_value_formatted',
             label: 'Valor Custo',
             align: '',
             md: '2',
@@ -188,7 +184,7 @@ export default {
           {
             type: 'money',
             name: 'sale_value',
-            formattedName: 'sale_value',
+            formattedName: 'sale_value_formatted',
             label: 'Valor Venda',
             align: '',
             md: '2',

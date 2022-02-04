@@ -17,17 +17,11 @@ import UsersService from '../services/UsersService';
 export default {
   name: 'ListUser',
   components: { PageHeader, PageContent, DynamicListPage },
-  props: {},
   data() {
     return {
       schema: UserSchema,
       service: UsersService,
     }
   },
-  methods: {}
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

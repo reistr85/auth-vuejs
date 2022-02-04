@@ -2,6 +2,7 @@ const account = 'mdi-account-plus-outline';
 const accountSettings = 'mdi-account-settings-outline';
 const address = 'mdi-map-marker-outline';
 const arrowLeft = 'mdi-arrow-left-bold';
+const arrowRight = 'mdi-arrow-right-bold';
 const calendar = 'mdi-calendar-month-outline';
 const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
@@ -50,6 +51,7 @@ export {
   accountSettings,
   address,
   arrowLeft,
+  arrowRight,
   calendar,
   cancel,
   cellPhone,

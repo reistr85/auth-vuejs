@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="drawer" :absolute="height < 500" :permanent="height >= 500" elevation="1" height="100%" style="border-right: 1px solid #c; z-index: 999">
+  <v-navigation-drawer v-model="drawer" :absolute="height < 500" :permanent="height >= 500" elevation="1" height="100%" style="border-right: 1px solid #ebebeb; z-index: 10">
     <template v-slot:prepend>
       <v-list-item two-line>
         <v-list-item-avatar>
