@@ -1,4 +1,4 @@
-import { typePageOptions } from '@/utils';
+import { typePageOptions, typeSituation } from '@/utils';
 import { text, calendar, list } from '@/utils/icons';
 import { required, money } from '@/utils/rules';
 
@@ -197,6 +197,22 @@ export default {
             length: 11,
             precision: 2,
             empty: null,
+          },
+          {
+            type: 'select',
+            name: 'situation',
+            formattedName: 'situation_formatted',
+            label: 'Situação',
+            align: '',
+            md: '3',
+            rules: [],
+            list: true,
+            readonly: false,
+            disabled: false,
+            noForm: true,
+            items: typeSituation,
+            itemText: 'text',
+            itemValue: 'value'
           },
         ],
       }
