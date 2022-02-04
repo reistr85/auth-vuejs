@@ -41,7 +41,8 @@ export default {
     return {
       headers: [
         {text: 'Nome', value: 'name'},
-        {text: 'Contato', value: 'phone_formatted'},
+        {text: 'Telefone', value: 'phone_formatted'},
+        {text: 'Celular', value: 'cell_phone_formatted'},
       ],
       search: '',
       disabledBtnNext: true
@@ -49,11 +50,11 @@ export default {
   },
   methods: {
     getItems(options) {
-      this.$emit('getItems', options);
+      this.$emit('getItems', { ...options, type: 'customer' });
     },
     selectCustomer(customer) {
       customer.length ? this.disabledBtnNext = false : this.disabledBtnNext = true;
-      this.$emit('selectCustomer', customer)
+      this.$emit('selectRegister', { register: customer, type: 'customer' })
     },
   }
 }

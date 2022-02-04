@@ -1,6 +1,10 @@
 <template>
   <div>
-    <TextField v-model="search" label='pesquisar cliente' class="content-appointments--boddy---right----customers-----search-customer" />
+    <TextField
+      v-model="search"
+      label='pesquisar'
+      class="content-appointments--boddy---right----customers-----search-customer" />
+
     <v-data-table
       v-model="selected"
       item-key="id"
@@ -72,6 +76,7 @@ export default {
       handler() {
         this.localItems = this.items.data;
         this.totalLocalItems = this.items.total;
+        this.options.itemsPerPage = parseInt(this.items.per_page);
       },
       deep: true,
     },

@@ -4,23 +4,30 @@
       <v-stepper-step :complete="steps > 1" step="1">Cliente</v-stepper-step>
       <v-divider></v-divider>
 
-      <v-stepper-step :complete="steps > 2" step="2">Serviço</v-stepper-step>
+      <v-stepper-step :complete="steps > 2" step="2">Colaborador</v-stepper-step>
       <v-divider></v-divider>
 
-      <v-stepper-step step="3">Data/Hora</v-stepper-step>
+      <v-stepper-step :complete="steps > 3" step="3">Serviço</v-stepper-step>
+      <v-divider></v-divider>
+
+      <v-stepper-step step="4">Data/Hora</v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <StepOne @setStep="setStep" :customers="customers" :loading="loadingDataTable" @getItems="getCustomers" @selectCustomer="selectCustomer" />
+        <StepOne @setStep="setStep" :customers="customers" :loading="loadingDataTable" @getItems="getRegisters" @selectRegister="selectRegister" />
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <StepTow @setStep="setStep" />
+        <StepTow @setStep="setStep" :collaborators="collaborators" :loading="loadingDataTable" @getItems="getRegisters" @selectRegister="selectRegister" />
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <StepThree @setStep="setStep" @finish="finish" />
+        <StepThree @setStep="setStep" />
+      </v-stepper-content>
+
+      <v-stepper-content step="4">
+        <StepFour @setStep="setStep" @finish="finish" />
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -33,21 +40,23 @@ import locales from '@/locales/pt-BR';
 import StepOne from './StepOne';
 import StepTow from './StepTow';
 import StepThree from './StepThree';
+import StepFour from './StepFour';
 import AppointmentsService from '../services/AppointmentsService';
 import RegistersService from '@/views/Registers/Registers/services/RegistersService';
 
 export default {
   name: 'Wizard',
-  components: { StepOne, StepTow, StepThree },
+  components: { StepOne, StepTow, StepThree, StepFour },
   data () {
     return {
       icons: {},
       steps: 1,
       customers: {},
+      collaborators: {},
       loadingDataTable: false,
       appointment: {
         customer_id: 0,
-        employee_id: 1,
+        collaborator_id: 0,
         services: [],
         appointment_number: 0,
         date_initial: null,
@@ -58,13 +67,13 @@ export default {
     }
   },
   methods: {
-    getCustomers(data = {}) {
+    getRegisters(data = {}) {
       this.loadingDataTable = true;
       const params = { page: data.options.page, totalItemsPerPage: 5 };
-      const filters = [{ name: 'type', value: 'customer' }, { name: 'name', value: data.search }];
+      const filters = [{ name: 'type', value: data.type }, { name: 'name', value: data.search }];
       
       RegistersService.filters(params, filters).then((res) => {
-        this.customers = res.data;
+        data.type === 'customer' ? this.customers = res.data : this.collaborators = res.data;
         this.loadingDataTable = false;
       }).catch(() => {
         this.loadingDataTable = false;
@@ -76,12 +85,17 @@ export default {
         return;
       }
 
-      if(step === 2) {
-        this.appointment.customer_id = 1
-      } else if(step === 2) {
-        this.appointment.services = []
-      }
       this.steps = step
+    },
+    selectRegister(data) {
+      if(data.type === 'customer') {
+        console.log(data)
+        data.register.length ? this.appointment.customer_id = data.register[0].id : this.appointment.customer_id = 0;
+      }else{
+        console.log(data)
+        data.register.length ? this.appointment.collaborator_id = data.register[0].id : this.appointment.collaborator_id = 0;
+      }
+      console.log(this.appointment)
     },
     finish(data) {
       const { date_initial, date_final } = data;
@@ -110,9 +124,6 @@ export default {
         status: appointmentStatus.PENDING,
       }
     },
-    selectCustomer(customer) {
-      customer.length ? this.appointment.customer_id = customer[0].id : this.appointment.customer_id = 0;
-    }
   }
 }
 </script>

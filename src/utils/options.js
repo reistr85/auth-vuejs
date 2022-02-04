@@ -10,7 +10,7 @@ const typeRegister = [
   {id: 2, text: 'Fornecedor', value: 'provider'},
   {id: 3, text: 'Vendedor', value: 'seller'},
   {id: 4, text: 'Prestador', value: 'provider'},
-  {id: 5, text: 'Colaboradores', value: 'collaborator' },
+  {id: 5, text: 'Colaborador', value: 'collaborator' },
   {id: 6, text: 'Outros', value: 'others' },
 ];
 
