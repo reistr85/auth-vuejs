@@ -1,8 +1,7 @@
 import { typePageOptions } from '@/utils';
 import { text, calendar, list } from '@/utils/icons';
 import { required } from '@/utils/rules';
-import locales from '@/locales/pt-BR';
-import { typeAccount, typeBankNumber, typeSituation } from '@/utils/options';
+import { typeAccount, typeBankNumber } from '@/utils/options';
 
 export default {
     domain: 'banks',
@@ -31,11 +30,10 @@ export default {
       has: true,
       noShow: false,
       noDestroy: false,
+      situation: true,
       more: {
         has: true,
-        items: [
-          { ...locales.dynamicListPage.listActions, },
-        ]
+        items: []
       },
     },
     filters: {
@@ -219,22 +217,6 @@ export default {
             list: false,
             readonly: false,
             disabled: false,
-          },
-          {
-            type: 'select',
-            name: 'situation',
-            formattedName: 'situation_formatted',
-            label: 'Situação',
-            align: '',
-            md: '3',
-            rules: [],
-            list: true,
-            readonly: false,
-            disabled: false,
-            noForm: true,
-            items: typeSituation,
-            itemText: 'text',
-            itemValue: 'value'
           },
         ],
       }

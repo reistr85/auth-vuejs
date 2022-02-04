@@ -8,15 +8,14 @@
       
       <div class="content-appointments--boddy---right pl-6">
         <div class="content-appointments--boddy---right----customers">
-          <TextField v-model="search" label='pesquisar cliente' class="content-appointments--boddy---right----customers-----search-customer" />
-          <DataTable :headers="headers" :items="customers" show-select single-select />
+          <DataTable :headers="headers" :items="customers" :loading="loading" @getItems="getItems" @selected="selectCustomer" show-select single-select />
         </div>
       </div>
     </div>
 
     <div class="content-appointments--boddy---actions mt-10">
       <Button label='Cancelar' outlined color='primary' @click="$emit('setStep', 0)" />
-      <Button label='Avançar' color='primary' class="ml-3" @click="$emit('setStep', 2)" />
+      <Button label='Avançar' color='primary' class="ml-3" :disabled="disabledBtnNext" @click="$emit('setStep', 2)" />
     </div>
   </div>
 </template>
@@ -24,15 +23,18 @@
 <script>
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
-import TextField from '@/components/vuetify/TextField';
 
 export default {
   name: 'StepOne',
-  components: { Button, DataTable, TextField },
+  components: { Button, DataTable },
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     customers: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -42,7 +44,17 @@ export default {
         {text: 'Contato', value: 'phone_formatted'},
       ],
       search: '',
+      disabledBtnNext: true
     }
+  },
+  methods: {
+    getItems(options) {
+      this.$emit('getItems', options);
+    },
+    selectCustomer(customer) {
+      customer.length ? this.disabledBtnNext = false : this.disabledBtnNext = true;
+      this.$emit('selectCustomer', customer)
+    },
   }
 }
 </script>
@@ -55,6 +67,7 @@ export default {
   min-height: 330px;
   border: 1px solid #ccc;
   border-radius: 7px;
+  padding: 3px;
 
   .content-appointments--boddy---right----customers-----search-customer {
     width: 100%;

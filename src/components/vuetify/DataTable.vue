@@ -1,25 +1,33 @@
 <template>
-  <v-data-table
-    v-model="selected"
-    item-key="id"
-    class="datatable"
-    dense
-    :loading="loading"
-    :headers="headers"
-    :items="items"
-    :options.sync="options"
-    :server-items-length="totalLocalItems"
-    :single-select="singleSelect"
-    :show-select="showSelect"
-    :hide-default-header="hideDefaultHeader"
-    :hide-default-footer="hideDefaultFooter"
-    @click:row="clickRow">
-  </v-data-table>
+  <div>
+    <TextField v-model="search" label='pesquisar cliente' class="content-appointments--boddy---right----customers-----search-customer" />
+    <v-data-table
+      v-model="selected"
+      item-key="id"
+      class="datatable"
+      dense
+      :loading="loading"
+      :search="search"
+      :headers="headers"
+      :items="localItems"
+      :options.sync="options"
+      :server-items-length="totalLocalItems"
+      :single-select="singleSelect"
+      :show-select="showSelect"
+      :hide-default-header="hideDefaultHeader"
+      :hide-default-footer="hideDefaultFooter"
+      @click:row="clickRow">
+    </v-data-table>
+  </div>
 </template>
 
 <script>
+import _ from 'lodash';
+import TextField from '@/components/vuetify/TextField';
+
 export default {
   name: 'DataTable',
+  components: { TextField },
   props: {
     loading: {
       type: Boolean,
@@ -30,8 +38,8 @@ export default {
       default: () => [],
     },
     items: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     singleSelect: {
       type: Boolean,
@@ -52,6 +60,7 @@ export default {
   },
   data() {
     return {
+      search: '',
       selected: [],
       options: {},
       localItems: [],
@@ -61,14 +70,29 @@ export default {
   watch: {
     items: {
       handler() {
-        this.totalLocalItems = this.items.length;
+        this.localItems = this.items.data;
+        this.totalLocalItems = this.items.total;
       },
       deep: true,
-    }
+    },
+    options: {
+      handler() {
+        this. getItems();
+      },
+      deep: true,
+    },
+    search: _.debounce(function() {
+      this.options.page = 1;
+      this. getItems();
+    }, 700)
   },
   methods: {
+    getItems() {
+      this.$emit('getItems', { options: this.options, search: this.search })
+    },
     clickRow(data) {
-      this.selected = [data]
+      this.selected.length && data.id === this.selected[0].id ? this.selected = [] :  this.selected = [data]
+      this.$emit('selected', this.selected)
     }
   }
 }

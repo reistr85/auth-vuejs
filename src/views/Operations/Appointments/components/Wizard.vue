@@ -12,7 +12,7 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <StepOne @setStep="setStep" :customers="customers" />
+        <StepOne @setStep="setStep" :customers="customers" :loading="loadingDataTable" @getItems="getCustomers" @selectCustomer="selectCustomer" />
       </v-stepper-content>
 
       <v-stepper-content step="2">
@@ -43,12 +43,13 @@ export default {
     return {
       icons: {},
       steps: 1,
-      customers: [],
+      customers: {},
+      loadingDataTable: false,
       appointment: {
-        customer_id: 1,
+        customer_id: 0,
         employee_id: 1,
         services: [],
-        appointment_number: 1,
+        appointment_number: 0,
         date_initial: null,
         date_final: null,
         description: null,
@@ -56,16 +57,17 @@ export default {
       }
     }
   },
-  mounted() {
-    this.getCustomers();
-  },
   methods: {
-    getCustomers() {
-      const params = { page: 1, totalItemsPerPage: 5 };
-      const filters = [{ name: 'type', value: 'customer' }];
+    getCustomers(data = {}) {
+      this.loadingDataTable = true;
+      const params = { page: data.options.page, totalItemsPerPage: 5 };
+      const filters = [{ name: 'type', value: 'customer' }, { name: 'name', value: data.search }];
       
       RegistersService.filters(params, filters).then((res) => {
-        this.customers = res.data.data;
+        this.customers = res.data;
+        this.loadingDataTable = false;
+      }).catch(() => {
+        this.loadingDataTable = false;
       })
     },
     setStep(step) {
@@ -107,6 +109,9 @@ export default {
         description: null,
         status: appointmentStatus.PENDING,
       }
+    },
+    selectCustomer(customer) {
+      customer.length ? this.appointment.customer_id = customer[0].id : this.appointment.customer_id = 0;
     }
   }
 }

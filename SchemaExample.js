@@ -29,15 +29,10 @@ export default {
     has: true,
     noShow: false,
     noDestroy: false,
+    situation: true,
     more: {
       has: true,
-      items: [
-        {
-          icon: check,
-          label: 'Ativar/Desativar',
-          action: 'activateDisable'
-        }
-      ]
+      items: []
     },
   },
   filters: {

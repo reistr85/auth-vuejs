@@ -22,6 +22,7 @@ const email = 'mdi-email-outline';
 const facebook = 'mdi-facebook';
 const google = 'mdi-google-plus'
 const filter = 'mdi-filter-menu-outline';
+const financial = 'mdi-cash-register'
 const home = 'mdi-home-alert-outline'
 const industry = 'mdi-factory';
 const list = 'mdi-format-list-bulleted-type';
@@ -72,6 +73,7 @@ export {
   facebook,
   google,
   filter,
+  financial,
   home,
   industry,
   list,
