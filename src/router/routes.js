@@ -6,7 +6,7 @@ import { routes as registers } from '@/views/Registers/Registers';
 import { routes as companies } from '@/views/Settings/Companies';
 import { routes as users } from '@/views/Settings/Users';
 import { routes as services } from '@/views/Registers/Services';
-
+import { routes as banks } from '@/views/Financial/Banks'
 
 
 export default [
@@ -18,4 +18,5 @@ export default [
   ...services,
   ...users,
   ...services,
+  ...banks,
 ]

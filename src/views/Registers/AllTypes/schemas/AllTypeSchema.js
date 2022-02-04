@@ -8,6 +8,7 @@ export default {
     title: 'Tipos Gerais',
     description: 'Lista de todos os tipos gerais do sistema',
     createBtn: 'Novo Tipo',
+    formAddress: false,
     routes: {
       list: {
         name: 'alltypes',
