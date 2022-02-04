@@ -204,7 +204,7 @@ export default {
             align: '',
             md: '6',
             rules: [],
-            list: true,
+            list: false,
             readonly: false,
             disabled: false,
           },
@@ -220,7 +220,6 @@ export default {
             readonly: false,
             disabled: false,
           },
-
           {
             type: 'select',
             name: 'situation',
