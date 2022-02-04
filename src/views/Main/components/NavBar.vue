@@ -5,7 +5,7 @@
       <v-toolbar-title>Company</v-toolbar-title>
       
       <div class="ml-10">
-        <Button label='Agendamento' rounded color='primary' :icon="icons.calendar" />
+        <Button label='Agendamento' rounded color='primary' :icon="icons.calendar" @click="dialog = true" />
       </div>
 
       <v-spacer></v-spacer>
@@ -30,9 +30,9 @@
       </Menu>
     </v-toolbar>
 
-    <Dialog dialog :maxWidth="parseInt(1000)" no-title>
+    <Dialog :dialog="dialog" :maxWidth="parseInt(1000)" no-title>
       <div slot="content" class="content-appointments">
-        <Wizard />
+        <Wizard @cancel="dialog = false" />
         
       </div>
     </Dialog>
@@ -69,6 +69,7 @@ export default {
         {icon: industry, label: 'Empresa', route: 'companies'},
         {icon: users, label: 'Usuários', route: 'users'},
       ],
+      dialog: true,
     }
   },
   methods: {

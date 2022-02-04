@@ -12,147 +12,103 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <div class="content-appointments">
-          <div class="content-appointments--boddy">
-            <div class="content-appointments--boddy---left">
-              <h4 class="title">Selecione o Cliente</h4>
-              <img src="@/assets/ilustration-customer.png" alt="" height="300">
-            </div>
-            
-            <div class="content-appointments--right">
-
-            </div>
-          </div>
-
-          <div class="content-appointments--boddy---actions mt-10">
-            <Button label='Cancelar' outlined color='primary' />
-            <Button label='Avançar' color='primary' class="ml-3" @click="steps = 2" />
-          </div>
-        </div>
+        <StepOne @setStep="setStep" :customers="customers" />
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <div class="content-appointments">
-          <div class="content-appointments--boddy">
-            <div class="content-appointments--boddy---left">
-              <h4 class="title">Selecione o Serviço</h4>
-              <img src="@/assets/ilustration-service.png" alt="" height="300">
-            </div>
-            
-            <div class="content-appointments--right">
-
-            </div>
-          </div>
-
-          <div class="content-appointments--boddy---actions mt-10">
-            <Button label='Voltar' outlined color='primary' @click="steps = 1" />
-            <Button label='Avançar' color='primary' class="ml-3" @click="steps = 3" />
-          </div>
-        </div>
+        <StepTow @setStep="setStep" />
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <div class="content-appointments">
-          <div class="content-appointments--boddy">
-            <div class="content-appointments--boddy---left">
-              <h4 class="title">Escolha a Data e Hora</h4>
-              <img src="@/assets/ilustration-data-time.png" alt="" height="300">
-            </div>
-            
-            <div class="content-appointments--boddy---right">
-              <v-date-picker v-model="date" v-if="!dateSelected" @input="selectDate"></v-date-picker>
-              <v-time-picker v-model="timeStep" v-else :allowed-minutes="allowedStep" format="24hr" @input="selectHour"></v-time-picker>
-            </div>
-          </div>
-
-          <div class="content-appointments--boddy---actions mt-10">
-            <Button label='Cancelar' outlined color='primary' @click="steps = 2, date = null, dateSelected = false, hourSelected = false" />
-            <Button label='Ver agenda' color='secondary' class="ml-3" @click="steps = 3" />
-            <Button label='Concluir' :disabled="!hourSelected" color='primary' class="ml-3" @click="steps = 3" />
-          </div>
-        </div>
+        <StepThree @setStep="setStep" @finish="finish" />
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
 </template>
 
 <script>
-import Button from '@/components/vuetify/Button';
+import { appointmentStatus } from '@/utils/enums';
+import { messageErrors } from '@/utils';
+import locales from '@/locales/pt-BR';
+import StepOne from './StepOne';
+import StepTow from './StepTow';
+import StepThree from './StepThree';
+import AppointmentsService from '../services/AppointmentsService';
+import RegistersService from '@/views/Registers/Registers/services/RegistersService';
 
 export default {
   name: 'Wizard',
-  components: { Button },
+  components: { StepOne, StepTow, StepThree },
   data () {
     return {
-      steps: 3,
-      date: null,
-      dateSelected: false,
-      hourSelected: false,
-      timeStep: null,
+      icons: {},
+      steps: 1,
+      customers: [],
+      appointment: {
+        customer_id: 1,
+        employee_id: 1,
+        services: [],
+        appointment_number: 1,
+        date_initial: null,
+        date_final: null,
+        description: null,
+        status: appointmentStatus.PENDING,
+      }
     }
   },
+  mounted() {
+    this.getCustomers();
+  },
   methods: {
-    selectDate() {
-      console.log(this.date)
-      this.dateSelected = true;
+    getCustomers() {
+      RegistersService.index().then((res) => {
+        this.customers = res.data.data;
+      })
     },
-    selectHour() {
-      this.hourSelected = true;
-      console.log(this.timeStep);
+    setStep(step) {
+      if(step === 0) {
+        this.$emit('cancel');
+        return;
+      }
+
+      if(step === 2) {
+        this.appointment.customer_id = 1
+      } else if(step === 2) {
+        this.appointment.services = []
+      }
+      this.steps = step
     },
-    allowedStep: m => m % 30 === 0,
+    finish(data) {
+      const { date_initial, date_final } = data;
+      this.appointment.date_initial = date_initial;
+      this.appointment.date_final = date_final;
+
+      AppointmentsService.create(this.appointment).then(() => {
+        this.$noty.success(locales.alerts.createdRegister);
+      }).catch((err) => {
+        this.$noty.error(messageErrors(err));
+      })
+      
+      this.$emit('cancel');
+      this.resetAppointment();
+    },
+    resetAppointment() {
+      this.steps = 1;
+      this.appointment = {
+        customer_id: 0,
+        employee_id: 0,
+        services: [],
+        appointment_number: 0,
+        date_initial: null,
+        date_final: null,
+        description: null,
+        status: appointmentStatus.PENDING,
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.content-stepper {
-  width: 100%;
-  min-height: 580px;
-
-  .content-appointments {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    .content-appointments--boddy {
-      width: 100%;
-      display: flex;
-      min-height: 395px;
-
-      .content-appointments--boddy---left {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        border-right: 1px solid #ccc;
-
-        .title {
-          font-size: 28px !important;
-          font-weight: normal;
-          color: #069
-        }
-      }
-
-      .content-appointments--boddy---right {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        .title {
-          font-size: 28px !important;
-          font-weight: normal;
-          color: #069
-        }
-      }
-    }
-  }
-}
+@import '../styles.scss';
 </style>
