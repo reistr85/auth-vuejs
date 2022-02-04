@@ -30,10 +30,9 @@
       </Menu>
     </v-toolbar>
 
-    <Dialog :dialog="dialog" :maxWidth="parseInt(1000)" no-title>
+    <Dialog :dialog="dialog" :maxWidth="parseInt(1000)" no-title no-actions>
       <div slot="content" class="content-appointments">
-        <Wizard @cancel="dialog = false" />
-        
+        <Wizard ref="wizardAppointment" @cancel="dialog = false" />
       </div>
     </Dialog>
   </v-card>
@@ -69,7 +68,12 @@ export default {
         {icon: industry, label: 'Empresa', route: 'companies'},
         {icon: users, label: 'Usuários', route: 'users'},
       ],
-      dialog: true,
+      dialog: false,
+    }
+  },
+  watch: {
+    dialog() {
+      if(this.dialog) this.$refs.wizardAppointment.getCustomers();
     }
   },
   methods: {

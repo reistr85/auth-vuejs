@@ -76,4 +76,8 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles.scss';
+
+.v-picker__title {
+  padding: 5px !important;
+}
 </style>

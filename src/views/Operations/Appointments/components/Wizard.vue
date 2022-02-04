@@ -61,7 +61,10 @@ export default {
   },
   methods: {
     getCustomers() {
-      RegistersService.index().then((res) => {
+      const params = { page: 1, totalItemsPerPage: 5 };
+      const filters = [{ name: 'type', value: 'customer' }];
+      
+      RegistersService.filters(params, filters).then((res) => {
         this.customers = res.data.data;
       })
     },

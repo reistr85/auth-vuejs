@@ -12,7 +12,8 @@
     :single-select="singleSelect"
     :show-select="showSelect"
     :hide-default-header="hideDefaultHeader"
-    :hide-default-footer="hideDefaultFooter">
+    :hide-default-footer="hideDefaultFooter"
+    @click:row="clickRow">
   </v-data-table>
 </template>
 
@@ -65,6 +66,11 @@ export default {
       deep: true,
     }
   },
+  methods: {
+    clickRow(data) {
+      this.selected = [data]
+    }
+  }
 }
 </script>
 

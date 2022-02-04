@@ -9,7 +9,7 @@
       <div class="content-appointments--boddy---right pl-6">
         <div class="content-appointments--boddy---right----customers">
           <TextField v-model="search" label='pesquisar cliente' class="content-appointments--boddy---right----customers-----search-customer" />
-          <DataTable :headers="headers" :items="customers" hide-default-footer />
+          <DataTable :headers="headers" :items="customers" show-select single-select />
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@ export default {
     return {
       headers: [
         {text: 'Nome', value: 'name'},
-        {text: 'Contato', value: 'phone'},
+        {text: 'Contato', value: 'phone_formatted'},
       ],
       search: '',
     }
