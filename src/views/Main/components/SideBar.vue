@@ -41,7 +41,8 @@
 </template>
 
 <script>
-import { home, account, chart, sale, accountSettings, list, tune, calendar } from '@/utils/icons';
+import { home, account, chart, sale, accountSettings, list, tune, calendar, bank } from '@/utils/icons';
+
 import Icon from '@/components/vuetify/Icon'
 import BreakPointMixin from '@/mixins/BreakPointMixin';
 
@@ -78,6 +79,15 @@ export default {
           items: [
             { icon: calendar, title: 'Agendamentos', route: 'appointments', active: false },
             { icon: tune, title: 'Ordem de Serviços', route: 'orderservices', active: false },
+          ],
+        },
+        {
+          active: false,
+          menuGroupName: 'financial',
+          icon: bank,
+          title: 'Financeiro',
+          items: [
+            { icon: bank, title: 'Bancos', route: 'banks', active: false },
           ],
         },
         {
