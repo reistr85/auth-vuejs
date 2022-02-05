@@ -15,19 +15,40 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <StepOne @setStep="setStep" :customers="customers" :loading="loadingDataTable" @getItems="getRegisters" @selectDataAppointment="selectDataAppointment" />
+        <StepOne
+          :appointment="appointment"
+          :customers="customers"
+          :loading="loadingDataTable"
+          @setStep="setStep"
+          @getItems="getRegisters"
+          @selectDataAppointment="selectDataAppointment" />
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <StepTow @setStep="setStep" :collaborators="collaborators" :loading="loadingDataTable" @getItems="getRegisters" @selectDataAppointment="selectDataAppointment" />
+        <StepTow
+          :appointment="appointment"
+          :collaborators="collaborators"
+          :loading="loadingDataTable"
+          @setStep="setStep"
+          @getItems="getRegisters"
+          @selectDataAppointment="selectDataAppointment" />
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <StepThree @setStep="setStep" :services="services" :loading="loadingDataTable" @getItems="getServices" @selectDataAppointment="selectDataAppointment" />
+        <StepThree
+          :appointment="appointment"
+          :services="services"
+          :loading="loadingDataTable"
+          @setStep="setStep"
+          @getItems="getServices"
+          @selectDataAppointment="selectDataAppointment" />
       </v-stepper-content>
 
       <v-stepper-content step="4">
-        <StepFour @setStep="setStep" @finish="finish" />
+        <StepFour
+          :appointment="appointment"
+          @setStep="setStep"
+          @finish="finish" />
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -58,12 +79,16 @@ export default {
       loadingDataTable: false,
       appointment: {
         customer_id: 0,
+        customer_name: '',
         collaborator_id: 0,
+        collaborator_name: '',
         services: [],
         appointment_number: 0,
         date_initial: null,
         date_final: null,
         description: null,
+        amount: 0,
+        qtd_items: 0,
         status: appointmentStatus.PENDING,
       }
     }
@@ -103,17 +128,30 @@ export default {
     selectDataAppointment(params) {
       const { data, type } = params;
       if(type === 'customer') {
-        data.length ? this.appointment.customer_id = data[0].id : this.appointment.customer_id = 0;
+        if(data.length) {
+          this.appointment.customer_id = data[0].id;
+          this.appointment.customer_name = data[0].name;
+        }else{
+          this.appointment.customer_id = 0;
+          this.appointment.customer_name = '';
+        }
       }else if(type === 'collaborator'){
-        data.length ? this.appointment.collaborator_id = data[0].id : this.appointment.collaborator_id = 0;
+        if(data.length) {
+          this.appointment.collaborator_id = data[0].id;
+          this.appointment.collaborator_name = data[0].name;
+        }else{
+          this.appointment.collaborator_id = 0;
+          this.appointment.collaboratorr_name = '';
+        }
       }else if(type === 'service'){
-        // if(data.length) {
-        //   data;
-        // }
+        let amount = 0;
         this.appointment.services = data.map((item) => {
+          amount += parseFloat(item.sale_value)
           return { id: item.id }
         });
-        // data.length ? this.appointment.collaborator_id = data[0].id : this.appointment.collaborator_id = 0;
+
+        this.appointment.amount = amount;
+        this.appointment.qtd_items = this.appointment.services.length;
       }
     },
     finish(data) {

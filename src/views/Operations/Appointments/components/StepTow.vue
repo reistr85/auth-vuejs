@@ -3,7 +3,8 @@
     <div class="content-appointments--boddy">
       <div class="content-appointments--boddy---left">
         <h4 class="title">Selecione o Colaborador</h4>
-        <img src="@/assets/ilustration-collaborator.png" alt="" height="300">
+        <img src="@/assets/ilustration-collaborator.png" alt="" height="200">
+        <Resume :appointment="appointment" />
       </div>
       
       <div class="content-appointments--boddy---right pl-6">
@@ -30,14 +31,19 @@
 <script>
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
+import Resume from './Resume';
 
 export default {
   name: 'StepOne',
-  components: { Button, DataTable },
+  components: { Button, DataTable, Resume },
   props: {
     loading: {
       type: Boolean,
       default: false,
+    },
+    appointment: {
+      type: Object,
+      default: () => {},
     },
     collaborators: {
       type: Object,
