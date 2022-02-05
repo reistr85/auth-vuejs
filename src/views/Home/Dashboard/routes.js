@@ -6,8 +6,6 @@ export default [
     path: HomeSchema.routes.home.path,
     name: HomeSchema.routes.home.name,
     component: Home,
-    meta:{
-      requiresAuth: true,
-    }
+    meta: HomeSchema.routes.home.meta,
   },
 ]

@@ -30,7 +30,7 @@ export default {
       has: true,
       noShow: false,
       noDestroy: false,
-      activateDisable: true,
+      situation: true,
       more: {
         has: true,
         items: []

@@ -7,6 +7,7 @@ export default {
     home: {
       name: 'home',
       path: '/',
+      meta: { typePage: null, requiresAuth: true, }
     },
   },
 }

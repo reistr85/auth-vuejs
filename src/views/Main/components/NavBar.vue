@@ -5,7 +5,7 @@
       <v-toolbar-title>Company</v-toolbar-title>
       
       <div class="ml-10">
-        <Button label='Agendamento' rounded color='primary' :icon="icons.calendar" @click="dialog = true" />
+        <Button label='Agendamento' rounded color='primary' :icon="icons.calendar" @click="dialog = true;" />
       </div>
 
       <v-spacer></v-spacer>
@@ -71,11 +71,6 @@ export default {
       dialog: false,
     }
   },
-  watch: {
-    dialog() {
-      if(this.dialog) this.$refs.wizardAppointment.getCustomers();
-    }
-  },
   methods: {
     logout() {
       AuthService.logout().then(() => {
@@ -83,7 +78,7 @@ export default {
       }).catch(() => {
 
       })
-    }
+    },
   }
 }
 </script>

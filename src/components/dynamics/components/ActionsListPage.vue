@@ -1,5 +1,5 @@
 <template>
-  <div style="min-width: 70px;">
+  <div style="width: 100px;">
     <v-menu :disabled="dataListProps.item.disableMoreActions" :nudge-width="200" bottom left offset-y v-if="schema.listActions.more.has">
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon v-bind="attrs" v-on="on">
@@ -8,8 +8,8 @@
       </template>
 
       <v-card>
-        <v-list dense v-if="schema.listActions.activateDisable">
-          <v-list-item link @click="$emit('actionMoreActions', { dataListProps, i: { action: 'activateDisable' } })">
+        <v-list dense v-if="schema.listActions.situation">
+          <v-list-item link @click="$emit('actionMoreActions', { dataListProps, i: { action: 'situation' } })">
             <v-list-item-icon>
               <v-icon class="icon-side-bar">{{ icons.check }}</v-icon>
             </v-list-item-icon>
