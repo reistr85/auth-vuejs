@@ -48,6 +48,8 @@
         <StepFour
           :appointment="appointment"
           @setStep="setStep"
+          @setDate="setDate"
+          @setHour="setHour"
           @finish="finish" />
       </v-stepper-content>
     </v-stepper-items>
@@ -72,7 +74,7 @@ export default {
   data () {
     return {
       icons: {},
-      steps: 1,
+      steps: 4,
       customers: {},
       collaborators: {},
       services: {},
@@ -82,13 +84,14 @@ export default {
         customer_name: '',
         collaborator_id: 0,
         collaborator_name: '',
-        services: [],
         appointment_number: 0,
-        date_initial: null,
-        date_final: null,
+        date: null,
+        initial_hour: null,
+        final_hour: null,
         description: null,
         amount: 0,
         qtd_items: 0,
+        services: [],
         status: appointmentStatus.PENDING,
       }
     }
@@ -154,11 +157,14 @@ export default {
         this.appointment.qtd_items = this.appointment.services.length;
       }
     },
-    finish(data) {
-      const { date_initial, date_final } = data;
-      this.appointment.date_initial = date_initial;
-      this.appointment.date_final = date_final;
-
+    setDate(date) {
+      this.appointment.date = date;
+    },
+    setHour(data) {
+      this.appointment.initial_hour = data.initialHour;
+      this.appointment.final_hour = data.finalHour;
+    },
+    finish() {
       AppointmentsService.create(this.appointment).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((err) => {
@@ -172,12 +178,17 @@ export default {
       this.steps = 1;
       this.appointment = {
         customer_id: 0,
-        employee_id: 0,
-        services: [],
+        customer_name: '',
+        collaborator_id: 0,
+        collaborator_name: '',
         appointment_number: 0,
-        date_initial: null,
-        date_final: null,
+        date: null,
+        initial_hour: null,
+        final_hour: null,
         description: null,
+        amount: 0,
+        qtd_items: 0,
+        services: [],
         status: appointmentStatus.PENDING,
       }
     },
