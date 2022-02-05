@@ -15,15 +15,15 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <StepOne @setStep="setStep" :customers="customers" :loading="loadingDataTable" @getItems="getRegisters" @selectRegister="selectRegister" />
+        <StepOne @setStep="setStep" :customers="customers" :loading="loadingDataTable" @getItems="getRegisters" @selectDataAppointment="selectDataAppointment" />
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <StepTow @setStep="setStep" :collaborators="collaborators" :loading="loadingDataTable" @getItems="getRegisters" @selectRegister="selectRegister" />
+        <StepTow @setStep="setStep" :collaborators="collaborators" :loading="loadingDataTable" @getItems="getRegisters" @selectDataAppointment="selectDataAppointment" />
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <StepThree @setStep="setStep" />
+        <StepThree @setStep="setStep" :services="services" :loading="loadingDataTable" @getItems="getServices" @selectDataAppointment="selectDataAppointment" />
       </v-stepper-content>
 
       <v-stepper-content step="4">
@@ -35,7 +35,7 @@
 
 <script>
 import { appointmentStatus } from '@/utils/enums';
-// import { messageErrors } from '@/utils';
+import { messageErrors } from '@/utils';
 import locales from '@/locales/pt-BR';
 import StepOne from './StepOne';
 import StepTow from './StepTow';
@@ -43,6 +43,7 @@ import StepThree from './StepThree';
 import StepFour from './StepFour';
 import AppointmentsService from '../services/AppointmentsService';
 import RegistersService from '@/views/Registers/Registers/services/RegistersService';
+import ServicesService from '@/views/Registers/Services/services/ServicesService';
 
 export default {
   name: 'Wizard',
@@ -53,6 +54,7 @@ export default {
       steps: 1,
       customers: {},
       collaborators: {},
+      services: {},
       loadingDataTable: false,
       appointment: {
         customer_id: 0,
@@ -79,6 +81,17 @@ export default {
         this.loadingDataTable = false;
       })
     },
+    getServices(data = {}) {
+      this.loadingDataTable = true;
+      const params = { page: data.options.page, totalItemsPerPage: 5 };
+      
+      ServicesService.index(params).then((res) => {
+        this.services = res.data;
+        this.loadingDataTable = false;
+      }).catch(() => {
+        this.loadingDataTable = false;
+      })
+    },
     setStep(step) {
       if(step === 0) {
         this.$emit('cancel');
@@ -87,11 +100,20 @@ export default {
 
       this.steps = step
     },
-    selectRegister(data) {
-      if(data.type === 'customer') {
-        data.register.length ? this.appointment.customer_id = data.register[0].id : this.appointment.customer_id = 0;
-      }else{
-        data.register.length ? this.appointment.collaborator_id = data.register[0].id : this.appointment.collaborator_id = 0;
+    selectDataAppointment(params) {
+      const { data, type } = params;
+      if(type === 'customer') {
+        data.length ? this.appointment.customer_id = data[0].id : this.appointment.customer_id = 0;
+      }else if(type === 'collaborator'){
+        data.length ? this.appointment.collaborator_id = data[0].id : this.appointment.collaborator_id = 0;
+      }else if(type === 'service'){
+        // if(data.length) {
+        //   data;
+        // }
+        this.appointment.services = data.map((item) => {
+          return { id: item.id }
+        });
+        // data.length ? this.appointment.collaborator_id = data[0].id : this.appointment.collaborator_id = 0;
       }
     },
     finish(data) {
@@ -102,12 +124,9 @@ export default {
       AppointmentsService.create(this.appointment).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((err) => {
-        console.log(err)
-        // this.$noty.error(messageErrors(err));
+        this.$noty.error(messageErrors(err));
       })
-      
-      // this.customers = {};
-      // this.collaborators = {};
+
       this.$emit('cancel');
       this.resetAppointment();
     },

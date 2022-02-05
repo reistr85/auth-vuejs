@@ -53,8 +53,9 @@ export default {
       this.$emit('getItems', { ...options, type: 'customer' });
     },
     selectCustomer(customer) {
+      console.log(customer)
       customer.length ? this.disabledBtnNext = false : this.disabledBtnNext = true;
-      this.$emit('selectRegister', { register: customer, type: 'customer' })
+      this.$emit('selectDataAppointment', { data: customer, type: 'customer' })
     },
   }
 }

@@ -58,9 +58,9 @@ export default {
     getItems(options) {
       this.$emit('getItems', { ...options, type: 'collaborator' });
     },
-    selectCollaborator(customer) {
-      customer.length ? this.disabledBtnNext = false : this.disabledBtnNext = true;
-      this.$emit('selectRegister', { register: customer, type: 'collaborator' })
+    selectCollaborator(collaborator) {
+      collaborator.length ? this.disabledBtnNext = false : this.disabledBtnNext = true;
+      this.$emit('selectDataAppointment', { data: collaborator, type: 'collaborator' })
     },
   }
 }
