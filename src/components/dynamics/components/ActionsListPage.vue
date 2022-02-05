@@ -1,5 +1,5 @@
 <template>
-  <div style="min-width: 100px;">
+  <div style="width: 100px;">
     <v-menu :disabled="dataListProps.item.disableMoreActions" :nudge-width="200" bottom left offset-y v-if="schema.listActions.more.has">
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon v-bind="attrs" v-on="on">

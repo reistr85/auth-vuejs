@@ -267,5 +267,6 @@ export default {
   position: sticky;
   background-color: #fff;
   padding: 0 5px !important;
+  width: 100px;
 }
 </style>

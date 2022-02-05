@@ -35,7 +35,7 @@
 
 <script>
 import { appointmentStatus } from '@/utils/enums';
-import { messageErrors } from '@/utils';
+// import { messageErrors } from '@/utils';
 import locales from '@/locales/pt-BR';
 import StepOne from './StepOne';
 import StepTow from './StepTow';
@@ -89,13 +89,10 @@ export default {
     },
     selectRegister(data) {
       if(data.type === 'customer') {
-        console.log(data)
         data.register.length ? this.appointment.customer_id = data.register[0].id : this.appointment.customer_id = 0;
       }else{
-        console.log(data)
         data.register.length ? this.appointment.collaborator_id = data.register[0].id : this.appointment.collaborator_id = 0;
       }
-      console.log(this.appointment)
     },
     finish(data) {
       const { date_initial, date_final } = data;
@@ -105,9 +102,12 @@ export default {
       AppointmentsService.create(this.appointment).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((err) => {
-        this.$noty.error(messageErrors(err));
+        console.log(err)
+        // this.$noty.error(messageErrors(err));
       })
       
+      // this.customers = {};
+      // this.collaborators = {};
       this.$emit('cancel');
       this.resetAppointment();
     },
