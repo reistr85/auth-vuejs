@@ -68,7 +68,7 @@ export default {
         {icon: industry, label: 'Empresa', route: 'companies'},
         {icon: users, label: 'Usuários', route: 'users'},
       ],
-      dialog: true,
+      dialog: false,
     }
   },
   methods: {

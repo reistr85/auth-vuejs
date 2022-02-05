@@ -9,7 +9,15 @@
       
       <div class="content-appointments--boddy---right pl-6">
         <div class="content-appointments--boddy---right----customers">
-          <DataTable :headers="headers" :items="customers" :loading="loading" @getItems="getItems" @selected="selectCustomer" show-select single-select />
+          <DataTable
+            ref="dataTable"
+            show-select
+            single-select
+            :headers="headers"
+            :items="customers"
+            :loading="loading"
+            @getItems="getItems"
+            @selected="selectCustomer" />
         </div>
       </div>
     </div>
@@ -59,6 +67,7 @@ export default {
       this.$emit('getItems', { ...options, type: 'customer' });
     },
     selectCustomer(customer) {
+      console.log(customer)
       customer.length ? this.disabledBtnNext = false : this.disabledBtnNext = true;
       this.$emit('selectDataAppointment', { data: customer, type: 'customer' })
     },

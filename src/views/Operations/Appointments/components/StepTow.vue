@@ -10,6 +10,7 @@
       <div class="content-appointments--boddy---right pl-6">
         <div class="content-appointments--boddy---right----contributors">
           <DataTable
+            ref="dataTable"
             show-select
             single-select
             :headers="headers"

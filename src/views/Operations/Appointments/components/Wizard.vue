@@ -16,6 +16,7 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <StepOne
+          ref="stepOne"
           :appointment="appointment"
           :customers="customers"
           :loading="loadingDataTable"
@@ -26,6 +27,7 @@
 
       <v-stepper-content step="2">
         <StepTow
+          ref="stepTow"
           :appointment="appointment"
           :collaborators="collaborators"
           :loading="loadingDataTable"
@@ -36,6 +38,7 @@
 
       <v-stepper-content step="3">
         <StepThree
+          ref="stepThree"
           :appointment="appointment"
           :services="services"
           :loading="loadingDataTable"
@@ -74,7 +77,7 @@ export default {
   data () {
     return {
       icons: {},
-      steps: 4,
+      steps: 1,
       customers: {},
       collaborators: {},
       services: {},
@@ -84,8 +87,7 @@ export default {
         customer_name: '',
         collaborator_id: 0,
         collaborator_name: '',
-        appointment_number: 0,
-        date: null,
+        appointment_date: null,
         initial_hour: null,
         final_hour: null,
         description: null,
@@ -97,7 +99,7 @@ export default {
     }
   },
   methods: {
-    getRegisters(data = {}) {
+    getRegisters(data) {
       this.loadingDataTable = true;
       const params = { page: data.options.page, totalItemsPerPage: 5 };
       const filters = [{ name: 'type', value: data.type }, { name: 'name', value: data.search }];
@@ -122,6 +124,9 @@ export default {
     },
     setStep(step) {
       if(step === 0) {
+        this.$refs.stepOne.$refs.dataTable.selected = []
+        this.$refs.stepTow.$refs.dataTable.selected = []
+        this.$refs.stepThree.$refs.dataTable.selected = []
         this.$emit('cancel');
         return;
       }
@@ -158,7 +163,7 @@ export default {
       }
     },
     setDate(date) {
-      this.appointment.date = date;
+      this.appointment.appointment_date = date;
     },
     setHour(data) {
       this.appointment.initial_hour = data.initialHour;
@@ -181,7 +186,6 @@ export default {
         customer_name: '',
         collaborator_id: 0,
         collaborator_name: '',
-        appointment_number: 0,
         date: null,
         initial_hour: null,
         final_hour: null,

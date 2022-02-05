@@ -76,7 +76,7 @@ export default {
       date: null,
       initialHour: null,
       finalHour: null,
-      dateSelected: true,
+      dateSelected: false,
       initialHourSelected: false,
       finalHourSelected: false,
     }
@@ -115,8 +115,11 @@ export default {
       this.resetHour();
     },
     resetHour() {
-      this.$refs.dataPickerInitial.selecting = 1
-      this.$refs.dataPickerFinal.selecting = 1
+      if(this.$refs.dataPickerInitial) {
+        this.$refs.dataPickerInitial.selecting = 1
+        this.$refs.dataPickerFinal.selecting = 1
+      }
+
       this.initialHour = null;
       this.finalHour = null;
       this.initialHourSelected = false;

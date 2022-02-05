@@ -20,7 +20,8 @@
       :show-select="showSelect"
       :hide-default-header="hideDefaultHeader"
       :hide-default-footer="hideDefaultFooter"
-      @click:row="clickRow">
+      @click:row="clickRow"
+      @input="handleAction">
     </v-data-table>
   </div>
 </template>
@@ -94,6 +95,9 @@ export default {
   methods: {
     getItems() {
       this.$emit('getItems', { options: this.options, search: this.search })
+    },
+    handleAction() {
+      this.$emit('selected', this.selected)
     },
     clickRow(data) {
       if(this.singleSelect) {

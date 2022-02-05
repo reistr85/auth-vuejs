@@ -29,7 +29,7 @@ export default {
       return formatCurrency(this.appointment.amount)
     },
     date() {
-      return formatDate(this.appointment.date)
+      return formatDate(this.appointment.appointment_date)
     }
   }
 }
