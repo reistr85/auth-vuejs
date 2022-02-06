@@ -3,12 +3,12 @@
     <div class="content-appointments--boddy">
       <div class="content-appointments--boddy---left">
         <h4 class="title">Selecione o Cliente</h4>
-        <img src="@/assets/ilustration-customer.png" alt="" height="200">
+        <img src="@/assets/ilustration-customer.png" alt="" height="200" v-if="height > 500">
         <Resume :appointment="appointment" />
       </div>
       
-      <div class="content-appointments--boddy---right pl-6">
-        <div class="content-appointments--boddy---right----customers">
+      <div class="content-appointments--boddy---right">
+        <div class="content-appointments--boddy---right----data-appointment" v-if="height > 500">
           <DataTable
             ref="dataTable"
             show-select
@@ -17,8 +17,18 @@
             :items="customers"
             :loading="loading"
             @getItems="getItems"
-            @selected="selectDataAppointment" />
+            @selected="selectDataAppointment({ data: $event})" />
         </div>
+
+        <AutoComplete
+          label='Pesquise o cliente'
+          item-text="name"
+          item-value="id"
+          avatar
+          :loading="loading"
+          :items="customers.data"
+          @getItems="getItemsAutoComplete"
+          @input="selectDataAppointment({ data: $event, autoComplete: true})" />
       </div>
     </div>
 
@@ -34,10 +44,12 @@ import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
 import Resume from './Resume';
 import SelectDataAppointment from '../mixins/SelectDataAppointment.js';
+import BreakPointMixin from '@/mixins/BreakPointMixin';
+import AutoComplete from '@/components/vuetify/AutoComplete';
 
 export default {
   name: 'StepOne',
-  components: { Button, DataTable, Resume },
+  components: { Button, DataTable, Resume, AutoComplete },
   props: {
     loading: {
       type: Boolean,
@@ -60,30 +72,26 @@ export default {
         {text: 'Celular', value: 'cell_phone_formatted'},
       ],
       search: '',
-      disabledBtnNext: true
+      disabledBtnNext: true,
+      modelAutoComplete: '',
     }
   },
-  mixins: [SelectDataAppointment('customer')],
+  mixins: [SelectDataAppointment('customer'), BreakPointMixin],
   methods: {
     getItems(options) {
       this.$emit('getItems', { ...options, type: 'customer' });
     },
+    getItemsAutoComplete(search) {
+      const options = {
+        search,
+        autoComplete: true,
+      }
+      this.$emit('getItems', { ...options, type: 'customer' });
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '../styles.scss';
-
-.content-appointments--boddy---right----customers {
-  width: 100%;
-  min-height: 330px;
-  border: 1px solid #ccc;
-  border-radius: 7px;
-  padding: 3px;
-
-  .content-appointments--boddy---right----customers-----search-customer {
-    width: 100%;
-  }
-}
 </style>

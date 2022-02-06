@@ -101,7 +101,7 @@ export default {
   methods: {
     getRegisters(data) {
       this.loadingDataTable = true;
-      const params = { page: data.options.page, totalItemsPerPage: 5 };
+      const params = { page: data.options?.page || 1, totalItemsPerPage: 5 };
       const filters = [{ name: 'type', value: data.type }, { name: 'name', value: data.search }];
       
       RegistersService.filters(params, filters).then((res) => {
