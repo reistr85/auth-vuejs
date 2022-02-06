@@ -37,17 +37,46 @@
       }
 
       .content-appointments--boddy---right {
-        width: 65%;
-        height: 355px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding-left: 10px;
+
+        .content-appointments--boddy---right----data-appointment {
+          width: 100%;
+          min-height: 330px;
+          border: 1px solid #ccc;
+          border-radius: 7px;
+          padding: 3px;
+        }
+      }
+    }
+  }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  .content-stepper {
+    .content-appointments {
+      .content-appointments--boddy {
+        min-height: auto;
         flex-direction: column;
 
-        .title {
-          font-size: 28px !important;
-          font-weight: normal;
-          color: #069
+        .content-appointments--boddy---left {
+          width: 100%;
+
+          .content-appointments--boddy---left----resume {
+            border-radius: 5px;
+          }
+        }
+
+        .content-appointments--boddy---right {
+          width: 100%;
+          padding-left: 0;
+          margin-top: 15px;
+
+          .content-appointments--boddy---right----data-appointment {
+            .content-appointments--boddy---right----data-appointment-----dataTableAppointment {
+              display: none;
+            }
+          }
         }
       }
     }
