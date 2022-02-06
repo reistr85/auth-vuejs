@@ -1,0 +1,55 @@
+.content-stepper {
+  width: 100%;
+
+  .content-appointments {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .content-appointments--boddy {
+      width: 100%;
+      display: flex;
+      min-height: 355px;
+
+      .content-appointments--boddy---left {
+        width: 35%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .title {
+          font-size: 24px !important;
+          font-weight: normal;
+          color: #069
+        }
+
+        .content-appointments--boddy---left----resume {
+          width: 100%;
+          background-color: #A3CCDA;
+          margin-top: 10px;
+          padding: 10px;
+          border-radius: 12px;
+        }
+      }
+
+      .content-appointments--boddy---right {
+        width: 65%;
+        height: 355px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .title {
+          font-size: 28px !important;
+          font-weight: normal;
+          color: #069
+        }
+      }
+    }
+  }
+}

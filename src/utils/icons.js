@@ -2,6 +2,8 @@ const account = 'mdi-account-plus-outline';
 const accountSettings = 'mdi-account-settings-outline';
 const address = 'mdi-map-marker-outline';
 const arrowLeft = 'mdi-arrow-left-bold';
+const arrowRight = 'mdi-arrow-right-bold';
+const bank = 'mdi-bank';
 const calendar = 'mdi-calendar-month-outline';
 const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
@@ -20,6 +22,7 @@ const email = 'mdi-email-outline';
 const facebook = 'mdi-facebook';
 const google = 'mdi-google-plus'
 const filter = 'mdi-filter-menu-outline';
+const financial = 'mdi-cash-register'
 const home = 'mdi-home-alert-outline'
 const industry = 'mdi-factory';
 const list = 'mdi-format-list-bulleted-type';
@@ -50,6 +53,8 @@ export {
   accountSettings,
   address,
   arrowLeft,
+  arrowRight,
+  bank,
   calendar,
   cancel,
   cellPhone,
@@ -68,6 +73,7 @@ export {
   facebook,
   google,
   filter,
+  financial,
   home,
   industry,
   list,

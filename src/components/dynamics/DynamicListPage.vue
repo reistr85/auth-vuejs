@@ -19,7 +19,7 @@
     <v-data-table
       v-model="selected"
       item-key="id"
-      class="elevation-1"
+      class="elevation-1 certus-data-list"
       dense
       :loading="loading"
       :headers="headers"
@@ -37,7 +37,7 @@
         <Chip :label="item.situation_formatted" small :color="item.situation === 'active' ? 'success' : 'light'" />
       </template>
 
-      <template v-slot:[`item.actions`]="props">
+      <template v-slot:[`item.actions`]="props" style="width: 200px">
         <ActionsListPage 
           :schema="schema" 
           :icons="icons" 
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { search, view, destroy, dotsVertical, filter, cancel } from '@/utils/icons';
+import { search, view, destroy, dotsVertical, filter, cancel, check } from '@/utils/icons';
 import { typeSituation } from '@/utils/options';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
@@ -80,6 +80,7 @@ export default {
         dotsVertical: dotsVertical,
         filter: filter,
         cancel: cancel,
+        check: check,
       },
       types: {
         typeSituation: typeSituation
@@ -126,8 +127,19 @@ export default {
         });
       });
 
+      if(this.schema.listActions.situation) {
+        this.headers.push(
+          {
+            text: 'Situação',
+            value: 'situation_formatted',
+            align: 'start',
+            sortable: true,
+          }
+        );
+      }
+
       if(this.schema.listActions.has) {
-        this.headers.push({ text: 'Ações', value: 'actions', sortable: false, align: 'end'});
+        this.headers.push({ text: 'Ações', value: 'actions', sortable: false, align: 'end', class: 'action-column-header', cellClass: 'action-column',});
       }
     },
     getAll() {
@@ -157,6 +169,7 @@ export default {
 
       const params = {
         page: this.options.page,
+        relations: this.schema.filters.relations,
         totalItemsPerPage: this.options.itemsPerPage,
         customSearch: this.search,
       }
@@ -207,7 +220,7 @@ export default {
         const { id } = this.selected[0].item;
 
         this.service.delete(id).then(() => {
-          // this.$noty.success('Registro excluído com sucesso!');
+          this.$noty.success('Registro excluído com sucesso!');
           this.loadingDestroy = false;
           this.getAll();
         }).catch((err) => {
@@ -227,12 +240,12 @@ export default {
       this.dialog = false;
     },
     actionMoreActions(item) {
-      if(item.i.action === 'activateDisable') {
-        this.activateDisable(item);
+      if(item.i.action === 'situation') {
+        this.situation(item);
         return;
       }
     },
-    activateDisable(item) {
+    situation(item) {
       this.loading = true;
       let situation = this.types.typeSituation[0].value;
       item.dataListProps.item.situation === this.types.typeSituation[0].value ? situation = this.types.typeSituation[1].value : situation = this.types.typeSituation[0].value;
@@ -249,6 +262,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.action-column, .action-column-header {
+  right: 0px;
+  position: sticky;
+  background-color: #fff;
+  padding: 0 5px !important;
+  width: 100px;
+}
 </style>

@@ -1,5 +1,5 @@
 import { typePageOptions } from '@/utils';
-import { search, text, address, list } from '@/utils/icons';
+import { text, address, list } from '@/utils/icons';
 import { required, requiredSelectMultiple } from '@/utils/rules';
 import { typeRegister, typePerson } from '@/utils/options';
 import RegisterBusiness from '@/business/Register';
@@ -32,15 +32,10 @@ export default {
       has: true,
       noShow: false,
       noDestroy: false,
+      situation: true,
       more: {
         has: true,
-        items: [
-          {
-            icon: search,
-            label: 'Alterar Permisões',
-            action: 'alterPermitions'
-          }
-        ]
+        items: []
       },
     },
     filters: {

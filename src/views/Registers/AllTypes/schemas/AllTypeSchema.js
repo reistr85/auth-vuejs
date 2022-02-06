@@ -1,14 +1,14 @@
 import { typePageOptions } from '@/utils';
 import { text, list } from '@/utils/icons';
 import { required } from '@/utils/rules';
-import locales from '@/locales/pt-BR';
-import { typeYesNo, typeSituation, typeAllTypes } from '@/utils/options';
+import { typeYesNo, typeAllTypes } from '@/utils/options';
 
 export default {
     domain: 'all-types',
     title: 'Tipos Gerais',
     description: 'Lista de todos os tipos gerais do sistema',
     createBtn: 'Novo Tipo',
+    formAddress: false,
     routes: {
       list: {
         name: 'alltypes',
@@ -30,11 +30,10 @@ export default {
       has: true,
       noShow: false,
       noDestroy: false,
+      situation: true,
       more: {
         has: true,
-        items: [
-          { ...locales.dynamicListPage.listActions, },
-        ]
+        items: []
       },
     },
     filters: {
@@ -125,22 +124,6 @@ export default {
             disabled: false,
             items: typeYesNo,
             default: 'no',
-            itemText: 'text',
-            itemValue: 'value'
-          },
-          {
-            type: 'select',
-            name: 'situation',
-            formattedName: 'situation_formatted',
-            label: 'Situação',
-            align: '',
-            md: '3',
-            rules: [],
-            list: true,
-            readonly: false,
-            disabled: false,
-            noForm: true,
-            items: typeSituation,
             itemText: 'text',
             itemValue: 'value'
           },

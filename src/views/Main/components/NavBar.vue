@@ -3,6 +3,11 @@
     <v-toolbar :dark="modeDark.value">
       <v-app-bar-nav-icon @click="$emit('openCloseSideBar')"></v-app-bar-nav-icon>
       <v-toolbar-title>Company</v-toolbar-title>
+      
+      <div class="ml-10">
+        <Button label='Agendamento' rounded color='primary' :icon="icons.calendar" @click="dialog = true;" />
+      </div>
+
       <v-spacer></v-spacer>
       <VSwitch :label="modeDark.label" class="mt-6 mr-5" @click="modeDark.value = !modeDark.value" />
       <Menu :width="200">
@@ -24,19 +29,27 @@
         <Button label="Sair" color="secondary" style="width: 100%" :icon="icons.logout" @click="logout()" />
       </Menu>
     </v-toolbar>
+
+    <Dialog :dialog="dialog" :maxWidth="parseInt(1000)" no-title no-actions>
+      <div slot="content" class="content-appointments">
+        <Wizard ref="wizardAppointment" @cancel="dialog = false" />
+      </div>
+    </Dialog>
   </v-card>
 </template>
 
 <script>
-import { dotsVertical, logout, users, industry } from '@/utils/icons';
+import { dotsVertical, logout, users, industry, calendar } from '@/utils/icons';
 import Menu from '@/components/vuetify/Menu';
 import Button from '@/components/vuetify/Button';
 import VSwitch from '@/components/vuetify/VSwitch';
+import Dialog from '@/components/vuetify/Dialog';
 import AuthService from '@/views/Auth/services/AuthService';
+import Wizard from '@/views/Operations/Appointments/components/Wizard';
 
 export default {
   name: 'NavBar',
-  components: { Menu, Button, VSwitch },
+  components: { Menu, Button, VSwitch, Dialog, Wizard },
   props: {
     modeDark: {
       type: Object,
@@ -49,11 +62,13 @@ export default {
       icons: {
         dotsVertical: dotsVertical,
         logout: logout,
+        calendar: calendar,
       },
       items: [
         {icon: industry, label: 'Empresa', route: 'companies'},
         {icon: users, label: 'Usuários', route: 'users'},
       ],
+      dialog: false,
     }
   },
   methods: {
@@ -63,11 +78,7 @@ export default {
       }).catch(() => {
 
       })
-    }
+    },
   }
 }
 </script>
-
-<style>
-
-</style>

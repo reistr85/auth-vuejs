@@ -1,5 +1,5 @@
 import DynamicService from '@/service/DynamicService';
-import { typeRegister } from '@/utils/options';
+import { typeRegister, typeSituation } from '@/utils/options';
 import { getText, formatPhone, formatCpfCnpj } from '@/utils';
 
 const formatResponse = (item) => {
@@ -14,6 +14,7 @@ const formatResponse = (item) => {
   item.cpf_formatted = formatCpfCnpj(item.cpf);
   item.phone_formatted = formatPhone(item.phone);
   item.cell_phone_formatted = formatPhone(item.cell_phone);
+  item.situation_formatted = getText(typeSituation, item.situation);
 }
 
 const RegistersService = DynamicService('registers', {

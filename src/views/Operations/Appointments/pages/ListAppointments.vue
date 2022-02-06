@@ -10,18 +10,18 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import ServiceSchema from '../schemas/ServiceSchema';
+import AppointmentSchema from '../schemas/AppointmentSchema';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
-import ServicesService from '../services/ServicesService';
+import AppointmentsService from '../services/AppointmentsService';
 
 export default {
-  name: 'ListService',
+  name: 'ListAppointments',
   components: { PageHeader, PageContent, DynamicListPage },
   props: {},
   data() {
     return {
-      schema: ServiceSchema,
-      service: ServicesService,
+      schema: AppointmentSchema,
+      service: AppointmentsService,
     }
   },
   methods: {}

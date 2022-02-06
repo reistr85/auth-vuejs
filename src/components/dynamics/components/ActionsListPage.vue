@@ -1,5 +1,5 @@
 <template>
-  <div style="min-width: 70px;">
+  <div style="width: 100px;">
     <v-menu :disabled="dataListProps.item.disableMoreActions" :nudge-width="200" bottom left offset-y v-if="schema.listActions.more.has">
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon v-bind="attrs" v-on="on">
@@ -8,6 +8,14 @@
       </template>
 
       <v-card>
+        <v-list dense v-if="schema.listActions.situation">
+          <v-list-item link @click="$emit('actionMoreActions', { dataListProps, i: { action: 'situation' } })">
+            <v-list-item-icon>
+              <v-icon class="icon-side-bar">{{ icons.check }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="text-side-bar">Ativar/Desativar</v-list-item-title>
+          </v-list-item>
+        </v-list>
         <v-list v-for="(i, index) in schema.listActions.more.items" :key="index" dense>
           <v-list-item link @click="$emit('actionMoreActions', { dataListProps, i })">
             <v-list-item-icon>
@@ -45,7 +53,7 @@ export default {
       type: Object,
       required: true,
     }
-  }
+  },
 }
 </script>
 

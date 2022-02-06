@@ -10,18 +10,18 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import ServiceSchema from '../schemas/ServiceSchema';
-import ServicesService from '../services/ServicesService';
+import BankSchema from '../schemas/BankSchema';
+import BanksService from '../services/BanksService';
 import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 
 export default {
-  name: 'CreateRegister',
+  name: 'CreateBank',
   components: { PageHeader, PageContent, DynamicFormPage },
   props: {},
   data() {
     return {
-      schema: ServiceSchema,
-      service: ServicesService,
+      schema: BankSchema,
+      service: BanksService,
     }
   },
   methods: {}

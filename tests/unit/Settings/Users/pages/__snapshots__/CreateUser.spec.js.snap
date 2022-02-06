@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests component CreateUser should contais components PageHeader, PageContent and DynamicFormPage 1`] = `
+<div>
+  <pageheader-stub schema="[object Object]"></pageheader-stub>
+  <pagecontent-stub>
+    <dynamicformpage-stub schema="[object Object]" service="[object Object]"></dynamicformpage-stub>
+  </pagecontent-stub>
+</div>
+`;

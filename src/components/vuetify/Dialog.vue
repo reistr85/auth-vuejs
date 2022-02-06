@@ -2,20 +2,20 @@
   <v-dialog
     v-model="dialog"
     persistent
-    :max-width="maxWidth"
+    :width="maxWidth"
     class="dialog-custom"
   >
-    <v-card class="">
-      <v-card-title>
+    <v-card >
+      <v-card-title v-if="!noTitle">
         <slot name="title" />
       </v-card-title>
       <v-divider></v-divider>
 
-      <v-card-text class="mt-3">
+      <v-card-text class="px-0 py-0">
         <slot name="content" />
       </v-card-text>
 
-      <v-card-actions class="mt-3 d-flex justify-end">
+      <v-card-actions class="mt-3 d-flex justify-end" v-if="!noActions">
         <slot name="actions" />
       </v-card-actions>
     </v-card>
@@ -28,12 +28,20 @@ export default {
   props: {
     dialog: {
       type: Boolean,
-      default: true
+      default: false
     },
     maxWidth: {
       type: Number,
       default: 800
-    }
+    },
+    noTitle: {
+      type: Boolean,
+      default: false
+    },
+    noActions: {
+      type: Boolean,
+      default: false
+    },
   }
 }
 </script>

@@ -10,7 +10,7 @@ export default {
     listActions: {
       icon: check,
       label: 'Ativar/Desativar',
-      action: 'activateDisable',
+      action: 'situation',
     }
   },
   dynamicFormPage: {}

@@ -17,17 +17,11 @@ import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 export default {
   name: 'CreateUser',
   components: { PageHeader, PageContent, DynamicFormPage },
-  props: {},
   data() {
     return {
       schema: UserSchema,
       service: UsersService,
     }
   },
-  methods: {}
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
