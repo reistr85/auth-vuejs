@@ -17,13 +17,14 @@
             :items="collaborators"
             :loading="loading"
             @getItems="getItems"
-            @selected="selectCollaborator" />
+            @selected="selectDataAppointment" />
         </div>
       </div>
     </div>
 
     <div class="content-appointments--boddy---actions mt-10">
-      <Button label='Voltar' outlined color='primary' @click="$emit('setStep', 1)" />
+      <Button label='Cancelar' outlined color='primary' @click="$emit('setStep', 0)" />
+      <Button label='Voltar' color='secondary' class="ml-3" @click="$emit('setStep', 1)" />
       <Button label='Avançar' color='primary' class="ml-3" :disabled="disabledBtnNext" @click="$emit('setStep', 3)" />
     </div>
   </div>
@@ -33,6 +34,7 @@
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
 import Resume from './Resume';
+import SelectDataAppointment from '../mixins/SelectDataAppointment.js';
 
 export default {
   name: 'StepOne',
@@ -61,13 +63,10 @@ export default {
       disabledBtnNext: true
     }
   },
+  mixins: [SelectDataAppointment('collaborator')],
   methods: {
     getItems(options) {
       this.$emit('getItems', { ...options, type: 'collaborator' });
-    },
-    selectCollaborator(collaborator) {
-      collaborator.length ? this.disabledBtnNext = false : this.disabledBtnNext = true;
-      this.$emit('selectDataAppointment', { data: collaborator, type: 'collaborator' })
     },
   }
 }
