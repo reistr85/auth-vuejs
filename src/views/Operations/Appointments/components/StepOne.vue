@@ -17,7 +17,7 @@
             :items="customers"
             :loading="loading"
             @getItems="getItems"
-            @selected="selectCustomer" />
+            @selected="selectDataAppointment" />
         </div>
       </div>
     </div>
@@ -33,6 +33,7 @@
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
 import Resume from './Resume';
+import SelectDataAppointment from '../mixins/SelectDataAppointment.js';
 
 export default {
   name: 'StepOne',
@@ -62,14 +63,10 @@ export default {
       disabledBtnNext: true
     }
   },
+  mixins: [SelectDataAppointment('customer')],
   methods: {
     getItems(options) {
       this.$emit('getItems', { ...options, type: 'customer' });
-    },
-    selectCustomer(customer) {
-      console.log(customer)
-      customer.length ? this.disabledBtnNext = false : this.disabledBtnNext = true;
-      this.$emit('selectDataAppointment', { data: customer, type: 'customer' })
     },
   }
 }

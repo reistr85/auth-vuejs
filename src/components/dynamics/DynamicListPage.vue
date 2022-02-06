@@ -169,6 +169,7 @@ export default {
 
       const params = {
         page: this.options.page,
+        relations: this.schema.filters.relations,
         totalItemsPerPage: this.options.itemsPerPage,
         customSearch: this.search,
       }

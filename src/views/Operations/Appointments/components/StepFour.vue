@@ -46,8 +46,9 @@
       </div>
 
       <div class="content-appointments--boddy---actions mt-10">
-        <Button label='Voltar' outlined color='primary' @click="setStep" />
-        <Button label='Ver agenda' :icon="icons.calendar" color='secondary' class="ml-3" @click="$emit('openCalendar', {})" />
+        <Button label='Cancelar' outlined color='primary' @click="$emit('setStep', 0)" />
+        <Button label='Voltar' class="ml-3"  color='secondary' @click="setStep" />
+        <Button label='Ver agenda' :icon="icons.calendar" color='orange' class="ml-3" @click="$emit('openCalendar', {})" />
         <Button label='Concluir' :disabled="!finalHourSelected" color='primary' class="ml-3" @click="finish" />
       </div>
     </div>

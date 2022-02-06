@@ -122,6 +122,7 @@ const DynamicService = (endpoint, options = {}) => ({
     let url = '';
     let paramsFilter = '';
     let queryParams = '';
+    let relations = '';
 
     searches.forEach((item) => {
       paramsFilter += `&filter[${item.name}]=${item.value}`
@@ -131,12 +132,16 @@ const DynamicService = (endpoint, options = {}) => ({
 
     if(params){
       page = params.page;
+      relations = params.relations;
       totalItemsPerPage = params.totalItemsPerPage;
       url = `${queryParams}&page=${page}&per_page=${totalItemsPerPage}`;
     }
 
     if(!params)
       url = `${queryParams}`;
+
+    if(relations)
+      url += `&include=${relations}`
 
     await axios.get(url).then((res) => {
       if (options.formatResponse && typeof options.formatResponse === 'function') {

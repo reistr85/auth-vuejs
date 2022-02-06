@@ -114,8 +114,9 @@ export default {
     getServices(data = {}) {
       this.loadingDataTable = true;
       const params = { page: data.options.page, totalItemsPerPage: 5 };
+      const filters = [{ name: 'name', value: data.search }];
       
-      ServicesService.index(params).then((res) => {
+      ServicesService.filters(params, filters).then((res) => {
         this.services = res.data;
         this.loadingDataTable = false;
       }).catch(() => {
@@ -124,6 +125,7 @@ export default {
     },
     setStep(step) {
       if(step === 0) {
+        this.steps = 1;
         this.$refs.stepOne.$refs.dataTable.selected = []
         this.$refs.stepTow.$refs.dataTable.selected = []
         this.$refs.stepThree.$refs.dataTable.selected = []
@@ -135,22 +137,9 @@ export default {
     },
     selectDataAppointment(params) {
       const { data, type } = params;
-      if(type === 'customer') {
-        if(data.length) {
-          this.appointment.customer_id = data[0].id;
-          this.appointment.customer_name = data[0].name;
-        }else{
-          this.appointment.customer_id = 0;
-          this.appointment.customer_name = '';
-        }
-      }else if(type === 'collaborator'){
-        if(data.length) {
-          this.appointment.collaborator_id = data[0].id;
-          this.appointment.collaborator_name = data[0].name;
-        }else{
-          this.appointment.collaborator_id = 0;
-          this.appointment.collaboratorr_name = '';
-        }
+      if(type === 'customer' || type === 'collaborator') {
+        this.appointment[`${type}_id`] = data.length ? data[0].id : 0;
+        this.appointment[`${type}_name`] = data.length ? data[0].name : '';
       }else if(type === 'service'){
         let amount = 0;
         this.appointment.services = data.map((item) => {
@@ -171,13 +160,12 @@ export default {
     },
     finish() {
       AppointmentsService.create(this.appointment).then(() => {
+        this.resetAppointment();
+        this.setStep(0)
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((err) => {
         this.$noty.error(messageErrors(err));
       })
-
-      this.$emit('cancel');
-      this.resetAppointment();
     },
     resetAppointment() {
       this.steps = 1;
@@ -186,7 +174,7 @@ export default {
         customer_name: '',
         collaborator_id: 0,
         collaborator_name: '',
-        date: null,
+        appointment_date: null,
         initial_hour: null,
         final_hour: null,
         description: null,

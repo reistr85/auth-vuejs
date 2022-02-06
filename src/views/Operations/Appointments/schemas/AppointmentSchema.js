@@ -1,11 +1,12 @@
 import { typePageOptions } from '@/utils';
 import { text, list } from '@/utils/icons';
+import { statusAppointment } from '@/utils/options';
 
 export default {
     domain: 'appointments',
     title: 'Agendamentos',
     description: 'Lista de todos os agendamentos no sistema',
-    createBtn: 'Novo Agendamento',
+    createBtn: '',
     formAddress: true,
     routes: {
       list: {
@@ -36,11 +37,15 @@ export default {
     },
     filters: {
       has: true,
+      relations: 'customer,collaborator',
       items: [
         {
           type: 'select',
-          label: 'Tipo de Cadastro',
-          name: 'type',
+          label: 'Status',
+          name: 'status',
+          items: {
+            data: statusAppointment,
+          },
           icon: list,
           md: 6,
         },
@@ -100,9 +105,9 @@ export default {
           },
           {
             type: 'text',
-            name: 'date_initial',
-            formattedName: 'date_initial_formatted',
-            label: 'Data/Hora Inicial',
+            name: 'appointment_date',
+            formattedName: 'appointment_date_formatted',
+            label: 'Data',
             align: '',
             md: '1',
             list: true,
@@ -111,9 +116,53 @@ export default {
           },
           {
             type: 'text',
-            name: 'date_final',
-            formattedName: 'date_final_formatted',
-            label: 'Data/Hora Final',
+            name: 'initial_hour',
+            formattedName: 'initial_hour_formatted',
+            label: 'Início',
+            align: '',
+            md: '1',
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+          {
+            type: 'text',
+            name: 'final_hour',
+            formattedName: 'final_hour_formatted',
+            label: 'Fim',
+            align: '',
+            md: '1',
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+          {
+            type: 'text',
+            name: 'collaborator_id',
+            formattedName: 'collaborator.name',
+            label: 'Colaborador',
+            align: '',
+            md: '1',
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+          {
+            type: 'text',
+            name: 'customer_id',
+            formattedName: 'customer.name',
+            label: 'Cliente',
+            align: '',
+            md: '1',
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+          {
+            type: 'text',
+            name: 'status',
+            formattedName: 'status_formatted',
+            label: 'Status',
             align: '',
             md: '1',
             list: true,
