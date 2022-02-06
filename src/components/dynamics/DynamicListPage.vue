@@ -29,6 +29,14 @@
       :single-select="schema.singleSelect"
       :show-select="schema.checkItem">
 
+      <!-- <template v-slot:body="props">
+        <tr v-for="(index, i) in props.items" :key="i">
+          <td v-for="(header, h) in headers" :key="h" class="text-left font-weight-black">
+            {{ index[header.value]}}
+          </td>
+        </tr>
+      </template> -->
+
       <template v-slot:[`item.use_nickname_formatted`]="{ item }">
         <Chip :label="item.use_nickname_formatted" small :color="item.use_nickname === 'yes' ? 'success' : 'light'" />
       </template>
@@ -56,12 +64,12 @@ import { search, view, destroy, dotsVertical, filter, cancel, check } from '@/ut
 import { typeSituation } from '@/utils/options';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
-import ActionsListPage from './components/ActionsListPage';
+// import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
 
 export default {
   name: 'DynamicListPage',
-  components: { DialogConfirmation, SearchListPage, ActionsListPage, Chip },
+  components: { DialogConfirmation, SearchListPage, Chip },
   props: {
     schema: {
       type: Object,
