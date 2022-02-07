@@ -4,28 +4,39 @@
       <div class="content-appointments--boddy---left">
         <h4 class="title">Selecione o Colaborador</h4>
         <img src="@/assets/ilustration-collaborator.png" alt="" height="200">
+        <AutoComplete
+            label='Pesquise o colaborador'
+            item-text="name"
+            item-value="id"
+            avatar
+            class="content-appointments--boddy---left----auto-complete-appointments"
+            :loading="loading"
+            :items="collaborators.data"
+            @getItems="getItemsAutoComplete"
+            @input="selectDataAppointment({ data: $event, autoComplete: true})" />
         <Resume :appointment="appointment" />
       </div>
       
-      <div class="content-appointments--boddy---right pl-6">
-        <div class="content-appointments--boddy---right----contributors">
+      <div class="content-appointments--boddy---right">
+        <div class="content-appointments--boddy---right----data-appointment">
           <DataTable
             ref="dataTable"
             show-select
             single-select
+            class="content-appointments--boddy---right----data-appointment-----data-table-appointments"
             :headers="headers"
             :items="collaborators"
             :loading="loading"
             @getItems="getItems"
-            @selected="selectDataAppointment" />
+            @selected="selectDataAppointment({ data: $event})" />
         </div>
       </div>
     </div>
 
-    <div class="content-appointments--boddy---actions mt-10">
+    <div class="content-appointments--actions">
       <Button label='Cancelar' outlined color='primary' @click="$emit('setStep', 0)" />
-      <Button label='Voltar' color='secondary' class="ml-3" @click="$emit('setStep', 1)" />
-      <Button label='Avançar' color='primary' class="ml-3" :disabled="disabledBtnNext" @click="$emit('setStep', 3)" />
+      <Button label='Voltar' color='secondary' @click="$emit('setStep', 1)" />
+      <Button label='Avançar' color='primary' :disabled="disabledBtnNext" @click="$emit('setStep', 3)" />
     </div>
   </div>
 </template>
@@ -35,10 +46,11 @@ import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
 import Resume from './Resume';
 import SelectDataAppointment from '../mixins/SelectDataAppointment.js';
+import AutoComplete from '@/components/vuetify/AutoComplete';
 
 export default {
   name: 'StepOne',
-  components: { Button, DataTable, Resume },
+  components: { Button, DataTable, Resume, AutoComplete },
   props: {
     loading: {
       type: Boolean,
@@ -60,7 +72,7 @@ export default {
         {text: 'Contato', value: 'phone_formatted'},
       ],
       search: '',
-      disabledBtnNext: true
+      disabledBtnNext: true,
     }
   },
   mixins: [SelectDataAppointment('collaborator')],

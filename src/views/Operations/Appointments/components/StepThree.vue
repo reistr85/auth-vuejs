@@ -16,7 +16,7 @@
             :items="services"
             :loading="loading"
             @getItems="getItems"
-            @selected="selectDataAppointment" />
+            @selected="selectDataAppointment({ data: $event})" />
         </div>
       </div>
     </div>

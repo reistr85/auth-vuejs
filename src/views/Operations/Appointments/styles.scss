@@ -27,6 +27,10 @@
           color: #069
         }
 
+        .content-appointments--boddy---left----auto-complete-appointments {
+          display: none;
+        }
+
         .content-appointments--boddy---left----resume {
           width: 100%;
           background-color: #A3CCDA;
@@ -48,6 +52,17 @@
         }
       }
     }
+
+    .content-appointments--actions {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+
+      button {
+       margin: 0 5px;
+      }
+    }
   }
 }
 
@@ -62,21 +77,42 @@
         .content-appointments--boddy---left {
           width: 100%;
 
+          .title {
+            font-size: 22px !important;
+          }
+
+          .content-appointments--boddy---left----auto-complete-appointments {
+            width: 100%;
+            display: block;
+            margin: 13px 0 5px 0;
+          }
+
           .content-appointments--boddy---left----resume {
             border-radius: 5px;
           }
         }
 
         .content-appointments--boddy---right {
+          display: none;
           width: 100%;
           padding-left: 0;
           margin-top: 15px;
 
           .content-appointments--boddy---right----data-appointment {
-            .content-appointments--boddy---right----data-appointment-----dataTableAppointment {
+            min-height: auto;
+
+            .content-appointments--boddy---right----data-appointment-----data-table-appointments {
               display: none;
             }
           }
+        }
+      }
+
+      .content-appointments--actions {
+        flex-direction: column-reverse;
+
+        button {
+          margin: 5px 0;
         }
       }
     }
