@@ -55,6 +55,9 @@
       </template>
     </v-data-table>
 
+    <div>
+      <slot name="custom-footer" />
+    </div>
     <DialogConfirmation :dialog="dialog" :loading="loadingDestroy" @noAction="clearProps" @yesAction="destroy" />
   </div>
 </template>
