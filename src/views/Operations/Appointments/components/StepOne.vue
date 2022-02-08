@@ -8,6 +8,7 @@
             label='Pesquise o cliente'
             item-text="name"
             item-value="id"
+            item-sub-text="cell_phone_formatted"
             avatar
             class="content-appointments--boddy---left----auto-complete-appointments"
             :loading="loading"

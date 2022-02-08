@@ -101,22 +101,20 @@ export default {
   methods: {
     getRegisters(data) {
       this.loadingDataTable = true;
-      const params = { page: data.options?.page || 1, totalItemsPerPage: 5 };
       const filters = [{ name: 'type', value: data.type }, { name: 'name', value: data.search }];
       
-      RegistersService.filters(params, filters).then((res) => {
+      RegistersService.filters(this.setParams(data), filters).then((res) => {
         data.type === 'customer' ? this.customers = res.data : this.collaborators = res.data;
         this.loadingDataTable = false;
       }).catch(() => {
         this.loadingDataTable = false;
       })
     },
-    getServices(data = {}) {
+    getServices(data) {
       this.loadingDataTable = true;
-      const params = { page: data.options.page, totalItemsPerPage: 5 };
       const filters = [{ name: 'name', value: data.search }];
       
-      ServicesService.filters(params, filters).then((res) => {
+      ServicesService.filters(this.setParams(data), filters).then((res) => {
         this.services = res.data;
         this.loadingDataTable = false;
       }).catch(() => {
@@ -157,6 +155,9 @@ export default {
     setHour(data) {
       this.appointment.initial_hour = data.initialHour;
       this.appointment.final_hour = data.finalHour;
+    },
+    setParams(data) {
+      return { page: data.options?.page || 1, totalItemsPerPage: 5 }
     },
     finish() {
       AppointmentsService.create(this.appointment).then(() => {

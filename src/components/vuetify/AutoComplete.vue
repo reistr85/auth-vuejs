@@ -7,7 +7,6 @@
       clearable
       hide-details
       hide-selected
-      solo
       :items="localItems"
       :loading="loading"
       :search-input.sync="search"
@@ -22,6 +21,7 @@
       :prepend-icon="icon"
       :item-text="itemText" 
       :item-value="itemValue"
+      :multiple="multiple"
     >
       <template v-slot:no-data>
         <v-list-item>
@@ -32,16 +32,16 @@
       </template>
       <template v-slot:selection="{ attr, on, item, selected }">
         <v-chip v-bind="attr" :input-value="selected" color="blue-grey" class="white--text" v-on="on">
-          <span v-text="item.name"></span>
+          <span v-text="item[itemText]"></span>
         </v-chip>
       </template>
       <template v-slot:item="{ item }">
         <v-list-item-avatar color="indigo" class="text-h5 font-weight-light white--text" v-if="avatar">
-          {{ item.name.charAt(0) }}
+          {{ item[itemText].charAt(0) }}
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title v-text="item.name"></v-list-item-title>
-          <v-list-item-subtitle v-text="item.cell_phone_formatted"></v-list-item-subtitle>
+          <v-list-item-title v-text="item[itemText]"></v-list-item-title>
+          <v-list-item-subtitle v-text="item[itemSubText]"></v-list-item-subtitle>
         </v-list-item-content>
       </template>
     </v-autocomplete>
@@ -80,6 +80,10 @@ export default {
       type: String,
       default: 'text',
     },
+    itemSubText: {
+      type: String,
+      default: 'sub_text',
+    },
     itemValue: {
       type: String,
       default: 'value',
@@ -105,6 +109,10 @@ export default {
       default: true,
     },
     avatar: {
+      type: Boolean,
+      default: false,
+    },
+    multiple: {
       type: Boolean,
       default: false,
     },

@@ -8,6 +8,7 @@
             label='Pesquise o colaborador'
             item-text="name"
             item-value="id"
+            item-sub-text="cell_phone_formatted"
             avatar
             class="content-appointments--boddy---left----auto-complete-appointments"
             :loading="loading"
@@ -69,7 +70,7 @@ export default {
     return {
       headers: [
         {text: 'Nome', value: 'name'},
-        {text: 'Contato', value: 'phone_formatted'},
+        {text: 'Contato', value: 'cell_phone_formatted'},
       ],
       search: '',
       disabledBtnNext: true,
@@ -86,16 +87,4 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles.scss';
-
-.content-appointments--boddy---right----contributors {
-  width: 100%;
-  min-height: 330px;
-  border: 1px solid #ccc;
-  border-radius: 7px;
-  padding: 3px;
-
-  .content-appointments--boddy---right----contributors-----search-customer {
-    width: 100%;
-  }
-}
 </style>
