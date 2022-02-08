@@ -8,48 +8,50 @@
           <Resume :appointment="appointment" />
         </div>
         
-        <div class="content-appointments--boddy---right">
-          <v-date-picker v-model="date" v-if="!dateSelected" @input="selectDate"></v-date-picker>
+        <div class="content-appointments--boddy---right calendar-hour">
+          <div class="content-appointments--boddy---right----date-time">
+            <v-date-picker v-model="date" v-if="!dateSelected" @input="selectDate"></v-date-picker>
 
-          <div v-else class="d-flex">
-            <div >
-              <h3 class="text-center">Hora Início</h3>
-              <h4 class="text-center">{{ initialHour || '00:00' }}</h4>
-              <v-time-picker
-                ref="dataPickerInitial"
-                v-model="initialHour"
-                no-title
-                format="24hr"
-                :allowed-minutes="allowedStep"
-                @input="selectHour('initial')" />
+            <div v-else class="content-appointments--boddy---right----date-time-----hour">
+              <div >
+                <h3 class="text-center">Hora Início</h3>
+                <h4 class="text-center">{{ initialHour || '00:00' }}</h4>
+                <v-time-picker
+                  ref="dataPickerInitial"
+                  v-model="initialHour"
+                  no-title
+                  format="24hr"
+                  :allowed-minutes="allowedStep"
+                  @input="selectHour('initial')" />
+              </div>
+
+              <div>
+                <h3 class="text-center">Hora Final</h3>
+                <h4 class="text-center">{{ finalHour || '00:00' }}</h4>
+                <v-time-picker
+                  ref="dataPickerFinal"
+                  v-model="finalHour"
+                  no-title
+                  format="24hr"
+                  :disabled="!initialHourSelected"
+                  :allowed-minutes="allowedStep"
+                  @input="selectHour('final')" />
+              </div>
             </div>
 
-            <div>
-              <h3 class="text-center">Hora Final</h3>
-              <h4 class="text-center">{{ finalHour || '00:00' }}</h4>
-              <v-time-picker
-                ref="dataPickerFinal"
-                v-model="finalHour"
-                no-title
-                format="24hr"
-                :disabled="!initialHourSelected"
-                :allowed-minutes="allowedStep"
-                @input="selectHour('final')" />
+            <div class="content-appointments--boddy---right----date-time-----actions" v-if="dateSelected">
+              <Button class="mr-2" label='Alterar Data' color='primary' small @click="reset" />
+              <Button class="ml-2" label='Resetar Hora' color='secondary' small @click="resetHour" />
             </div>
-          </div>
-
-          <div class="d-flex" v-if="dateSelected">
-            <Button class="mr-2" label='Alterar Data' color='primary' small @click="reset" />
-            <Button class="ml-2" label='Resetar Hora' color='secondary' small @click="resetHour" />
           </div>
         </div>
       </div>
 
-      <div class="content-appointments--boddy---actions mt-10">
+      <div class="content-appointments--actions">
         <Button label='Cancelar' outlined color='primary' @click="$emit('setStep', 0)" />
-        <Button label='Voltar' class="ml-3"  color='secondary' @click="setStep" />
-        <Button label='Ver agenda' :icon="icons.calendar" color='orange' class="ml-3" @click="$emit('openCalendar', {})" />
-        <Button label='Concluir' :disabled="!finalHourSelected" color='primary' class="ml-3" @click="finish" />
+        <Button label='Voltar' color='secondary' @click="setStep" />
+        <Button label='Ver agenda' :icon="icons.calendar" color='orange' @click="$emit('openCalendar', {})" />
+        <Button label='Concluir' :disabled="!finalHourSelected" color='primary' @click="finish" />
       </div>
     </div>
   </div>

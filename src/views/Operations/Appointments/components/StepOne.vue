@@ -3,38 +3,40 @@
     <div class="content-appointments--boddy">
       <div class="content-appointments--boddy---left">
         <h4 class="title">Selecione o Cliente</h4>
-        <img src="@/assets/ilustration-customer.png" alt="" height="200" v-if="height > 500">
+        <img src="@/assets/ilustration-customer.png" alt="" height="200">
+        <AutoComplete
+            label='Pesquise o cliente'
+            item-text="name"
+            item-value="id"
+            item-sub-text="cell_phone_formatted"
+            avatar
+            class="content-appointments--boddy---left----auto-complete-appointments"
+            :loading="loading"
+            :items="customers.data"
+            @getItems="getItemsAutoComplete"
+            @input="selectDataAppointment({ data: $event, autoComplete: true})" />
         <Resume :appointment="appointment" />
       </div>
       
       <div class="content-appointments--boddy---right">
-        <div class="content-appointments--boddy---right----data-appointment" v-if="height > 500">
+        <div class="content-appointments--boddy---right----data-appointment">
           <DataTable
             ref="dataTable"
             show-select
             single-select
+            class="content-appointments--boddy---right----data-appointment-----data-table-appointments"
             :headers="headers"
             :items="customers"
             :loading="loading"
             @getItems="getItems"
             @selected="selectDataAppointment({ data: $event})" />
         </div>
-
-        <AutoComplete
-          label='Pesquise o cliente'
-          item-text="name"
-          item-value="id"
-          avatar
-          :loading="loading"
-          :items="customers.data"
-          @getItems="getItemsAutoComplete"
-          @input="selectDataAppointment({ data: $event, autoComplete: true})" />
       </div>
     </div>
 
-    <div class="content-appointments--boddy---actions mt-10">
+    <div class="content-appointments--actions">
       <Button label='Cancelar' outlined color='primary' @click="$emit('setStep', 0)" />
-      <Button label='Avançar' color='primary' class="ml-3" :disabled="disabledBtnNext" @click="$emit('setStep', 2)" />
+      <Button label='Avançar' color='primary' :disabled="disabledBtnNext" @click="$emit('setStep', 2)" />
     </div>
   </div>
 </template>
@@ -44,7 +46,6 @@ import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
 import Resume from './Resume';
 import SelectDataAppointment from '../mixins/SelectDataAppointment.js';
-import BreakPointMixin from '@/mixins/BreakPointMixin';
 import AutoComplete from '@/components/vuetify/AutoComplete';
 
 export default {
@@ -73,21 +74,13 @@ export default {
       ],
       search: '',
       disabledBtnNext: true,
-      modelAutoComplete: '',
     }
   },
-  mixins: [SelectDataAppointment('customer'), BreakPointMixin],
+  mixins: [SelectDataAppointment('customer')],
   methods: {
     getItems(options) {
       this.$emit('getItems', { ...options, type: 'customer' });
     },
-    getItemsAutoComplete(search) {
-      const options = {
-        search,
-        autoComplete: true,
-      }
-      this.$emit('getItems', { ...options, type: 'customer' });
-    }
   }
 }
 </script>

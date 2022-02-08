@@ -55,6 +55,9 @@
       </template>
     </v-data-table>
 
+    <div>
+      <slot name="custom-footer" />
+    </div>
     <DialogConfirmation :dialog="dialog" :loading="loadingDestroy" @noAction="clearProps" @yesAction="destroy" />
   </div>
 </template>
@@ -64,12 +67,12 @@ import { search, view, destroy, dotsVertical, filter, cancel, check } from '@/ut
 import { typeSituation } from '@/utils/options';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
-// import ActionsListPage from './components/ActionsListPage';
+import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
 
 export default {
   name: 'DynamicListPage',
-  components: { DialogConfirmation, SearchListPage, Chip },
+  components: { DialogConfirmation, SearchListPage, Chip, ActionsListPage },
   props: {
     schema: {
       type: Object,
