@@ -10,6 +10,7 @@
         <Button 
           color="primary"
           v-if="schema.createBtn && typePage === typePageOptions.list"
+          rounded
           :label="schema.createBtn"
           :icon="icons.plusOutline"
           :class="[height < 500 ? 'btnWidth' : '']"
@@ -19,6 +20,7 @@
           color="light"
           v-if="typePage === typePageOptions.create || typePage === typePageOptions.show"
           label="Voltar"
+          rounded
           :icon="icons.arrowLeft"
           :class="[height < 500 ? 'btnWidth' : '']"
           @click="$router.push({ name: schema.routes.list.name })" />

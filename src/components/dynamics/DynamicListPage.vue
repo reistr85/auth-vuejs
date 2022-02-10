@@ -21,6 +21,7 @@
       item-key="id"
       class="elevation-1 certus-data-list"
       dense
+      :show-expand="schema.showExpand"
       :loading="loading"
       :headers="headers"
       :items="localItems.data"
@@ -36,6 +37,10 @@
           </td>
         </tr>
       </template> -->
+
+      <template v-slot:expanded-item="">
+          <slot name="content-expanded" />
+      </template>
 
       <template v-slot:[`item.use_nickname_formatted`]="{ item }">
         <Chip :label="item.use_nickname_formatted" small :color="item.use_nickname === 'yes' ? 'success' : 'light'" />

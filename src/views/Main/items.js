@@ -1,4 +1,16 @@
-import { home, account, chart, sale, accountSettings, list, tune, calendar, bank, financial } from '@/utils/icons';
+import {
+  account,
+  accountSettings,
+  bank,
+  calendar,
+  calendarEdit,
+  chart,
+  financial,
+  home,
+  list,
+  sale,
+  tune, 
+} from '@/utils/icons';
 
 export default [
   {
@@ -26,6 +38,7 @@ export default [
     icon: sale,
     title: 'Operações',
     items: [
+      { icon: calendarEdit, title: 'Minha Agenda', route: 'calendars', active: false },
       { icon: calendar, title: 'Agendamentos', route: 'appointments', active: false },
       { icon: tune, title: 'Ordem de Serviços', route: 'orderservices', active: false },
     ],
