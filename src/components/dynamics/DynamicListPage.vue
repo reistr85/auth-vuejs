@@ -43,11 +43,15 @@
       </template>
 
       <template v-slot:[`item.use_nickname_formatted`]="{ item }">
-        <Chip :label="item.use_nickname_formatted" small :color="item.use_nickname === 'yes' ? 'success' : 'light'" />
+        <Chip :label="item.use_nickname_formatted" small :color="colorsUseNickname[item.use_nickname]" />
       </template>
 
       <template v-slot:[`item.situation_formatted`]="{ item }">
-        <Chip :label="item.situation_formatted" small :color="item.situation === 'active' ? 'success' : 'light'" />
+        <Chip :label="item.situation_formatted" small :color="colorsSituation[item.situation]" />
+      </template>
+
+      <template v-slot:[`item.status_formatted`]="{ item }">
+        <Chip :label="item.status_formatted" small :color="colorsStatus[item.status]" />
       </template>
 
       <template v-slot:[`item.actions`]="props" style="width: 200px">
@@ -74,6 +78,20 @@ import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
 import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
+
+const COLORS_STATUS = Object.freeze({
+  pending: 'warning'
+})
+
+const COLORS_SITUATION = Object.freeze({
+  active: 'success',
+  disabled: 'light',
+})
+
+const COLORS_USE_NICKNAME = Object.freeze({
+  yes: 'success',
+  no: 'light',
+})
 
 export default {
   name: 'DynamicListPage',
@@ -111,7 +129,10 @@ export default {
       options: {},
       totalLocalItems: 10,
       noGetDynamicItems: false,
-      chips: {}
+      chips: {},
+      colorsStatus: COLORS_STATUS,
+      colorsSituation: COLORS_SITUATION,
+      colorsUseNickname: COLORS_USE_NICKNAME,
     }
   },
   mounted() {
@@ -142,6 +163,17 @@ export default {
           }
         });
       });
+
+      if(this.schema.listActions.status) {
+        this.headers.push(
+          {
+            text: 'Status',
+            value: 'status_formatted',
+            align: 'start',
+            sortable: true,
+          }
+        );
+      }
 
       if(this.schema.listActions.situation) {
         this.headers.push(

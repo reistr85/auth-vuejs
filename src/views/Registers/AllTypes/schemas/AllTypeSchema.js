@@ -11,18 +11,18 @@ export default {
     formAddress: false,
     routes: {
       list: {
-        name: 'alltypes',
-        path: '/tipos',
+        name: 'allTypes',
+        path: '/tipos-gerais',
         meta: { typePage: typePageOptions.list, requiresAuth: true, }
       },
       create: {
-        name: 'alltype-create',
-        path: '/tipos/novo',
+        name: 'allType-create',
+        path: '/tipos-gerais/novo',
         meta: { typePage: typePageOptions.create, requiresAuth: true, }
       },
       show: {
-        name: 'alltype-show',
-        path: '/tipos/:id',
+        name: 'allType-show',
+        path: '/tipos-gerais/:id',
         meta: { typePage: typePageOptions.show, requiresAuth: true, }
       }
     },

@@ -28,7 +28,7 @@ export default [
     title: 'Cadastros',
     items: [
       { icon: accountSettings, title: 'Registros', route: 'registers', active: false },
-      { icon: list, title: 'Tipos Gerais', route: 'alltypes', active: false },
+      { icon: list, title: 'Tipos Gerais', route: 'allTypes', active: false },
       { icon: tune, title: 'Serviços', route: 'services', active: false },
     ],
   },
@@ -40,7 +40,7 @@ export default [
     items: [
       { icon: calendarEdit, title: 'Minha Agenda', route: 'calendars', active: false },
       { icon: calendar, title: 'Agendamentos', route: 'appointments', active: false },
-      { icon: tune, title: 'Ordem de Serviços', route: 'orderservices', active: false },
+      { icon: tune, title: 'Ordem de Serviços', route: 'orderServices', active: false },
     ],
   },
   {
