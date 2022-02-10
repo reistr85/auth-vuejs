@@ -1,5 +1,11 @@
 const statusAppointment = [
   { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Concluido', value: 'done' },
+  { id: 3, text: 'Cancelado', value: 'canceled' },
+]
+
+const statusOrderService = [
+  { id: 1, text: 'Pendente', value: 'pending' },
   { id: 1, text: 'Concluido', value: 'done' },
   { id: 1, text: 'Cancelado', value: 'canceled' },
 ]
@@ -297,6 +303,7 @@ const typeBankNumber = [
 
 export { 
   statusAppointment,
+  statusOrderService,
   typeUser,
   typePerson,
   typeRegister,

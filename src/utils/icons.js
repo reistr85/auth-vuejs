@@ -5,6 +5,7 @@ const arrowLeft = 'mdi-arrow-left-bold';
 const arrowRight = 'mdi-arrow-right-bold';
 const bank = 'mdi-bank';
 const calendar = 'mdi-calendar-month-outline';
+const calendarEdit = 'mdi-calendar-edit';
 const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
 const chart = 'mdi-chart-box-outline';
@@ -56,6 +57,7 @@ export {
   arrowRight,
   bank,
   calendar,
+  calendarEdit,
   cancel,
   cellPhone,
   chart,
