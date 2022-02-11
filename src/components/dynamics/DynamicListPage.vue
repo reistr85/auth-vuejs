@@ -80,7 +80,9 @@ import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
 
 const COLORS_STATUS = Object.freeze({
-  pending: 'warning'
+  pending: 'warning',
+  done: 'success',
+  canceled: 'red',
 })
 
 const COLORS_SITUATION = Object.freeze({
