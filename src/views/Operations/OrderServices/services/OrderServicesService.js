@@ -8,6 +8,12 @@ const formatResponse = (item) => {
   item.discount_formatted = formatCurrency(item.discount);
   item.amount_formatted = formatCurrency(item.amount);
   item.status_formatted = getText(statusOrderService, item.status);
+
+  item.items.forEach((i) => {
+    i.subtotal_formatted = formatCurrency(i.subtotal);
+    i.discount_formatted = formatCurrency(i.discount);
+    i.amount_formatted = formatCurrency(i.amount);
+  });
 }
 
 const OrdderServiceService = DynamicService('order-services', {

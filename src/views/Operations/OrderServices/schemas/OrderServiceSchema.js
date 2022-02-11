@@ -146,5 +146,14 @@ export default {
         ],
       },
     ],
+    order_service_items: [
+      { text: 'Item', value: 'number_item' },
+      { text: 'Colaborador', value: 'collaborator.name' },
+      { text: 'Serviço', value: 'service.name' },
+      { text: 'Sub total', value: 'subtotal_formatted' },
+      { text: 'Quant.', value: 'quantity' },
+      { text: 'Desconto.', value: 'discount_formatted' },
+      { text: 'Vlr.Total.', value: 'amount_formatted' },
+    ],
     footer: []
   }
