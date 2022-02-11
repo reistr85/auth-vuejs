@@ -166,7 +166,7 @@ export default {
             label: 'E-mail',
             align: '',
             md: '3',
-            list: true,
+            list: false,
             readonly: false,
             disabled: false,
           },
