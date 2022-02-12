@@ -2,16 +2,17 @@
   <div>
     <PageHeader :schema="schema" />
     <PageContent>
-      <ExpansionPanel v-model="expModel" title="Dados da Ordem" multiple :icon="$icons.list">
+      <ExpansionPanel v-model="expModel" readonly title="Dados da Ordem" multiple :icon="$icons.list">
         <v-row>
-          <v-col cols="12" md="3"><DataPicker v-model="order_service.order_date" label="Data da Ordem" /></v-col>
-          <v-col cols="12" md="4"><AutoComplete v-model="order_service.order_date" label="Colaborador" :items="collaborators" /></v-col>
-          <v-col cols="12" md="4"><TextField v-model="order_service.order_date" label="Cliente" /></v-col>
+          <v-col cols="12" md="2"><DataPicker v-model="order_service.order_date" label="Data da Ordem" /></v-col>
+          <v-col cols="12" md="4"><AutoComplete v-model="order_service.collaborator_id" label="Colaborador" :items="collaborators" /></v-col>
+          <v-col cols="12" md="4"><AutoComplete v-model="order_service.customer_id" label="Cliente" :items="customers" /></v-col>
+          <v-col cols="12" md="2"><TextFieldInteger v-model="order_service.quantity_services" label="Quant. Itens" /></v-col>
         </v-row>
         
       </ExpansionPanel>
 
-      <ExpansionPanel v-model="expModel" title="Itens" class="mt-3" multiple :icon="$icons.list">
+      <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
         <v-data-table
           dense
           hide-default-footer
@@ -20,8 +21,13 @@
           :items="order_service.items" />
       </ExpansionPanel>
 
-      <ExpansionPanel v-model="expModel" title="Resumo" class="mt-3" multiple :icon="$icons.list">
-        Teste
+      <ExpansionPanel v-model="expModel" readonly title="Pagamentos" class="mt-3" multiple :icon="$icons.list">
+        <v-data-table
+          dense
+          hide-default-footer
+          :loading="loading"
+          :headers="headers"
+          :items="order_service.items" />
       </ExpansionPanel>
     </PageContent>
   </div>
@@ -34,12 +40,13 @@ import OrderServiceSchema from '../schemas/OrderServiceSchema';
 import OrderServicesService from '../services/OrderServicesService';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
 import DataPicker from '@/components/vuetify/DataPicker';
-import TextField from '@/components/vuetify/TextField';
 import AutoComplete from '@/components/vuetify/AutoComplete';
+import TextFieldInteger from '@/components/vuetify/TextFieldInteger';
+import { mountParamsApiFilter } from '@/utils';
 
 export default {
   name: 'CreateCreateOrderService',
-  components: { PageHeader, PageContent, ExpansionPanel, DataPicker, TextField, AutoComplete },
+  components: { PageHeader, PageContent, ExpansionPanel, DataPicker, AutoComplete, TextFieldInteger },
   data() {
     return {
       schema: OrderServiceSchema,
@@ -47,14 +54,19 @@ export default {
       expModel: [0],
       loading: false,
       order_service: {
+        collaborator_id: 0,
+        customer_id: 0,
+        quantity_services: 1,
         items: []
       },
       collaborators: [],
+      customers: [],
     }
   },
   mounted() {
     this.getOrderService();
-    this.getRegisters();
+    this.getCollaborators();
+    this.getCustomers();
   },
   computed: {
     id() {
@@ -74,8 +86,10 @@ export default {
         this.loading = false;
       })
     },
-    getRegisters() {
-      this.registersService.index().then((res) => {
+    getCollaborators() {
+      const { options, filters } = mountParamsApiFilter({ type: 'collaborator' });
+
+      this.registersService.filters(options, filters).then((res) => {
         this.collaborators = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -86,7 +100,22 @@ export default {
       }).catch(() => {
         this.loading = false;
       })
-    }
+    },
+    getCustomers() {
+      const { options, filters } = mountParamsApiFilter({ type: 'customer' });
+
+      this.registersService.filters(options, filters).then((res) => {
+        this.customers = res.data.data.map((item) => {
+          return {
+            id: item.id,
+            text: item.name,
+            value: item.id,
+          }
+        })
+      }).catch(() => {
+        this.loading = false;
+      })
+    },
   }
 }
 </script>
