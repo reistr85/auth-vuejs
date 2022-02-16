@@ -146,5 +146,22 @@ export default {
         ],
       },
     ],
+    order_service_items: [
+      { text: 'Item', value: 'number_item' },
+      { text: 'Colaborador', value: 'collaborator.name' },
+      { text: 'Serviço', value: 'service.name' },
+      { text: 'Sub total', value: 'subtotal_formatted' },
+      { text: 'Quant.', value: 'quantity' },
+      { text: 'Desconto.', value: 'discount_formatted' },
+      { text: 'Vlr. Total.', value: 'amount_formatted' },
+      { text: 'Ações.', value: 'actions', align: 'end' },
+    ],
+    order_service_payments: [
+      { text: 'Data do Pagamento', value: 'payment_date_formatted' },
+      { text: 'Forma Pagamento', value: 'payment_method.description' },
+      { text: 'Bandeira', value: 'card_flag.description' },
+      { text: 'Vlr. Pago', value: 'amount_paid_formatted' },
+      { text: 'Ações.', value: 'actions', align: 'end' },
+    ],
     footer: []
   }

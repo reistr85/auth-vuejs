@@ -30,14 +30,6 @@
       :single-select="schema.singleSelect"
       :show-select="schema.checkItem">
 
-      <!-- <template v-slot:body="props">
-        <tr v-for="(index, i) in props.items" :key="i">
-          <td v-for="(header, h) in headers" :key="h" class="text-left font-weight-black">
-            {{ index[header.value]}}
-          </td>
-        </tr>
-      </template> -->
-
       <template v-slot:expanded-item="">
           <slot name="content-expanded" />
       </template>
@@ -80,7 +72,9 @@ import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
 
 const COLORS_STATUS = Object.freeze({
-  pending: 'warning'
+  pending: 'warning',
+  done: 'success',
+  canceled: 'red',
 })
 
 const COLORS_SITUATION = Object.freeze({
