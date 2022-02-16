@@ -30,14 +30,6 @@
       :single-select="schema.singleSelect"
       :show-select="schema.checkItem">
 
-      <!-- <template v-slot:body="props">
-        <tr v-for="(index, i) in props.items" :key="i">
-          <td v-for="(header, h) in headers" :key="h" class="text-left font-weight-black">
-            {{ index[header.value]}}
-          </td>
-        </tr>
-      </template> -->
-
       <template v-slot:expanded-item="">
           <slot name="content-expanded" />
       </template>

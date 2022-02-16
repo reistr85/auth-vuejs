@@ -14,6 +14,11 @@ const formatResponse = (item) => {
     i.discount_formatted = formatCurrency(i.discount);
     i.amount_formatted = formatCurrency(i.amount);
   });
+
+  item.payments.forEach((i) => {
+    i.payment_date_formatted = formatDate(i.payment_date);
+    i.amount_paid_formatted = formatCurrency(i.amount_paid);
+  });
 }
 
 const OrdderServiceService = DynamicService('order-services', {
