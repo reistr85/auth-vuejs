@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="d-flex justify-end mb-5">
-      <Button label="Adicionar" small :icon="$icons.plus" color="secondary" rounded class="btn-actions" @click="$emit('handleAction', {})" />
+      <Button 
+        label="Adicionar" 
+        small 
+        :icon="$icons.plus" 
+        color="secondary" 
+        rounded 
+        class="btn-actions" 
+        @click="$emit('handleAction', { type: actionType, params: { componentType: componentType} })" />
     </div>
     <v-data-table
       dense
@@ -35,6 +42,14 @@ export default {
     loading: {
       type: Boolean,
       default: false,
+    },
+    actionType: {
+      type: String,
+      required: true,
+    },
+    componentType: {
+      type: String,
+      required: true,
     },
   }
 }

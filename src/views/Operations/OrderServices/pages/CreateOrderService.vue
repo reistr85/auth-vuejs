@@ -13,6 +13,8 @@
 
       <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
+          action-type="openDialog"
+          componentType="DialogAddItem"
           :loading="loading"
           :headers="headersItems" 
           :items="order_service.items"
@@ -21,6 +23,8 @@
 
       <ExpansionPanel v-model="expModel" readonly title="Pagamentos" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
+          action-type="openDialog"
+          componentType="DialogAddPayment"
           :loading="loading"
           :headers="headersPayments" 
           :items="order_service.payments"
@@ -35,11 +39,19 @@
         </v-row>
       </ExpansionPanel>
 
-      <div class="mt-3">
-        <Button label="Salvar" :icon="$icons.save" color="primary" rounded class="" />
-        <Button label="Salvar e Finalizar" :icon="$icons.check" color="success" rounded class="ml-3" />
-      </div>
+      <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
+        <Button label="Salvar" :icon="$icons.save" color="primary" rounded class="" @click="handleAction({ type: 'save' })" />
+        <Button label="Salvar e Finalizar" :icon="$icons.check" color="success" rounded class="ml-3" @click="handleAction({ type: 'finish' })" />
+      </ExpansionPanel>
     </PageContent>
+
+    <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
+      <component 
+        slot="content" 
+        :is="dialogComponent" 
+        @update:dialog="dialog = $event" 
+        @handleActionModal="handleActionModal" />
+    </Dialog>
   </div>
 </template>
 
@@ -55,7 +67,12 @@ import TextFieldInteger from '@/components/vuetify/TextFieldInteger';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Button from '@/components/vuetify/Button';
 import { mountParamsApiFilter } from '@/utils';
-import GenericDataTable from '../components/GenericDataTable.vue';
+import GenericDataTable from '../components/GenericDataTable';
+import Dialog from '@/components/vuetify/Dialog';
+// eslint-disable-next-line no-unused-vars
+import DialogAddItem from '../components/DialogAddItem';
+// eslint-disable-next-line no-unused-vars
+import DialogAddPayment from '../components/DialogAddPayment';
 
 export default {
   name: 'CreateCreateOrderService',
@@ -69,6 +86,9 @@ export default {
     Button,
     TextFieldMoney,
     GenericDataTable,
+    Dialog,
+    DialogAddItem,
+    DialogAddPayment
   },
   data() {
     return {
@@ -84,6 +104,8 @@ export default {
       },
       collaborators: [],
       customers: [],
+      dialog: false,
+      dialogComponent: null,
     }
   },
   mounted() {
@@ -143,8 +165,23 @@ export default {
       })
     },
     handleAction(data) {
-      console.log(data)
-    }
+      const { type, params } = data;
+      this[type](params);
+    },
+    openDialog({ componentType }) {
+      this.dialog = true;
+      this.dialogComponent = componentType;
+    },
+    handleActionModal(form) {
+      this.dialog = false;
+      console.log(form)
+    },
+    save() {
+      console.log('save')
+    },
+    finish() {
+      console.log('finish')
+    },
   }
 }
 </script>
