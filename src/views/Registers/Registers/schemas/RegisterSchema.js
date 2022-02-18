@@ -90,6 +90,7 @@ export default {
         icon: list,
         title: 'Dados do Cadastro',
         openGroup: true,
+        type: 'form',
         items: [
           {
             type: 'select',
@@ -165,7 +166,7 @@ export default {
             label: 'E-mail',
             align: '',
             md: '3',
-            list: true,
+            list: false,
             readonly: false,
             disabled: false,
           },
@@ -323,10 +324,24 @@ export default {
         ],
       },
       {
+        icon: list,
+        title: 'Filhos',
+        openGroup: true,
+        type: 'dataTable',
+        service: {
+          has: true,
+          verb: 'get',
+          endpoint: 'filters',
+          queryParams: 'domain=all-types&filter[type]=category',
+          items: 'all_types',
+        },
+        items: []
+      },
+      {
         icon: address,
         title: 'Dados de Endereço',
         openGroup: true,
-        address: true,
+        type: 'address',
         required: true,
         items: []
       }

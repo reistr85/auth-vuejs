@@ -2,7 +2,6 @@
   <v-text-field-integer
     v-bind="$attrs"
     v-on="$listeners"
-    v-model="value"
     v-bind:label="label"
     v-bind:properties="{
       id: id,
@@ -14,12 +13,6 @@
       clearable: clearable,
       dense: dense,
       rules: rules,
-    }"
-    v-bind:options="{
-      inputMask: inputMask,
-      outputMask: outputMask,
-      applyAfter: applyAfter,
-      empty: empty,
     }"
   />
 </template>
@@ -64,7 +57,7 @@ export default {
     },
     clearable: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     dense: {
       type: Boolean,

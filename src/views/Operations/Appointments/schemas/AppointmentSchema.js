@@ -8,6 +8,7 @@ export default {
     description: 'Lista de todos os agendamentos no sistema',
     createBtn: '',
     formAddress: true,
+    showExpand: false,
     routes: {
       list: {
         name: 'appointments',

@@ -2,6 +2,7 @@
   <div>
     <TextField
       v-model="search"
+      v-if="!noSearch"
       label='pesquisar'
       class="content-appointments--boddy---right----customers-----search-customer" />
 
@@ -21,8 +22,7 @@
       :hide-default-header="hideDefaultHeader"
       :hide-default-footer="hideDefaultFooter"
       @click:row="clickRow"
-      @input="handleAction">
-    </v-data-table>
+      @input="handleAction" />
   </div>
 </template>
 
@@ -34,6 +34,10 @@ export default {
   name: 'DataTable',
   components: { TextField },
   props: {
+    noSearch: {
+      type: Boolean,
+      default: false,
+    },
     loading: {
       type: Boolean,
       default: false,

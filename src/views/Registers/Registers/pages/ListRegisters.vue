@@ -17,17 +17,11 @@ import RegistersService from '../services/RegistersService';
 export default {
   name: 'ListRegister',
   components: { PageHeader, PageContent, DynamicListPage },
-  props: {},
   data() {
     return {
       schema: RegisterSchema,
       service: RegistersService,
     }
   },
-  methods: {}
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -1,18 +1,23 @@
 <!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
 <template>
   <div>
-    <div class="mb-5 d-flex justify-space-between">
-      <div class="d-flex flex-wrap  justify-start">
-        <Chip 
-          v-for="(item, index) in searches" :key="index"
-          dense
-          close
-          class="mr-2"
-          :label="`${item.label}: ${item.formattedValue}`" 
-          @click:close="closeChip(item)" />
+    <div>
+      <div class="mb-3">
+        <slot name="custom-header" />
       </div>
-      <div>
-        <SearchListPage ref="searchListPage" :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
+      <div class="mb-5 d-flex justify-space-between">
+        <div class="d-flex flex-wrap  justify-start">
+          <Chip 
+            v-for="(item, index) in searches" :key="index"
+            dense
+            close
+            class="mr-2"
+            :label="`${item.label}: ${item.formattedValue}`" 
+            @click:close="closeChip(item)" />
+        </div>
+        <div>
+          <SearchListPage ref="searchListPage" :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
+        </div>
       </div>
     </div>
 
@@ -21,6 +26,7 @@
       item-key="id"
       class="elevation-1 certus-data-list"
       dense
+      :show-expand="schema.showExpand"
       :loading="loading"
       :headers="headers"
       :items="localItems.data"
@@ -29,20 +35,20 @@
       :single-select="schema.singleSelect"
       :show-select="schema.checkItem">
 
-      <!-- <template v-slot:body="props">
-        <tr v-for="(index, i) in props.items" :key="i">
-          <td v-for="(header, h) in headers" :key="h" class="text-left font-weight-black">
-            {{ index[header.value]}}
-          </td>
-        </tr>
-      </template> -->
+      <template v-slot:expanded-item="">
+          <slot name="content-expanded" />
+      </template>
 
       <template v-slot:[`item.use_nickname_formatted`]="{ item }">
-        <Chip :label="item.use_nickname_formatted" small :color="item.use_nickname === 'yes' ? 'success' : 'light'" />
+        <Chip :label="item.use_nickname_formatted" small :color="colorsUseNickname[item.use_nickname]" />
       </template>
 
       <template v-slot:[`item.situation_formatted`]="{ item }">
-        <Chip :label="item.situation_formatted" small :color="item.situation === 'active' ? 'success' : 'light'" />
+        <Chip :label="item.situation_formatted" small :color="colorsSituation[item.situation]" />
+      </template>
+
+      <template v-slot:[`item.status_formatted`]="{ item }">
+        <Chip :label="item.status_formatted" small :color="colorsStatus[item.status]" />
       </template>
 
       <template v-slot:[`item.actions`]="props" style="width: 200px">
@@ -69,6 +75,23 @@ import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
 import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
+
+const COLORS_STATUS = Object.freeze({
+  pending: 'warning',
+  done: 'success',
+  canceled: 'red',
+  finished: 'success',
+})
+
+const COLORS_SITUATION = Object.freeze({
+  active: 'success',
+  disabled: 'light',
+})
+
+const COLORS_USE_NICKNAME = Object.freeze({
+  yes: 'success',
+  no: 'light',
+})
 
 export default {
   name: 'DynamicListPage',
@@ -106,7 +129,10 @@ export default {
       options: {},
       totalLocalItems: 10,
       noGetDynamicItems: false,
-      chips: {}
+      chips: {},
+      colorsStatus: COLORS_STATUS,
+      colorsSituation: COLORS_SITUATION,
+      colorsUseNickname: COLORS_USE_NICKNAME,
     }
   },
   mounted() {
@@ -137,6 +163,17 @@ export default {
           }
         });
       });
+
+      if(this.schema.listActions.status) {
+        this.headers.push(
+          {
+            text: 'Status',
+            value: 'status_formatted',
+            align: 'start',
+            sortable: true,
+          }
+        );
+      }
 
       if(this.schema.listActions.situation) {
         this.headers.push(

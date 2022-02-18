@@ -8,9 +8,9 @@
       <slot />
     </v-card-text>
 
-    <v-card-action>
+    <v-card-actions>
       <slot name="actions" />
-    </v-card-action>
+    </v-card-actions>
   </v-card>
 </template>
 
