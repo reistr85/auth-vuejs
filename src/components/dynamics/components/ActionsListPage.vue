@@ -30,8 +30,15 @@
     <v-btn icon v-if="!schema.listActions.noShow" class="my-1" fab color="secondary" x-small :to="{name: schema.routes.show.name, params: {id: dataListProps.item.id}}">
       <v-icon dark>{{ icons.view }}</v-icon>
     </v-btn>
-    
-    <v-btn icon v-if="!schema.listActions.noDestroy" class="my-1" fab color="red" x-small @click="$emit('openDialogDestroy', dataListProps)">
+
+    <v-btn
+      icon v-if="!schema.listActions.noDestroy"
+      class="my-1"
+      fab
+      color="red"
+      x-small
+      :disabled="dataListProps.item.destroyDisabled"
+      @click="$emit('openDialogDestroy', dataListProps)">
       <v-icon dark>{{ icons.destroy }}</v-icon>
     </v-btn>
   </div>

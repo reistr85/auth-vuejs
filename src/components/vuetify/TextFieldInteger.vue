@@ -57,7 +57,7 @@ export default {
     },
     clearable: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     dense: {
       type: Boolean,

@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="d-flex justify-end mb-5">
-      <Button label="Adicionar" small :icon="$icons.plus" color="secondary" rounded class="btn-actions" @click="$emit('handleAction', {})" />
+      <Button 
+        label="Adicionar" 
+        small 
+        :icon="$icons.plus" 
+        color="secondary" 
+        rounded 
+        class="btn-actions" 
+        @click="$emit('handleAction', handleAction(actionType))" />
     </div>
     <v-data-table
       dense
@@ -10,8 +17,8 @@
       :headers="headers"
       :items="items">
 
-      <template v-slot:[`item.actions`]="" style="width: 200px">
-        <Button :icon="$icons.destroy" type-icon color="red" />
+      <template v-slot:[`item.actions`]="{ item }" style="width: 200px">
+        <Button :icon="$icons.destroy" type-icon color="red" @click="$emit('handleAction', handleAction('itemDestroy', item))" />
       </template>
     </v-data-table>
   </div>
@@ -36,6 +43,19 @@ export default {
       type: Boolean,
       default: false,
     },
+    actionType: {
+      type: String,
+      required: true,
+    },
+    componentType: {
+      type: String,
+      required: true,
+    },
+  },
+  methods: {
+    handleAction(type, data = null) {
+      return { type, params: { ...data, componentType: this.componentType}}
+    }
   }
 }
 </script>

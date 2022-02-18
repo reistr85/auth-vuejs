@@ -1,18 +1,23 @@
 <!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
 <template>
   <div>
-    <div class="mb-5 d-flex justify-space-between">
-      <div class="d-flex flex-wrap  justify-start">
-        <Chip 
-          v-for="(item, index) in searches" :key="index"
-          dense
-          close
-          class="mr-2"
-          :label="`${item.label}: ${item.formattedValue}`" 
-          @click:close="closeChip(item)" />
+    <div>
+      <div class="mb-3">
+        <slot name="custom-header" />
       </div>
-      <div>
-        <SearchListPage ref="searchListPage" :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
+      <div class="mb-5 d-flex justify-space-between">
+        <div class="d-flex flex-wrap  justify-start">
+          <Chip 
+            v-for="(item, index) in searches" :key="index"
+            dense
+            close
+            class="mr-2"
+            :label="`${item.label}: ${item.formattedValue}`" 
+            @click:close="closeChip(item)" />
+        </div>
+        <div>
+          <SearchListPage ref="searchListPage" :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
+        </div>
       </div>
     </div>
 
@@ -75,6 +80,7 @@ const COLORS_STATUS = Object.freeze({
   pending: 'warning',
   done: 'success',
   canceled: 'red',
+  finished: 'success',
 })
 
 const COLORS_SITUATION = Object.freeze({

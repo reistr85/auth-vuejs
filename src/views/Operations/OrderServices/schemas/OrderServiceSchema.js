@@ -1,3 +1,4 @@
+import OrderService from '@/business/OrderService';
 import { typePageOptions } from '@/utils';
 import { list } from '@/utils/icons';
 import { statusOrderService } from '@/utils/options';
@@ -6,6 +7,7 @@ export default {
     domain: 'order-services',
     title: 'Ordem de Serviços',
     description: 'Lista de todas as ordem de serviços do sisteema.',
+    business: OrderService,
     createBtn: 'Nova Ordem',
     formAddress: false,
     showExpand: false,

@@ -6,7 +6,7 @@ const statusAppointment = [
 
 const statusOrderService = [
   { id: 1, text: 'Pendente', value: 'pending' },
-  { id: 1, text: 'Concluido', value: 'done' },
+  { id: 1, text: 'Finalizado', value: 'finished' },
   { id: 1, text: 'Cancelado', value: 'canceled' },
 ]
 
