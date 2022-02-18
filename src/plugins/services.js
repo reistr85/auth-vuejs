@@ -12,6 +12,5 @@ export default {
       Vue.prototype[key] = services[key]
       Vue[key] = services[key]
     });
-    
   }
 }

@@ -8,7 +8,7 @@
         color="secondary" 
         rounded 
         class="btn-actions" 
-        @click="$emit('handleAction', { type: actionType, params: { componentType: componentType} })" />
+        @click="$emit('handleAction', handleAction(actionType))" />
     </div>
     <v-data-table
       dense
@@ -17,8 +17,8 @@
       :headers="headers"
       :items="items">
 
-      <template v-slot:[`item.actions`]="" style="width: 200px">
-        <Button :icon="$icons.destroy" type-icon color="red" />
+      <template v-slot:[`item.actions`]="{ item }" style="width: 200px">
+        <Button :icon="$icons.destroy" type-icon color="red" @click="$emit('handleAction', handleAction('itemDestroy', item))" />
       </template>
     </v-data-table>
   </div>
@@ -51,6 +51,11 @@ export default {
       type: String,
       required: true,
     },
+  },
+  methods: {
+    handleAction(type, data = null) {
+      return { type, params: { ...data, componentType: this.componentType}}
+    }
   }
 }
 </script>
