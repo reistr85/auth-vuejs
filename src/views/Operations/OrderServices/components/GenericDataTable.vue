@@ -4,10 +4,11 @@
       <Button 
         label="Adicionar" 
         small 
-        :icon="$icons.plus" 
         color="secondary" 
         rounded 
         class="btn-actions" 
+        :icon="$icons.plus" 
+        :disabled="orderFinished"
         @click="$emit('handleAction', handleAction(actionType))" />
     </div>
     <v-data-table
@@ -18,7 +19,11 @@
       :items="items">
 
       <template v-slot:[`item.actions`]="{ item }" style="width: 200px">
-        <Button :icon="$icons.destroy" type-icon color="red" @click="$emit('handleAction', handleAction('itemDestroy', item))" />
+        <Button 
+          type-icon color="red"
+          :icon="$icons.destroy"
+          :disabled="orderFinished"
+          @click="$emit('handleAction', handleAction('itemDestroy', item))" />
       </template>
     </v-data-table>
   </div>
@@ -50,6 +55,10 @@ export default {
     componentType: {
       type: String,
       required: true,
+    },
+    orderFinished: {
+      type: Boolean,
+      default: false
     },
   },
   methods: {

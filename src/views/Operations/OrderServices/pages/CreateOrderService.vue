@@ -1,14 +1,13 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="orderServiceSchema" />
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados da Ordem" multiple :icon="$icons.list">
-        <v-row>
-          <v-col cols="12" md="2"><DataPicker v-model="order_service.order_date" label="Data da Ordem" /></v-col>
-          <v-col cols="12" md="4"><AutoComplete v-model="order_service.collaborator_id" label="Colaborador" :items="collaborators" /></v-col>
-          <v-col cols="12" md="4"><AutoComplete v-model="order_service.customer_id" label="Cliente" :items="customers" /></v-col>
-          <v-col cols="12" md="2"><TextFieldInteger v-model="order_service.quantity_services" label="Quant. Itens" readonly /></v-col>
-        </v-row>
+        <OrderData
+          :order-service="order_service"
+          :customers="customers"
+          :collaborators="collaborators"
+          :order-finished="orderFinished" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
@@ -18,6 +17,7 @@
           :loading="loading"
           :headers="headersItems" 
           :items="order_service.items"
+          :order-finished="orderFinished"
           @handleAction="handleAction"/>
       </ExpansionPanel>
 
@@ -28,6 +28,7 @@
           :loading="loading"
           :headers="headersPayments" 
           :items="order_service.payments"
+          :order-finished="orderFinished"
           @handleAction="handleAction" />
       </ExpansionPanel>
 
@@ -40,8 +41,22 @@
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
-        <Button label="Salvar" :icon="$icons.save" color="primary" rounded class="" @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.PENDING }})" />
-        <Button label="Salvar e Finalizar" :icon="$icons.check" color="success" rounded class="ml-3" @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.FINISHED }})" />
+        <Button
+          label="Salvar"
+          color="primary"
+          rounded
+          class=""
+          :icon="$icons.save"
+          :disabled="orderFinished"
+          @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.PENDING }})" />
+        <Button
+          label="Salvar e Finalizar"
+          color="success"
+          rounded
+          class="ml-3"
+          :icon="$icons.check"
+          :disabled="orderFinished"
+          @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.FINISHED }})" />
       </ExpansionPanel>
     </PageContent>
 
@@ -60,21 +75,19 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import OrderServiceSchema from '../schemas/OrderServiceSchema';
 import OrderServicesService from '../services/OrderServicesService';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
-import DataPicker from '@/components/vuetify/DataPicker';
-import AutoComplete from '@/components/vuetify/AutoComplete';
-import TextFieldInteger from '@/components/vuetify/TextFieldInteger';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Button from '@/components/vuetify/Button';
-import { mountParamsApiFilter } from '@/utils';
 import GenericDataTable from '../components/GenericDataTable';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogAddItem from '../components/DialogAddItem';
 import DialogAddPayment from '../components/DialogAddPayment';
 import DialogConfirmation from '@/components/DialogConfirmation';
+import OrderData from '../components/OrderData';
+import { mountParamsApiFilter } from '@/utils';
 import { messageErrors } from '@/utils'
+import { orderServiceStatus } from '@/utils/enums';
 
 export default {
   name: 'CreateCreateOrderService',
@@ -82,20 +95,17 @@ export default {
     PageHeader,
     PageContent,
     ExpansionPanel,
-    DataPicker,
-    AutoComplete,
-    TextFieldInteger,
     Button,
     TextFieldMoney,
     GenericDataTable,
     Dialog,
     DialogAddItem,
     DialogAddPayment,
-    DialogConfirmation
+    DialogConfirmation,
+    OrderData,
   },
   data() {
     return {
-      schema: OrderServiceSchema,
       service: OrderServicesService,
       expModel: [0],
       loading: false,
@@ -117,10 +127,13 @@ export default {
       return this.$route.params.id
     },
     headersItems() {
-      return this.schema.order_service_items;
+      return this.orderServiceSchema.headerOrderServiceItems;
     },
     headersPayments() {
-      return this.schema.order_service_payments;
+      return this.orderServiceSchema.headerOrderServicePayments;
+    },
+    orderFinished() {
+      return this.order_service.status === orderServiceStatus.FINISHED || false;
     }
   },
   methods: {
@@ -191,7 +204,7 @@ export default {
     save() {
       this.orderServicesService.update(5, this.order_service).then(() => {
         this.$noty.success(this.$locales.alerts.updatedRegister)
-        this.$router.push({ name: this.schema.routes.list.name })
+        this.$router.push({ name: this.orderServiceSchema.routes.list.name })
       }).catch((err) => {
         this.$noty.error(messageErrors(err))
       }).finally(() => {

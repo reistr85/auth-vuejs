@@ -1,10 +1,28 @@
 <template>
   <Card title="Adicionar Item">
-    <h3>Conteúdo</h3>
+    <DataTable
+      :headers="addItemHeaders"
+      :items="items"
+      show-select
+      single-select
+      @selected="setService" />
 
     <div slot="actions">
-      <Button label="Cancelar" :icon="$icons.cancel" color="primary" rounded class="" @click="$emit('update:dialog', false)" />
-      <Button label="Adicionar" :icon="$icons.plus" color="secondary" rounded class="ml-3" @click="$emit('handleActionModal', form)" />
+      <Button 
+        label="Cancelar" 
+        color="primary" 
+        rounded 
+        class=""
+        :icon="$icons.cancel" 
+        @click="$emit('update:dialog', false)" />
+      <Button 
+        label="Adicionar" 
+        color="secondary" 
+        rounded 
+        class="ml-3" 
+        :disabled="!serviceSelected"
+        :icon="$icons.plus" 
+        @click="$emit('handleActionModal', form)" />
     </div>
   </Card>
 </template>
@@ -12,15 +30,38 @@
 <script>
 import Card from '@/components/vuetify/Card';
 import Button from '@/components/vuetify/Button';
+import DataTable from '@/components/vuetify/DataTable';
 
 export default {
   name: 'DialogAddItem',
-  components: { Card, Button },
+  components: { Card, Button, DataTable },
   props: {},
   data() {
     return {
-      form: {}
+      form: {},
+      serviceSelected: null,
+      items: {},
     }
+  },
+  mounted() {
+    this.getServices();
+  },
+  computed: {
+    addItemHeaders() {
+      return this.orderServiceSchema.headerAddItem;
+    }
+  },
+  methods: {
+    setService(data) {
+      this.serviceSelected = data[0]
+    },
+    getServices() {
+      this.servicesService.index().then((res) => {
+        this.items = res.data;
+      }).catch(() => {
+
+      })
+    },
   }
 }
 </script>

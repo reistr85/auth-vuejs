@@ -72,19 +72,17 @@ export default {
       search: '',
       selected: [],
       options: {},
-      localItems: [],
-      totalLocalItems: 0,
     }
   },
   watch: {
-    items: {
-      handler() {
-        this.localItems = this.items.data;
-        this.totalLocalItems = this.items.total;
-        this.options.itemsPerPage = parseInt(this.items.per_page);
-      },
-      deep: true,
-    },
+    // items: {
+    //   handler() {
+    //     this.localItems = this.items.data;
+    //     this.totalLocalItems = this.items.total;
+    //     this.options.itemsPerPage = parseInt(this.items.per_page);
+    //   },
+    //   deep: true,
+    // },
     options: {
       handler() {
         this. getItems();
@@ -95,6 +93,24 @@ export default {
       this.options.page = 1;
       this. getItems();
     }, 700)
+  },
+  computed: {
+    localItems: {
+      get() {
+        return this.items.data;
+      },
+      set(value) {
+        this.localItems = value;
+      }
+    },
+    totalLocalItems: {
+      get() {
+        return this.items.total;
+      },
+      set(value) {
+        this.items = value;
+      }
+    }
   },
   methods: {
     getItems() {
