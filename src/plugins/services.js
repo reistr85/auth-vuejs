@@ -1,9 +1,11 @@
 import RegistersService from '@/views/Registers/Registers/services/RegistersService';
-import OrdderServicesService from '@/views/Operations/OrderServices/services/OrderServicesService';
+import OrderServicesService from '@/views/Operations/OrderServices/services/OrderServicesService';
+import ServicesService from '@/views/Registers/Services/services/ServicesService';
 
 const services = Object.freeze({
-  orderServicesService: OrdderServicesService,
+  orderServicesService: OrderServicesService,
   registersService: RegistersService,
+  servicesService: ServicesService,
 });
 
 export default {

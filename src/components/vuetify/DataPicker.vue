@@ -24,6 +24,8 @@
       <v-date-picker
         v-bind="$attrs"
         v-on="$listeners"
+        :readonly="readonly"
+        :disabled="disabled"
         @input="menu = false" />
     </v-menu>
   </div>

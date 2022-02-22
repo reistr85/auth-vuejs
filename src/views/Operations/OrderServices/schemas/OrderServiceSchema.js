@@ -148,7 +148,7 @@ export default {
         ],
       },
     ],
-    order_service_items: [
+    headerOrderServiceItems: [
       { text: 'Item', value: 'number_item' },
       { text: 'Colaborador', value: 'collaborator.name' },
       { text: 'Serviço', value: 'service.name' },
@@ -158,12 +158,16 @@ export default {
       { text: 'Vlr. Total.', value: 'amount_formatted' },
       { text: 'Ações.', value: 'actions', align: 'end' },
     ],
-    order_service_payments: [
+    headerOrderServicePayments: [
       { text: 'Data do Pagamento', value: 'payment_date_formatted' },
       { text: 'Forma Pagamento', value: 'payment_method.description' },
       { text: 'Bandeira', value: 'card_flag.description' },
       { text: 'Vlr. Pago', value: 'amount_paid_formatted' },
       { text: 'Ações.', value: 'actions', align: 'end' },
+    ],
+    headerAddItem: [
+      { text: 'Código', value: 'id' },
+      { text: 'Descrição', value: 'description' },
     ],
     footer: []
   }
