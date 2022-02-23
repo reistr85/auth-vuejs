@@ -92,10 +92,8 @@ export default {
     dateFormatted() {
       if(this.noInitial) {
         return null;
-      }else if(this.now) {
-        return formatDate(new Date().toISOString().substr(0, 10))
       }else{
-        return formatDate(this.$attrs.value)
+        return formatDate(this.$attrs.value) || formatDate(new Date().toISOString().substr(0, 10))
       }
     }
   },
