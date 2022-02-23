@@ -184,9 +184,26 @@ export default {
       const { type, params } = data;
       this[type](params);
     },
-    handleActionModal(form) {
+    handleActionModal(data) {
+      const { action, item } = data;
       this.dialog = false;
-      console.log(form)
+      this[action](item);
+    },
+    addItem(item) {
+      this.order_service.items.push({
+        id: item.id,
+        collaborator: '',
+        amount: item.sale_value,
+        amount_formatted: item.sale_value_formatted,
+        discount: 0,
+        discount_formatted: 'R$0,00',
+        number_item: 3,
+        quantity: 1,
+        service: { name: item.name },
+        subtotal: item.sale_value,
+        subtotal_formatted: item.sale_value_formatted,
+        newItem: true,
+      })
     },
     itemDestroy(params) {
       const { id, componentType } = params;

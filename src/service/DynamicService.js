@@ -2,7 +2,10 @@
 import axios from './';
 import { messageErrors } from '@/utils';
 
-const DynamicService = (endpoint, options = {}) => ({
+const DynamicService = (endpoint, schema, options = {}) => ({
+  get schema() {
+    return schema;
+  },
   get options() {
     return options;
   },
@@ -18,6 +21,14 @@ const DynamicService = (endpoint, options = {}) => ({
     }
     
     return message;
+  },
+  mountFilter(filter) {
+    let paramsFilter = '';
+    schema.filters.items.forEach((item) => {
+      paramsFilter += `&filter[${item.field}]=${filter}`
+    })
+    console.log(paramsFilter)
+    return paramsFilter;
   },
   async index(params = null){
     let items = {}
@@ -115,33 +126,14 @@ const DynamicService = (endpoint, options = {}) => ({
       });
     })
   },
-  async filters(params = null, searches){
-    let items = {}
-    let page = 1;
-    let totalItemsPerPage = 10;
-    let url = '';
-    let paramsFilter = '';
-    let queryParams = '';
-    let relations = '';
+  async filters(params){
+    let items = {};
+    const { page, per_page, filter } = params;
+    let url = `filters?domain=${endpoint}`;
 
-    searches.forEach((item) => {
-      paramsFilter += `&filter[${item.name}]=${item.value}`
-    })
-
-    queryParams = `filters?domain=${endpoint}${paramsFilter}`;
-
-    if(params){
-      page = params.page;
-      relations = params.relations;
-      totalItemsPerPage = params.totalItemsPerPage;
-      url = `${queryParams}&page=${page}&per_page=${totalItemsPerPage}`;
-    }
-
-    if(!params)
-      url = `${queryParams}`;
-
-    if(relations)
-      url += `&include=${relations}`
+    if(page) url += `&page=${page}&per_page=${per_page || 10}`;
+    if(filter && schema.filters.has) url += this.mountFilter(filter)
+    if(schema.include.has) url += `&include=${schema.include.value}`;
 
     await axios.get(url).then((res) => {
       if (options.formatResponse && typeof options.formatResponse === 'function') {
@@ -152,7 +144,7 @@ const DynamicService = (endpoint, options = {}) => ({
 
       items = res;
     }).catch((err) => {
-      console.error(`DynamicService Index error: ${err}`)
+      console.error(`DynamicService Filter error: ${err}`)
     });
 
     return items;

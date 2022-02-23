@@ -1,4 +1,5 @@
 import DynamicService from '@/service/DynamicService';
+import OrderServiceSchema from '../schemas/OrderServiceSchema';
 import { formatCurrency, formatDate, getText } from '@/utils';
 import { statusOrderService } from '@/utils/options';
 
@@ -21,7 +22,7 @@ const formatResponse = (item) => {
   });
 }
 
-const OrdderServiceService = DynamicService('order-services', {
+const OrdderServiceService = DynamicService('order-services', OrderServiceSchema, {
   formatResponse,
 });
 

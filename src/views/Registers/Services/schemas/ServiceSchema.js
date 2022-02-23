@@ -1,5 +1,5 @@
 import { typePageOptions } from '@/utils';
-import { text, calendar, list } from '@/utils/icons';
+import { text, list } from '@/utils/icons';
 import { required, money } from '@/utils/rules';
 
 export default {
@@ -51,21 +51,11 @@ export default {
           icon: text,
           md: 6,
         },
-        {
-          type: 'select',
-          label: 'Tipo de Cadastro',
-          field: 'type',
-          icon: calendar,
-          md: 6,
-        },
-        {
-          type: 'dataPicker',
-          label: 'Data do Cadastro',
-          field: 'created_at',
-          icon: calendar,
-          md: 6,
-        }
-      ]
+      ],
+    },
+    include: {
+      has: true,
+      value: 'category,subCategory'
     },
     fields: [
       {

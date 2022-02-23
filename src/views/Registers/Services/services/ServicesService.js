@@ -1,4 +1,5 @@
 import DynamicService from '@/service/DynamicService';
+import ServiceSchema from '../schemas/ServiceSchema';
 import { formatCurrency, getText } from '@/utils';
 import { typeSituation } from '@/utils/options';
 
@@ -10,7 +11,7 @@ const formatResponse = (item) => {
   item.situation_formatted = getText(typeSituation, item.situation);
 }
 
-const ServicesService = DynamicService('services', {
+const ServicesService = DynamicService('services', ServiceSchema, {
   formatResponse,
 });
 

@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     getItems() {
-      this.$emit('getItems', { options: this.options, search: this.search })
+      this.$emit('getItems', { ...this.options, per_page: this.options.itemsPerPage, filter: this.search  })
     },
     handleAction() {
       this.$emit('selected', this.selected)

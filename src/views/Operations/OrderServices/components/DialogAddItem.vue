@@ -1,11 +1,13 @@
 <template>
   <Card title="Adicionar Item">
     <DataTable
-      :headers="addItemHeaders"
-      :items="items"
       show-select
       single-select
-      @selected="setService" />
+      :headers="addItemHeaders"
+      :items="items"
+      :loading="loading"
+      @selected="setService"
+      @getItems="getServices" />
 
     <div slot="actions">
       <Button 
@@ -22,7 +24,7 @@
         class="ml-3" 
         :disabled="!serviceSelected"
         :icon="$icons.plus" 
-        @click="$emit('handleActionModal', form)" />
+        @click="$emit('handleActionModal', { action: 'addItem', item: serviceSelected })" />
     </div>
   </Card>
 </template>
@@ -31,6 +33,7 @@
 import Card from '@/components/vuetify/Card';
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
+// import { mountParamsApiFilter } from '@/utils';
 
 export default {
   name: 'DialogAddItem',
@@ -38,9 +41,9 @@ export default {
   props: {},
   data() {
     return {
-      form: {},
       serviceSelected: null,
       items: {},
+      loading: true,
     }
   },
   mounted() {
@@ -55,12 +58,15 @@ export default {
     setService(data) {
       this.serviceSelected = data[0]
     },
-    getServices() {
-      this.servicesService.index().then((res) => {
+    getServices(params = {}) {
+      this.loading = true;
+      this.servicesService.filters(params).then((res) => {
         this.items = res.data;
       }).catch(() => {
 
-      })
+      }).finally(() => {
+        this.loading = false;
+      });
     },
   }
 }
