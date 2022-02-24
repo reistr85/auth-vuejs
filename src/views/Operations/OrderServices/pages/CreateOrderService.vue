@@ -63,7 +63,8 @@
     <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
       <component 
         slot="content" 
-        :is="dialogComponent" 
+        v-bind="dialogProps"
+        :is="dialogComponent"
         @update:dialog="dialog = $event" 
         @handleActionModal="handleActionModal" />
     </Dialog>
@@ -85,7 +86,7 @@ import DialogAddItem from '../components/DialogAddItem';
 import DialogAddPayment from '../components/DialogAddPayment';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import OrderData from '../components/OrderData';
-import { mountParamsApiFilter } from '@/utils';
+import { mountParamsRequestFilter } from '@/utils';
 import { messageErrors } from '@/utils'
 import { orderServiceStatus } from '@/utils/enums';
 
@@ -114,6 +115,7 @@ export default {
       customers: [],
       dialog: false,
       dialogComponent: null,
+      dialogProps: {},
       dialogConfirmation: false,
     }
   },
@@ -146,10 +148,9 @@ export default {
         this.loading = false;
       })
     },
-    getCollaborators() {
-      const { options, filters } = mountParamsApiFilter({ type: 'collaborator' });
-
-      this.registersService.filters(options, filters).then((res) => {
+    getCollaborators(params = {}) {
+      const payload = mountParamsRequestFilter(params, 'collaborator', ['type']);
+      this.registersService.filters(payload).then((res) => {
         this.collaborators = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -161,10 +162,9 @@ export default {
         this.loading = false;
       })
     },
-    getCustomers() {
-      const { options, filters } = mountParamsApiFilter({ type: 'customer' });
-
-      this.registersService.filters(options, filters).then((res) => {
+    getCustomers(params = {}) {
+      const payload = mountParamsRequestFilter(params, 'customer', ['type']);
+      this.registersService.filters(payload).then((res) => {
         this.customers = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -178,6 +178,10 @@ export default {
     },
     openDialog({ componentType }) {
       this.dialog = true;
+      this.dialogProps = {
+        collaborators: this.collaborators,
+      }
+
       this.dialogComponent = componentType;
     },
     handleAction(data) {
@@ -192,18 +196,19 @@ export default {
     addItem(item) {
       this.order_service.items.push({
         id: item.id,
-        collaborator: '',
+        collaborator: item.collaborator,
         amount: item.sale_value,
         amount_formatted: item.sale_value_formatted,
         discount: 0,
         discount_formatted: 'R$0,00',
-        number_item: 3,
+        number_item: this.setNumberItem(),
         quantity: 1,
         service: { name: item.name },
         subtotal: item.sale_value,
         subtotal_formatted: item.sale_value_formatted,
         newItem: true,
       })
+      console.log(this.order_service.items)
     },
     itemDestroy(params) {
       const { id, componentType } = params;
@@ -248,7 +253,7 @@ export default {
         return {
           id: item.id,
           number_item: item.number_item,
-          collaborator: { name: item.collaborator.name },
+          collaborator: { id: item.collaborator.id, name: item.collaborator.name },
           service: { name: item.service.name },
           subtotal: item.subtotal,
           subtotal_formatted: item.subtotal_formatted,
@@ -274,6 +279,9 @@ export default {
         }
       });
     },
+    setNumberItem() {
+      return this.order_service.items.length + 1;
+    }
   }
 }
 </script>

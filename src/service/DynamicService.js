@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars */
 import axios from './';
 import { messageErrors } from '@/utils';
 
@@ -22,12 +22,14 @@ const DynamicService = (endpoint, schema, options = {}) => ({
     
     return message;
   },
-  mountFilter(filter) {
+  mountFilter(customFields, filter) {
     let paramsFilter = '';
-    schema.filters.items.forEach((item) => {
+    const fields = customFields.length ? customFields : schema.filters.items;
+
+    fields.forEach((item) => {
       paramsFilter += `&filter[${item.field}]=${filter}`
     })
-    console.log(paramsFilter)
+
     return paramsFilter;
   },
   async index(params = null){
@@ -127,13 +129,14 @@ const DynamicService = (endpoint, schema, options = {}) => ({
     })
   },
   async filters(params){
-    let items = {};
-    const { page, per_page, filter } = params;
+    const { page, per_page, filter, customFields } = params;
     let url = `filters?domain=${endpoint}`;
+    let items = {};
 
     if(page) url += `&page=${page}&per_page=${per_page || 10}`;
-    if(filter && schema.filters.has) url += this.mountFilter(filter)
-    if(schema.include.has) url += `&include=${schema.include.value}`;
+    if(filter && schema.filters.has) url += this.mountFilter(customFields, filter)
+    if(schema.filters?.has && schema.include?.has) url += `&include=${schema.include?.value}`;
+    if(params.search_global) url += `&search_global=true`;
 
     await axios.get(url).then((res) => {
       if (options.formatResponse && typeof options.formatResponse === 'function') {

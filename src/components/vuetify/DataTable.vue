@@ -1,10 +1,16 @@
 <template>
   <div>
-    <TextField
-      v-model="search"
-      v-if="!noSearch"
-      label='pesquisar'
-      class="content-appointments--boddy---right----customers-----search-customer" />
+    <v-row>
+      <v-col v-if="!noSearch">
+        <TextField
+          v-model="search"
+          label='pesquisar'
+          class="content-appointments--boddy---right----customers-----search-customer" />
+      </v-col>
+      <v-col>
+        <slot name="custom-header" />
+      </v-col>
+    </v-row>
 
     <v-data-table
       v-model="selected"
@@ -75,14 +81,6 @@ export default {
     }
   },
   watch: {
-    // items: {
-    //   handler() {
-    //     this.localItems = this.items.data;
-    //     this.totalLocalItems = this.items.total;
-    //     this.options.itemsPerPage = parseInt(this.items.per_page);
-    //   },
-    //   deep: true,
-    // },
     options: {
       handler() {
         this. getItems();
@@ -114,7 +112,12 @@ export default {
   },
   methods: {
     getItems() {
-      this.$emit('getItems', { ...this.options, per_page: this.options.itemsPerPage, filter: this.search  })
+      this.$emit('getItems', {
+        ...this.options,
+        per_page: this.options.itemsPerPage,
+        filter: this.search,
+        search_global: true
+      })
     },
     handleAction() {
       this.$emit('selected', this.selected)

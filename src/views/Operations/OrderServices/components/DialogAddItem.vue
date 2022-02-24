@@ -7,7 +7,16 @@
       :items="items"
       :loading="loading"
       @selected="setService"
-      @getItems="getServices" />
+      @getItems="getServices">
+
+      <template slot="custom-header">
+        <AutoComplete
+          v-model="collaborator"
+          label="Colaborador"
+          return-object
+          :items="localCollaborators" />
+      </template>
+    </DataTable>
 
     <div slot="actions">
       <Button 
@@ -24,7 +33,7 @@
         class="ml-3" 
         :disabled="!serviceSelected"
         :icon="$icons.plus" 
-        @click="$emit('handleActionModal', { action: 'addItem', item: serviceSelected })" />
+        @click="add()" />
     </div>
   </Card>
 </template>
@@ -33,21 +42,29 @@
 import Card from '@/components/vuetify/Card';
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
-// import { mountParamsApiFilter } from '@/utils';
+import AutoComplete from '@/components/vuetify/AutoComplete';
 
 export default {
   name: 'DialogAddItem',
-  components: { Card, Button, DataTable },
-  props: {},
+  components: { Card, Button, DataTable, AutoComplete },
+  props: {
+    collaborators: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       serviceSelected: null,
       items: {},
       loading: true,
+      collaborator: {},
+      localCollaborators: [],
     }
   },
   mounted() {
     this.getServices();
+    this.localCollaborators = this.collaborators;
   },
   computed: {
     addItemHeaders() {
@@ -68,6 +85,13 @@ export default {
         this.loading = false;
       });
     },
+    add() {
+      this.$emit('handleActionModal', {
+        action: 'addItem',
+        item: {
+          ...this.serviceSelected, collaborator: { ...this.collaborator, name: this.collaborator.text } } 
+      })
+    }
   }
 }
 </script>
