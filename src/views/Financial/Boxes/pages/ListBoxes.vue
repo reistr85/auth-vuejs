@@ -73,6 +73,7 @@ export default {
         title: 'Lançamento de Sangria',
         disabledDate: true,
         disabledTypeInputOutput: true,
+        readonlyDescription: true,
         movement: {
           box_id: item.dataListProps.item.id,
           box_movements_date: null,
@@ -89,6 +90,7 @@ export default {
         title: 'Lançamento de Suprimento',
         disabledDate: true,
         disabledTypeInputOutput: true,
+        readonlyDescription: true,
         movement: {
           box_id: item.dataListProps.item.id,
           box_movements_date: null,

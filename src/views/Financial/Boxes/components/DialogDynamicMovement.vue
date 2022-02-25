@@ -30,6 +30,7 @@
               v-model="movement.description" 
               label="Descrição" 
               :rules="[rules.required]"
+              :readonly="readonlyDescription"
               v-on:keyup.enter="save()" />
           </v-col>
         </v-row>
@@ -87,6 +88,10 @@ export default {
     disabledTypeInputOutput: {
       type: Boolean,
       default: false,
+    },
+    readonlyDescription: {
+      type: Boolean,
+      default: true,
     },
     loading: {
       type: Boolean,

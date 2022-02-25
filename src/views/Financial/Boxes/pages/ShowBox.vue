@@ -111,6 +111,7 @@ export default {
         title: 'Lançamento Manual',
         disabledDate: false,
         disabledTypeInputOutput: false,
+        readonlyDescription: false,
         movement: {
           box_id: this.id,
           box_movements_date: null,
