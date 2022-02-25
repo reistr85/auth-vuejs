@@ -17,22 +17,25 @@ const formatResponse = (item) => {
   });
 }
 
+const formatResponseGetAllBoxMovementsByBoxId = (res) => {
+  const { data } = res.data;
+  data.forEach((item) => {
+    item.origin_type_formatted = 'test'
+  })
+
+  return res;
+}
+
 const BoxesService = DynamicService('boxes', {
   formatResponse,
 });
 
 const BoxesCommands = () => ({
   async getAllBoxMovementsByBoxId(id) {
-    new Promise((resolve, reject) => {
-      axios.get(`boxes/${id}/box-movements`).then((res) => {
-        console.log('res',res)
-        resolve(res);
-      }).catch((err) => {
-        reject(err);
-      })
-    })
+     const res = await axios.get(`boxes/${id}/box-movements`);
+     return formatResponseGetAllBoxMovementsByBoxId(res);
   }
 })
 
 export default BoxesService;
-export { BoxesCommands }
+export { BoxesService, BoxesCommands }

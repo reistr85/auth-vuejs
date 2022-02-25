@@ -71,11 +71,9 @@ export default {
       items: []
     }
   },
-  created() {
-    this.getBoxMovements();
-  },
   mounted() {
     this.getBox();
+    this.getBoxMovements();
   },
   computed: {
     id() {
@@ -96,13 +94,12 @@ export default {
       })
     },
     async getBoxMovements() {
-      const res = await this.boxesService.getAllBoxMovementsByBoxId(this.id).then((res) => {
-        this.items = res;
+      this.boxesService.getAllBoxMovementsByBoxId(this.id).then((res) => {
+        this.items = res.data.data;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
       })
-        console.log('getBoxMovements', res)
     },
     openDialog({ componentType }) {
       this.dialog = true;
