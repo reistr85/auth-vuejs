@@ -9,18 +9,14 @@ const formatResponse = (item) => {
   item.initial_value_formatted = formatCurrency(item.initial_value);
   item.total_value_formatted = formatCurrency(item.total_value);
   item.status_formatted = getText(statusBoxes, item.status);
-
-  item.movements.forEach((i) => {
-    i.box_movements_date_formatted = formatDate(i.box_movements_date, true);
-    i.total_value_formatted = formatCurrency(i.total_value);
-    i.origin_type_formatted = getText(originTypeBoxMovements, i.origin_type);
-  });
 }
 
 const formatResponseGetAllBoxMovementsByBoxId = (res) => {
   const { data } = res.data;
   data.forEach((item) => {
-    item.origin_type_formatted = 'test'
+    item.box_movements_date_formatted = formatDate(item.box_movements_date, true);
+    item.total_value_formatted = formatCurrency(item.total_value);
+    item.origin_type_formatted = getText(originTypeBoxMovements, item.origin_type);
   })
 
   return res;

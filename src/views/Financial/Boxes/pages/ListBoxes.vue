@@ -17,6 +17,11 @@
         @handleActionModal="handleActionModal"
       />
     </Dialog>
+    <Dialog :dialog="dialogClosed" :maxWidth="parseInt(1000)" no-title no-actions>
+    <div slot="content">
+      {{ " Não será possível fazer o fechamento do caixa, pois conta Saldo Final maior que zero. " }}
+    </div>
+  </Dialog>
   </div>
 </template>
 
@@ -52,6 +57,7 @@ export default {
       dialog: false,
       dialogComponent: null,
       propsComponents: null,
+      dialogClosed: false,
     }
   },
   methods: {
@@ -101,6 +107,8 @@ export default {
       }
     },
     closed(item) {
+      if(item.dataListProps.item.total_value > 0) return this.dialogClosed = true;
+      
       let status = 'closed';
       BoxesService.update(item.dataListProps.item.id, { status: status }).then(() => {
         this.$noty.success(locales.alerts.updatedRegister);

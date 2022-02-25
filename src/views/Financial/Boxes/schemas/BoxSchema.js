@@ -79,7 +79,7 @@ export default {
         },
         {
           type: 'text',
-          label: 'Valor Total',
+          label: 'Saldo Final',
           name: 'total_value',
           icon: text,
           md: 6,
@@ -139,7 +139,7 @@ export default {
             type: 'money',
             name: 'total_value',
             formattedName: 'total_value_formatted',
-            label: 'Valor Final',
+            label: 'Saldo Final',
             align: '',
             md: '2',
             rules: [required],
