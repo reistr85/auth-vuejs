@@ -1,18 +1,39 @@
-import RegistersService from '@/views/Registers/Registers/services/RegistersService';
+// Auth
+import AuthService from '@/views/Auth/services/AuthService';
+
+// Financial
+import BanksService from '@/views/Financial/Banks/services/BanksService';
+
+// Operations
+import AppointmentsService from '@/views/Operations/Appointments/services/AppointmentsService';
+import CalendarsService from '@/views/Operations/Calendars/services/CalendarsService';
 import OrderServicesService from '@/views/Operations/OrderServices/services/OrderServicesService';
+
+// Registers
+import AllTypesService from '@/views/Registers/AllTypes/services/AllTypesService';
+import RegistersService from '@/views/Registers/Registers/services/RegistersService';
 import ServicesService from '@/views/Registers/Services/services/ServicesService';
 
-const services = Object.freeze({
-  orderServicesService: OrderServicesService,
-  registersService: RegistersService,
-  servicesService: ServicesService,
+// Settings
+import CompaniesService, { CompaniesCommands } from '@/views/Settings/Companies/services/CompaniesService';
+import UsersService from '@/views/Settings/Users/services/UsersService';
+
+const api = Object.freeze({
+  auth: AuthService,
+  banks: BanksService,
+  appointments: AppointmentsService,
+  calendars: CalendarsService,
+  orderServices: OrderServicesService,
+  allTypes: AllTypesService,
+  registers: RegistersService,
+  services: ServicesService,
+  companies: { ...CompaniesService, ...CompaniesCommands() },
+  users: UsersService,
 });
 
 export default {
   install: function (Vue) {
-    Object.keys(services).forEach((key) => {
-      Vue.prototype[key] = services[key]
-      Vue[key] = services[key]
-    });
+    Vue.prototype.$api = api
+    Vue.api = api
   }
 }

@@ -323,20 +323,20 @@ export default {
           },
         ],
       },
-      {
-        icon: list,
-        title: 'Filhos',
-        openGroup: true,
-        type: 'dataTable',
-        service: {
-          has: true,
-          verb: 'get',
-          endpoint: 'filters',
-          queryParams: 'domain=all-types&filter[type]=category',
-          items: 'all_types',
-        },
-        items: []
-      },
+      // {
+      //   icon: list,
+      //   title: 'Filhos',
+      //   openGroup: true,
+      //   type: 'dataTable',
+      //   service: {
+      //     has: true,
+      //     verb: 'get',
+      //     endpoint: 'filters',
+      //     queryParams: 'domain=all-types&filter[type]=category',
+      //     items: 'all_types',
+      //   },
+      //   items: []
+      // },
       {
         icon: address,
         title: 'Dados de Endereço',

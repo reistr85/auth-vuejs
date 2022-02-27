@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader :schema="orderServiceSchema" />
+    <PageHeader :schema="$schemas.orderService" />
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados da Ordem" multiple :icon="$icons.list">
         <OrderData
@@ -129,10 +129,10 @@ export default {
       return this.$route.params.id
     },
     headersItems() {
-      return this.orderServiceSchema.headerOrderServiceItems;
+      return this.$schemas.orderService.headerOrderServiceItems;
     },
     headersPayments() {
-      return this.orderServiceSchema.headerOrderServicePayments;
+      return this.$schemas.orderService.headerOrderServicePayments;
     },
     orderFinished() {
       return this.order_service.status === orderServiceStatus.FINISHED || false;
@@ -141,7 +141,7 @@ export default {
   methods: {
     getOrderService() {
       this.loading = true;
-      this.orderServicesService.show(this.id).then((res) => {
+      this.$api.orderServices.show(this.id).then((res) => {
         this.mountForm(res);
         this.loading = false;
       }).catch(() => {
@@ -150,7 +150,7 @@ export default {
     },
     getCollaborators(params = {}) {
       const payload = mountParamsRequestFilter(params, 'collaborator', ['type']);
-      this.registersService.filters(payload).then((res) => {
+      this.$api.registers.filters(payload).then((res) => {
         this.collaborators = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -164,7 +164,7 @@ export default {
     },
     getCustomers(params = {}) {
       const payload = mountParamsRequestFilter(params, 'customer', ['type']);
-      this.registersService.filters(payload).then((res) => {
+      this.$api.registers.filters(payload).then((res) => {
         this.customers = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -226,7 +226,7 @@ export default {
     save() {
       this.orderServicesService.update(5, this.order_service).then(() => {
         this.$noty.success(this.$locales.alerts.updatedRegister)
-        this.$router.push({ name: this.orderServiceSchema.routes.list.name })
+        this.$router.push({ name: this.$schemas.orderService.routes.list.name })
       }).catch((err) => {
         this.$noty.error(messageErrors(err))
       }).finally(() => {

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="$schemas.allType" />
     <PageContent>
-      <DynamicFormPage :schema="schema" :service="service" />
+      <DynamicFormPage :schema="$schemas.allType" :service="$api.allTypes" />
     </PageContent>
   </div>
 </template>
@@ -10,24 +10,10 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import AllTypeSchema from '../schemas/AllTypeSchema';
-import AllTypesService from '../services/AllTypesService';
 import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 
 export default {
   name: 'CreateAllType',
   components: { PageHeader, PageContent, DynamicFormPage },
-  props: {},
-  data() {
-    return {
-      schema: AllTypeSchema,
-      service: AllTypesService,
-    }
-  },
-  methods: {}
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
