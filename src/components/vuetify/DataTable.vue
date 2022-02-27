@@ -14,9 +14,32 @@
 
     <v-data-table
       v-model="selected"
-      item-key="id"
+      v-if="noSync"
       class="datatable"
       dense
+      :item-key="itemKey"
+      :loading="loading"
+      :search="search"
+      :headers="headers"
+      :items="localItems"
+      :single-select="singleSelect"
+      :show-select="showSelect"
+      :hide-default-header="hideDefaultHeader"
+      :hide-default-footer="hideDefaultFooter"
+      @click:row="clickRow"
+      @input="handleAction">
+
+      <template v-slot:[`item.actions`]="props" style="width: 200px">
+        <slot name="actions" :props="props" />
+      </template>
+    </v-data-table>
+
+    <v-data-table
+      v-model="selected"
+      v-else
+      class="datatable"
+      dense
+      :item-key="itemKey"
       :loading="loading"
       :search="search"
       :headers="headers"
@@ -48,13 +71,20 @@ export default {
       type: Boolean,
       default: false,
     },
+    noSync: {
+      type: Boolean,
+      default: false,
+    },
+    itemKey: {
+      type: String,
+      default: 'id',
+    },
     headers: {
       type: Array,
       default: () => [],
     },
     items: {
-      type: Object,
-      default: () => {},
+      type: [Object, Array],
     },
     singleSelect: {
       type: Boolean,
@@ -95,7 +125,7 @@ export default {
   computed: {
     localItems: {
       get() {
-        return this.items.data;
+        return this.noSync ? this.items : this.items.data;
       },
       set(value) {
         this.localItems = value;

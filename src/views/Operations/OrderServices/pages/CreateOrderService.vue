@@ -13,7 +13,7 @@
       <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
           action-type="openDialog"
-          componentType="DialogAddItem"
+          componentType="items"
           :loading="loading"
           :headers="headersItems" 
           :items="order_service.items"
@@ -24,7 +24,7 @@
       <ExpansionPanel v-model="expModel" readonly title="Pagamentos" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
           action-type="openDialog"
-          componentType="DialogAddPayment"
+          componentType="payments"
           :loading="loading"
           :headers="headersPayments" 
           :items="order_service.payments"
@@ -90,6 +90,11 @@ import { mountParamsRequestFilter } from '@/utils';
 import { messageErrors } from '@/utils'
 import { orderServiceStatus } from '@/utils/enums';
 
+const dialogComponents  = Object.freeze({
+  items: DialogAddItem,
+  payments: DialogAddPayment,
+});
+
 export default {
   name: 'CreateCreateOrderService',
   components: {
@@ -144,7 +149,8 @@ export default {
       this.$api.orderServices.show(this.id).then((res) => {
         this.mountForm(res);
         this.loading = false;
-      }).catch(() => {
+      }).catch((err) => {
+        console.error(err)
         this.loading = false;
       })
     },
@@ -182,7 +188,7 @@ export default {
         collaborators: this.collaborators,
       }
 
-      this.dialogComponent = componentType;
+      this.dialogComponent = dialogComponents[componentType];
     },
     handleAction(data) {
       const { type, params } = data;
@@ -208,16 +214,12 @@ export default {
         subtotal_formatted: item.sale_value_formatted,
         newItem: true,
       })
-      console.log(this.order_service.items)
     },
     itemDestroy(params) {
-      const { id, componentType } = params;
-      if(componentType === 'DialogAddItem') {
-        this.order_service.removedItems.push({ id });
-      }else{
-        this.order_service.removedPayments.push({ id });
+      const { index, componentType } = params;
+      if(componentType === 'items') {
+        this.order_service.items.splice(index,1)
       }
-      console.log(this.order_service)
     },
     confirmSave(data) {
       this.order_service.status = data.status;

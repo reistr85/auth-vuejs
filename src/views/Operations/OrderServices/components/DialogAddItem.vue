@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     addItemHeaders() {
-      return this.orderServiceSchema.headerAddItem;
+      return this.$schemas.orderService.headerAddItem;
     }
   },
   methods: {
@@ -77,7 +77,7 @@ export default {
     },
     getServices(params = {}) {
       this.loading = true;
-      this.servicesService.filters(params).then((res) => {
+      this.$api.services.filters(params).then((res) => {
         this.items = res.data;
       }).catch(() => {
 
