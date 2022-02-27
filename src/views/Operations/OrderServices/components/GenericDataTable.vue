@@ -13,6 +13,7 @@
     </div>
     <DataTable
       no-sync
+      no-search
       itemKey="number_item"
       :headers="headers"
       :items="items"

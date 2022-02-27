@@ -10,11 +10,13 @@
       @getItems="getServices">
 
       <template slot="custom-header">
-        <AutoComplete
-          v-model="collaborator"
-          label="Colaborador"
-          return-object
-          :items="localCollaborators" />
+        <v-form v-model="valid" ref="form" lazy-validation>
+          <AutoComplete
+            v-model="collaborator"
+            label="Colaborador"
+            return-object
+            :items="localCollaborators" />
+        </v-form>
       </template>
     </DataTable>
 
@@ -43,6 +45,8 @@ import Card from '@/components/vuetify/Card';
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
 import AutoComplete from '@/components/vuetify/AutoComplete';
+import { mountParamsRequestFilter } from '@/utils';
+import { required } from '@/utils/rules';
 
 export default {
   name: 'DialogAddItem',
@@ -55,6 +59,10 @@ export default {
   },
   data() {
     return {
+      rules:{
+        required: required
+      },
+      valid: true,
       serviceSelected: null,
       items: {},
       loading: true,
@@ -77,7 +85,8 @@ export default {
     },
     getServices(params = {}) {
       this.loading = true;
-      this.$api.services.filters(params).then((res) => {
+      const payload = mountParamsRequestFilter(params, params.filter, ['name', 'nickname']);
+      this.$api.services.filters(payload).then((res) => {
         this.items = res.data;
       }).catch(() => {
 
@@ -86,6 +95,11 @@ export default {
       });
     },
     add() {
+      if(!this.collaborator.id) {
+        this.$noty.error('Selecione o Colaborador');
+        return;
+      }
+
       this.$emit('handleActionModal', {
         action: 'addItem',
         item: {
