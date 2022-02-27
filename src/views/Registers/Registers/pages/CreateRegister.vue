@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="$schemas.register" />
     <PageContent>
-      <DynamicFormPage :schema="schema" :service="service" />
+      <DynamicFormPage :schema="$schemas.register" :service="$api.registers" />
     </PageContent>
   </div>
 </template>
@@ -10,24 +10,10 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import RegisterSchema from '../schemas/RegisterSchema';
-import RegistersService from '../services/RegistersService';
 import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 
 export default {
   name: 'CreateRegister',
   components: { PageHeader, PageContent, DynamicFormPage },
-  props: {},
-  data() {
-    return {
-      schema: RegisterSchema,
-      service: RegistersService,
-    }
-  },
-  methods: {}
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

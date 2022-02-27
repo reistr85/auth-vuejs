@@ -1,11 +1,22 @@
 <template>
   <Card title="Adicionar Item">
     <DataTable
-      :headers="addItemHeaders"
-      :items="items"
       show-select
       single-select
-      @selected="setService" />
+      :headers="addItemHeaders"
+      :items="items"
+      :loading="loading"
+      @selected="setService"
+      @getItems="getServices">
+
+      <template slot="custom-header">
+        <AutoComplete
+          v-model="collaborator"
+          label="Colaborador"
+          return-object
+          :items="localCollaborators" />
+      </template>
+    </DataTable>
 
     <div slot="actions">
       <Button 
@@ -22,7 +33,7 @@
         class="ml-3" 
         :disabled="!serviceSelected"
         :icon="$icons.plus" 
-        @click="$emit('handleActionModal', form)" />
+        @click="add()" />
     </div>
   </Card>
 </template>
@@ -31,37 +42,56 @@
 import Card from '@/components/vuetify/Card';
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
+import AutoComplete from '@/components/vuetify/AutoComplete';
 
 export default {
   name: 'DialogAddItem',
-  components: { Card, Button, DataTable },
-  props: {},
+  components: { Card, Button, DataTable, AutoComplete },
+  props: {
+    collaborators: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
-      form: {},
       serviceSelected: null,
       items: {},
+      loading: true,
+      collaborator: {},
+      localCollaborators: [],
     }
   },
   mounted() {
     this.getServices();
+    this.localCollaborators = this.collaborators;
   },
   computed: {
     addItemHeaders() {
-      return this.orderServiceSchema.headerAddItem;
+      return this.$schemas.orderService.headerAddItem;
     }
   },
   methods: {
     setService(data) {
       this.serviceSelected = data[0]
     },
-    getServices() {
-      this.servicesService.index().then((res) => {
+    getServices(params = {}) {
+      this.loading = true;
+      this.$api.services.filters(params).then((res) => {
         this.items = res.data;
       }).catch(() => {
 
-      })
+      }).finally(() => {
+        this.loading = false;
+      });
     },
+    add() {
+      this.$emit('handleActionModal', {
+        action: 'addItem',
+        item: {
+          ...this.serviceSelected, collaborator: { ...this.collaborator, name: this.collaborator.text } } 
+      })
+    }
   }
 }
 </script>

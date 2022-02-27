@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader :schema="orderServiceSchema" />
+    <PageHeader :schema="$schemas.orderService" />
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados da Ordem" multiple :icon="$icons.list">
         <OrderData
@@ -13,7 +13,7 @@
       <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
           action-type="openDialog"
-          componentType="DialogAddItem"
+          componentType="items"
           :loading="loading"
           :headers="headersItems" 
           :items="order_service.items"
@@ -24,7 +24,7 @@
       <ExpansionPanel v-model="expModel" readonly title="Pagamentos" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
           action-type="openDialog"
-          componentType="DialogAddPayment"
+          componentType="payments"
           :loading="loading"
           :headers="headersPayments" 
           :items="order_service.payments"
@@ -63,7 +63,8 @@
     <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
       <component 
         slot="content" 
-        :is="dialogComponent" 
+        v-bind="dialogProps"
+        :is="dialogComponent"
         @update:dialog="dialog = $event" 
         @handleActionModal="handleActionModal" />
     </Dialog>
@@ -85,9 +86,14 @@ import DialogAddItem from '../components/DialogAddItem';
 import DialogAddPayment from '../components/DialogAddPayment';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import OrderData from '../components/OrderData';
-import { mountParamsApiFilter } from '@/utils';
+import { mountParamsRequestFilter } from '@/utils';
 import { messageErrors } from '@/utils'
 import { orderServiceStatus } from '@/utils/enums';
+
+const dialogComponents  = Object.freeze({
+  items: DialogAddItem,
+  payments: DialogAddPayment,
+});
 
 export default {
   name: 'CreateCreateOrderService',
@@ -114,6 +120,7 @@ export default {
       customers: [],
       dialog: false,
       dialogComponent: null,
+      dialogProps: {},
       dialogConfirmation: false,
     }
   },
@@ -127,10 +134,10 @@ export default {
       return this.$route.params.id
     },
     headersItems() {
-      return this.orderServiceSchema.headerOrderServiceItems;
+      return this.$schemas.orderService.headerOrderServiceItems;
     },
     headersPayments() {
-      return this.orderServiceSchema.headerOrderServicePayments;
+      return this.$schemas.orderService.headerOrderServicePayments;
     },
     orderFinished() {
       return this.order_service.status === orderServiceStatus.FINISHED || false;
@@ -139,17 +146,17 @@ export default {
   methods: {
     getOrderService() {
       this.loading = true;
-      this.orderServicesService.show(this.id).then((res) => {
+      this.$api.orderServices.show(this.id).then((res) => {
         this.mountForm(res);
         this.loading = false;
-      }).catch(() => {
+      }).catch((err) => {
+        console.error(err)
         this.loading = false;
       })
     },
-    getCollaborators() {
-      const { options, filters } = mountParamsApiFilter({ type: 'collaborator' });
-
-      this.registersService.filters(options, filters).then((res) => {
+    getCollaborators(params = {}) {
+      const payload = mountParamsRequestFilter(params, 'collaborator', ['type']);
+      this.$api.registers.filters(payload).then((res) => {
         this.collaborators = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -161,10 +168,9 @@ export default {
         this.loading = false;
       })
     },
-    getCustomers() {
-      const { options, filters } = mountParamsApiFilter({ type: 'customer' });
-
-      this.registersService.filters(options, filters).then((res) => {
+    getCustomers(params = {}) {
+      const payload = mountParamsRequestFilter(params, 'customer', ['type']);
+      this.$api.registers.filters(payload).then((res) => {
         this.customers = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -178,24 +184,42 @@ export default {
     },
     openDialog({ componentType }) {
       this.dialog = true;
-      this.dialogComponent = componentType;
+      this.dialogProps = {
+        collaborators: this.collaborators,
+      }
+
+      this.dialogComponent = dialogComponents[componentType];
     },
     handleAction(data) {
       const { type, params } = data;
       this[type](params);
     },
-    handleActionModal(form) {
+    handleActionModal(data) {
+      const { action, item } = data;
       this.dialog = false;
-      console.log(form)
+      this[action](item);
+    },
+    addItem(item) {
+      this.order_service.items.push({
+        id: item.id,
+        collaborator: item.collaborator,
+        amount: item.sale_value,
+        amount_formatted: item.sale_value_formatted,
+        discount: 0,
+        discount_formatted: 'R$0,00',
+        number_item: this.setNumberItem(),
+        quantity: 1,
+        service: { name: item.name },
+        subtotal: item.sale_value,
+        subtotal_formatted: item.sale_value_formatted,
+        newItem: true,
+      })
     },
     itemDestroy(params) {
-      const { id, componentType } = params;
-      if(componentType === 'DialogAddItem') {
-        this.order_service.removedItems.push({ id });
-      }else{
-        this.order_service.removedPayments.push({ id });
+      const { index, componentType } = params;
+      if(componentType === 'items') {
+        this.order_service.items.splice(index,1)
       }
-      console.log(this.order_service)
     },
     confirmSave(data) {
       this.order_service.status = data.status;
@@ -204,7 +228,7 @@ export default {
     save() {
       this.orderServicesService.update(5, this.order_service).then(() => {
         this.$noty.success(this.$locales.alerts.updatedRegister)
-        this.$router.push({ name: this.orderServiceSchema.routes.list.name })
+        this.$router.push({ name: this.$schemas.orderService.routes.list.name })
       }).catch((err) => {
         this.$noty.error(messageErrors(err))
       }).finally(() => {
@@ -231,7 +255,7 @@ export default {
         return {
           id: item.id,
           number_item: item.number_item,
-          collaborator: { name: item.collaborator.name },
+          collaborator: { id: item.collaborator.id, name: item.collaborator.name },
           service: { name: item.service.name },
           subtotal: item.subtotal,
           subtotal_formatted: item.subtotal_formatted,
@@ -257,6 +281,9 @@ export default {
         }
       });
     },
+    setNumberItem() {
+      return this.order_service.items.length + 1;
+    }
   }
 }
 </script>

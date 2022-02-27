@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="$schemas.allType" />
     <PageContent>
-      <DynamicListPage :schema="schema" :service="service" />
+      <DynamicListPage :schema="$schemas.allType" :service="$api.allTypes" />
     </PageContent>
   </div>
 </template>
@@ -10,24 +10,10 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import AllTypeSchema from '../schemas/AllTypeSchema';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
-import AllTypesService from '../services/AllTypesService';
 
 export default {
   name: 'ListAllType',
   components: { PageHeader, PageContent, DynamicListPage },
-  props: {},
-  data() {
-    return {
-      schema: AllTypeSchema,
-      service: AllTypesService,
-    }
-  },
-  methods: {}
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

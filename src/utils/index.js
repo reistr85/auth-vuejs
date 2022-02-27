@@ -165,10 +165,8 @@ export const typePageOptions = {
   show: 'show',
 }
 
-export function mountParamsApiFilter(data) {
-  const filters = Object.keys(data).map((key) => {
-    return { name: key, value: data[key]  }
-  })
-
-  return { filters, options: { page: 1, totalItemsPerPage: 10 } }
+export function mountParamsRequestFilter(params, filter, customFields) {
+  return { ...params, page: 1, per_page: 10, filter, customFields: customFields.map((item) => {
+    return { field: item }
+  })}
 }

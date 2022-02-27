@@ -22,6 +22,7 @@
       :item-text="itemText" 
       :item-value="itemValue"
       :multiple="multiple"
+      :return-object="returnObject"
     >
       <!-- <template v-slot:no-data>
         <v-list-item>
@@ -118,6 +119,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    returnObject: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {

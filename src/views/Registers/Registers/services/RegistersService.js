@@ -1,4 +1,5 @@
 import DynamicService from '@/service/DynamicService';
+import RegisterSchema from '../schemas/RegisterSchema';
 import { typeRegister, typeSituation } from '@/utils/options';
 import { getText, formatPhone, formatCpfCnpj } from '@/utils';
 
@@ -17,7 +18,7 @@ const formatResponse = (item) => {
   item.situation_formatted = getText(typeSituation, item.situation);
 }
 
-const RegistersService = DynamicService('registers', {
+const RegistersService = DynamicService('registers', RegisterSchema, {
   formatResponse,
 });
 

@@ -11,30 +11,31 @@
         :disabled="orderFinished"
         @click="$emit('handleAction', handleAction(actionType))" />
     </div>
-    <v-data-table
-      dense
-      hide-default-footer
-      :loading="loading"
+    <DataTable
+      no-sync
+      itemKey="number_item"
       :headers="headers"
-      :items="items">
+      :items="items"
+      :loading="loading">
 
-      <template v-slot:[`item.actions`]="{ item }" style="width: 200px">
+      <template v-slot:actions="{ props }">
         <Button 
           type-icon color="red"
           :icon="$icons.destroy"
           :disabled="orderFinished"
-          @click="$emit('handleAction', handleAction('itemDestroy', item))" />
+          @click="$emit('handleAction', handleAction('itemDestroy', props))" />
       </template>
-    </v-data-table>
+    </DataTable>
   </div>
 </template>
 
 <script>
+import DataTable from '@/components/vuetify/DataTable';
 import Button from '@/components/vuetify/Button';
 
 export default {
   name: 'GenericDataTable',
-  components: { Button },
+  components: { Button, DataTable },
   props: {
     headers: {
       type: Array,

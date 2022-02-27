@@ -167,7 +167,10 @@ export default {
     ],
     headerAddItem: [
       { text: 'Código', value: 'id' },
-      { text: 'Descrição', value: 'description' },
+      { text: 'Categoria', value: 'category.description' },
+      { text: 'Sub Categoria', value: 'sub_category.description' },
+      { text: 'Serviço', value: 'name' },
+      { text: 'Valor', value: 'sale_value_formatted' },
     ],
     footer: []
   }
