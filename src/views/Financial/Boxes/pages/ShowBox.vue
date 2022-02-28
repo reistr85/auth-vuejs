@@ -7,7 +7,7 @@
           <v-col cols="12" md="2"><TextField v-model="box.box_date_formatted" label="Data da Caixa" readonly /></v-col>
           <v-col cols="12" md="4"><TextField v-model="box.employee" label="Funcionário" readonly /></v-col>
           <v-col cols="12" md="3"><TextFieldMoney v-model="box.initial_value" label="Valor Inicial" readonly /></v-col>
-          <v-col cols="12" md="3"><TextFieldMoney v-model="box.total_value" label="Valor Final" readonly /></v-col>
+          <v-col cols="12" md="3"><TextFieldMoney v-model="box.total_value" label="Saldo Final" readonly /></v-col>
         </v-row>
       </ExpansionPanel>
 
@@ -18,6 +18,8 @@
           :loading="loading"
           :headers="headerMovements" 
           :items="items"
+          @getItems="getBoxMovements"
+          :disabledBttn="disabledBttn"
           @handleAction="handleAction"/>
       </ExpansionPanel>
     </PageContent>
@@ -37,9 +39,8 @@
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import BoxSchema from '../schemas/BoxSchema';
-import BoxesService from '../services/BoxesService';
-import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
 import GenericDataTable from '../components/GenericDataTable';
+import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
 import TextField from '@/components/vuetify/TextField';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Dialog from '@/components/vuetify/Dialog';
@@ -61,19 +62,20 @@ export default {
   data() {
     return {
       schema: BoxSchema,
-      service: BoxesService,
       expModel: [0],
       box: {},
       loading: false,
       dialog: false,
       dialogComponent: null,
       propsComponents: null,
-      items: []
+      items: {},
+      disabledBttn: false
     }
   },
   mounted() {
     this.getBox();
     this.getBoxMovements();
+    this.getBoxStatus();
   },
   computed: {
     id() {
@@ -86,16 +88,20 @@ export default {
   methods: {
     getBox() {
       this.loading = true;
-      this.boxesService.show(this.id).then((res) => {
+      this.$api.boxes.show(this.id).then((res) => {
         this.box = res;
+        if(this.box.status === 'closed') this.disabledBttn = true;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
       })
     },
-    async getBoxMovements() {
-      this.boxesService.getAllBoxMovementsByBoxId(this.id).then((res) => {
-        this.items = res.data.data;
+    async getBoxMovements(options = {}) {
+      const payload = {
+        page: options.page || 1,
+      }
+      this.$api.boxes.getAllBoxMovementsByBoxId(this.id, payload).then((res) => {
+        this.items = res.data;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
@@ -112,7 +118,6 @@ export default {
         movement: {
           box_id: this.id,
           box_movements_date: null,
-          type: 'output',
           total_value: 0,
           description: ''
         }
@@ -125,6 +130,11 @@ export default {
     handleActionModal() {
       this.dialog = false;
       this.getBox();
+      this.getBoxMovements();
+    },
+    async getBoxStatus() {
+      console.log(this.box)
+      // if(this.box.status === 'closed') this.disabledBttn = true;
     }
   }
 }

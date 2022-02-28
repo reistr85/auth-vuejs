@@ -66,7 +66,7 @@ export default {
         {
           type: 'text',
           label: 'Funcionário',
-          name: 'collaborator.name',
+          name: 'employee',
           icon: text,
           md: 6,
         },

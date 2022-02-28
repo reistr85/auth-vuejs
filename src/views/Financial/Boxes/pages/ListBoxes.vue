@@ -17,11 +17,12 @@
         @handleActionModal="handleActionModal"
       />
     </Dialog>
-    <Dialog :dialog="dialogClosed" :maxWidth="parseInt(1000)" no-title no-actions>
-    <div slot="content">
-      {{ " Não será possível fazer o fechamento do caixa, pois conta Saldo Final maior que zero. " }}
-    </div>
-  </Dialog>
+    <DialogConfirmation 
+      :dialog="dialogClosed" 
+      :maxWidth="parseInt(1000)"
+      v-bind="propsClosed"
+      v-on="eventsClosed"
+      @noAction="dialogClosed = false" />
   </div>
 </template>
 
@@ -35,6 +36,7 @@ import BoxesService from '../services/BoxesService';
 import Button from '@/components/vuetify/Button';
 import DialogOpenBox from '@/views/Financial/Boxes/components/DialogOpenBox';
 import DialogDynamicMovement from '@/views/Financial/Boxes/components/DialogDynamicMovement';
+import DialogConfirmation from '@/components/DialogConfirmation';
 import { messageErrors } from '@/utils';
 import locales from '@/locales/pt-BR';
 
@@ -47,7 +49,8 @@ export default {
     Button,
     Dialog,
     DialogOpenBox,
-    DialogDynamicMovement
+    DialogDynamicMovement,
+    DialogConfirmation
   },
   props: {},
   data() {
@@ -56,9 +59,17 @@ export default {
       service: BoxesService,
       dialog: false,
       dialogComponent: null,
-      propsComponents: null,
+      propsComponents: {},
       dialogClosed: false,
+      propsClosed: {},
+      boxClosed: {},
+      eventsClosed: {},
+      movement: {},
+      boxOpen: false
     }
+  },
+  mounted() {
+    console.log(this.$refs.dynamicListPage.localItems);
   },
   methods: {
     openDialog() {
@@ -70,22 +81,40 @@ export default {
       this.$refs.dynamicListPage.getAll();
     },
     actionMoreActions(item) {
+      if(item.dataListProps.item.status === 'closed') return this.$noty.error('Caixa fechado!');
       this[item.i.action](item);
     },
-    withdrawn(item) {
-      this.dialog = true;
-      this.dialogComponent = DialogDynamicMovement;
-      this.propsComponents= {
-        title: 'Lançamento de Sangria',
-        disabledDate: true,
-        disabledTypeInputOutput: true,
-        readonlyDescription: true,
-        movement: {
+    withdrawn(item, automatic = false) {
+      if (automatic){
+        this.movement = {
+          payment_method_id: 1,
           box_id: item.dataListProps.item.id,
           box_movements_date: null,
           type: 'output',
-          total_value: 0,
-          description: 'Sangria'
+          total_value: item.dataListProps.item.total_value,
+          description: 'Sangria Fechamento'
+        }
+        this.$api.boxMovements.create(this.movement).then(() => {
+          this.$noty.success(locales.alerts.createdRegister);
+        }).catch((err) => {
+          this.$noty.error(messageErrors(err));
+        })
+        this.closedBox();
+      } else {
+        this.dialog = true;
+        this.dialogComponent = DialogDynamicMovement;
+        this.propsComponents = {
+          title: 'Lançamento de Sangria',
+          disabledDate: true,
+          disabledTypeInputOutput: true,
+          readonlyDescription: true,
+          movement: {
+            box_id: item.dataListProps.item.id,
+            box_movements_date: null,
+            type: 'output',
+            total_value: 0,
+            description: 'Sangria'
+          }
         }
       }
     },
@@ -106,16 +135,31 @@ export default {
         }
       }
     },
-    closed(item) {
-      if(item.dataListProps.item.total_value > 0) return this.dialogClosed = true;
-      
+    closed(item){
+      this.dialogClosed = true;
+      this.boxClosed = item;
+      if(item.dataListProps.item.total_value > 0) {
+        this.propsClosed = {
+          message: 'Caixa com saldo final maior que zero. Deseja fazer sangria e fechar o caixa?'
+        }
+        this.eventsClosed = { yesAction: () => this.withdrawn(item, true) };
+      } else {
+        this.propsClosed = {
+          message: 'Tem certeza que deseja fechar o caixa selecionado?'
+        }
+        this.eventsClosed = { yesAction: () => this.closedBox() };
+      }
+    },
+    closedBox() {
       let status = 'closed';
-      BoxesService.update(item.dataListProps.item.id, { status: status }).then(() => {
+      BoxesService.update(this.boxClosed.dataListProps.item.id, { status: status }).then(() => {
         this.$noty.success(locales.alerts.updatedRegister);
         this.$refs.dynamicListPage.getAll();
       }).catch((error) => {
         this.$noty.error(messageErrors(error));
-      })
+      }).finally(() => {
+        this.dialogClosed = false;
+      });
     }
   }
 }

@@ -16,7 +16,8 @@
               :items="options.typeInputOutput" 
               itemText="text" 
               itemValue="value"
-              :disabled="disabledTypeInputOutput" />
+              :disabled="disabledTypeInputOutput"
+              :rules="[rules.required]" />
           </v-col>
           <v-col cols="12" md="2">
             <TextFieldMoney
@@ -31,7 +32,7 @@
               label="Descrição" 
               :rules="[rules.required]"
               :readonly="readonlyDescription"
-              v-on:keyup.enter="save()" />
+              v-on:keyup.enter="save" />
           </v-col>
         </v-row>
       </v-form>
@@ -51,7 +52,6 @@ import DataPicker from '@/components/vuetify/DataPicker';
 import Select from '@/components/vuetify/Select';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import TextField from '@/components/vuetify/TextField';
-import BoxMovementsService from '../services/BoxMovementsService';
 import { messageErrors } from '@/utils';
 import locales from '@/locales/pt-BR';
 import { money, required } from '@/utils/rules';
@@ -74,7 +74,7 @@ export default {
           movement: {
             box_id: this.id,
             box_movements_date: null,
-            type: 'output',
+            type: 'input',
             total_value: 0,
             description: ''
           }
@@ -124,10 +124,10 @@ export default {
         return;
       
       this.movement.payment_method_id = 1;
-      BoxMovementsService.create(this.movement).then(() => {
+      this.$api.boxMovements.create(this.movement).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
-      }).catch((error) => {
-        this.$noty.error(messageErrors(error));
+      }).catch((err) => {
+        this.$noty.error(messageErrors(err));
       })
       this.$emit('handleActionModal');
     },

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import DynamicService from '@/service/DynamicService';
+import BoxSchema from '../schemas/BoxSchema';
 import { formatCurrency, formatDate, getText } from '@/utils';
 import { statusBoxes, originTypeBoxMovements } from '@/utils/options';
 
@@ -22,13 +23,13 @@ const formatResponseGetAllBoxMovementsByBoxId = (res) => {
   return res;
 }
 
-const BoxesService = DynamicService('boxes', {
+const BoxesService = DynamicService('boxes', BoxSchema, {
   formatResponse,
 });
 
 const BoxesCommands = () => ({
-  async getAllBoxMovementsByBoxId(id) {
-     const res = await axios.get(`boxes/${id}/box-movements`);
+  async getAllBoxMovementsByBoxId(id, payload) {
+     const res = await axios.get(`boxes/${id}/box-movements?page=${payload.page}`);
      return formatResponseGetAllBoxMovementsByBoxId(res);
   }
 })

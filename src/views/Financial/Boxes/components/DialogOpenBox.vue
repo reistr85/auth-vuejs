@@ -20,8 +20,8 @@
             <TextFieldMoney
               v-model="box.initial_value" 
               label="Valor Inicial"
-              :rules="[rules.money]"
-              :length="10" />
+              :length="10"
+              v-on:keyup.enter="save" />
           </v-col>
         </v-row>
       </v-form>
@@ -39,9 +39,8 @@ import Button from '@/components/vuetify/Button';
 import DataPicker from '@/components/vuetify/DataPicker';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import AutoComplete from '@/components/vuetify/AutoComplete';
-import BoxesService from '../services/BoxesService';
-import { money, required } from '@/utils/rules';
-import { mountParamsApiFilter } from '@/utils';
+import required from '@/utils/rules';
+import { mountParamsRequestFilter } from '@/utils';
 import { messageErrors } from '@/utils';
 import locales from '@/locales/pt-BR';
 
@@ -60,11 +59,11 @@ export default {
       valid: true,
       disabled: true,
       rules: {
-        money: money,
         required: required
       },
-      expModel: [0],
-      box: {},
+      box: {
+        initial_value: 0
+      },
       employees: [],
     }
   },
@@ -72,10 +71,9 @@ export default {
     this.getEmployees();
   },
   methods: {
-    getEmployees() {
-      const { options, filters } = mountParamsApiFilter({ type: 'employee' });
-
-      this.registersService.filters(options, filters).then((res) => {
+    getEmployees(params = {}) {
+      const payload = mountParamsRequestFilter(params, 'employee', ['type']);
+      this.$api.registers.filters(payload).then((res) => {
         this.employees = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -92,7 +90,7 @@ export default {
       if(!this.$refs.form.validate()) return;
 
       box.total_value = box.initial_value;
-      BoxesService.create(box).then((res) => {
+      this.$api.boxes.create(box).then((res) => {
         this.localItems = res.data;
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((error) => {

@@ -42,8 +42,8 @@ export default {
       type: Object,
       default: () => {
         return {
-          noBtn: '',
-          yesBtn: 'red'
+          noBtn: 'red',
+          yesBtn: 'green'
         }
       }
     }
