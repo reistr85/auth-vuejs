@@ -68,9 +68,6 @@ export default {
       boxOpen: false
     }
   },
-  mounted() {
-    console.log(this.$refs.dynamicListPage.localItems);
-  },
   methods: {
     openDialog() {
       this.dialog = true;
