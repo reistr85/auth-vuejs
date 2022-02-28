@@ -75,7 +75,6 @@ export default {
   mounted() {
     this.getBox();
     this.getBoxMovements();
-    this.getBoxStatus();
   },
   computed: {
     id() {
@@ -131,10 +130,6 @@ export default {
       this.dialog = false;
       this.getBox();
       this.getBoxMovements();
-    },
-    async getBoxStatus() {
-      console.log(this.box)
-      // if(this.box.status === 'closed') this.disabledBttn = true;
     }
   }
 }

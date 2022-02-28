@@ -120,13 +120,13 @@ export default {
   },
   methods: {
     save() {
-      if(!this.$refs.form.validate())
-        return;
+      if(!this.$refs.form.validate()) return;
       
       this.movement.payment_method_id = 1;
       this.$api.boxMovements.create(this.movement).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((err) => {
+        console.log(err.message)
         this.$noty.error(messageErrors(err));
       })
       this.$emit('handleActionModal');
