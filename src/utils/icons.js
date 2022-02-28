@@ -4,6 +4,7 @@ const address = 'mdi-map-marker-outline';
 const arrowLeft = 'mdi-arrow-left-bold';
 const arrowRight = 'mdi-arrow-right-bold';
 const bank = 'mdi-bank';
+const box = 'mdi-inbox-multiple';
 const calendar = 'mdi-calendar-month-outline';
 const calendarEdit = 'mdi-calendar-edit';
 const cancel = 'mdi-cancel';
@@ -56,6 +57,7 @@ export {
   arrowLeft,
   arrowRight,
   bank,
+  box,
   calendar,
   calendarEdit,
   cancel,

@@ -6,8 +6,8 @@ const statusAppointment = [
 
 const statusOrderService = [
   { id: 1, text: 'Pendente', value: 'pending' },
-  { id: 1, text: 'Finalizado', value: 'finished' },
-  { id: 1, text: 'Cancelado', value: 'canceled' },
+  { id: 2, text: 'Finalizado', value: 'finished' },
+  { id: 3, text: 'Cancelado', value: 'canceled' },
 ]
 
 const typeUser = [
@@ -301,6 +301,16 @@ const typeBankNumber = [
 
 ];
 
+const typeInputOutput = [
+  {id: 1, text: 'Entrada', value: 'input' },
+  {id: 2, text: 'Saída', value: 'output' }
+];
+
+const statusBoxes = [
+  { id: 1, text: 'Aberto', value: 'open' },
+  { id: 2, text: 'Fechado', value: 'closed' },
+];
+
 export { 
   statusAppointment,
   statusOrderService,
@@ -313,4 +323,6 @@ export {
   UF,
   typeAccount,
   typeBankNumber,
+  typeInputOutput,
+  statusBoxes
 }

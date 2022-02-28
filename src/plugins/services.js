@@ -13,6 +13,8 @@ import OrderServicesService from '@/views/Operations/OrderServices/services/Orde
 import AllTypesService from '@/views/Registers/AllTypes/services/AllTypesService';
 import RegistersService from '@/views/Registers/Registers/services/RegistersService';
 import ServicesService from '@/views/Registers/Services/services/ServicesService';
+import BoxesService, { BoxesCommands } from '@/views/Financial/Boxes/services/BoxesService';
+import BoxMovementsService from '@/views/Financial/Boxes/services/BoxMovementsService';
 
 // Settings
 import CompaniesService, { CompaniesCommands } from '@/views/Settings/Companies/services/CompaniesService';
@@ -27,6 +29,8 @@ const api = Object.freeze({
   allTypes: AllTypesService,
   registers: RegistersService,
   services: ServicesService,
+  boxes: { ...BoxesService, ...BoxesCommands() },
+  boxMovements: BoxMovementsService,
   companies: { ...CompaniesService, ...CompaniesCommands() },
   users: UsersService,
 });
