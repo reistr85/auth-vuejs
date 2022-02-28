@@ -23,7 +23,7 @@ export const formatCurrency = (value, params = false) => {
   value = parseFloat(value);
 
   if(!params)
-    return `R$${value.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")}`;
+    return `R$ ${value.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")}`;
 
   if(params.type === 'percent')
     return `${value.toFixed(params.precision ? params.precision : 2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")}%`;
@@ -89,7 +89,7 @@ export function formatDate(date, getHours = false) {
   if (!date) return null;
   const d = new Date(new Date(date).toUTCString().substr(0, 25));
   if (getHours) {
-    return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+    return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()} - ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
   }
   return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
 }
@@ -116,9 +116,13 @@ export function messageErrors(err) {
   let message = '';
 
   if(err.status === 422){
-    Object.keys(err.data.errors).forEach(function(key) {
-      message += `<li class="item-error">${err.data.errors[key][0]}</li>`;
-    });
+    if(err.data.errors?.length) {
+      Object.keys(err.data.errors).forEach(function(key) {
+        message += `<li class="item-error">${err.data.errors[key][0]}</li>`;
+      });
+    } else {
+      message += `<li class="item-error">${err.data.message}</li>`;
+    }
   }else{
     message += `<li class="item-error">Erro desconhecido, tente novamente.</li>`;
   }

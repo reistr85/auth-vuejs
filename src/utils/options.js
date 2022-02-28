@@ -22,6 +22,7 @@ const typeRegister = [
   {id: 2, text: 'Fornecedor', value: 'provider'},
   {id: 3, text: 'Vendedor', value: 'seller'},
   {id: 4, text: 'Colaborador', value: 'collaborator' },
+  {id: 4, text: 'Funcionário', value: 'employee' },
   {id: 5, text: 'Outros', value: 'others' },
 ];
 
@@ -311,6 +312,11 @@ const statusBoxes = [
   { id: 2, text: 'Fechado', value: 'closed' },
 ];
 
+const originTypeBoxMovements = [
+  { id: 1, text: 'Manual', value: null },
+  { id: 2, text: 'Order de Serviço', value: 'App\\Models\\OrderService' }
+];
+
 export { 
   statusAppointment,
   statusOrderService,
@@ -324,5 +330,6 @@ export {
   typeAccount,
   typeBankNumber,
   typeInputOutput,
-  statusBoxes
+  statusBoxes,
+  originTypeBoxMovements
 }

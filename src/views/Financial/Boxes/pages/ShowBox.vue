@@ -4,8 +4,8 @@
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados do Caixa" multiple :icon="$icons.list">
         <v-row>
-          <v-col cols="12" md="2"><TextField v-model="box.box_date" label="Data da Caixa" readonly /></v-col>
-          <v-col cols="12" md="4"><TextField v-model="box.collaborator" label="Funcionário" readonly /></v-col>
+          <v-col cols="12" md="2"><TextField v-model="box.box_date_formatted" label="Data da Caixa" readonly /></v-col>
+          <v-col cols="12" md="4"><TextField v-model="box.employee" label="Funcionário" readonly /></v-col>
           <v-col cols="12" md="3"><TextFieldMoney v-model="box.initial_value" label="Valor Inicial" readonly /></v-col>
           <v-col cols="12" md="3"><TextFieldMoney v-model="box.total_value" label="Valor Final" readonly /></v-col>
         </v-row>
@@ -14,10 +14,10 @@
       <ExpansionPanel v-model="expModel" readonly title="Lançamentos do Caixa" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
           action-type="openDialog"
-          componentType="DialogAddMovement"
+          componentType="DialogDynamicMovement"
           :loading="loading"
           :headers="headerMovements" 
-          :items="box.movements"
+          :items="items"
           @handleAction="handleAction"/>
       </ExpansionPanel>
     </PageContent>
@@ -26,7 +26,8 @@
       <component 
         slot="content" 
         :is="dialogComponent" 
-        @update:dialog="dialog = $event" 
+        v-bind="propsComponents"
+        @update:dialog="dialog = $event"
         @handleActionModal="handleActionModal" />
     </Dialog>
   </div>
@@ -42,11 +43,10 @@ import GenericDataTable from '../components/GenericDataTable';
 import TextField from '@/components/vuetify/TextField';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Dialog from '@/components/vuetify/Dialog';
-import DialogAddMovement from '../components/DialogAddMovement';
-
+import DialogDynamicMovement from '@/views/Financial/Boxes/components/DialogDynamicMovement';
 
 export default {
-  name: 'ShowBoxMovements',
+  name: 'ShowBox',
   components: { 
     PageHeader, 
     PageContent,
@@ -55,7 +55,7 @@ export default {
     TextField,
     TextFieldMoney,
     Dialog,
-    DialogAddMovement
+    DialogDynamicMovement
   },
   props: {},
   data() {
@@ -67,7 +67,12 @@ export default {
       loading: false,
       dialog: false,
       dialogComponent: null,
+      propsComponents: null,
+      items: []
     }
+  },
+  created() {
+    this.getBoxMovements();
   },
   mounted() {
     this.getBox();
@@ -84,56 +89,44 @@ export default {
     getBox() {
       this.loading = true;
       this.boxesService.show(this.id).then((res) => {
-        this.mountForm(res);
+        this.box = res;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
       })
     },
-    saveMovement(movement) {
-      this.loading = true;
-      movement.box_id = this.id;
-      movement.payment_method_id = 1;
-      this.boxMovementsService.create(movement).then(() => {
+    async getBoxMovements() {
+      const res = await this.boxesService.getAllBoxMovementsByBoxId(this.id).then((res) => {
+        this.items = res;
         this.loading = false;
-        this.getBox();
       }).catch(() => {
         this.loading = false;
       })
-    },
-    mountForm(data) {
-      this.box = {
-        box_date: data.box_date_formatted,
-        initial_value: data.initial_value,
-        total_value: data.total_value,
-        collaborator_id: data.collaborator_id,
-        collaborator: data.collaborator.name,
-        movements: []
-      }
-
-      this.box.movements = data.movements.map((item) => {
-        return {
-          id: item.id,
-          box_movements_date: item.box_movements_date_formatted,
-          origin_type: item.origin_type,
-          origin_id: item.origin_id,
-          total_value: item.total_value_formatted,
-          description: item.description,
-          newItem: false
-        }
-      });
+        console.log('getBoxMovements', res)
     },
     openDialog({ componentType }) {
       this.dialog = true;
       this.dialogComponent = componentType;
+      this.propsComponents= {
+        title: 'Lançamento Manual',
+        disabledDate: false,
+        disabledTypeInputOutput: false,
+        movement: {
+          box_id: this.id,
+          box_movements_date: null,
+          type: 'output',
+          total_value: 0,
+          description: ''
+        }
+      }
     },
     handleAction(data) {
       const { type, params } = data;
       this[type](params);
     },
-    handleActionModal(form) {
+    handleActionModal() {
       this.dialog = false;
-      this.saveMovement(form);
+      this.getBox();
     }
   }
 }

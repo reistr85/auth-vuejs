@@ -6,7 +6,8 @@
           <v-col cols="12" md="3">
             <DataPicker
               v-model="movement.box_movements_date"
-              label="Data da Lançamento" />
+              label="Data da Lançamento"
+              :disabled="disabledDate" />
           </v-col>
           <v-col cols="12" md="3">
             <Select 
@@ -14,13 +15,15 @@
               label="Entrada / Saída" 
               :items="options.typeInputOutput" 
               itemText="text" 
-              itemValue="value" />
+              itemValue="value"
+              :disabled="disabledTypeInputOutput" />
           </v-col>
           <v-col cols="12" md="2">
             <TextFieldMoney
               v-model="movement.total_value" 
               label="Valor Lançamento"
-              :length="10" />
+              :length="10"
+              :rules="[rules.money]" />
           </v-col>
           <v-col cols="12" md="4">
             <TextField 
@@ -34,7 +37,7 @@
     </div>
     <div slot="actions">
       <Button label="Cancelar" :icon="$icons.cancel" color="primary" rounded :loading="loading" class="" @click="cancel()" />
-      <Button label="Salvar" :icon="$icons.save" color="success" rounded :loading="loading" class="ml-3" @click="save()" />
+      <Button label="Salvar" :icon="$icons.save" color="success" rounded :loading="loading" class="ml-3" @click="save" />
     </div>
   </Card>
 </template>
@@ -47,10 +50,13 @@ import DataPicker from '@/components/vuetify/DataPicker';
 import Select from '@/components/vuetify/Select';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import TextField from '@/components/vuetify/TextField';
-import { biggerZero, required } from '@/utils/rules';
+import BoxMovementsService from '../services/BoxMovementsService';
+import { messageErrors } from '@/utils';
+import locales from '@/locales/pt-BR';
+import { money, required } from '@/utils/rules';
 
 export default {
-  name: 'DialogAddMovement',
+  name: 'DialogDynamicMovement',
   components: { 
     Card, 
     Button,
@@ -59,22 +65,48 @@ export default {
     TextFieldMoney,
     TextField
   },
-  props: {},
+  props: {
+    movement: {
+      type: Object,
+      default: () => {
+        return {
+          movement: {
+            box_id: this.id,
+            box_movements_date: null,
+            type: 'output',
+            total_value: 0,
+            description: ''
+          }
+        }
+      }
+    },
+    disabledDate: {
+      type: Boolean,
+      default: false,
+    },
+    disabledTypeInputOutput: {
+      type: Boolean,
+      default: false,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    valid: {
+      type: Boolean,
+      default: true,
+    }
+  },
   data() {
     return {
       form: {},
-      loading: false,
-      valid: true,
-      title: '',
       rules: {
-        biggerZero: biggerZero,
+        money: money,
         required: required
-      },
-      movement: {
-        box_movements_date: null,
-        type: 'input',
-        total_value: 0,
-        description: ''
       },
       options: {
         typeInputOutput: typeInputOutput
@@ -85,20 +117,17 @@ export default {
     save() {
       if(!this.$refs.form.validate())
         return;
-      this.$emit('handleMovement', this.movement);
-      this.resetBoxMovements();
+      
+      this.movement.payment_method_id = 1;
+      BoxMovementsService.create(this.movement).then(() => {
+        this.$noty.success(locales.alerts.createdRegister);
+      }).catch((error) => {
+        this.$noty.error(messageErrors(error));
+      })
+      this.$emit('handleActionModal');
     },
     cancel() {
       this.$emit('update:dialog', false)
-      this.resetBoxMovements();
-    },
-    resetBoxMovements() {
-      this.movement = {
-        box_movements_date: null,
-        type: 'input',
-        total_value: 0,
-        description: ''
-      }
     }
   }
   

@@ -294,6 +294,7 @@ export default {
         this.situation(item);
         return;
       }
+      this.$emit('actionMoreActions', item);
     },
     situation(item) {
       this.loading = true;

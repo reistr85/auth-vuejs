@@ -1,5 +1,6 @@
 import { typePageOptions } from '@/utils';
-import { text, calendar, list } from '@/utils/icons';
+import { text, calendar, list, clipboardPlusOutline, clipboardMinusOutline, clipboardFlowOutline
+} from '@/utils/icons';
 import { required } from '@/utils/rules';
 
 export default {
@@ -29,11 +30,27 @@ export default {
     listActions: {
       has: true,
       noShow: false,
-      noDestroy: true,
-      situation: false,
+      noDestroy: false,
+      status: true,
       more: {
-        has: false,
-        items: []
+        has: true,
+        items: [
+          {
+            label: 'Suprimento',
+            icon: clipboardPlusOutline,
+            action: 'entrance'
+          },
+          {
+            label: 'Sangria',
+            icon:   clipboardMinusOutline,
+            action: 'withdrawn'
+          },
+          {
+            label: 'Fechamento',
+            icon: clipboardFlowOutline,
+            action: 'closed'
+          },
+        ]
       },
     },
     filters: {
@@ -91,8 +108,8 @@ export default {
           },
           {
             type: 'text',
-            name: 'collaborator_id',
-            formattedName: 'collaborator.name',
+            name: 'employee_id',
+            formattedName: 'employee',
             label: 'Funcionário',
             align: '',
             md: '6',
@@ -134,27 +151,15 @@ export default {
             length: 11,
             precision: 2,
             empty: null,
-          },
-          {
-            type: 'text',
-            name: 'status',
-            formattedName: 'status_formatted',
-            label: 'Status',
-            align: '',
-            md: '3',
-            rules: [],
-            list: true,
-            readonly: false,
-            disabled: true,
-          },
+          }
         ],
       }
     ],
     box_movements: [
-      { text: 'Data', value: 'box_movements_date' },
-      { text: 'Origem', value: 'origin_type' },
+      { text: 'Data', value: 'box_movements_date_formatted' },
+      { text: 'Origem', value: 'origin_type_formatted' },
       { text: 'Descrição', value: 'description' },
-      { text: 'Valor', value: 'total_value' },
+      { text: 'Valor', value: 'total_value_formatted' },
       { text: 'Ações', value: 'actions', align: 'end' },
     ],
     footer: []

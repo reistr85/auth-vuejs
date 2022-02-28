@@ -2,16 +2,20 @@
   <div>
     <PageHeader :schema="schema" />
     <PageContent>
-      <DynamicListPage :schema="schema" :service="service">
+      <DynamicListPage ref="dynamicListPage" :schema="schema" :service="service" @actionMoreActions="actionMoreActions">
       <div slot="custom-header">
         <Button label="Abrir Caixa" color="primary" rounded @click="openDialog()"/>
       </div>
       </DynamicListPage>
     </PageContent>
     <Dialog :dialog="dialog" :maxWidth="parseInt(1000)" no-title no-actions>
-      <div slot="content">
-        <component :is="dialogComponent" @openBox="openBox" />
-      </div>
+      <component 
+        slot="content" 
+        :is="dialogComponent"
+        v-bind="propsComponents"
+        @update:dialog="dialog = $event"
+        @handleActionModal="handleActionModal"
+      />
     </Dialog>
   </div>
 </template>
@@ -24,11 +28,22 @@ import BoxSchema from '../schemas/BoxSchema';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
 import BoxesService from '../services/BoxesService';
 import Button from '@/components/vuetify/Button';
-import WizardBox from '@/views/Financial/Boxes/components/WizardBox';
+import DialogOpenBox from '@/views/Financial/Boxes/components/DialogOpenBox';
+import DialogDynamicMovement from '@/views/Financial/Boxes/components/DialogDynamicMovement';
+import { messageErrors } from '@/utils';
+import locales from '@/locales/pt-BR';
 
 export default {
   name: 'ListBoxes',
-  components: { PageHeader, PageContent, DynamicListPage, Button, Dialog, WizardBox },
+  components: { 
+    PageHeader,
+    PageContent,
+    DynamicListPage,
+    Button,
+    Dialog,
+    DialogOpenBox,
+    DialogDynamicMovement
+  },
   props: {},
   data() {
     return {
@@ -36,16 +51,62 @@ export default {
       service: BoxesService,
       dialog: false,
       dialogComponent: null,
+      propsComponents: null,
     }
   },
   methods: {
     openDialog() {
       this.dialog = true;
-      this.dialogComponent = WizardBox;
+      this.dialogComponent = DialogOpenBox;
     },
-    openBox() {
+    handleActionModal() {
       this.dialog = false;
+      this.$refs.dynamicListPage.getAll();
     },
+    actionMoreActions(item) {
+      this[item.i.action](item);
+    },
+    withdrawn(item) {
+      this.dialog = true;
+      this.dialogComponent = DialogDynamicMovement;
+      this.propsComponents= {
+        title: 'Lançamento de Sangria',
+        disabledDate: true,
+        disabledTypeInputOutput: true,
+        movement: {
+          box_id: item.dataListProps.item.id,
+          box_movements_date: null,
+          type: 'output',
+          total_value: 0,
+          description: 'Sangria'
+        }
+      }
+    },
+    entrance(item) {
+      this.dialog = true;
+      this.dialogComponent = DialogDynamicMovement;
+      this.propsComponents= {
+        title: 'Lançamento de Suprimento',
+        disabledDate: true,
+        disabledTypeInputOutput: true,
+        movement: {
+          box_id: item.dataListProps.item.id,
+          box_movements_date: null,
+          type: 'input',
+          total_value: 0,
+          description: 'Suprimento'
+        }
+      }
+    },
+    closed(item) {
+      let status = 'closed';
+      BoxesService.update(item.dataListProps.item.id, { status: status }).then(() => {
+        this.$noty.success(locales.alerts.updatedRegister);
+        this.$refs.dynamicListPage.getAll();
+      }).catch((error) => {
+        this.$noty.error(messageErrors(error));
+      })
+    }
   }
 }
 

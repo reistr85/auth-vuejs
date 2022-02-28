@@ -11,6 +11,11 @@ const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
 const chart = 'mdi-chart-box-outline';
 const check = 'mdi-check-bold';
+const clipboardArrowUpOutline = 'mdi-clipboard-arrow-up-outline';
+const clipboardArrowDownOutline = 'mdi-clipboard-arrow-down-outline';
+const clipboardPlusOutline = 'mdi-clipboard-plus-outline';
+const clipboardMinusOutline = 'mdi-clipboard-minus-outline';
+const clipboardFlowOutline = 'mdi-clipboard-flow-outline';
 const close = 'mdi-close';
 const copy = 'mdi-content-copy';
 const databaseSearch = 'mdi-database-search';
@@ -64,6 +69,11 @@ export {
   cellPhone,
   chart,
   check,
+  clipboardArrowUpOutline,
+  clipboardArrowDownOutline,
+  clipboardPlusOutline,
+  clipboardMinusOutline,
+  clipboardFlowOutline,
   close,
   copy,
   databaseSearch,
