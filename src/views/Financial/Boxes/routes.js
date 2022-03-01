@@ -14,7 +14,7 @@ export default [
   //   name: BoxSchema.routes.create.name,
   //   component: ShowBox,
   //   meta: BoxSchema.routes.create.meta,
-  // },s
+  // },
   {
     path: BoxSchema.routes.show.path,
     name: BoxSchema.routes.show.name,

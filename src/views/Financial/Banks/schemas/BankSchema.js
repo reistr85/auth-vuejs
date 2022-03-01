@@ -21,10 +21,15 @@ export default {
         meta: { typePage: typePageOptions.create, requiresAuth: true, }
       },
       show: {
-        name: 'banco-show',
+        name: 'bank-show',
         path: '/bancos/:id',
         meta: { typePage: typePageOptions.show, requiresAuth: true, }
-      }
+      },
+      statement: {
+        name: 'bank-statement',
+        path: '/bancos-extrato/:id',
+        meta: { typePage: typePageOptions.statement, requiresAuth: true, }
+      },
     },
     listActions: {
       has: true,
@@ -33,7 +38,13 @@ export default {
       situation: true,
       more: {
         has: true,
-        items: []
+        items: [
+          {
+            label: 'Extrato Bancário',
+            icon: text,
+            action: 'bankStatement'
+          }
+        ]
       },
     },
     filters: {
@@ -221,12 +232,12 @@ export default {
         ],
       }
     ],
-    footer: [
-      {
-        name: 'total_devolutions',
-        label: 'Valor Devolvido',
-        class: 'custom-footer-value',
-        md: 2,
-      },
-    ]
+    bank_movements: [
+      { text: 'Data', value: 'movements_date_formatted' },
+      { text: 'Origem', value: 'origin_type_formatted' },
+      { text: 'Descrição', value: 'description' },
+      { text: 'Valor', value: 'value_formatted' },
+      { text: 'Ações', value: 'actions', align: 'end' },
+    ],
+    footer: []
   }

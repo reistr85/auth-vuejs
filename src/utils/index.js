@@ -167,6 +167,7 @@ export const typePageOptions = {
   list: 'list',
   create: 'create',
   show: 'show',
+  statement: 'statement'
 }
 
 export function mountParamsRequestFilter(params, filter, customFields) {

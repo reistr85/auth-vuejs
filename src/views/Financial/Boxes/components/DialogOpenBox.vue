@@ -39,7 +39,7 @@ import Button from '@/components/vuetify/Button';
 import DataPicker from '@/components/vuetify/DataPicker';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import AutoComplete from '@/components/vuetify/AutoComplete';
-import required from '@/utils/rules';
+import { required } from '@/utils/rules';
 import { mountParamsRequestFilter } from '@/utils';
 import { messageErrors } from '@/utils';
 import locales from '@/locales/pt-BR';

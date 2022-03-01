@@ -317,6 +317,11 @@ const originTypeBoxMovements = [
   { id: 2, text: 'Order de Serviço', value: 'App\\Models\\OrderService' }
 ];
 
+const originTypeBankMovements = [
+  { id: 1, text: 'Manual', value: null },
+  { id: 2, text: 'Order de Serviço', value: 'App\\Models\\OrderService' }
+];
+
 export { 
   statusAppointment,
   statusOrderService,
@@ -331,5 +336,6 @@ export {
   typeBankNumber,
   typeInputOutput,
   statusBoxes,
-  originTypeBoxMovements
+  originTypeBoxMovements,
+  originTypeBankMovements
 }
