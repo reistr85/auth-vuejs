@@ -98,7 +98,7 @@ export default {
         this.$api.boxMovements.create(this.movement).then(() => {
           this.$noty.success(locales.alerts.createdRegister);
         }).catch((err) => {
-          this.$noty.error(messageErrors(err));
+          this.$noty.error(err);
         })
         this.closedBox();
       } else {

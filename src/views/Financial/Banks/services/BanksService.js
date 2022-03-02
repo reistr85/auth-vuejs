@@ -3,7 +3,7 @@ import DynamicService from '@/service/DynamicService';
 import BankSchema from '../schemas/BankSchema';
 import { formatCurrency, formatDate, getText } from '@/utils';
 import { typeAccount, typeBankNumber, typeSituation } from '@/utils/options';
-import { originTypeBankMovements } from '@/utils/options';
+import { originTypeBankMovements, typeBankMovements } from '@/utils/options';
 
 const formatResponse = (item) => {
   item.account_type_formatted = getText(typeAccount, item.account_type);
@@ -17,6 +17,7 @@ const formatResponseGetAllBankMovementsByBankId = (res) => {
     item.movements_date_formatted = formatDate(item.movement_date, true);
     item.value_formatted = formatCurrency(item.value);
     item.origin_type_formatted = getText(originTypeBankMovements, item.origin_type);
+    item.movement_type_formatted = getText(typeBankMovements, item.movement_type);
   })
 
   return res;

@@ -318,8 +318,16 @@ const originTypeBoxMovements = [
 ];
 
 const originTypeBankMovements = [
-  { id: 1, text: 'Manual', value: null },
+  { id: 1, text: '', value: null },
   { id: 2, text: 'Order de Serviço', value: 'App\\Models\\OrderService' }
+];
+
+const typeBankMovements = [
+  { id: 1, text: 'Pix', value: 'pix' },
+  { id: 2, text: 'Transferência', value: 'tranfer' },
+  { id: 3, text: 'Depósito Espécie', value: 'cash' },
+  { id: 4, text: 'Depósito Cheque', value: 'check' },
+  { id: 5, text: 'Saque', value: 'withdraw' }
 ];
 
 export { 
@@ -337,5 +345,6 @@ export {
   typeInputOutput,
   statusBoxes,
   originTypeBoxMovements,
-  originTypeBankMovements
+  originTypeBankMovements,
+  typeBankMovements
 }

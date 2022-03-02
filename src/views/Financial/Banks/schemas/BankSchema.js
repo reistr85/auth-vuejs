@@ -27,7 +27,7 @@ export default {
       },
       statement: {
         name: 'bank-statement',
-        path: '/bancos-extrato/:id',
+        path: '/bancos/:id/extrato',
         meta: { typePage: typePageOptions.statement, requiresAuth: true, }
       },
     },
@@ -235,6 +235,7 @@ export default {
     bank_movements: [
       { text: 'Data', value: 'movements_date_formatted' },
       { text: 'Origem', value: 'origin_type_formatted' },
+      { text: 'Tipo', value: 'movement_type_formatted' },
       { text: 'Descrição', value: 'description' },
       { text: 'Valor', value: 'value_formatted' },
       { text: 'Ações', value: 'actions', align: 'end' },

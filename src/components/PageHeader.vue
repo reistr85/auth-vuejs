@@ -18,7 +18,7 @@
 
         <Button 
           color="light"
-          v-if="typePage === typePageOptions.create || typePage === typePageOptions.show || typePage === typePageOptions.statement"
+          v-if="typePage === typePageOptions.create || typePage === typePageOptions.show"
           label="Voltar"
           rounded
           :icon="icons.arrowLeft"

@@ -19,20 +19,31 @@
               :disabled="disabledTypeInputOutput"
               :rules="[rules.required]" />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3">
+            <Select 
+              v-model="movement.movement_type" 
+              label="Tipo de Movimentação" 
+              :items="options.typeBankMovements" 
+              itemText="text" 
+              itemValue="value"
+              :rules="[rules.required]" />
+          </v-col>
+          <v-col cols="12" md="3">
             <TextFieldMoney
               v-model="movement.value" 
               label="Valor Lançamento"
               :length="10"
               :rules="[rules.money]" />
-              <v-col cols="12" md="4">
+          </v-col>
+        </v-row>
+        <v-row>
+           <v-col cols="12" md="12">
             <TextField 
               v-model="movement.description" 
               label="Descrição" 
               :rules="[rules.required]"
               :readonly="readonlyDescription"
               v-on:keyup.enter="save" />
-          </v-col>
           </v-col>
         </v-row>
       </v-form>
@@ -45,13 +56,13 @@
 </template>
 
 <script>
-import { typeInputOutput } from '@/utils/options';
+import { typeInputOutput, typeBankMovements } from '@/utils/options';
 import Card from '@/components/vuetify/Card';
 import Button from '@/components/vuetify/Button';
 import DataPicker from '@/components/vuetify/DataPicker';
 import Select from '@/components/vuetify/Select';
+import TextField from '@/components/vuetify/TextField';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
-import { messageErrors } from '@/utils';
 import locales from '@/locales/pt-BR';
 import { money, required } from '@/utils/rules';
 
@@ -62,6 +73,7 @@ export default {
     Button,
     DataPicker,
     Select,
+    TextField,
     TextFieldMoney
   },
   props: {
@@ -73,6 +85,8 @@ export default {
             bank_id: this.id,
             movements_date: null,
             type: 'input',
+            movement_type: '',
+            description: '',
             value: 0
           }
         }
@@ -111,7 +125,8 @@ export default {
         required: required
       },
       options: {
-        typeInputOutput: typeInputOutput
+        typeInputOutput: typeInputOutput,
+        typeBankMovements: typeBankMovements
       },
     }
   },
@@ -122,9 +137,8 @@ export default {
       this.movement.payment_method_id = 1;
       this.$api.bankMovements.create(this.movement).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
-      }).catch((err) => {
-        console.log(err.message)
-        this.$noty.error(messageErrors(err));
+      }).catch((error) => {
+        this.$noty.error(error);
       })
       this.$emit('handleActionModal');
     },

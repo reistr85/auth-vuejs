@@ -23,6 +23,15 @@
           :disabledBttn="disabledBttn"
           @handleAction="handleAction"/>
       </ExpansionPanel>
+      <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
+        <Button
+          label="Voltar"
+          color="light"
+          rounded
+          class="ml-3"
+          :icon="$icons.arrowLeft"
+          @click="$router.push({ name: schema.routes.list.name })" />
+      </ExpansionPanel>
     </PageContent>
 
     <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
@@ -44,8 +53,10 @@ import GenericDataTable from '../components/GenericDataTable';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
 import TextField from '@/components/vuetify/TextField';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
+import Button from '@/components/vuetify/Button';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogDynamicMovement from '@/views/Financial/Banks/components/DialogDynamicMovement';
+import { arrowLeft } from '@/utils/icons';
 
 export default {
   name: 'ShowBank',
@@ -56,6 +67,7 @@ export default {
     ExpansionPanel,
     TextField,
     TextFieldMoney,
+    Button,
     Dialog,
     DialogDynamicMovement
   },
@@ -70,7 +82,10 @@ export default {
       dialogComponent: null,
       propsComponents: null,
       items: {},
-      disabledBttn: false
+      disabledBttn: false,
+      icons: {
+        arrowLeft: arrowLeft,
+      }
     }
   },
   mounted() {

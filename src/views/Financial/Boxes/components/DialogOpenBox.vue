@@ -41,7 +41,6 @@ import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import AutoComplete from '@/components/vuetify/AutoComplete';
 import { required } from '@/utils/rules';
 import { mountParamsRequestFilter } from '@/utils';
-import { messageErrors } from '@/utils';
 import locales from '@/locales/pt-BR';
 
 export default {
@@ -93,7 +92,7 @@ export default {
         this.localItems = res.data;
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((error) => {
-        this.$noty.error(messageErrors(error));
+        this.$noty.error(error);
       })
       this.$emit('handleActionModal');
     },
