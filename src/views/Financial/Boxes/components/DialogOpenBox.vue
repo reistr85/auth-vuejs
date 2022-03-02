@@ -85,7 +85,6 @@ export default {
         this.loading = false;
       })
     },
-
     save(box) {
       if(!this.$refs.form.validate()) return;
 
