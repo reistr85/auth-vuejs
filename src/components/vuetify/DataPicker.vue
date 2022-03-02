@@ -88,6 +88,9 @@ export default {
   directives: {
     mask,
   },
+  mounted() {
+    this.$attrs.value = this.dateFormatted;
+  },
   computed: {
     dateFormatted() {
       if(this.noInitial) {

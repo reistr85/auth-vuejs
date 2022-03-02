@@ -79,8 +79,10 @@ import Chip from '@/components/vuetify/Chip';
 const COLORS_STATUS = Object.freeze({
   pending: 'warning',
   done: 'success',
-  canceled: 'red',
+  canceled: 'primary',
   finished: 'success',
+  open: 'secondary',
+  closed: 'primary'
 })
 
 const COLORS_SITUATION = Object.freeze({
@@ -292,6 +294,7 @@ export default {
         this.situation(item);
         return;
       }
+      this.$emit('actionMoreActions', item);
     },
     situation(item) {
       this.loading = true;

@@ -2,6 +2,7 @@ import {
   account,
   accountSettings,
   bank,
+  box,
   calendar,
   calendarEdit,
   chart,
@@ -50,6 +51,7 @@ export default [
     title: 'Financeiro',
     items: [
       { icon: bank, title: 'Bancos', route: 'banks', active: false },
+      { icon: box, title: 'Caixa', route: 'boxes', active: false },
     ],
   },
   {
