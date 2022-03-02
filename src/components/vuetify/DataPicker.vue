@@ -24,6 +24,8 @@
       <v-date-picker
         v-bind="$attrs"
         v-on="$listeners"
+        :readonly="readonly"
+        :disabled="disabled"
         @input="menu = false" />
     </v-menu>
   </div>
@@ -86,14 +88,15 @@ export default {
   directives: {
     mask,
   },
+  mounted() {
+    this.$attrs.value = this.dateFormatted;
+  },
   computed: {
     dateFormatted() {
       if(this.noInitial) {
         return null;
-      }else if(this.now) {
-        return formatDate(new Date().toISOString().substr(0, 10))
       }else{
-        return formatDate(this.$attrs.value)
+        return formatDate(this.$attrs.value) || formatDate(new Date().toISOString().substr(0, 10))
       }
     }
   },

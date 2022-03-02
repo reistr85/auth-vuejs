@@ -22,31 +22,7 @@
       :item-text="itemText" 
       :item-value="itemValue"
       :multiple="multiple"
-    >
-      <!-- <template v-slot:no-data>
-        <v-list-item>
-          <v-list-item-title>
-            <strong>{{ label }}</strong>
-          </v-list-item-title>
-        </v-list-item>
-      </template>
-
-      <template v-slot:selection="{ attr, on, item, selected }">
-        <v-chip v-bind="attr" :input-value="selected" color="blue-grey" class="white--text" v-on="on">
-          <span v-text="item[itemText]"></span>
-        </v-chip>
-      </template>
-
-      <template v-slot:item="{ item }">
-        <v-list-item-avatar color="indigo" class="text-h5 font-weight-light white--text">
-          {{ item[itemText].charAt(0) }}
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title v-text="item[itemText]"></v-list-item-title>
-          <v-list-item-subtitle v-text="item[itemSubText]"></v-list-item-subtitle>
-        </v-list-item-content>
-      </template> -->
-    </v-autocomplete>
+      :return-object="returnObject" />
   </div>
 </template>
 
@@ -118,6 +94,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    returnObject: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {

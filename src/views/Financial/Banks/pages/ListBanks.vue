@@ -2,7 +2,7 @@
   <div>
     <PageHeader :schema="schema" />
     <PageContent>
-      <DynamicListPage :schema="schema" :service="service" />
+      <DynamicListPage :schema="schema" :service="service" @actionMoreActions="actionMoreActions" />
     </PageContent>
   </div>
 </template>
@@ -25,7 +25,15 @@ export default {
       service: BanksService,
     }
   },
-  methods: {}
+  methods: {
+    actionMoreActions(item) {
+      this[item.i.action](item);
+    },
+    bankStatement(item) {
+      const id = item.dataListProps.item.id;
+      this.$router.push({ name: BankSchema.routes.statement.name, params: { id } })
+    }
+  }
 }
 
 </script>

@@ -1,33 +1,34 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="$schemas.orderService" />
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados da Ordem" multiple :icon="$icons.list">
-        <v-row>
-          <v-col cols="12" md="2"><DataPicker v-model="order_service.order_date" label="Data da Ordem" /></v-col>
-          <v-col cols="12" md="4"><AutoComplete v-model="order_service.collaborator_id" label="Colaborador" :items="collaborators" /></v-col>
-          <v-col cols="12" md="4"><AutoComplete v-model="order_service.customer_id" label="Cliente" :items="customers" /></v-col>
-          <v-col cols="12" md="2"><TextFieldInteger v-model="order_service.quantity_services" label="Quant. Itens" readonly /></v-col>
-        </v-row>
+        <OrderData
+          :order-service="order_service"
+          :customers="customers"
+          :collaborators="collaborators"
+          :order-finished="orderFinished" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
           action-type="openDialog"
-          componentType="DialogAddItem"
+          componentType="items"
           :loading="loading"
           :headers="headersItems" 
           :items="order_service.items"
+          :order-finished="orderFinished"
           @handleAction="handleAction"/>
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Pagamentos" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
           action-type="openDialog"
-          componentType="DialogAddPayment"
+          componentType="payments"
           :loading="loading"
           :headers="headersPayments" 
           :items="order_service.payments"
+          :order-finished="orderFinished"
           @handleAction="handleAction" />
       </ExpansionPanel>
 
@@ -40,15 +41,30 @@
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
-        <Button label="Salvar" :icon="$icons.save" color="primary" rounded class="" @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.PENDING }})" />
-        <Button label="Salvar e Finalizar" :icon="$icons.check" color="success" rounded class="ml-3" @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.FINISHED }})" />
+        <Button
+          label="Salvar"
+          color="primary"
+          rounded
+          class=""
+          :icon="$icons.save"
+          :disabled="orderFinished"
+          @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.PENDING }})" />
+        <Button
+          label="Salvar e Finalizar"
+          color="success"
+          rounded
+          class="ml-3"
+          :icon="$icons.check"
+          :disabled="orderFinished"
+          @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.FINISHED }})" />
       </ExpansionPanel>
     </PageContent>
 
     <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
       <component 
         slot="content" 
-        :is="dialogComponent" 
+        v-bind="dialogProps"
+        :is="dialogComponent"
         @update:dialog="dialog = $event" 
         @handleActionModal="handleActionModal" />
     </Dialog>
@@ -60,21 +76,24 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import OrderServiceSchema from '../schemas/OrderServiceSchema';
 import OrderServicesService from '../services/OrderServicesService';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
-import DataPicker from '@/components/vuetify/DataPicker';
-import AutoComplete from '@/components/vuetify/AutoComplete';
-import TextFieldInteger from '@/components/vuetify/TextFieldInteger';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Button from '@/components/vuetify/Button';
-import { mountParamsApiFilter } from '@/utils';
 import GenericDataTable from '../components/GenericDataTable';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogAddItem from '../components/DialogAddItem';
 import DialogAddPayment from '../components/DialogAddPayment';
 import DialogConfirmation from '@/components/DialogConfirmation';
+import OrderData from '../components/OrderData';
+import { mountParamsRequestFilter } from '@/utils';
 import { messageErrors } from '@/utils'
+import { orderServiceStatus } from '@/utils/enums';
+
+const dialogComponents  = Object.freeze({
+  items: DialogAddItem,
+  payments: DialogAddPayment,
+});
 
 export default {
   name: 'CreateCreateOrderService',
@@ -82,20 +101,17 @@ export default {
     PageHeader,
     PageContent,
     ExpansionPanel,
-    DataPicker,
-    AutoComplete,
-    TextFieldInteger,
     Button,
     TextFieldMoney,
     GenericDataTable,
     Dialog,
     DialogAddItem,
     DialogAddPayment,
-    DialogConfirmation
+    DialogConfirmation,
+    OrderData,
   },
   data() {
     return {
-      schema: OrderServiceSchema,
       service: OrderServicesService,
       expModel: [0],
       loading: false,
@@ -104,6 +120,7 @@ export default {
       customers: [],
       dialog: false,
       dialogComponent: null,
+      dialogProps: {},
       dialogConfirmation: false,
     }
   },
@@ -117,26 +134,29 @@ export default {
       return this.$route.params.id
     },
     headersItems() {
-      return this.schema.order_service_items;
+      return this.$schemas.orderService.headerOrderServiceItems;
     },
     headersPayments() {
-      return this.schema.order_service_payments;
+      return this.$schemas.orderService.headerOrderServicePayments;
+    },
+    orderFinished() {
+      return this.order_service.status === orderServiceStatus.FINISHED || false;
     }
   },
   methods: {
     getOrderService() {
       this.loading = true;
-      this.orderServicesService.show(this.id).then((res) => {
+      this.$api.orderServices.show(this.id).then((res) => {
         this.mountForm(res);
         this.loading = false;
-      }).catch(() => {
+      }).catch((err) => {
+        console.error(err)
         this.loading = false;
       })
     },
-    getCollaborators() {
-      const { options, filters } = mountParamsApiFilter({ type: 'collaborator' });
-
-      this.registersService.filters(options, filters).then((res) => {
+    getCollaborators(params = {}) {
+      const payload = mountParamsRequestFilter(params, 'collaborator', ['type']);
+      this.$api.registers.filters(payload).then((res) => {
         this.collaborators = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -148,10 +168,9 @@ export default {
         this.loading = false;
       })
     },
-    getCustomers() {
-      const { options, filters } = mountParamsApiFilter({ type: 'customer' });
-
-      this.registersService.filters(options, filters).then((res) => {
+    getCustomers(params = {}) {
+      const payload = mountParamsRequestFilter(params, 'customer', ['type']);
+      this.$api.registers.filters(payload).then((res) => {
         this.customers = res.data.data.map((item) => {
           return {
             id: item.id,
@@ -165,24 +184,42 @@ export default {
     },
     openDialog({ componentType }) {
       this.dialog = true;
-      this.dialogComponent = componentType;
+      this.dialogProps = {
+        collaborators: this.collaborators,
+      }
+
+      this.dialogComponent = dialogComponents[componentType];
     },
     handleAction(data) {
       const { type, params } = data;
       this[type](params);
     },
-    handleActionModal(form) {
+    handleActionModal(data) {
+      const { action, item } = data;
       this.dialog = false;
-      console.log(form)
+      this[action](item);
+    },
+    addItem(item) {
+      this.order_service.items.push({
+        id: item.id,
+        collaborator: item.collaborator,
+        amount: item.sale_value,
+        amount_formatted: item.sale_value_formatted,
+        discount: 0,
+        discount_formatted: 'R$0,00',
+        number_item: this.setNumberItem(),
+        quantity: 1,
+        service: { name: item.name },
+        subtotal: item.sale_value,
+        subtotal_formatted: item.sale_value_formatted,
+        newItem: true,
+      })
     },
     itemDestroy(params) {
-      const { id, componentType } = params;
-      if(componentType === 'DialogAddItem') {
-        this.order_service.removedItems.push({ id });
-      }else{
-        this.order_service.removedPayments.push({ id });
+      const { index, componentType } = params;
+      if(componentType === 'items') {
+        this.order_service.items.splice(index,1)
       }
-      console.log(this.order_service)
     },
     confirmSave(data) {
       this.order_service.status = data.status;
@@ -191,7 +228,7 @@ export default {
     save() {
       this.orderServicesService.update(5, this.order_service).then(() => {
         this.$noty.success(this.$locales.alerts.updatedRegister)
-        this.$router.push({ name: this.schema.routes.list.name })
+        this.$router.push({ name: this.$schemas.orderService.routes.list.name })
       }).catch((err) => {
         this.$noty.error(messageErrors(err))
       }).finally(() => {
@@ -218,7 +255,7 @@ export default {
         return {
           id: item.id,
           number_item: item.number_item,
-          collaborator: { name: item.collaborator.name },
+          collaborator: { id: item.collaborator.id, name: item.collaborator.name },
           service: { name: item.service.name },
           subtotal: item.subtotal,
           subtotal_formatted: item.subtotal_formatted,
@@ -244,6 +281,9 @@ export default {
         }
       });
     },
+    setNumberItem() {
+      return this.order_service.items.length + 1;
+    }
   }
 }
 </script>

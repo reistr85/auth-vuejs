@@ -1,8 +1,11 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars */
 import axios from './';
 import { messageErrors } from '@/utils';
 
-const DynamicService = (endpoint, options = {}) => ({
+const DynamicService = (endpoint, schema, options = {}) => ({
+  get schema() {
+    return schema;
+  },
   get options() {
     return options;
   },
@@ -18,6 +21,16 @@ const DynamicService = (endpoint, options = {}) => ({
     }
     
     return message;
+  },
+  mountFilter(customFields, filter) {
+    let paramsFilter = '';
+    const fields = customFields.length ? customFields : schema.filters.items;
+
+    fields.forEach((item) => {
+      paramsFilter += `&filter[${item.field}]=${filter}`
+    })
+
+    return paramsFilter;
   },
   async index(params = null){
     let items = {}
@@ -115,47 +128,33 @@ const DynamicService = (endpoint, options = {}) => ({
       });
     })
   },
-  async filters(params = null, searches){
-    let items = {}
-    let page = 1;
-    let totalItemsPerPage = 10;
-    let url = '';
-    let paramsFilter = '';
-    let queryParams = '';
-    let relations = '';
+  async filters(params){
+    try {
+      const { page, per_page, filter, customFields } = params;
+      let url = `filters?domain=${endpoint}`;
+      let items = {};
+      
+      if(page) url += `&page=${page}&per_page=${per_page || 10}`;
+      if(filter && schema.filters.has) url += this.mountFilter(customFields, filter)
+      if(schema.filters?.has && schema.include?.has) url += `&include=${schema.include?.value}`;
+      if(params.search_global) url += `&search_global=true`;
 
-    searches.forEach((item) => {
-      paramsFilter += `&filter[${item.name}]=${item.value}`
-    })
+      await axios.get(url).then((res) => {
+        if (options.formatResponse && typeof options.formatResponse === 'function') {
+          res.data.data.forEach((item) => {
+            options.formatResponse(item);
+          });
+        }
 
-    queryParams = `filters?domain=${endpoint}${paramsFilter}`;
+        items = res;
+      }).catch((err) => {
+        console.error(`DynamicService Filter error: ${err}`)
+      });
 
-    if(params){
-      page = params.page;
-      relations = params.relations;
-      totalItemsPerPage = params.totalItemsPerPage;
-      url = `${queryParams}&page=${page}&per_page=${totalItemsPerPage}`;
+      return items;
+    }catch(err) {
+      console.error(err)
     }
-
-    if(!params)
-      url = `${queryParams}`;
-
-    if(relations)
-      url += `&include=${relations}`
-
-    await axios.get(url).then((res) => {
-      if (options.formatResponse && typeof options.formatResponse === 'function') {
-        res.data.data.forEach((item) => {
-          options.formatResponse(item);
-        });
-      }
-
-      items = res;
-    }).catch((err) => {
-      console.error(`DynamicService Index error: ${err}`)
-    });
-
-    return items;
   },
 });
 

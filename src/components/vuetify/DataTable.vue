@@ -1,16 +1,45 @@
 <template>
   <div>
-    <TextField
-      v-model="search"
-      v-if="!noSearch"
-      label='pesquisar'
-      class="content-appointments--boddy---right----customers-----search-customer" />
+    <v-row>
+      <v-col v-if="!noSearch">
+        <TextField
+          v-model="search"
+          label='pesquisar'
+          class="content-appointments--boddy---right----customers-----search-customer" />
+      </v-col>
+      <v-col>
+        <slot name="custom-header" />
+      </v-col>
+    </v-row>
 
     <v-data-table
       v-model="selected"
-      item-key="id"
+      v-if="noSync"
       class="datatable"
       dense
+      :item-key="itemKey"
+      :loading="loading"
+      :search="search"
+      :headers="headers"
+      :items="localItems"
+      :single-select="singleSelect"
+      :show-select="showSelect"
+      :hide-default-header="hideDefaultHeader"
+      :hide-default-footer="hideDefaultFooter"
+      @click:row="clickRow"
+      @input="handleAction">
+
+      <template v-slot:[`item.actions`]="props" style="width: 200px">
+        <slot name="actions" :props="props" />
+      </template>
+    </v-data-table>
+
+    <v-data-table
+      v-model="selected"
+      v-else
+      class="datatable"
+      dense
+      :item-key="itemKey"
       :loading="loading"
       :search="search"
       :headers="headers"
@@ -42,13 +71,20 @@ export default {
       type: Boolean,
       default: false,
     },
+    noSync: {
+      type: Boolean,
+      default: false,
+    },
+    itemKey: {
+      type: String,
+      default: 'id',
+    },
     headers: {
       type: Array,
       default: () => [],
     },
     items: {
-      type: Object,
-      default: () => {},
+      type: [Object, Array],
     },
     singleSelect: {
       type: Boolean,
@@ -72,19 +108,9 @@ export default {
       search: '',
       selected: [],
       options: {},
-      localItems: [],
-      totalLocalItems: 0,
     }
   },
   watch: {
-    items: {
-      handler() {
-        this.localItems = this.items.data;
-        this.totalLocalItems = this.items.total;
-        this.options.itemsPerPage = parseInt(this.items.per_page);
-      },
-      deep: true,
-    },
     options: {
       handler() {
         this. getItems();
@@ -96,9 +122,32 @@ export default {
       this. getItems();
     }, 700)
   },
+  computed: {
+    localItems: {
+      get() {
+        return this.noSync ? this.items : this.items.data;
+      },
+      set(value) {
+        this.localItems = value;
+      }
+    },
+    totalLocalItems: {
+      get() {
+        return this.items.total;
+      },
+      set(value) {
+        this.items = value;
+      }
+    }
+  },
   methods: {
     getItems() {
-      this.$emit('getItems', { options: this.options, search: this.search })
+      this.$emit('getItems', {
+        ...this.options,
+        per_page: this.options.itemsPerPage,
+        filter: this.search,
+        search_global: true
+      })
     },
     handleAction() {
       this.$emit('selected', this.selected)

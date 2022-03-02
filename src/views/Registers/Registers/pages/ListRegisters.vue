@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="$schemas.register" />
     <PageContent>
-      <DynamicListPage :schema="schema" :service="service" />
+      <DynamicListPage :schema="$schemas.register" :service="$api.registers" />
     </PageContent>
   </div>
 </template>
@@ -10,18 +10,10 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import RegisterSchema from '../schemas/RegisterSchema';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
-import RegistersService from '../services/RegistersService';
 
 export default {
   name: 'ListRegister',
   components: { PageHeader, PageContent, DynamicListPage },
-  data() {
-    return {
-      schema: RegisterSchema,
-      service: RegistersService,
-    }
-  },
 }
 </script>

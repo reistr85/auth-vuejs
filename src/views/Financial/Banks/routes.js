@@ -1,6 +1,7 @@
 import BankSchema from './schemas/BankSchema';
 import ListBanks from './pages/ListBanks';
 import CreateBank from './pages/CreateBank';
+import ShowBank from './pages/ShowBank';
 
 export default [
   {
@@ -20,5 +21,11 @@ export default [
     name: BankSchema.routes.show.name,
     component: CreateBank,
     meta: BankSchema.routes.show.meta,
+  },
+  {
+    path: BankSchema.routes.statement.path,
+    name: BankSchema.routes.statement.name,
+    component: ShowBank,
+    meta: BankSchema.routes.statement.meta,
   },
 ]

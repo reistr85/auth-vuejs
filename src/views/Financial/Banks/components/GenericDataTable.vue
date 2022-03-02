@@ -2,28 +2,27 @@
   <div>
     <div class="d-flex justify-end mb-5">
       <Button 
-        label="Adicionar" 
+        label="Adicionar Lançamento" 
         small 
+        :icon="$icons.plus" 
         color="secondary" 
         rounded 
-        class="btn-actions" 
-        :icon="$icons.plus" 
-        :disabled="orderFinished"
+        class="btn-actions"
+        :disabled="disabledBttn"
         @click="$emit('handleAction', handleAction(actionType))" />
     </div>
     <DataTable
-      no-sync
       no-search
       itemKey="number_item"
       :headers="headers"
       :items="items"
-      :loading="loading">
+      :loading="loading"
+      @getItems="getItems">
 
-      <template v-slot:actions="{ props }">
+     <template v-slot:actions="{ props }">
         <Button 
           type-icon color="red"
           :icon="$icons.destroy"
-          :disabled="orderFinished"
           @click="$emit('handleAction', handleAction('itemDestroy', props))" />
       </template>
     </DataTable>
@@ -43,8 +42,8 @@ export default {
       default: () => [],
     },
     items: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     loading: {
       type: Boolean,
@@ -58,14 +57,17 @@ export default {
       type: String,
       required: true,
     },
-    orderFinished: {
+    disabledBttn: {
       type: Boolean,
-      default: false
-    },
+      default: false,
+    }
   },
   methods: {
     handleAction(type, data = null) {
       return { type, params: { ...data, componentType: this.componentType}}
+    },
+    getItems(options) {
+      this.$emit('getItems', options);
     }
   }
 }

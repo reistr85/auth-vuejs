@@ -6,8 +6,8 @@ const statusAppointment = [
 
 const statusOrderService = [
   { id: 1, text: 'Pendente', value: 'pending' },
-  { id: 1, text: 'Finalizado', value: 'finished' },
-  { id: 1, text: 'Cancelado', value: 'canceled' },
+  { id: 2, text: 'Finalizado', value: 'finished' },
+  { id: 3, text: 'Cancelado', value: 'canceled' },
 ]
 
 const typeUser = [
@@ -22,6 +22,7 @@ const typeRegister = [
   {id: 2, text: 'Fornecedor', value: 'provider'},
   {id: 3, text: 'Vendedor', value: 'seller'},
   {id: 4, text: 'Colaborador', value: 'collaborator' },
+  {id: 4, text: 'Funcionário', value: 'employee' },
   {id: 5, text: 'Outros', value: 'others' },
 ];
 
@@ -301,6 +302,34 @@ const typeBankNumber = [
 
 ];
 
+const typeInputOutput = [
+  {id: 1, text: 'Entrada', value: 'input' },
+  {id: 2, text: 'Saída', value: 'output' }
+];
+
+const statusBoxes = [
+  { id: 1, text: 'Aberto', value: 'open' },
+  { id: 2, text: 'Fechado', value: 'closed' },
+];
+
+const originTypeBoxMovements = [
+  { id: 1, text: 'Manual', value: null },
+  { id: 2, text: 'Order de Serviço', value: 'App\\Models\\OrderService' }
+];
+
+const originTypeBankMovements = [
+  { id: 1, text: '', value: null },
+  { id: 2, text: 'Order de Serviço', value: 'App\\Models\\OrderService' }
+];
+
+const typeBankMovements = [
+  { id: 1, text: 'Pix', value: 'pix' },
+  { id: 2, text: 'Transferência', value: 'tranfer' },
+  { id: 3, text: 'Depósito Espécie', value: 'cash' },
+  { id: 4, text: 'Depósito Cheque', value: 'check' },
+  { id: 5, text: 'Saque', value: 'withdraw' }
+];
+
 export { 
   statusAppointment,
   statusOrderService,
@@ -313,4 +342,9 @@ export {
   UF,
   typeAccount,
   typeBankNumber,
+  typeInputOutput,
+  statusBoxes,
+  originTypeBoxMovements,
+  originTypeBankMovements,
+  typeBankMovements
 }
