@@ -3,25 +3,24 @@
     <PageHeader :schema="schema" />
     <PageContent>
       <DynamicListPage ref="dynamicListPage" :schema="schema" :service="service" @actionMoreActions="actionMoreActions">
-      <div slot="custom-header">
-        <Button label="Abrir Caixa" color="primary" rounded @click="openDialog()"/>
-      </div>
+        <div slot="custom-header">
+          <Button label="Abrir Caixa" color="primary" rounded @click="openDialog()"/>
+        </div>
       </DynamicListPage>
     </PageContent>
     <Dialog :dialog="dialog" :maxWidth="parseInt(1000)" no-title no-actions>
       <component 
         slot="content" 
-        :is="dialogComponent"
         v-bind="propsComponents"
+        :is="dialogComponent"
         @update:dialog="dialog = $event"
-        @handleActionModal="handleActionModal"
-      />
+        @handleActionModal="handleActionModal" />
     </Dialog>
     <DialogConfirmation 
-      :dialog="dialogClosed" 
-      :maxWidth="parseInt(1000)"
       v-bind="propsClosed"
       v-on="eventsClosed"
+      :dialog="dialogClosed" 
+      :maxWidth="parseInt(1000)"
       @noAction="dialogClosed = false" />
   </div>
 </template>
@@ -66,6 +65,11 @@ export default {
       eventsClosed: {},
       movement: {},
       boxOpen: false
+    }
+  },
+  computed: {
+    locales() {
+      return this.$locales.pt.boxes.listBoxes;
     }
   },
   methods: {
@@ -135,17 +139,8 @@ export default {
     closed(item){
       this.dialogClosed = true;
       this.boxClosed = item;
-      if(item.dataListProps.item.total_value > 0) {
-        this.propsClosed = {
-          message: 'Caixa com saldo final maior que zero. Deseja fazer sangria e fechar o caixa?'
-        }
-        this.eventsClosed = { yesAction: () => this.withdrawn(item, true) };
-      } else {
-        this.propsClosed = {
-          message: 'Tem certeza que deseja fechar o caixa selecionado?'
-        }
-        this.eventsClosed = { yesAction: () => this.closedBox() };
-      }
+      this.propsClosed = { message: item.dataListProps.item.total_value > 0 ? this.locales.messages.closed.totalValueLargerZero : this.locales.messages.closed.box }
+      this.eventsClosed = { yesAction: item.dataListProps.item.total_value > 0 ? () => this.withdrawn(item, true) : () => this.closedBox() };
     },
     closedBox() {
       let status = 'closed';
