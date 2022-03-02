@@ -14,7 +14,6 @@ export default {
         case typePageOptions.list: type = typePageOptions.list; break;
         case typePageOptions.create: type = typePageOptions.create; break;
         case typePageOptions.show: type = typePageOptions.show; break;
-        case typePageOptions.statement: type = typePageOptions.statement; break;
       }
 
       return type;
