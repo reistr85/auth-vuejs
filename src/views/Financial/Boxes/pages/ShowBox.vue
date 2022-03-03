@@ -32,6 +32,8 @@
         @update:dialog="dialog = $event"
         @handleActionModal="handleActionModal" />
     </Dialog>
+    
+    <DialogConfirmation :dialog="dialogDestroy" :loading="loadingDestroy" @noAction="dialogDestroy = false" @yesAction="itemDestroy" />
   </div>
 </template>
 
@@ -45,6 +47,7 @@ import TextField from '@/components/vuetify/TextField';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogDynamicMovement from '@/views/Financial/Boxes/components/DialogDynamicMovement';
+import DialogConfirmation from '@/components/DialogConfirmation';
 
 export default {
   name: 'ShowBox',
@@ -56,7 +59,8 @@ export default {
     TextField,
     TextFieldMoney,
     Dialog,
-    DialogDynamicMovement
+    DialogDynamicMovement,
+    DialogConfirmation
   },
   props: {},
   data() {
@@ -65,11 +69,14 @@ export default {
       expModel: [0],
       box: {},
       loading: false,
+      loadingDestroy: false,
       dialog: false,
+      dialogDestroy: false,
       dialogComponent: null,
       propsComponents: null,
       items: {},
-      disabledBttn: false
+      disabledBttn: false,
+      idBoxMovementDestroy: null
     }
   },
   mounted() {
@@ -130,6 +137,23 @@ export default {
       this.dialog = false;
       this.getBox();
       this.getBoxMovements();
+    },
+    handleItemDestroy(params) {
+      this.dialogDestroy = true;
+      this.idBoxMovementDestroy = params.item.id;
+    },
+    itemDestroy() {
+      this.loadingDestroy = true;
+      this.$api.boxMovements.delete(this.idBoxMovementDestroy).then(() => {
+        this.loadingDestroy = false;
+        this.dialogDestroy = false;
+        this.getBox();
+        this.getBoxMovements();
+      }).catch((err) => {
+        this.$noty.error(err);
+        this.loadingDestroy = false;
+        this.dialogDestroy = false;
+      })
     }
   }
 }

@@ -18,27 +18,14 @@
       :items="items"
       :loading="loading"
       @getItems="getItems">
-      <!-- <template v-slot:actions="{ props }">
+     
+     <template v-slot:actions="{ props }">
         <Button 
           type-icon color="red"
           :icon="$icons.destroy"
-          :disabled="disabledBttn"
-          @click="$emit('handleAction', handleAction('itemDestroy', props))" />
-      </template> -->
-      <template v-slot:[`item.actions`]="{ item }" style="width: 200px">
-        <Button :icon="$icons.destroy" type-icon color="red" @click="$emit('handleAction', handleAction('itemDestroy', item))" />
+          @click="$emit('handleAction', handleAction('handleItemDestroy', props))" />
       </template>
     </DataTable>
-    <!-- <v-data-table
-      dense
-      :loading="loading"
-      :headers="headers"
-      :items="items">
-
-      <template v-slot:[`item.actions`]="{ item }" style="width: 200px">
-        <Button :icon="$icons.destroy" type-icon color="red" @click="$emit('handleAction', handleAction('itemDestroy', item))" />
-      </template>
-    </v-data-table> -->
   </div>
 </template>
 
