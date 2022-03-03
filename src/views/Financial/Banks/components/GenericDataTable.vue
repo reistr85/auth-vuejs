@@ -23,7 +23,7 @@
         <Button 
           type-icon color="red"
           :icon="$icons.destroy"
-          @click="$emit('handleAction', handleAction('itemDestroy', props))" />
+          @click="$emit('handleAction', handleAction('handleItemDestroy', props))" />
       </template>
     </DataTable>
   </div>

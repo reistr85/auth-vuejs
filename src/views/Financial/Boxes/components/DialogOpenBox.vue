@@ -95,10 +95,18 @@ export default {
         this.$noty.error(error);
       })
       this.$emit('handleActionModal');
+      this.resetFormBox();
     },
     cancel() {
       this.$emit('update:dialog', false)
     },
+    resetFormBox() {
+      this.box = {
+        box_date: null,
+        employee_id: '',
+        initial_value: 0
+      }
+    }
   }
 }
 </script>

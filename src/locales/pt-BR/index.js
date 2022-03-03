@@ -4,6 +4,7 @@ export default {
   alerts: {
     createdRegister: 'Registro criado com sucesso',
     updatedRegister: 'Registro atualizado com sucesso',
+    deletedRegister: 'Registro excluído com sucesso',
     errorCreatingRegister: 'Erro ao criar o registro',
   },
   dynamicListPage: {
