@@ -51,7 +51,12 @@
       :hide-default-header="hideDefaultHeader"
       :hide-default-footer="hideDefaultFooter"
       @click:row="clickRow"
-      @input="handleAction" />
+      @input="handleAction">
+
+      <template v-slot:[`item.actions`]="props" style="width: 200px">
+        <slot name="actions" :props="props" />
+      </template>
+    </v-data-table>
   </div>
 </template>
 
