@@ -318,7 +318,7 @@ const originTypeBoxMovements = [
 ];
 
 const originTypeBankMovements = [
-  { id: 1, text: '', value: null },
+  { id: 1, text: 'Manual', value: null },
   { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' }
 ];
 

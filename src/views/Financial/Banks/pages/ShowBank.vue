@@ -59,6 +59,7 @@ import Button from '@/components/vuetify/Button';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogDynamicMovement from '@/views/Financial/Banks/components/DialogDynamicMovement';
 import DialogConfirmation from '@/components/DialogConfirmation';
+import locales from '@/locales/pt-BR';
 import { arrowLeft } from '@/utils/icons';
 
 export default {
@@ -161,6 +162,7 @@ export default {
       this.loadingDestroy = true;
       console.log(this.idBankMovementDestroy)
       this.$api.bankMovements.delete(this.idBankMovementDestroy).then(() => {
+        this.$noty.success(locales.alerts.deletedRegister);
         this.loadingDestroy = false;
         this.dialogDestroy = false;
         this.getBank();

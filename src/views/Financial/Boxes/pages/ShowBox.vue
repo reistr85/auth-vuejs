@@ -48,6 +48,7 @@ import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogDynamicMovement from '@/views/Financial/Boxes/components/DialogDynamicMovement';
 import DialogConfirmation from '@/components/DialogConfirmation';
+import locales from '@/locales/pt-BR';
 
 export default {
   name: 'ShowBox',
@@ -145,6 +146,7 @@ export default {
     itemDestroy() {
       this.loadingDestroy = true;
       this.$api.boxMovements.delete(this.idBoxMovementDestroy).then(() => {
+        this.$noty.success(locales.alerts.deletedRegister);
         this.loadingDestroy = false;
         this.dialogDestroy = false;
         this.getBox();
