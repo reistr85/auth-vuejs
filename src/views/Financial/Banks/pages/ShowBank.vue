@@ -42,6 +42,8 @@
         @update:dialog="dialog = $event"
         @handleActionModal="handleActionModal" />
     </Dialog>
+
+    <DialogConfirmation :dialog="dialogDestroy" :loading="loadingDestroy" @noAction="dialogDestroy = false" @yesAction="itemDestroy" />
   </div>
 </template>
 
@@ -56,6 +58,7 @@ import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Button from '@/components/vuetify/Button';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogDynamicMovement from '@/views/Financial/Banks/components/DialogDynamicMovement';
+import DialogConfirmation from '@/components/DialogConfirmation';
 import { arrowLeft } from '@/utils/icons';
 
 export default {
@@ -69,7 +72,8 @@ export default {
     TextFieldMoney,
     Button,
     Dialog,
-    DialogDynamicMovement
+    DialogDynamicMovement,
+    DialogConfirmation
   },
   props: {},
   data() {
@@ -78,14 +82,17 @@ export default {
       expModel: [0],
       bank: {},
       loading: false,
+      loadingDestroy: false,
       dialog: false,
+      dialogDestroy: false,
       dialogComponent: null,
       propsComponents: null,
-      items: {},
       disabledBttn: false,
+      items: {},
       icons: {
         arrowLeft: arrowLeft,
-      }
+      },
+      idBankMovementDestroy: null
     }
   },
   mounted() {
@@ -145,6 +152,24 @@ export default {
       this.dialog = false;
       this.getBank();
       this.getBankMovements();
+    },
+    handleItemDestroy(params) {
+      this.dialogDestroy = true;
+      this.idBankMovementDestroy = params.item.id;
+    },
+    itemDestroy() {
+      this.loadingDestroy = true;
+      console.log(this.idBankMovementDestroy)
+      this.$api.bankMovements.delete(this.idBankMovementDestroy).then(() => {
+        this.loadingDestroy = false;
+        this.dialogDestroy = false;
+        this.getBank();
+        this.getBankMovements();
+      }).catch((err) => {
+        this.$noty.error(err);
+        this.loadingDestroy = false;
+        this.dialogDestroy = false;
+      })
     }
   }
 }
