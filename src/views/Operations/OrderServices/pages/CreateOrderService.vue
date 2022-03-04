@@ -78,7 +78,6 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import OrderServicesService from '../services/OrderServicesService';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Button from '@/components/vuetify/Button';
@@ -114,12 +113,13 @@ export default {
   },
   data() {
     return {
-      service: OrderServicesService,
       expModel: [0],
       loading: false,
       order_service: {},
       collaborators: [],
       customers: [],
+      payment_methods: [],
+      card_flags: [],
       dialog: false,
       dialogComponent: null,
       dialogProps: {},
@@ -130,6 +130,7 @@ export default {
     this.getOrderService();
     this.getCollaborators();
     this.getCustomers();
+    this.getMethodPayments();
   },
   computed: {
     id() {
@@ -184,12 +185,28 @@ export default {
         this.loading = false;
       })
     },
+    getMethodPayments(params = {}) {
+      const payload = mountParamsRequestFilter(params, 'payment-method', ['type']);
+      this.$api.allTypes.filters(payload).then((res) => {
+        this.payment_methods = res.data.data.map((item) => {
+          return {
+            id: item.id,
+            text: item.description,
+            value: item.id,
+          }
+        })
+      }).catch(() => {
+        this.loading = false;
+      })
+    },
     openDialog({ componentType }) {
+      console.log(componentType)
       this.dialog = true;
       this.dialogProps = {
-        collaborators: this.collaborators,
+        ...componentType === 'items' && { collaborators: this.collaborators },
+        ...componentType === 'payments' && { payment_methods: this.payment_methods, card_flags: this.card_flags }
       }
-
+      console.log(this.dialogProps)
       this.dialogComponent = dialogComponents[componentType];
     },
     handleAction(data) {
@@ -217,6 +234,9 @@ export default {
         newItem: true,
       })
       this.totalizers();
+    },
+    addPayment(payment) {
+      console.log(payment)
     },
     itemDestroy(params) {
       const { index, componentType, item } = params;
