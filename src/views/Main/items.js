@@ -29,8 +29,11 @@ export default [
     title: 'Cadastros',
     items: [
       { icon: accountSettings, title: 'Registros', route: 'registers', active: false },
-      { icon: list, title: 'Tipos Gerais', route: 'allTypes', active: false },
       { icon: tune, title: 'Serviços', route: 'services', active: false },
+      { icon: list, title: 'Categorias', route: 'categories', active: false },
+      { icon: list, title: 'Sub Categorias', route: 'subcategories', active: false },
+      { icon: list, title: 'Formas de Pagamento', route: 'payments', active: false },
+      { icon: list, title: 'Bandeira de Cartão', route: 'cardflag', active: false },
     ],
   },
   {
