@@ -32,8 +32,8 @@ export default [
       { icon: tune, title: 'Serviços', route: 'services', active: false },
       { icon: list, title: 'Categorias', route: 'categories', active: false },
       { icon: list, title: 'Sub Categorias', route: 'subcategories', active: false },
-      { icon: list, title: 'Formas de Pagamento', route: 'payments', active: false },
-      { icon: list, title: 'Bandeira de Cartão', route: 'cardflag', active: false },
+      { icon: list, title: 'Formas de Pagamento', route: 'paymentmethods', active: false },
+      { icon: list, title: 'Bandeira de Cartão', route: 'cardflags', active: false },
     ],
   },
   {

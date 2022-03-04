@@ -43,7 +43,9 @@ const typeSituation = [
 
 const typeAllTypes = [
   {id: 1, text: 'Categoria', value: 'category'},
-  {id: 2, text: 'Sub-Categoria', value: 'sub-category'}
+  {id: 2, text: 'Sub Categoria', value: 'sub-category'},
+  {id: 3, text: 'Forma de Pagamento', value: 'payment-method'},
+  {id: 4, text: 'Bandeira', value: 'card-flag'},
 ];
 
 const UF = [
