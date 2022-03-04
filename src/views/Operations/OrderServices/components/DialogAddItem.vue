@@ -77,7 +77,7 @@ export default {
   computed: {
     addItemHeaders() {
       return this.$schemas.orderService.headerAddItem;
-    }
+    },
   },
   methods: {
     setService(data) {
