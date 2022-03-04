@@ -14,6 +14,7 @@
     <DataTable
       no-sync
       no-search
+      hide-default-footer
       itemKey="number_item"
       :headers="headers"
       :items="items"

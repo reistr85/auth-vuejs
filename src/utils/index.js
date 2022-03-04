@@ -171,7 +171,7 @@ export const typePageOptions = {
 }
 
 export function mountParamsRequestFilter(params, filter, customFields) {
-  return { ...params, page: 1, per_page: 10, filter, customFields: customFields.map((item) => {
+  return { ...params, page: params.page || 1, per_page: params.per_page || 10, filter, customFields: customFields.map((item) => {
     return { field: item }
   })}
 }

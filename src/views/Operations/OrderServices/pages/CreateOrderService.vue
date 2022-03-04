@@ -34,9 +34,11 @@
 
       <ExpansionPanel v-model="expModel" readonly title="Totalizadores" class="mt-3" multiple :icon="$icons.list">
         <v-row>
-          <v-col cols="12" md="4"><TextFieldMoney v-model="order_service.subtotal" label="Sub Total" readonly /></v-col>
-          <v-col cols="12" md="4"><TextFieldMoney v-model="order_service.discount" label="Desconto" readonly /></v-col>
-          <v-col cols="12" md="4"><TextFieldMoney v-model="order_service.amount" label="Total Final" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.subtotal" label="Sub Total" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.discount" label="Desconto" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.amount" label="Total Final" readonly /></v-col>
+          <v-col cols="12" md="3"><TextFieldMoney v-model="order_service.total_paid" label="Total Pago" readonly /></v-col>
+          <v-col cols="12" md="3"><TextFieldMoney v-model="order_service.total_payable" label="Falta Pagar" readonly /></v-col>
         </v-row>
       </ExpansionPanel>
 
@@ -214,12 +216,15 @@ export default {
         subtotal_formatted: item.sale_value_formatted,
         newItem: true,
       })
+      this.totalizers();
     },
     itemDestroy(params) {
-      const { index, componentType } = params;
+      const { index, componentType, item } = params;
       if(componentType === 'items') {
-        this.order_service.items.splice(index,1)
+        this.order_service.items.splice(index, 1)
+        this.order_service.items_destroy.push(item)
       }
+      this.totalizers();
     },
     confirmSave(data) {
       this.order_service.status = data.status;
@@ -244,11 +249,13 @@ export default {
         subtotal: data.subtotal,
         discount: data.discount,
         amount: data.amount,
+        total_paid: data.total_paid,
+        total_payable: data.amount - data.total_paid,
         status: data.status,
-        removedItems: [],
-        removedPayments: [],
         items: [],
-        payments: []
+        payments: [],
+        items_destroy: [],
+        payments_destroy: [],
       }
 
       this.order_service.items = data.items.map((item) => {
@@ -283,6 +290,29 @@ export default {
     },
     setNumberItem() {
       return this.order_service.items.length + 1;
+    },
+    totalizers() {
+      let quantity_services = 0;
+      let subtotal = 0;
+      let discount = 0;
+      let amount = 0;
+      let total_paid = 0;
+      this.order_service.items.forEach((item) => {
+        quantity_services += 1;
+        subtotal += parseFloat(item.subtotal);
+        discount += parseFloat(item.discount);
+        amount += parseFloat(item.amount);
+      });
+
+      this.order_service.payments.forEach((payment) => {
+        total_paid += parseFloat(payment.amount_paid);
+      });
+      this.order_service.quantity_services = quantity_services;
+      this.order_service.subtotal = subtotal;
+      this.order_service.discount = discount;
+      this.order_service.amount = amount;
+      this.order_service.total_paid = total_paid;
+      this.order_service.total_payable = amount - total_paid;
     }
   }
 }
