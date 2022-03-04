@@ -11,19 +11,70 @@ export default {
     formAddress: false,
     routes: {
       list: {
-        name: 'allTypes',
-        path: '/tipos-gerais',
-        meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        category: {
+          name: 'categories',
+          path: '/categorias',
+          meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        },
+        subCategory: {
+          name: 'subcategories',
+          path: '/sub-categorias',
+          meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        },
+        payment: {
+          name: 'payments',
+          path: '/pagamentos',
+          meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        },
+        cardFlag: {
+          name: 'cardflag',
+          path: '/bandeiras',
+          meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        }
       },
       create: {
-        name: 'allType-create',
-        path: '/tipos-gerais/novo',
-        meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        category: {
+          name: 'categories-create',
+          path: '/categorias/novo',
+          meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        },
+        subCategory: {
+          name: 'subcategories-create',
+          path: '/sub-categorias/novo',
+          meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        },
+        payment: {
+          name: 'payments-create',
+          path: '/pagamentos/novo',
+          meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        },
+        cardFlag: {
+          name: 'cardflag-create',
+          path: '/bandeiras/novo',
+          meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        }
       },
       show: {
-        name: 'allType-show',
-        path: '/tipos-gerais/:id',
-        meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        category: {
+          name: 'categories-show',
+          path: '/categorias/:id',
+          meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        },
+        subCategory: {
+          name: 'subcategories-show',
+          path: '/sub-categorias/:id',
+          meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        },
+        payment: {
+          name: 'payments-show',
+          path: '/pagamentos/:id',
+          meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        },
+        cardFlag: {
+          name: 'cardflag-create',
+          path: '/bandeiras/:id',
+          meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        }
       }
     },
     listActions: {
