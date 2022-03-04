@@ -22,12 +22,12 @@ export default {
           meta: { typePage: typePageOptions.list, requiresAuth: true, }
         },
         payment: {
-          name: 'payments',
+          name: 'paymentmethods',
           path: '/pagamentos',
           meta: { typePage: typePageOptions.list, requiresAuth: true, }
         },
         cardFlag: {
-          name: 'cardflag',
+          name: 'cardflags',
           path: '/bandeiras',
           meta: { typePage: typePageOptions.list, requiresAuth: true, }
         }
@@ -44,12 +44,12 @@ export default {
           meta: { typePage: typePageOptions.create, requiresAuth: true, }
         },
         payment: {
-          name: 'payments-create',
+          name: 'paymentmethods-create',
           path: '/pagamentos/novo',
           meta: { typePage: typePageOptions.create, requiresAuth: true, }
         },
         cardFlag: {
-          name: 'cardflag-create',
+          name: 'cardflags-create',
           path: '/bandeiras/novo',
           meta: { typePage: typePageOptions.create, requiresAuth: true, }
         }
@@ -66,12 +66,12 @@ export default {
           meta: { typePage: typePageOptions.show, requiresAuth: true, }
         },
         payment: {
-          name: 'payments-show',
+          name: 'paymentmethods-show',
           path: '/pagamentos/:id',
           meta: { typePage: typePageOptions.show, requiresAuth: true, }
         },
         cardFlag: {
-          name: 'cardflag-create',
+          name: 'cardflags-show',
           path: '/bandeiras/:id',
           meta: { typePage: typePageOptions.show, requiresAuth: true, }
         }

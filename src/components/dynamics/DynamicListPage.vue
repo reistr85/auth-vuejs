@@ -75,6 +75,7 @@ import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
 import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
+import { mountParamsRequestFilter } from '@/utils';
 
 const COLORS_STATUS = Object.freeze({
   pending: 'warning',
@@ -106,6 +107,14 @@ export default {
     service: {
       type: Object,
     },
+    filters: {
+      type: Boolean,
+      default: false,
+    },
+    filterParams: {
+      type: Object,
+      default: () => {},
+    }
   },
   data() {
     return {
@@ -139,15 +148,15 @@ export default {
   },
   mounted() {
     this.setHeaders();
-    this.getAll();
+    if(!this.filters) this.getAll();
   },
   watch: {
-    options: {
-      handler () {
-        this.getAll();
-      },
-      deep: true,
-    },
+    // options: {
+    //   handler () {
+    //     this.getAll();
+    //   },
+    //   deep: true,
+    // },
   },
   methods: {
     setHeaders() {
@@ -214,17 +223,11 @@ export default {
         this.$noty.error('Erro ao receber os itens.');
       });
     },
-    getFilters() {
+    getFilters(filterParams = {}) {
       this.loading = true;
+      const payload = mountParamsRequestFilter(filterParams.params, filterParams.filter, filterParams.customFields);
 
-      const params = {
-        page: this.options.page,
-        relations: this.schema.filters.relations,
-        totalItemsPerPage: this.options.itemsPerPage,
-        customSearch: this.search,
-      }
-
-      this.service.filters(params, this.searches).then((res) => {
+      this.service.filters(payload).then((res) => {
         this.localItems = res.data;
         this.totalLocalItems = res.data.total;
         this.loading = false;
@@ -232,7 +235,7 @@ export default {
         if(this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
       }).catch((err) => {
-        console.error(`DynamicListPage GetDataFromApi error: ${err}`)
+        console.error(`DynamicListPage Filters error: ${err}`)
         this.loading = false;
         this.$noty.error('Erro ao receber os itens.');
       });
