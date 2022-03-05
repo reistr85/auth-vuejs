@@ -46,9 +46,15 @@ const DynamicService = (endpoint, schema, options = {}) => ({
 
     await axios.get(url).then((res) => {
       if (options.formatResponse && typeof options.formatResponse === 'function') {
-        res.data.data.forEach((item) => {
-          options.formatResponse(item);
-        });
+        if(res.data?.data) {
+          res.data.data.forEach((item) => {
+            options.formatResponse(item);
+          });
+        }else{
+          res.data.forEach((item) => {
+            options.formatResponse(item);
+          });
+        }
       }
 
       items = res;
