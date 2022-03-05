@@ -8,7 +8,7 @@
       <div class="mb-5 d-flex justify-space-between">
         <div class="d-flex flex-wrap  justify-start">
           <Chip 
-            v-for="(item, index) in searches" :key="index"
+            v-for="(item, index) in searchChips" :key="index"
             dense
             close
             class="mr-2"
@@ -75,7 +75,6 @@ import DialogConfirmation from '@/components/DialogConfirmation';
 import SearchListPage from './components/SearchListPage';
 import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
-import { mountParamsRequestFilter } from '@/utils';
 
 const COLORS_STATUS = Object.freeze({
   pending: 'warning',
@@ -134,10 +133,11 @@ export default {
       dialog: false,
       loading: false,
       loadingDestroy: false,
-      searches: '',
+      searches: {},
+      searchChips: [],
       headers: [],
-      localItems: {},
       options: {},
+      localItems: {},
       totalLocalItems: 10,
       noGetDynamicItems: false,
       chips: {},
@@ -223,10 +223,7 @@ export default {
         this.$noty.error('Erro ao receber os itens.');
       });
     },
-    getFilters(filterParams = {}) {
-      this.loading = true;
-      const payload = mountParamsRequestFilter(filterParams.params, filterParams.filter, filterParams.customFields);
-
+    getFilters(payload) {
       this.service.filters(payload).then((res) => {
         this.localItems = res.data;
         this.totalLocalItems = res.data.total;
@@ -241,28 +238,29 @@ export default {
       });
     },
     searchItems(search) {
-      this.searches = [];
-      this.searches = Object.keys(search)
-        .filter((item) =>  search[item].value)
-        .map((item) => {
-          return {
-            domain: this.schema.domain,
-            name: search[item].name,
-            label: search[item].label,
-            value: search[item].value,
-            formattedValue: search[item].formattedValue,
-          }
-        })
+      this.searches = search;
+      this.searchChips = [];
+      let filter = {};
+      Object.keys(search).forEach((key) => {
+        filter[key] = search[key].value
+        this.searchChips.push({ name: search[key].name, label: search[key].label, value: search[key].value, formattedValue: search[key].formattedValue })
+      })
 
-      this.getFilters();
+      const payload = { params: { page: this.options.page, per_page: this.options.itemsPerPage }, filter, }
+      this.getFilters(payload);
     },
     closeChip(value) {
-      this.searches = this.searches.filter((item) => {
+      this.searchChips = this.searchChips.filter((item) => {
         if (item.name === value.name) this.$refs.searchListPage.localItem[item.name] = '';
         return item.name != value.name
       });
 
-      this.getFilters();
+      let payload = {};
+      this.searchChips.forEach((item) => {
+        payload[item.name] = item;
+      });
+
+      this.searchItems(payload);
     },
     openDialogDestroy(item) {
       this.selected.push(item);
