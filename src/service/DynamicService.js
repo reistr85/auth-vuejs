@@ -22,14 +22,11 @@ const DynamicService = (endpoint, schema, options = {}) => ({
     
     return message;
   },
-  mountFilter(customFields, filter) {
+  mountFilter(filter) {
     let paramsFilter = '';
-    const fields = customFields.length ? customFields : schema.filters.items;
-
-    fields.forEach((item) => {
-      paramsFilter += `&filter[${item.field}]=${filter}`
+    Object.keys(filter).forEach((key) => {
+      paramsFilter += `&filter[${key}]=${filter[key]}`
     })
-
     return paramsFilter;
   },
   async index(params = null){
@@ -130,13 +127,13 @@ const DynamicService = (endpoint, schema, options = {}) => ({
   },
   async filters(params){
     try {
-      const { page, per_page, filter, customFields } = params;
+      const { page, per_page, filter } = params;
       let url = `filters?domain=${endpoint}`;
       let items = {};
       
       if(page) url += `&page=${page}&per_page=${per_page || 10}`;
-      if(filter && schema.filters.has) url += this.mountFilter(customFields, filter)
-      if(schema.filters?.has && schema.include?.has) url += `&include=${schema.include?.value}`;
+      if(filter && schema.filters.has) url += this.mountFilter(filter)
+      if(schema.filters?.has && schema.filters?.include?.has) url += `&include=${schema.filters?.include?.value}`;
       if(params.search_global) url += `&search_global=true`;
 
       await axios.get(url).then((res) => {
