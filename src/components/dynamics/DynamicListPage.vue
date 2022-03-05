@@ -148,15 +148,14 @@ export default {
   },
   mounted() {
     this.setHeaders();
-    if(!this.filters) this.getAll();
   },
   watch: {
-    // options: {
-    //   handler () {
-    //     this.getAll();
-    //   },
-    //   deep: true,
-    // },
+    options: {
+      handler () {
+        this.searchChips.length ? this.searchItems(this.searches) : this.getAll();
+      },
+      deep: true,
+    },
   },
   methods: {
     setHeaders() {
@@ -224,6 +223,7 @@ export default {
       });
     },
     getFilters(payload) {
+      payload = { ...payload, page: this.options.page, per_page: this.options.itemsPerPage }
       this.service.filters(payload).then((res) => {
         this.localItems = res.data;
         this.totalLocalItems = res.data.total;

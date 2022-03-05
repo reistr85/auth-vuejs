@@ -133,7 +133,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       
       if(page) url += `&page=${page}&per_page=${per_page || 10}`;
       if(filter && schema.filters.has) url += this.mountFilter(filter)
-      if(schema.filters?.has && schema.include?.has) url += `&include=${schema.include?.value}`;
+      if(schema.filters?.has && schema.filters?.include?.has) url += `&include=${schema.filters?.include?.value}`;
       if(params.search_global) url += `&search_global=true`;
 
       await axios.get(url).then((res) => {

@@ -14,6 +14,7 @@
       clearable: clearable,
       dense: dense,
       rules: rules,
+      'prepend-icon': icon,
     }"
     v-bind:options="{
       inputMask: inputMask,
@@ -99,6 +100,10 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    icon: {
+      type: String,
+      default: '',
     },
   }
 }

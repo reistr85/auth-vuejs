@@ -170,8 +170,24 @@ export const typePageOptions = {
   statement: 'statement'
 }
 
-export function mountParamsRequestFilter(params, filter, customFields) {
-  return { ...params, page: params?.page || 1, per_page: params?.per_page || 10, filter, customFields: customFields.map((item) => {
-    return { field: item }
-  })}
+export function mountParamsRequestFilter(params, filter, customFields, search_global = false) {
+  let payload = {};
+
+  if(search_global) {
+    return { ...params, page: params?.page || 1, per_page: params?.per_page || 10, filter, search_global, customFields: customFields.map((item) => {
+      return { field: item }
+    })}
+  }else{
+    return { 
+      ...params,
+      page: params?.page || 1,
+      per_page: params?.per_page || 10,
+      filter,
+      search_global,
+      customFields: Object.keys(customFields).customFields.map((key) => {
+        // console.log(key)
+        return { [key]: key }
+      })
+    }
+  }
 }

@@ -48,6 +48,9 @@ export default {
           name: 'type',
           icon: list,
           md: 6,
+          items: {
+            data: typeRegister
+          }
         },
         {
           type: 'text',
@@ -71,18 +74,30 @@ export default {
           md: 6,
         },
         {
-          type: 'text',
-          label: 'Telefone',
+          type: 'simpleMask',
           name: 'phone',
-          icon: text,
+          label: 'Telefone',
           md: 6,
+          icon: text,
+          inputMask: '(##)####-####',
+          outputMask: '###########',
+          applyAfter: false,
+          empty: null,
+          alphanumeric: false,
+          clearable: false
         },
         {
-          type: 'text',
-          label: 'Celular',
+          type: 'simpleMask',
           name: 'cell_phone',
-          icon: text,
+          label: 'Celular',
           md: 6,
+          icon: text,
+          inputMask: '(##)#####-####',
+          outputMask: '############',
+          applyAfter: false,
+          empty: null,
+          alphanumeric: false,
+          clearable: false
         },
       ]
     },
