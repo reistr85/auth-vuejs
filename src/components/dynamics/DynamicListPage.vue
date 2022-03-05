@@ -1,4 +1,3 @@
-<!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
 <template>
   <div>
     <div>
@@ -7,13 +6,15 @@
       </div>
       <div class="mb-5 d-flex justify-space-between">
         <div class="d-flex flex-wrap  justify-start">
-          <Chip 
-            v-for="(item, index) in searchChips" :key="index"
-            dense
-            close
-            class="mr-2"
-            :label="`${item.label}: ${item.formattedValue}`" 
-            @click:close="closeChip(item)" />
+          <div v-for="(item, index) in searchChips" :key="index">
+            <Chip 
+              v-if="!item.noChip"
+              dense
+              close
+              class="mr-2"
+              :label="`${item.label}: ${item.formattedValue}`" 
+              @click:close="closeChip(item)" />
+          </div>
         </div>
         <div>
           <SearchListPage ref="searchListPage" :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
@@ -106,11 +107,11 @@ export default {
     service: {
       type: Object,
     },
-    filters: {
+    fixedFilter: {
       type: Boolean,
       default: false,
     },
-    filterParams: {
+    fixedFilterParams: {
       type: Object,
       default: () => {},
     }
@@ -152,10 +153,16 @@ export default {
   watch: {
     options: {
       handler () {
-        this.searchChips.length ? this.searchItems(this.searches) : this.getAll();
+        (this.searchChips.length || this.fixedFilter) ? this.searchItems(this.searches) : this.getAll() ;
       },
       deep: true,
     },
+    fixedFilterParams: {
+      handler() {
+        this.searchItems(this.searches);
+      },
+      deep: true
+    }
   },
   methods: {
     setHeaders() {
@@ -238,12 +245,20 @@ export default {
       });
     },
     searchItems(search) {
+      if(this.fixedFilter) search[this.fixedFilterParams.name] = { ...this.fixedFilterParams };
+
       this.searches = search;
       this.searchChips = [];
       let filter = {};
       Object.keys(search).forEach((key) => {
         filter[key] = search[key].value
-        this.searchChips.push({ name: search[key].name, label: search[key].label, value: search[key].value, formattedValue: search[key].formattedValue })
+        this.searchChips.push({ 
+          name: search[key].name,
+          label: search[key].label,
+          value: search[key].value,
+          formattedValue: search[key].formattedValue,
+          noChip: search[key].noChip
+        })
       })
 
       const payload = { params: { page: this.options.page, per_page: this.options.itemsPerPage }, filter, }

@@ -191,3 +191,7 @@ export function mountParamsRequestFilter(params, filter, customFields, search_gl
     }
   }
 }
+
+export function onlyNumbers(str) {
+  return str.replace(/\D/g, "");
+}

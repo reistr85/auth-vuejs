@@ -91,13 +91,10 @@ export default {
       has: true,
       items: [
         {
-          type: 'select',
-          label: 'Tipo',
-          name: 'type',
-          icon: list,
-          items: {
-            data: typeAllTypes,
-          },
+          type: 'text',
+          label: 'Descrição',
+          name: 'description',
+          icon: text,
           md: 6,
         },
         {
@@ -106,13 +103,6 @@ export default {
           name: 'nickname',
           icon: text,
           md: 6,
-        },
-        {
-          type: 'text',
-          label: 'Descrição',
-          name: 'description',
-          icon: text,
-          md: 12,
         },
       ]
     },
