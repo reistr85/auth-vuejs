@@ -9,12 +9,12 @@
       <div>
         <Button 
           color="primary"
-          v-if="schema.createBtn && typePage === typePageOptions.list"
+          v-if="(schema.createBtn && typePage === typePageOptions.list) || createBtn"
           rounded
-          :label="schema.createBtn"
+          :label="createBtnLabel"
           :icon="icons.plusOutline"
           :class="[height < 500 ? 'btnWidth' : '']"
-          @click="$router.push({ name: schema.routes.create.name })" />
+          @click="$router.push({ name: createBtnRouteName })" />
 
         <Button 
           color="light"
@@ -23,7 +23,7 @@
           rounded
           :icon="icons.arrowLeft"
           :class="[height < 500 ? 'btnWidth' : '']"
-          @click="$router.push({ name: schema.routes.list.name })" />
+          @click="$router.back()" />
       </div>
     </div>
     <v-divider class="my-5"></v-divider>    
@@ -43,6 +43,14 @@ export default {
     schema: {
       type: Object,
       required: true
+    },
+    createBtn: {
+      type: String,
+      default: null
+    },
+    createBtnRoute: {
+      type: String,
+      default: null
     }
   },
   data() {
@@ -51,6 +59,14 @@ export default {
         plusOutline: plusOutline,
         arrowLeft: arrowLeft,
       }
+    }
+  },
+  computed: {
+    createBtnLabel() {
+      return this.createBtn || this.schema.createBtn
+    },
+    createBtnRouteName() {
+      return this.createBtnRoute || this.schema.routes.create.name
     }
   },
   mixins: [TypePageMixin, BreakPointMixin],

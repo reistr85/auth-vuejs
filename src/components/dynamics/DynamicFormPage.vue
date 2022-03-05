@@ -34,7 +34,7 @@
       </v-expansion-panels>
 
       <div class="mt-5">
-        <Button label="Voltar" color="light" class="mr-2" rounded :icon="icons.arrowLeft" :loading="loadingSave" @click="$router.push({ name: schema.routes.list.name })" />
+        <Button label="Voltar" color="light" class="mr-2" rounded :icon="icons.arrowLeft" :loading="loadingSave" @click="$router.back()" />
         <Button label="Salvar" color="primary"  rounded :icon="icons.save" :loading="loadingSave" @click="save" />
       </div>
     </v-form>
@@ -150,7 +150,7 @@ export default {
       if(this.schema.formAddress) this.localItem.address = this.address;
       this.service.create(this.localItem).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
-        this.$router.push({name: this.schema.routes.list.name});
+        this.$router.back();
         this.loadingSave = false;
       }).catch((err) => {
         this.loadingSave = false;
@@ -163,7 +163,7 @@ export default {
 
       this.service.update(id, this.localItem).then(() => {
         this.$noty.success(locales.alerts.updatedRegister)
-        this.$router.push({name: this.schema.routes.list.name});
+        this.$router.back();
         this.loadingSave = false;
       }).catch((err) => {
         this.$noty.error(err);
