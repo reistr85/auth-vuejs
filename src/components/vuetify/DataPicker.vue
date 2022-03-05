@@ -19,7 +19,7 @@
           :icon="icon"
           :readonly="readonly"
           :disabled="disabled"
-          @change="changeDate()" />
+          :rules="rules" />
       </template>
       <v-date-picker
         v-bind="$attrs"
@@ -75,7 +75,11 @@ export default {
     model: {
       type: String,
       default: '',
-    }
+    },
+    rules: {
+      type: Array,
+      default: () => [],
+    },
   },
   watch: {
     model: {

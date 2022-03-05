@@ -45,7 +45,6 @@ import Card from '@/components/vuetify/Card';
 import Button from '@/components/vuetify/Button';
 import DataTable from '@/components/vuetify/DataTable';
 import AutoComplete from '@/components/vuetify/AutoComplete';
-import { mountParamsRequestFilter } from '@/utils';
 import { required } from '@/utils/rules';
 
 export default {
@@ -85,7 +84,7 @@ export default {
     },
     getServices(params = {}) {
       this.loading = true;
-      const payload = mountParamsRequestFilter(params, params.filter, ['name', 'nickname']);
+      const payload = { ...params, filter: { name: params.filter, nickname: params.filter }};
       this.$api.services.filters(payload).then((res) => {
         this.items = res.data;
       }).catch(() => {

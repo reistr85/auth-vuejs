@@ -13,7 +13,7 @@
       outlined: outlined,
       clearable: clearable,
       dense: dense,
-      rules: rules,
+      rules: rules
     }"
     v-bind:options="{
       locale: 'pt-BR',
@@ -70,7 +70,7 @@ export default {
     },
     length: {
       type: Number,
-      default: 3,
+      default: 11,
     },
     precision: {
       type: Number,

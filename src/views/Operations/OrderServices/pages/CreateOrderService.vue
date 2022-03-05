@@ -37,8 +37,9 @@
           <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.subtotal" label="Sub Total" readonly /></v-col>
           <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.discount" label="Desconto" readonly /></v-col>
           <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.amount" label="Total Final" readonly /></v-col>
-          <v-col cols="12" md="3"><TextFieldMoney v-model="order_service.total_paid" label="Total Pago" readonly /></v-col>
-          <v-col cols="12" md="3"><TextFieldMoney v-model="order_service.total_payable" label="Falta Pagar" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.total_paid" label="Total Pago" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.total_payable" label="Falta Pagar" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.thing" label="Troco" readonly /></v-col>
         </v-row>
       </ExpansionPanel>
 
@@ -60,18 +61,18 @@
           :disabled="orderFinished"
           @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.FINISHED }})" />
       </ExpansionPanel>
+
+      <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1100)">
+        <component 
+          slot="content" 
+          v-bind="dialogProps"
+          :is="dialogComponent"
+          @update:dialog="dialog = $event" 
+          @handleActionModal="handleActionModal" />
+      </Dialog>
+
+      <DialogConfirmation :dialog="dialogConfirmation" @noAction="dialogConfirmation = false" @yesAction="save" />
     </PageContent>
-
-    <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
-      <component 
-        slot="content" 
-        v-bind="dialogProps"
-        :is="dialogComponent"
-        @update:dialog="dialog = $event" 
-        @handleActionModal="handleActionModal" />
-    </Dialog>
-
-    <DialogConfirmation :dialog="dialogConfirmation" @noAction="dialogConfirmation = false" @yesAction="save" />
   </div>
 </template>
 
@@ -87,8 +88,7 @@ import DialogAddItem from '../components/DialogAddItem';
 import DialogAddPayment from '../components/DialogAddPayment';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import OrderData from '../components/OrderData';
-import { mountParamsRequestFilter } from '@/utils';
-import { messageErrors } from '@/utils'
+import { messageErrors, formatDate, formatCurrency } from '@/utils'
 import { orderServiceStatus } from '@/utils/enums';
 
 const dialogComponents  = Object.freeze({
@@ -120,6 +120,7 @@ export default {
       customers: [],
       payment_methods: [],
       card_flags: [],
+      banks: [],
       dialog: false,
       dialogComponent: null,
       dialogProps: {},
@@ -131,6 +132,8 @@ export default {
     this.getCollaborators();
     this.getCustomers();
     this.getMethodPayments();
+    this.getCardFlags();
+    this.getBanks();
   },
   computed: {
     id() {
@@ -158,7 +161,7 @@ export default {
       })
     },
     getCollaborators(params = {}) {
-      const payload = mountParamsRequestFilter(params, 'collaborator', ['type']);
+      const payload = { ...params, filter: { type: 'collaborator' }};
       this.$api.registers.filters(payload).then((res) => {
         this.collaborators = res.data.data.map((item) => {
           return {
@@ -172,7 +175,7 @@ export default {
       })
     },
     getCustomers(params = {}) {
-      const payload = mountParamsRequestFilter(params, 'customer', ['type']);
+      const payload = { ...params, filter: { type: 'customer' }};
       this.$api.registers.filters(payload).then((res) => {
         this.customers = res.data.data.map((item) => {
           return {
@@ -186,7 +189,7 @@ export default {
       })
     },
     getMethodPayments(params = {}) {
-      const payload = mountParamsRequestFilter(params, 'payment-method', ['type']);
+      const payload = { ...params, filter: { type: 'payment-method' }};
       this.$api.allTypes.filters(payload).then((res) => {
         this.payment_methods = res.data.data.map((item) => {
           return {
@@ -199,15 +202,47 @@ export default {
         this.loading = false;
       })
     },
+    getCardFlags(params = {}) {
+      const payload = { ...params, filter: { type: 'card-flag' }};
+      this.$api.allTypes.filters(payload).then((res) => {
+        this.card_flags = res.data.data.map((item) => {
+          return {
+            id: item.id,
+            text: item.description,
+            value: item.id,
+          }
+        })
+      }).catch(() => {
+        this.loading = false;
+      })
+    },
+    getBanks() {
+      this.$api.banks.index().then((res) => {
+        this.banks = res.data.map((item) => {
+          return {
+            id: item.id,
+            text: item.description,
+            value: item.id,
+          }
+        })
+      }).catch(() => {
+        this.loading = false;
+      })
+    },
     openDialog({ componentType }) {
-      console.log(componentType)
       this.dialog = true;
+      this.setPropsDialog(componentType);
+      this.dialogComponent = dialogComponents[componentType];
+    },
+    setPropsDialog(componentType) {
       this.dialogProps = {
         ...componentType === 'items' && { collaborators: this.collaborators },
-        ...componentType === 'payments' && { payment_methods: this.payment_methods, card_flags: this.card_flags }
+        ...componentType === 'payments' && {
+          banks: this.banks,
+          payment_methods: this.payment_methods,
+          card_flags: this.card_flags
+        }
       }
-      console.log(this.dialogProps)
-      this.dialogComponent = dialogComponents[componentType];
     },
     handleAction(data) {
       const { type, params } = data;
@@ -235,8 +270,17 @@ export default {
       })
       this.totalizers();
     },
-    addPayment(payment) {
-      console.log(payment)
+    addPayment(item) {
+      this.order_service.payments.push({
+        id: null,
+        payment_date: item.payment_date,
+        payment_date_formatted: formatDate(item.payment_date),
+        payment_method: { description: item.payment_method.text },
+        card_flag: { description: item.card_flag?.text },
+        amount_paid: item.value,
+        amount_paid_formatted: formatCurrency(item.value),
+        newItem: true
+      });
     },
     itemDestroy(params) {
       const { index, componentType, item } = params;
@@ -270,7 +314,8 @@ export default {
         discount: data.discount,
         amount: data.amount,
         total_paid: data.total_paid,
-        total_payable: data.amount - data.total_paid,
+        total_payable: 0,
+        thing: 0,
         status: data.status,
         items: [],
         payments: [],
@@ -307,6 +352,8 @@ export default {
           newItem: false
         }
       });
+
+      this.totalizers();
     },
     setNumberItem() {
       return this.order_service.items.length + 1;
@@ -333,6 +380,7 @@ export default {
       this.order_service.amount = amount;
       this.order_service.total_paid = total_paid;
       this.order_service.total_payable = amount - total_paid;
+      this.order_service.thing = total_paid > amount ? total_paid - amount : 0;
     }
   }
 }

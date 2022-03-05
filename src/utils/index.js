@@ -170,13 +170,19 @@ export const typePageOptions = {
   statement: 'statement'
 }
 
-export function mountParamsRequestFilter(params, filter, customFields, search_global = false) {
+export function mountParamsRequestFilter(params, filter, search_global = false) {
   let payload = {};
-
   if(search_global) {
-    return { ...params, page: params?.page || 1, per_page: params?.per_page || 10, filter, search_global, customFields: customFields.map((item) => {
-      return { field: item }
-    })}
+    return {
+      ...params,
+      page: params?.page || 1,
+      per_page: params?.per_page || 10,
+      filter,
+      search_global,
+      customFields: customFields.map((item) => {
+        return { field: item }
+      }
+    )}
   }else{
     return { 
       ...params,
