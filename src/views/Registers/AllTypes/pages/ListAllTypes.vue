@@ -1,6 +1,9 @@
 <template>
   <div>
-    <PageHeader :schema="$schemas.allType" />
+    <PageHeader
+      :schema="$schemas.allType"
+      :create-btn="createBtnName"
+      :create-btn-route="createBtnRoute" />
     <PageContent>
       <DynamicListPage
         ref="dynamicListPage"
@@ -17,11 +20,11 @@ import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
 
-const TYPES_FILTER = Object.freeze({
-  categories: 'category',
-  subcategories: 'sub-category',
-  paymentmethods: 'payment-method',
-  cardflags: 'card-flags',
+const TYPES = Object.freeze({
+  categories: { filter: 'category', label: 'Nova Categoria', routerName: 'categories-create' },
+  subcategories: { filter: 'sub-category', label: 'Nova Sub Categoria', routerName: 'subcategories-create' },
+  paymentmethods: { filter: 'payment-method', label: 'Nova Forma de Pagemento', routerName: 'paymentmethods-create' },
+  cardflags: { filter: 'card-flags', label: 'Nova Bandeira', routerName: 'cardflags-create' },
 });
 
 export default {
@@ -29,7 +32,9 @@ export default {
   components: { PageHeader, PageContent, DynamicListPage },
   data() {
     return {
-      fixedFilterParams: {}
+      fixedFilterParams: {},
+      createBtnName: '',
+      createBtnRoute: '',
     }
   },
   computed: {
@@ -38,21 +43,32 @@ export default {
     },
   },
   mounted() {
-    this.setFixedFilterParams();
+    this.handler();
   },
   watch: {
     routerName() {
-      this.setFixedFilterParams();
+      this.handler();
     },
   },
   methods: {
+    handler() {
+      this.setFixedFilterParams();
+      this.setCreateBtnName();
+      this.setCreateBtnRoute();
+    },
     setFixedFilterParams() {
       this.fixedFilterParams = {
         name: 'type',
         label: 'Tipo',
-        value: TYPES_FILTER[this.routerName],
-        formattedValue: TYPES_FILTER[this.routerName], noChip: true,
+        value: TYPES[this.$route.name].filter,
+        formattedValue: TYPES[this.$route.name].filter, noChip: true,
       }
+    },
+    setCreateBtnName() {
+      this.createBtnName = TYPES[this.$route.name].label;
+    },
+    setCreateBtnRoute() {
+      this.createBtnRoute = TYPES[this.$route.name].routerName;
     }
   }
 }

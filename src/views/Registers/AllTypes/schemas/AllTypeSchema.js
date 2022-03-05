@@ -1,13 +1,15 @@
+import AllType from '@/business/AllType';
 import { typePageOptions } from '@/utils';
 import { text, list } from '@/utils/icons';
 import { required } from '@/utils/rules';
-import { typeYesNo, typeAllTypes } from '@/utils/options';
+import { typeYesNo } from '@/utils/options';
 
 export default {
     domain: 'all-types',
     title: 'Tipos Gerais',
     description: 'Lista de todos os tipos gerais do sistema',
-    createBtn: 'Novo Tipo',
+    business: AllType,
+    createBtn: '',
     formAddress: false,
     routes: {
       list: {
@@ -112,21 +114,6 @@ export default {
         title: 'Dados do Tipo Geral',
         openGroup: true,
         items: [
-          {
-            type: 'select',
-            name: 'type',
-            formattedName: 'type_formatted',
-            label: 'Tipo',
-            align: '',
-            md: '4',
-            rules: [required],
-            list: true,
-            readonly: false,
-            disabled: false,
-            items: typeAllTypes,
-            itemText: 'text',
-            itemValue: 'value'
-          },
           {
             type: 'text',
             name: 'description',
