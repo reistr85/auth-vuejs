@@ -1,7 +1,7 @@
 <template>
   <v-menu v-model="menu" :max-width="650" bottom left offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on, attrs }">
-      <Button v-bind="attrs" v-on="on" label="FILTROS" text :icon="icons.filter" @click="clearFilters" />
+      <Button v-bind="attrs" v-on="on" label="FILTROS" text :icon="icons.filter" @click="menu = !menu" />
     </template>
 
     <v-card>
@@ -15,14 +15,14 @@
               :is="getComponent(item)"
               v-bind="getPropsComponent(item)"
               v-model="localItem[item.name]"
-              @change="setFormValue(item, $event)"
+              @change="setFormValue(item)"
               @keyup.enter="$emit('searchItems', form), menu = false" />
           </v-col>
         </v-row>
       </v-card-text>
 
       <v-card-actions class="px-4 py-4 d-flex justify-end">
-        <!-- <Button label="Limpar" text color="primary" @click="clearFilters" /> -->
+        <Button label="Limpar" text color="primary" @click="clearFilters" />
         <Button label="Pesquisar" color="primary" :icon="icons.search" @click="$emit('searchItems', form), menu = false" />
       </v-card-actions>
     </v-card>
@@ -31,17 +31,19 @@
 
 <script>
 import _ from 'lodash';
-import { getText, formatDate } from '@/utils';
+import { getText, formatDate, onlyNumbers } from '@/utils';
 import { search, filter, text } from '@/utils/icons';
 import TextField from '@/components/vuetify/TextField';
 import Select from '@/components/vuetify/Select';
 import Button from '@/components/vuetify/Button';
 import DataPicker from '@/components/vuetify/DataPicker';
+import TextFieldSimpleMask from '@/components/vuetify/TextFieldSimpleMask';
 
 const TYPES_COMPONENT = Object.freeze({
   text: TextField,
   select: Select,
   dataPicker: DataPicker,
+  simpleMask: TextFieldSimpleMask,
 })
 
 export default {
@@ -78,14 +80,15 @@ export default {
         ...item.type === 'text' && { type: item.type, },
         ...item.type === 'select' && { items: item.items?.data, },
         ...item.type === 'dataPicker' && { noInitial: true, },
+        ...item.type === 'simpleMask' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty, alphanumeric: item.alphanumeric },
       }
     },
-    setFormValue(field, value) {
+    setFormValue(field) {
       _.set(this.form, field.name, { 
           name: field.name,
           label: field.label,
-          value: value,
-          formattedValue: this.getFomattedValues(field, value),
+          value: field.type === 'simpleMask' ? onlyNumbers(this.localItem[field.name]) : this.localItem[field.name],
+          formattedValue: this.localItem[field.name],
         });
     },
     getFomattedValues(field, value) {
@@ -93,15 +96,19 @@ export default {
       switch(field.type) {
         case 'select': formattedValue =getText(field.items.data, value); break;
         case 'dataPicker': formattedValue = formatDate(value); break;
+        case 'simpleMask': formattedValue = onlyNumbers(value); break;
         default: formattedValue = value;
       }
 
       return formattedValue;
     },
     clearFilters() {
-      // this.form = '';
-      // this.menu = false;
-      // this.$emit('searchItems', this.form);
+      Object.keys(this.form).forEach((key) => {
+        this.localItem[key] = ''
+      });
+      this.form = {};
+      this.menu = false;
+      this.$emit('searchItems', this.form);
     }
   }
 }

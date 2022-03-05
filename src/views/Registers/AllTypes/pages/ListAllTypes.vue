@@ -2,7 +2,12 @@
   <div>
     <PageHeader :schema="$schemas.allType" />
     <PageContent>
-      <DynamicListPage ref="dynamicListPage" :schema="$schemas.allType" :service="$api.allTypes" filters :filterParams="filterParams" />
+      <DynamicListPage
+        ref="dynamicListPage"
+        fixed-filter
+        :schema="$schemas.allType"
+        :service="$api.allTypes"
+        :fixed-filter-params="fixedFilterParams" />
     </PageContent>
   </div>
 </template>
@@ -12,12 +17,19 @@ import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
 
+const TYPES_FILTER = Object.freeze({
+  categories: 'category',
+  subcategories: 'sub-category',
+  paymentmethods: 'payment-method',
+  cardflags: 'card-flags',
+});
+
 export default {
   name: 'ListAllType',
   components: { PageHeader, PageContent, DynamicListPage },
   data() {
     return {
-      filterParams: {}
+      fixedFilterParams: {}
     }
   },
   computed: {
@@ -26,24 +38,21 @@ export default {
     },
   },
   mounted() {
-    this.setProps();
+    this.setFixedFilterParams();
   },
   watch: {
     routerName() {
-      this.setProps();
+      this.setFixedFilterParams();
     },
   },
   methods: {
-    setProps() {
-      this.filterParams = {
-        params: {},
-        ...this.routerName === 'categories' && {  filter:  'category' },
-        ...this.routerName === 'subcategories' && {  filter:  'sub-category' },
-        ...this.routerName === 'paymentmethods' && {  filter:  'payment-method' },
-        ...this.routerName === 'cardflags' && {  filter:  'card-flags' },
-        customFields: ['type']
+    setFixedFilterParams() {
+      this.fixedFilterParams = {
+        name: 'type',
+        label: 'Tipo',
+        value: TYPES_FILTER[this.routerName],
+        formattedValue: TYPES_FILTER[this.routerName], noChip: true,
       }
-      this.$refs.dynamicListPage.getFilters(this.filterParams);
     }
   }
 }
