@@ -87,6 +87,7 @@ import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
+import TypePageMixin from '@/mixins/TypePageMixin';
 import Button from '@/components/vuetify/Button';
 import GenericDataTable from '../components/GenericDataTable';
 import Dialog from '@/components/vuetify/Dialog';
@@ -121,7 +122,13 @@ export default {
     return {
       expModel: [0],
       loading: false,
-      order_service: {},
+      order_service: {
+        order_date: new Date().toISOString().substr(0, 10),
+        items: [],
+        payments: [],
+        items_destroy: [],
+        payments_destroy: [],
+      },
       collaborators: [],
       customers: [],
       payment_methods: [],
@@ -134,7 +141,9 @@ export default {
     }
   },
   mounted() {
-    this.getOrderService();
+    if(this.typePage === this.typePageOptions.show)
+      this.getOrderService();
+
     this.getCollaborators();
     this.getCustomers();
     this.getMethodPayments();
@@ -161,6 +170,7 @@ export default {
       return this.order_service.total_paid >= this.order_service.amount || false;
     }
   },
+  mixins: [TypePageMixin],
   methods: {
     getOrderService() {
       this.loading = true;
@@ -318,6 +328,19 @@ export default {
       this.dialogConfirmation = true;
     },
     save() {
+      this.typePage === this.typePageOptions.create ? this.create() : this.update();
+    },
+    create() {
+      this.$api.orderServices.create(this.order_service).then(() => {
+        this.$noty.success(this.$locales.pt.index.alerts.createdRegister)
+        this.$router.push({ name: this.$schemas.orderService.routes.list.name })
+      }).catch((err) => {
+        this.$noty.error(messageErrors(err))
+      }).finally(() => {
+        this.dialogConfirmation = false;
+      });
+    },
+    update() {
       const { id } = this.$route.params;
       this.$api.orderServices.update(id, this.order_service).then(() => {
         this.$noty.success(this.$locales.pt.index.alerts.updatedRegister)
