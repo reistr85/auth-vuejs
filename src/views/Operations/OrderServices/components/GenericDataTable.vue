@@ -24,7 +24,7 @@
         <Button 
           type-icon color="red"
           :icon="$icons.destroy"
-          :disabled="orderFinished"
+          :disabled="orderFinished || !props.item.newItem"
           @click="$emit('handleAction', handleAction('itemDestroy', props))" />
       </template>
     </DataTable>
