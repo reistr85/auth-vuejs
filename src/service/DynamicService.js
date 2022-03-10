@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import axios from './';
 import { messageErrors } from '@/utils';
 
@@ -8,19 +7,6 @@ const DynamicService = (endpoint, schema, options = {}) => ({
   },
   get options() {
     return options;
-  },
-  mountMessageErrors(err) {
-    let message = '';
-
-    if(err.status === 422){
-      Object.keys(err.data.errors).forEach(function(key) {
-        message += `<li class="item-error">${err.data.errors[key][0]}</li>`;
-      });
-    }else{
-      message += `<li class="item-error">Erro desconhecido, tente novamente.</li>`;
-    }
-    
-    return message;
   },
   mountFilter(filter) {
     let paramsFilter = '';
