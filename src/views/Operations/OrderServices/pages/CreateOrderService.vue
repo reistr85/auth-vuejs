@@ -124,6 +124,8 @@ export default {
       loading: false,
       order_service: {
         order_date: new Date().toISOString().substr(0, 10),
+        order_number: 0,
+        quantity_services: 0,
         items: [],
         payments: [],
         items_destroy: [],
@@ -143,6 +145,9 @@ export default {
   mounted() {
     if(this.typePage === this.typePageOptions.show)
       this.getOrderService();
+
+    if(this.typePage === this.typePageOptions.create)
+      this.getLastOrderNumber();
 
     this.getCollaborators();
     this.getCustomers();
@@ -179,6 +184,13 @@ export default {
         this.loading = false;
       }).catch((err) => {
         console.error(err)
+        this.loading = false;
+      })
+    },
+    getLastOrderNumber() {
+      this.$api.orderServices.lastOrderNumber().then((res) => {
+        this.order_service.order_number = res.data.order_number + 1;
+      }).catch(() => {
         this.loading = false;
       })
     },
@@ -335,7 +347,7 @@ export default {
         this.$noty.success(this.$locales.pt.index.alerts.createdRegister)
         this.$router.push({ name: this.$schemas.orderService.routes.list.name })
       }).catch((err) => {
-        this.$noty.error(messageErrors(err))
+        this.$noty.error(err)
       }).finally(() => {
         this.dialogConfirmation = false;
       });
@@ -354,6 +366,7 @@ export default {
     mountForm(data) {
       this.order_service = {
         order_date: data.order_date,
+        order_number: data.order_number,
         customer_id: data.customer_id,
         collaborator_id: data.collaborator_id,
         quantity_services: data.quantity_services,

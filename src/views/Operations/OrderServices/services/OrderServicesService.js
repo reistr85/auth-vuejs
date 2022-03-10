@@ -1,3 +1,4 @@
+import axios from 'axios';
 import DynamicService from '@/service/DynamicService';
 import OrderServiceSchema from '../schemas/OrderServiceSchema';
 import { formatCurrency, formatDate, getText } from '@/utils';
@@ -26,4 +27,12 @@ const OrdderServiceService = DynamicService('order-services', OrderServiceSchema
   formatResponse,
 });
 
+const OrdderServiceCommands = () => ({
+  async lastOrderNumber() {
+     return await axios.post(`order-services/last-order-number`);
+  }
+})
+
+
 export default OrdderServiceService;
+export { OrdderServiceService, OrdderServiceCommands }
