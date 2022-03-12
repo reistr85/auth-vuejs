@@ -37,7 +37,6 @@ import DialogOpenBox from '@/views/Financial/Boxes/components/DialogOpenBox';
 import DialogDynamicMovement from '@/views/Financial/Boxes/components/DialogDynamicMovement';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import { messageErrors } from '@/utils';
-import locales from '@/locales/pt-BR';
 
 export default {
   name: 'ListBoxes',
@@ -67,9 +66,13 @@ export default {
       boxOpen: false
     }
   },
+  mounted() {
+    console.log(this.$locales.pt)
+  },
   computed: {
-    locales() {
-      return this.$locales.pt.boxes.listBoxes;
+    l() {
+      // return this.$locales.pt.boxes.listBoxes; 
+      return this.$locales.pt;
     }
   },
   methods: {
@@ -91,12 +94,12 @@ export default {
           payment_method_id: 1,
           box_id: item.dataListProps.item.id,
           box_movements_date: null,
-          type: 'output',
+          type: this.$enums.typeMovement.OUTPUT,
           total_value: item.dataListProps.item.total_value,
-          description: 'Sangria Fechamento'
+          description: this.l.boxes.movements.description
         }
         this.$api.boxMovements.create(this.movement).then(() => {
-          this.$noty.success(locales.alerts.createdRegister);
+          this.$noty.success(this.l.index.alerts.createdRegister);
         }).catch((err) => {
           this.$noty.error(err);
         })
@@ -105,16 +108,16 @@ export default {
         this.dialog = true;
         this.dialogComponent = DialogDynamicMovement;
         this.propsComponents = {
-          title: 'Lançamento de Sangria',
+          title: this.l.boxes.movements.dialogs.withdrawn.title,
           disabledDate: true,
           disabledTypeInputOutput: true,
           readonlyDescription: true,
           movement: {
             box_id: item.dataListProps.item.id,
             box_movements_date: null,
-            type: 'output',
+            type: this.$enums.typeMovement.OUTPUT,
             total_value: 0,
-            description: 'Sangria'
+            description: this.l.boxes.movements.dialogs.withdrawn.description
           }
         }
       }
@@ -123,16 +126,16 @@ export default {
       this.dialog = true;
       this.dialogComponent = DialogDynamicMovement;
       this.propsComponents= {
-        title: 'Lançamento de Suprimento',
+        title: this.l.boxes.movements.dialogs.entrance.title,
         disabledDate: true,
         disabledTypeInputOutput: true,
         readonlyDescription: true,
         movement: {
           box_id: item.dataListProps.item.id,
           box_movements_date: null,
-          type: 'input',
+          type: this.$enums.typeMovement.INPUT,
           total_value: 0,
-          description: 'Suprimento'
+          description: this.l.boxes.movements.dialogs.entrance.description,
         }
       }
     },
@@ -145,7 +148,7 @@ export default {
     closedBox() {
       let status = 'closed';
       BoxesService.update(this.boxClosed.dataListProps.item.id, { status: status }).then(() => {
-        this.$noty.success(locales.alerts.updatedRegister);
+        this.$noty.success(this.l.index.alerts.updatedRegister);
         this.$refs.dynamicListPage.getAll();
       }).catch((error) => {
         this.$noty.error(messageErrors(error));
