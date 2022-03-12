@@ -320,7 +320,7 @@ export default {
         payment_method: { id: item.payment_method.id, description: item.payment_method.text },
         payment_method_id: item.payment_method.id,
         card_flag: { id: item.card_flag?.id, description: item.card_flag?.text },
-        card_flag_id: item.card_flag.id,
+        card_flag_id: item.card_flag?.id ? item.card_flag.id : null,
         amount_paid: item.value,
         amount_paid_formatted: formatCurrency(item.value),
         newItem: true

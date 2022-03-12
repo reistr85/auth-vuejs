@@ -9,7 +9,24 @@ const orderServiceStatus = {
   FINISHED: 'finished',
 }
 
+const typeRegisters = {
+  CUSTOMER: 'customer',
+  EMPLOYEE: 'employee',
+  COLLABORATOR: 'collaborator',
+  VENDOR: 'finished',
+  PROVIDER: 'provider',
+  SELLER: 'seller',
+  OTHERS: 'others',
+}
+
+const typeMovement = {
+  INPUT: 'input',
+  OUTPUT: 'output',
+}
+
 export {
   appointmentStatus,
-  orderServiceStatus
+  orderServiceStatus,
+  typeRegisters,
+  typeMovement
 }
