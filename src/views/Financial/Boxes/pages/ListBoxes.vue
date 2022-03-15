@@ -14,6 +14,7 @@
         v-bind="propsComponents"
         :is="dialogComponent"
         @update:dialog="dialog = $event"
+        @handleActionMovement="handleActionMovement"
         @handleActionModal="handleActionModal" />
     </Dialog>
     <DialogConfirmation 
@@ -57,7 +58,11 @@ export default {
       service: BoxesService,
       dialog: false,
       dialogComponent: null,
-      propsComponents: {},
+      propsComponents: {
+        disabledDate: true,
+        disabledTypeInputOutput: true,
+        readonlyDescription: true
+      },
       dialogClosed: false,
       propsClosed: {},
       boxClosed: {},
@@ -66,12 +71,8 @@ export default {
       boxOpen: false
     }
   },
-  mounted() {
-    console.log(this.$locales.pt)
-  },
   computed: {
     l() {
-      // return this.$locales.pt.boxes.listBoxes; 
       return this.$locales.pt;
     }
   },
@@ -80,12 +81,17 @@ export default {
       this.dialog = true;
       this.dialogComponent = DialogOpenBox;
     },
+    handleActionMovement(data) {
+      const { action, item } = data;
+      this.dialog = false;
+      this[action](item);
+    },
     handleActionModal() {
       this.dialog = false;
       this.$refs.dynamicListPage.getAll();
     },
     actionMoreActions(item) {
-      if(item.dataListProps.item.status === 'closed') return this.$noty.error('Caixa fechado!');
+      if(item.dataListProps.item.status === 'closed') return this.$noty.error(this.l.boxes.listBoxes.messages.closed.boxClosed);
       this[item.i.action](item);
     },
     withdrawn(item, automatic = false) {
@@ -108,16 +114,13 @@ export default {
         this.dialog = true;
         this.dialogComponent = DialogDynamicMovement;
         this.propsComponents = {
-          title: this.l.boxes.movements.dialogs.withdrawn.title,
-          disabledDate: true,
-          disabledTypeInputOutput: true,
-          readonlyDescription: true,
+          title: this.l.boxes.listBoxes.movements.dialogs.withdrawn.title,
           movement: {
             box_id: item.dataListProps.item.id,
             box_movements_date: null,
             type: this.$enums.typeMovement.OUTPUT,
             total_value: 0,
-            description: this.l.boxes.movements.dialogs.withdrawn.description
+            description: this.l.boxes.listBoxes.movements.dialogs.withdrawn.description
           }
         }
       }
@@ -126,28 +129,25 @@ export default {
       this.dialog = true;
       this.dialogComponent = DialogDynamicMovement;
       this.propsComponents= {
-        title: this.l.boxes.movements.dialogs.entrance.title,
-        disabledDate: true,
-        disabledTypeInputOutput: true,
-        readonlyDescription: true,
+        title: this.l.boxes.listBoxes.movements.dialogs.entrance.title,
         movement: {
           box_id: item.dataListProps.item.id,
           box_movements_date: null,
           type: this.$enums.typeMovement.INPUT,
           total_value: 0,
-          description: this.l.boxes.movements.dialogs.entrance.description,
+          description: this.l.boxes.listBoxes.movements.dialogs.entrance.description,
         }
       }
     },
     closed(item){
       this.dialogClosed = true;
       this.boxClosed = item;
-      this.propsClosed = { message: item.dataListProps.item.total_value > 0 ? this.locales.messages.closed.totalValueLargerZero : this.locales.messages.closed.box }
+      this.propsClosed = { message: item.dataListProps.item.total_value > 0 ? this.l.boxes.listBoxes.messages.closed.totalValueLargerZero : this.l.boxes.listBoxes.messages.closed.box }
       this.eventsClosed = { yesAction: item.dataListProps.item.total_value > 0 ? () => this.withdrawn(item, true) : () => this.closedBox() };
     },
     closedBox() {
       let status = 'closed';
-      BoxesService.update(this.boxClosed.dataListProps.item.id, { status: status }).then(() => {
+      this.$api.boxes.update(this.boxClosed.dataListProps.item.id, { status: status }).then(() => {
         this.$noty.success(this.l.index.alerts.updatedRegister);
         this.$refs.dynamicListPage.getAll();
       }).catch((error) => {
@@ -155,6 +155,14 @@ export default {
       }).finally(() => {
         this.dialogClosed = false;
       });
+    },
+    saveMovement(movement) {
+      movement.payment_method_id = 1;
+      this.$api.boxMovements.create(movement).then(() => {
+        this.$noty.success(this.l.index.alerts.createdRegister);
+      }).catch((err) => {
+        this.$noty.error(err);
+      })
     }
   }
 }
