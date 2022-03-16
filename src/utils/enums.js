@@ -24,9 +24,15 @@ const typeMovement = {
   OUTPUT: 'output',
 }
 
+const typePerson = {
+  PF: 'F',
+  PJ: 'J',
+}
+
 export {
   appointmentStatus,
   orderServiceStatus,
   typeRegisters,
-  typeMovement
+  typeMovement,
+  typePerson
 }

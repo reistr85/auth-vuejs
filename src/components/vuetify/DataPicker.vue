@@ -22,7 +22,7 @@
           :rules="rules" />
       </template>
       <v-date-picker
-        v-bind="$attrs"
+        v-model="picker"
         v-on="$listeners"
         :readonly="readonly"
         :disabled="disabled"
@@ -32,8 +32,7 @@
 </template>
 
 <script>
-import { formatDate } from '@/utils';
-import { mask } from "vue-the-mask";
+import { formatDate, formatDateEN } from '@/utils';
 import TextField from '@/components/vuetify/TextField';
 
 export default {
@@ -41,10 +40,6 @@ export default {
   components: { TextField },
   props: {
     label: {
-      type: String,
-      default: '',
-    },
-    modelName: {
       type: String,
       default: '',
     },
@@ -60,10 +55,6 @@ export default {
       type: String,
       default: '',
     },
-    noInitial: {
-      type: Boolean,
-      default: false,
-    },
     readonly: {
       type: Boolean,
       default: false,
@@ -72,46 +63,41 @@ export default {
       type: Boolean,
       default: false,
     },
-    model: {
-      type: String,
-      default: '',
-    },
     rules: {
       type: Array,
       default: () => [],
     },
   },
   watch: {
-    model: {
+    picker: {
       handler() {
-        this.dateFormatted = formatDate(this.model);
+        this.dateFormatted = formatDate(this.picker);
       },
-      deep: true,
+      deep: true
     },
-  },
-  directives: {
-    mask,
+    $attrs: {
+      handler() {
+        this.getDate();
+      },
+      deep: true
+    }
   },
   mounted() {
-    this.$attrs.value = this.dateFormatted;
-  },
-  computed: {
-    dateFormatted() {
-      if(this.noInitial) {
-        return null;
-      }else{
-        return formatDate(this.$attrs.value) || formatDate(new Date().toISOString().substr(0, 10))
-      }
-    }
+    this.getDate();
   },
   data() {
     return {
       menu: false,
+      activePicker: null,
+      dateFormatted: null,
+      picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     }
   },
+  methods: {
+    getDate() {
+      this.dateFormatted = formatDate(this.$attrs.value);
+      this.picker = formatDateEN(this.dateFormatted);
+    }
+  }
 }
 </script>
-
-<style>
-
-</style>

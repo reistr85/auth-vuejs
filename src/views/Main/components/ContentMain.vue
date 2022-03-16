@@ -10,13 +10,6 @@ import BreakPointMixin from '@/mixins/BreakPointMixin';
 
 export default {
   name: 'ContentMain',
-  props: {
-    modeDark: {
-      type: Object,
-      default: () => {},
-      require: true
-    }
-  },
   data() {
     return {
     }
