@@ -25,7 +25,7 @@
     <v-data-table
       v-model="selected"
       item-key="id"
-      class="elevation-1 certus-data-list"
+      class="elevation-1"
       dense
       :show-expand="schema.showExpand"
       :loading="loading"
@@ -52,7 +52,7 @@
         <Chip :label="item.status_formatted" small :color="colorsStatus[item.status]" />
       </template>
 
-      <template v-slot:[`item.actions`]="props" style="width: 200px">
+      <template v-slot:[`item.actions`]="props">
         <ActionsListPage 
           :schema="schema" 
           :icons="icons" 
@@ -116,6 +116,7 @@ export default {
       default: () => {},
     }
   },
+  inject: ['modeDark'],
   data() {
     return {
       icons: {
@@ -202,9 +203,15 @@ export default {
           }
         );
       }
-
+      
       if(this.schema.listActions.has) {
-        this.headers.push({ text: 'Ações', value: 'actions', sortable: false, align: 'end', class: 'action-column-header', cellClass: 'action-column',});
+        this.headers.push({
+          text: 'Ações',
+          value: 'actions',
+          sortable: false,
+          align: 'end',
+          cellClass: 'action-column',
+        });
       }
     },
     getAll() {
@@ -330,10 +337,9 @@ export default {
 </script>
 
 <style lang="scss">
-.action-column, .action-column-header {
+.action-column {
   right: 0px;
   position: sticky;
-  background-color: #fff;
   padding: 0 5px !important;
   width: 100px;
 }

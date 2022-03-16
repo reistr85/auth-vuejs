@@ -86,11 +86,9 @@ export default {
     }
   },
   mounted() {
-    if(this.typePage === this.typePageOptions.show)
-      this.show();
-
     this.mountItemsSelects();
     this.getItemsChildren();
+    this.typePage === this.typePageOptions.show ? this.show() : this.handlerBeforeForm();
   },
   mixins: [TypePageMixin],
   methods: {
@@ -126,8 +124,7 @@ export default {
         
         this.localItem = form
         this.address = res.address || {};
-
-        if(this.schema.business?.beforeForm) this.schema.business?.beforeForm(this.localItem, this.schema.fields)
+        this.handlerBeforeForm();
       }).catch((err) => {
         this.$noty.error(err);
         this.$router.push({name: this.schema.routes.list.name});
@@ -214,6 +211,9 @@ export default {
           });
         }
       });
+    },
+    handlerBeforeForm() {
+      if(this.schema.business?.beforeForm) this.schema.business?.beforeForm(this.localItem, this.schema.fields)
     }
   }
 }

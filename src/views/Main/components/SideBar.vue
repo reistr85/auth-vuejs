@@ -25,7 +25,7 @@
             </v-list-item-content>
           </template>
 
-          <v-list-item v-for="child in item.items" :class="{ 'childActive': child.active }" :key="child.title" link @click="menuNavigator(item, child)">
+          <v-list-item v-for="child in item.items" :class="getClassMenuActive(child.active)" :key="child.title" link @click="menuNavigator(item, child)">
             <v-list-item-content>
               <v-list-item-title color="primary" :prepend-icon="item.icon">
                 <Icon :icon="child.icon" class="mr-3" dense />
@@ -48,6 +48,13 @@ import items from '../items';
 export default {
   name: 'SideBar',
   components: { Icon },
+  props: {
+    modeDark: {
+      type: Object,
+      default: () => {},
+      require: true
+    }
+  },
   data() {
     return {
       items: items,
@@ -86,6 +93,13 @@ export default {
     },
     drawerEvent() {
       this.drawer = !this.drawer;
+    },
+    getClassMenuActive(value) {
+      if(value) {
+        return this.modeDark.value ? 'childActiveDark' : 'childActiveLight';
+      }
+
+      return '';
     }
   }
 }
@@ -95,7 +109,7 @@ export default {
 
 .v-list-item--active {
   border-left: 3px solid red;
-  background-color: #ebebeb;
+  background-color: #E1E1E1;
 }
 .item-active {
   background: #ebebeb !important;
@@ -105,7 +119,11 @@ export default {
   padding-left: 35px !important;
 }
 
-.childActive {
-  background-color: #F6F6F6;
+.childActiveLight {
+  background-color: #EBEBEB;
+}
+
+.childActiveDark {
+  background-color: #666666;
 }
 </style>
