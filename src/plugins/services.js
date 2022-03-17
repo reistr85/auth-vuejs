@@ -2,7 +2,8 @@
 import AuthService from '@/views/Auth/services/AuthService';
 
 // Financial
-import BanksService from '@/views/Financial/Banks/services/BanksService';
+import AccountPaymentsService, { AccountPaymentsCommands } from '@/views/Financial/AccountPayments/services/AccountPaymentsService';
+import BanksService, { BanksCommands } from '../views/Financial/Banks/services/BanksService';
 import BankMovementsService from '@/views/Financial/Banks/services/BankMovementsService';
 
 // Operations
@@ -20,10 +21,10 @@ import BoxMovementsService from '@/views/Financial/Boxes/services/BoxMovementsSe
 // Settings
 import CompaniesService, { CompaniesCommands } from '@/views/Settings/Companies/services/CompaniesService';
 import UsersService from '@/views/Settings/Users/services/UsersService';
-import { BanksCommands } from '../views/Financial/Banks/services/BanksService';
 
 const api = Object.freeze({
   auth: AuthService,
+  accountPayments: { ...AccountPaymentsService, ...AccountPaymentsCommands() },
   banks: { ...BanksService, ...BanksCommands() },
   bankMovements: BankMovementsService,
   appointments: AppointmentsService,

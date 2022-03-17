@@ -37,7 +37,6 @@ import Button from '@/components/vuetify/Button';
 import DialogOpenBox from '@/views/Financial/Boxes/components/DialogOpenBox';
 import DialogDynamicMovement from '@/views/Financial/Boxes/components/DialogDynamicMovement';
 import DialogConfirmation from '@/components/DialogConfirmation';
-import { messageErrors } from '@/utils';
 
 export default {
   name: 'ListBoxes',
@@ -102,7 +101,7 @@ export default {
           box_movements_date: null,
           type: this.$enums.typeMovement.OUTPUT,
           total_value: item.dataListProps.item.total_value,
-          description: this.l.boxes.movements.description
+          description: this.l.boxes.listBoxes.movements.description
         }
         this.$api.boxMovements.create(this.movement).then(() => {
           this.$noty.success(this.l.index.alerts.createdRegister);
@@ -151,7 +150,7 @@ export default {
         this.$noty.success(this.l.index.alerts.updatedRegister);
         this.$refs.dynamicListPage.getAll();
       }).catch((error) => {
-        this.$noty.error(messageErrors(error));
+        this.$noty.error(error);
       }).finally(() => {
         this.dialogClosed = false;
       });
