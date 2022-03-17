@@ -33,12 +33,11 @@
     <v-col cols="12" md="3">
       <TextFieldMoney
         v-model="accountPayment.amount"
-        label="Valor Total"
-        readonly />
+        label="Valor Título" />
     </v-col>
     <v-col cols="12" md="3">
       <TextField
-        v-model="accountPayment.status"
+        v-model="accountPayment.status_formatted"
         label="Status"
         readonly />
     </v-col>
