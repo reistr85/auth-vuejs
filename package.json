@@ -49,7 +49,10 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {},
+    "rules": {
+      "semi": "error",
+      "quotes": [2, "single", { "avoidEscape": true }]
+    },
     "overrides": [
       {
         "files": [
