@@ -84,17 +84,17 @@ const COLORS_STATUS = Object.freeze({
   finished: 'success',
   open: 'secondary',
   closed: 'primary'
-})
+});
 
 const COLORS_SITUATION = Object.freeze({
   active: 'success',
   disabled: 'light',
-})
+});
 
 const COLORS_USE_NICKNAME = Object.freeze({
   yes: 'success',
   no: 'light',
-})
+});
 
 export default {
   name: 'DynamicListPage',
@@ -146,15 +146,34 @@ export default {
       colorsStatus: COLORS_STATUS,
       colorsSituation: COLORS_SITUATION,
       colorsUseNickname: COLORS_USE_NICKNAME,
-    }
+    };
   },
   mounted() {
     this.setHeaders();
   },
+  computed: {
+    paramsPaginator() {
+      let params = { page: this.options.page, per_page: this.options.itemsPerPage, sortBy: this.options.sortBy[0],
+        sortDesc: this.options.sortDesc[0] ? 'desc' : 'asc' };
+
+      if(params.sortBy) {
+        const arr = params.sortBy.split('_');
+        if(arr.length > 1) {
+          let sortBy = '';
+          arr.forEach((i, index) => {
+            if(index < (arr.length - 1)) sortBy += `${i}_`;
+          });
+          params.sortBy = sortBy.substring(0, sortBy.length - 1);
+        }
+      }
+
+      return params;
+    }
+  },
   watch: {
     options: {
       handler () {
-        (this.searchChips.length || this.fixedFilter) ? this.searchItems(this.searches) : this.getAll() ;
+        (this.searchChips.length || this.fixedFilter) ? this.searchItems(this.searches) : this.getAll();
       },
       deep: true,
     },
@@ -217,11 +236,11 @@ export default {
     getAll() {
       this.loading = true;
 
+      
       const params = {
-        page: this.options.page,
-        totalItemsPerPage: this.options.itemsPerPage,
+        ...this.paramsPaginator,
         customSearch: this.search,
-      }
+      };
 
       this.service.index(params).then((res) => {
         this.localItems = res.data;
@@ -231,13 +250,13 @@ export default {
         if(this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
       }).catch((err) => {
-        console.error(`DynamicListPage GetDataFromApi error: ${err}`)
+        console.error(`DynamicListPage GetDataFromApi error: ${err}`);
         this.loading = false;
         this.$noty.error('Erro ao receber os itens.');
       });
     },
     getFilters(payload) {
-      payload = { ...payload, page: this.options.page, per_page: this.options.itemsPerPage }
+      payload = { ...payload, ...this.paramsPaginator, };
       this.service.filters(payload).then((res) => {
         this.localItems = res.data;
         this.totalLocalItems = res.data.total;
@@ -246,7 +265,7 @@ export default {
         if(this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
       }).catch((err) => {
-        console.error(`DynamicListPage Filters error: ${err}`)
+        console.error(`DynamicListPage Filters error: ${err}`);
         this.loading = false;
         this.$noty.error('Erro ao receber os itens.');
       });
@@ -258,23 +277,23 @@ export default {
       this.searchChips = [];
       let filter = {};
       Object.keys(search).forEach((key) => {
-        filter[key] = search[key].value
+        filter[key] = search[key].value;
         this.searchChips.push({ 
           name: search[key].name,
           label: search[key].label,
           value: search[key].value,
           formattedValue: search[key].formattedValue,
           noChip: search[key].noChip
-        })
-      })
+        });
+      });
 
-      const payload = { params: { page: this.options.page, per_page: this.options.itemsPerPage }, filter, }
+      const payload = { params: { ...this.paramsPaginator }, filter, };
       this.getFilters(payload);
     },
     closeChip(value) {
       this.searchChips = this.searchChips.filter((item) => {
         if (item.name === value.name) this.$refs.searchListPage.localItem[item.name] = '';
-        return item.name != value.name
+        return item.name != value.name;
       });
 
       let payload = {};
@@ -333,7 +352,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
