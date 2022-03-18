@@ -7,9 +7,9 @@ import InstallmentType from '@/business/InstallmentType';
 export default {
     domain: 'installment-types',
     business: InstallmentType,
-    title: 'Formas de Parcelamento',
-    description: 'Lista os formas de parcelamento no sistema',
-    createBtn: 'Nova Forma de Parcelamento',
+    title: 'Tipos de Parcelamento',
+    description: 'Lista os Tipos de Parcelamento no sistema',
+    createBtn: 'Novo Tipo de Parcelamento',
     routes: {
       list: {
         name: 'installmenttypes',
