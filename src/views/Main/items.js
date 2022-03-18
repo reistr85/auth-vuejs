@@ -33,6 +33,7 @@ export default [
       { icon: list, title: 'Categorias', route: 'categories', active: false },
       { icon: list, title: 'Sub Categorias', route: 'subcategories', active: false },
       { icon: list, title: 'Formas de Pagamento', route: 'paymentmethods', active: false },
+      { icon: list, title: 'Formas de Parcelamento', route: 'installmenttypes', active: false },
       { icon: list, title: 'Bandeira de Cartão', route: 'cardflags', active: false },
     ],
   },
