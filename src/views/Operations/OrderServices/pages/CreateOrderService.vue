@@ -140,7 +140,7 @@ export default {
       dialogComponent: null,
       dialogProps: {},
       dialogConfirmation: false,
-    }
+    };
   },
   mounted() {
     if(this.typePage === this.typePageOptions.show)
@@ -160,7 +160,7 @@ export default {
       return this.$locales.pt.orderServices.createOrderService;
     },
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     },
     headersItems() {
       return this.$schemas.orderService.headerOrderServiceItems;
@@ -182,17 +182,16 @@ export default {
       this.$api.orderServices.show(this.id).then((res) => {
         this.mountForm(res);
         this.loading = false;
-      }).catch((err) => {
-        console.error(err)
+      }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     getLastOrderNumber() {
       this.$api.orderServices.lastOrderNumber().then((res) => {
         this.order_service.order_number = res.data.order_number + 1;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     getCollaborators(params = {}) {
       const payload = { ...params, filter: { type: 'collaborator' }};
@@ -202,11 +201,11 @@ export default {
             id: item.id,
             text: item.name,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     getCustomers(params = {}) {
       const payload = { ...params, filter: { type: 'customer' }};
@@ -216,11 +215,11 @@ export default {
             id: item.id,
             text: item.name,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     getMethodPayments(params = {}) {
       const payload = { ...params, filter: { type: 'payment-method' }};
@@ -230,11 +229,11 @@ export default {
             id: item.id,
             text: item.description,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     getCardFlags(params = {}) {
       const payload = { ...params, filter: { type: 'card-flag' }};
@@ -244,11 +243,11 @@ export default {
             id: item.id,
             text: item.description,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     getBanks() {
       this.$api.banks.index().then((res) => {
@@ -257,11 +256,11 @@ export default {
             id: item.id,
             text: item.description,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     openDialog({ componentType }) {
       this.dialog = true;
@@ -276,7 +275,7 @@ export default {
           payment_methods: this.payment_methods,
           card_flags: this.card_flags
         }
-      }
+      };
     },
     handleAction(data) {
       const { type, params } = data;
@@ -303,12 +302,12 @@ export default {
         subtotal: item.sale_value,
         subtotal_formatted: item.sale_value_formatted,
         newItem: true,
-      })
+      });
       this.totalizers();
     },
     addPayment(item) {
       if((parseFloat(this.order_service.total_paid) + parseFloat(item.value)) > this.order_service.amount) {
-        this.$noty.error(this.l.alerts.totalPaidGreaterAmount)
+        this.$noty.error(this.l.alerts.totalPaidGreaterAmount);
         return;
       }
 
@@ -330,8 +329,8 @@ export default {
     itemDestroy(params) {
       const { index, componentType, item } = params;
       if(componentType === 'items') {
-        this.order_service.items.splice(index, 1)
-        this.order_service.items_destroy.push(item)
+        this.order_service.items.splice(index, 1);
+        this.order_service.items_destroy.push(item);
       }
       this.totalizers();
     },
@@ -344,10 +343,10 @@ export default {
     },
     create() {
       this.$api.orderServices.create(this.order_service).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.createdRegister)
-        this.$router.push({ name: this.$schemas.orderService.routes.list.name })
+        this.$noty.success(this.$locales.pt.index.alerts.createdRegister);
+        this.$router.push({ name: this.$schemas.orderService.routes.list.name });
       }).catch((err) => {
-        this.$noty.error(err)
+        this.$noty.error(err);
       }).finally(() => {
         this.dialogConfirmation = false;
       });
@@ -355,10 +354,10 @@ export default {
     update() {
       const { id } = this.$route.params;
       this.$api.orderServices.update(id, this.order_service).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister)
-        this.$router.push({ name: this.$schemas.orderService.routes.list.name })
+        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
+        this.$router.push({ name: this.$schemas.orderService.routes.list.name });
       }).catch((err) => {
-        this.$noty.error(messageErrors(err))
+        this.$noty.error(messageErrors(err));
       }).finally(() => {
         this.dialogConfirmation = false;
       });
@@ -380,7 +379,7 @@ export default {
         payments: [],
         items_destroy: [],
         payments_destroy: [],
-      }
+      };
 
       this.order_service.items = data.items.map((item) => {
         return {
@@ -396,7 +395,7 @@ export default {
           amount: item.amount,
           amount_formatted: item.amount_formatted,
           newItem: false
-        }
+        };
       });
 
       this.order_service.payments = data.payments.map((item) => {
@@ -412,7 +411,7 @@ export default {
           amount_paid: item.amount_paid,
           amount_paid_formatted: item.amount_paid_formatted,
           newItem: false
-        }
+        };
       });
 
       this.totalizers();
@@ -444,7 +443,7 @@ export default {
       this.order_service.total_payable = total_paid >= amount ? 0 :amount - total_paid;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

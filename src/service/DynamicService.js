@@ -11,21 +11,24 @@ const DynamicService = (endpoint, schema, options = {}) => ({
   mountFilter(filter) {
     let paramsFilter = '';
     Object.keys(filter).forEach((key) => {
-      paramsFilter += `&filter[${key}]=${filter[key]}`
-    })
+      paramsFilter += `&filter[${key}]=${filter[key]}`;
+    });
     return paramsFilter;
   },
   async index(params = null){
-    let items = {}
+    let items = {};
     let page = 1;
     let totalItemsPerPage = 10;
     let url = '';
 
     if(params){
       page = params.page;
-      totalItemsPerPage = params.totalItemsPerPage;
+      totalItemsPerPage = params.per_page;
+      const { sortBy, sortDesc } = params;
       url = `${endpoint}?page=${page}&per_page=${totalItemsPerPage}`;
+      if(sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
     }
+
 
     if(!params)
       url = `${endpoint}`;
@@ -45,7 +48,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
 
       items = res;
     }).catch((err) => {
-      console.error(`DynamicService Index error: ${err}`)
+      console.error(`DynamicService Index error: ${err}`);
     });
 
     return items;
@@ -62,7 +65,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async create(params){
     return new Promise((resolve, reject) => {
@@ -74,7 +77,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async update(id, params){
     return new Promise((resolve, reject) => {
@@ -87,7 +90,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async createOrUpdateFile(id, params, type = 'post'){
     return new Promise((resolve, reject) => {
@@ -106,7 +109,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async delete(id){
     return new Promise((resolve, reject) => {
@@ -115,7 +118,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async filters(params){
     try {
@@ -124,9 +127,9 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       let items = {};
       
       if(page) url += `&page=${page}&per_page=${per_page || 10}`;
-      if(filter && schema.filters.has) url += this.mountFilter(filter)
+      if(filter && schema.filters.has) url += this.mountFilter(filter);
       if(schema.filters?.has && schema.filters?.include?.has) url += `&include=${schema.filters?.include?.value}`;
-      if(params.search_global) url += `&search_global=true`;
+      if(params.search_global) url += '&search_global=true';
 
       await axios.get(url).then((res) => {
         if (options.formatResponse && typeof options.formatResponse === 'function') {
@@ -137,12 +140,12 @@ const DynamicService = (endpoint, schema, options = {}) => ({
 
         items = res;
       }).catch((err) => {
-        console.error(`DynamicService Filter error: ${err}`)
+        console.error(`DynamicService Filter error: ${err}`);
       });
 
       return items;
     }catch(err) {
-      console.error(err)
+      console.error(err);
     }
   },
 });
