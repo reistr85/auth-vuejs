@@ -158,7 +158,7 @@ export default {
 
       if(params.sortBy) {
         const arr = params.sortBy.split('_');
-        if(arr.length > 1) {
+        if(arr[arr.length-1] === 'formatted') {
           let sortBy = '';
           arr.forEach((i, index) => {
             if(index < (arr.length - 1)) sortBy += `${i}_`;
@@ -194,7 +194,7 @@ export default {
                 text: item.label,
                 value: item.formattedName ? item.formattedName : item.name,
                 align: item.align ? item.align : 'start',
-                sortable: item.sortable ? item.sortable : true,
+                sortable: !item.noSortable || false,
               }
             );
           }

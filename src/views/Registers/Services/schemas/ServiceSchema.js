@@ -80,6 +80,7 @@ export default {
             name: 'category_id',
             formattedName: 'category_formatted',
             label: 'Categoria',
+            noSortable: true,
             align: '',
             md: '3',
             rules: [],
@@ -101,6 +102,7 @@ export default {
             name: 'sub_category_id',
             formattedName: 'sub_category_formatted',
             label: 'Sub Categoria',
+            noSortable: true,
             align: '',
             md: '3',
             rules: [],
@@ -199,4 +201,4 @@ export default {
         md: 2,
       },
     ]
-  }
+  };
