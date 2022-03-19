@@ -94,7 +94,7 @@ export default {
         arrowLeft: arrowLeft,
       },
       idBankMovementDestroy: null
-    }
+    };
   },
   mounted() {
     this.getBank();
@@ -102,7 +102,7 @@ export default {
   },
   computed: {
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     },
     headerMovements() {
       return this.schema.bank_movements;
@@ -117,18 +117,18 @@ export default {
         this.loading = false;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     async getBankMovements(options = {}) {
       const payload = {
         page: options.page || 1,
-      }
+      };
       this.$api.banks.getAllBankMovementsByBankId(this.id, payload).then((res) => {
         this.items = res.data;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     openDialog({ componentType }) {
       this.dialog = true;
@@ -143,7 +143,7 @@ export default {
           movement_date: null,
           value: 0
         }
-      }
+      };
     },
     handleAction(data) {
       const { type, params } = data;
@@ -160,7 +160,6 @@ export default {
     },
     itemDestroy() {
       this.loadingDestroy = true;
-      console.log(this.idBankMovementDestroy)
       this.$api.bankMovements.delete(this.idBankMovementDestroy).then(() => {
         this.$noty.success(locales.alerts.deletedRegister);
         this.loadingDestroy = false;
@@ -171,10 +170,10 @@ export default {
         this.$noty.error(err);
         this.loadingDestroy = false;
         this.dialogDestroy = false;
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
