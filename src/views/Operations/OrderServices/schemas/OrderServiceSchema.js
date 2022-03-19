@@ -87,6 +87,7 @@ export default {
             type: 'text',
             name: 'customer_id',
             formattedName: 'customer.name',
+            noSortable: true,
             label: 'Cliente',
             align: '',
             md: '1',
@@ -173,4 +174,4 @@ export default {
       { text: 'Valor', value: 'sale_value_formatted' },
     ],
     footer: []
-  }
+  };

@@ -37,7 +37,7 @@ const schemas = Object.freeze({
 
 export default {
   install: function (Vue) {
-    Vue.prototype.$schemas = schemas
-    Vue.schemas = schemas
+    Vue.prototype.$schemas = schemas;
+    Vue.schemas = schemas;
   }
-}
+};
