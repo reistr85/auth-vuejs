@@ -10,7 +10,7 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import MyCalendar from '../components/MyCalendar';
+import MyCalendar from '../components/MyCalendar/MyCalendar';
 
 
 export default {
