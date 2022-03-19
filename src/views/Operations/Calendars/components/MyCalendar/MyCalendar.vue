@@ -4,11 +4,9 @@
       <v-col>
         <Header
           :calendar="$refs.calendar"
-          :type-to-label="typeToLabel"
           :type="type"
-          @setToday="setToday"
-          @prev="prev"
-          @next="next"
+          @setToday="focus = ''"
+          @nextPrev="nextPrev"
           @update:type="type = $event" />
         
         <v-sheet height="600">
@@ -22,49 +20,8 @@
             @click:event="showEvent"
             @click:more="viewDay"
             @click:date="viewDay"
-            @change="updateRange"
-          ></v-calendar>
-          <v-menu
-            v-model="selectedOpen"
-            :close-on-content-click="false"
-            :activator="selectedElement"
-            offset-x
-          >
-            <v-card
-              color="grey lighten-4"
-              min-width="350px"
-              flat
-            >
-              <v-toolbar
-                :color="selectedEvent.color"
-                dark
-              >
-                <v-btn icon>
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-                <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn icon>
-                  <v-icon>mdi-heart</v-icon>
-                </v-btn>
-                <v-btn icon>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </v-toolbar>
-              <v-card-text>
-                <span v-html="selectedEvent.details"></span>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  text
-                  color="secondary"
-                  @click="selectedOpen = false"
-                >
-                  Cancel
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-menu>
+            @change="updateRange" />
+            <ToolbarEvent v-model="selectedOpen" :selectedElement="selectedElement" :selectedEvent="selectedEvent" />
         </v-sheet>
       </v-col>
     </v-row>
@@ -73,19 +30,15 @@
 
 <script>
 import Header from './components/Header';
+import ToolbarEvent from './components/ToolbarEvent';
+
 export default {
   name: 'MyCalendar',
-  components: { Header },
+  components: { Header, ToolbarEvent },
   data() {
     return {
       focus: '',
       type: 'month',
-      typeToLabel: {
-        month: 'Mês',
-        week: 'Semana',
-        day: 'Dia',
-        '4day': '4 Dias',
-      },
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
@@ -105,16 +58,12 @@ export default {
     getEventColor (event) {
       return event.color;
     },
-    setToday () {
-      this.focus = '';
-    },
-    prev () {
-      this.$refs.calendar.prev();
-    },
-    next () {
-      this.$refs.calendar.next();
+    nextPrev(type) {
+      this.$refs.calendar[type]();
     },
     showEvent ({ nativeEvent, event }) {
+      console.log(nativeEvent);
+      console.log(event);
       const open = () => {
         this.selectedEvent = event;
         this.selectedElement = nativeEvent.target;
@@ -153,8 +102,8 @@ export default {
           timed: !allDay,
         });
       }
-
       this.events = events;
+      console.log(this.events);
     },
     rnd (a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;

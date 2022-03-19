@@ -2,8 +2,8 @@
   <v-sheet height="64">
     <v-toolbar flat>
       <Button label="Hoje" outlined color="grey darken-2" @click="$emit('setToday')" />
-      <Button :icon="$icons.chevronLeft" fab x-small class="elevation-0 ml-5" @click="$emit('prev')" />
-      <Button :icon="$icons.chevronRight" fab x-small class="elevation-0" @click="$emit('next')" />
+      <Button :icon="$icons.chevronLeft" fab x-small class="elevation-0 ml-5" @click="$emit('nextPrev', 'prev')" />
+      <Button :icon="$icons.chevronRight" fab x-small class="elevation-0" @click="$emit('nextPrev', 'next')" />
 
       <v-toolbar-title v-if="calendar">{{ calendar.title }}</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -32,10 +32,10 @@ export default {
     calendar: {
       required: true,
     },
-    typeToLabel: {
-      type: Object,
-      required: true,
-    },
+    // typeToLabel: {
+    //   type: Object,
+    //   required: true,
+    // },
     type: {
       type: String,
       required: true,
@@ -43,6 +43,12 @@ export default {
   },
   data() {
     return {
+      typeToLabel: {
+        month: 'Mês',
+        week: 'Semana',
+        day: 'Dia',
+        '4day': '4 Dias',
+      },
       list: [
         {
           label: 'Dia',
