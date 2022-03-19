@@ -122,7 +122,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
   },
   async filters(params){
     try {
-      const { page, per_page, filter } = params;
+      const { page, per_page, filter, sortBy, sortDesc } = params;
       let url = `filters?domain=${endpoint}`;
       let items = {};
       
@@ -130,6 +130,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       if(filter && schema.filters.has) url += this.mountFilter(filter);
       if(schema.filters?.has && schema.filters?.include?.has) url += `&include=${schema.filters?.include?.value}`;
       if(params.search_global) url += '&search_global=true';
+      if(sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
 
       await axios.get(url).then((res) => {
         if (options.formatResponse && typeof options.formatResponse === 'function') {

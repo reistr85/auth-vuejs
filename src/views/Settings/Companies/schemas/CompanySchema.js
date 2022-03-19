@@ -75,7 +75,7 @@ export default {
           align: '',
           md: '4',
           rules: [required],
-          list: true,
+          list: false,
           readonly: false,
           disabled: false,
         },
@@ -124,4 +124,4 @@ export default {
       md: 2,
     },
   ]
-}
+};

@@ -111,6 +111,7 @@ export default {
             name: 'employee_id',
             formattedName: 'employee',
             label: 'Funcionário',
+            noSortable: true,
             align: '',
             md: '6',
             rules: [],
@@ -163,4 +164,4 @@ export default {
       { text: 'Ações', value: 'actions', align: 'end' },
     ],
     footer: []
-  }
+  };
