@@ -202,4 +202,4 @@ export default {
       { text: 'Ações', value: 'actions', align: 'end' },
     ],
     footer: []
-  }
+  };

@@ -52,7 +52,7 @@ const api = Object.freeze({
 
 export default {
   install: function (Vue) {
-    Vue.prototype.$api = api
-    Vue.api = api
+    Vue.prototype.$api = api;
+    Vue.api = api;
   }
-}
+};

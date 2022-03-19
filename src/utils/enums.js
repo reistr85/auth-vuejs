@@ -40,7 +40,7 @@ const accountPaymentStatus = {
   PENDING: 'pending',
   PARTIAL: 'partial',
   SETTLED: 'settled',
-}
+};
 
 export {
   appointmentStatus,

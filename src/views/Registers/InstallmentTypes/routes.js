@@ -21,4 +21,4 @@ export default [
     component: CreateInstallmentType,
     meta: InstallmentTypeSchema.routes.show.meta,
   },
-]
+];

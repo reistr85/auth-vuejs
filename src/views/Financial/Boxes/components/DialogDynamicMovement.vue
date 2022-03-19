@@ -76,7 +76,7 @@ export default {
             total_value: 0,
             description: ''
           }
-        }
+        };
       }
     },
     disabledDate: {
@@ -114,7 +114,7 @@ export default {
       options: {
         typeInputOutput: typeInputOutput
       },
-    }
+    };
   },
   methods: {
     save() {
@@ -123,15 +123,15 @@ export default {
       this.$emit('handleActionMovement',  {
         action: 'saveMovement',
         item: this.movement
-      })
+      });
       this.$emit('handleActionModal');
     },
     cancel() {
-      this.$emit('update:dialog', false)
+      this.$emit('update:dialog', false);
     }
   }
   
-}
+};
 </script>
 
 <style>

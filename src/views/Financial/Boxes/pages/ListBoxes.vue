@@ -68,7 +68,7 @@ export default {
       eventsClosed: {},
       movement: {},
       boxOpen: false
-    }
+    };
   },
   computed: {
     l() {
@@ -102,12 +102,12 @@ export default {
           type: this.$enums.typeMovement.OUTPUT,
           total_value: item.dataListProps.item.total_value,
           description: this.l.boxes.listBoxes.movements.description
-        }
+        };
         this.$api.boxMovements.create(this.movement).then(() => {
           this.$noty.success(this.l.index.alerts.createdRegister);
         }).catch((err) => {
           this.$noty.error(err);
-        })
+        });
         this.closedBox();
       } else {
         this.dialog = true;
@@ -121,7 +121,7 @@ export default {
             total_value: 0,
             description: this.l.boxes.listBoxes.movements.dialogs.withdrawn.description
           }
-        }
+        };
       }
     },
     entrance(item) {
@@ -136,12 +136,12 @@ export default {
           total_value: 0,
           description: this.l.boxes.listBoxes.movements.dialogs.entrance.description,
         }
-      }
+      };
     },
     closed(item){
       this.dialogClosed = true;
       this.boxClosed = item;
-      this.propsClosed = { message: item.dataListProps.item.total_value > 0 ? this.l.boxes.listBoxes.messages.closed.totalValueLargerZero : this.l.boxes.listBoxes.messages.closed.box }
+      this.propsClosed = { message: item.dataListProps.item.total_value > 0 ? this.l.boxes.listBoxes.messages.closed.totalValueLargerZero : this.l.boxes.listBoxes.messages.closed.box };
       this.eventsClosed = { yesAction: item.dataListProps.item.total_value > 0 ? () => this.withdrawn(item, true) : () => this.closedBox() };
     },
     closedBox() {
@@ -161,10 +161,10 @@ export default {
         this.$noty.success(this.l.index.alerts.createdRegister);
       }).catch((err) => {
         this.$noty.error(err);
-      })
+      });
     }
   }
-}
+};
 
 </script>
 

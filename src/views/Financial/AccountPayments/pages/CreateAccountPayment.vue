@@ -74,7 +74,7 @@ export default {
       registers: [],
       dialogConfirmation: null,
       propsConfirmation: {}
-    }
+    };
   },
   mounted() {
     if(this.typePage === this.typePageOptions.show)
@@ -87,7 +87,7 @@ export default {
       return this.$locales.pt;
     },
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     }
   },
   mixins: [TypePageMixin],
@@ -98,9 +98,9 @@ export default {
         this.accountPayment = res;
         this.loading = false;
       }).catch((err) => {
-        console.error(err)
+        console.error(err);
         this.loading = false;
-      })
+      });
     },
     getRegisters() {
       this.$api.registers.index().then((res) => {
@@ -109,11 +109,11 @@ export default {
             id: item.id,
             text: item.name,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     handleAction(data) {
       const { type, params } = data;
@@ -124,36 +124,35 @@ export default {
       this.dialogConfirmation = true;
       this.propsConfirmation = { message: this.typePage === this.typePageOptions.create 
         ? this.l.accountPayments.createAccountPayment.messages.save.create 
-        : this.l.accountPayments.createAccountPayment.messages.save.update }
+        : this.l.accountPayments.createAccountPayment.messages.save.update };
     },
     save() {
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
     },
     create() {
-      console.log('accountPayment', this.accountPayment)
       this.$api.accountPayments.create(this.accountPayment).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.createdRegister)
-        this.$router.push({ name: this.schema.routes.list.name })
+        this.$noty.success(this.$locales.pt.index.alerts.createdRegister);
+        this.$router.push({ name: this.schema.routes.list.name });
       }).catch((err) => {
-        this.$noty.error(err)
+        this.$noty.error(err);
       }).finally(() => {
         this.dialogConfirmation = false;
       });
     },
     update() {
       const { id } = this.$route.params;
-      console.log('accountPayment', this.accountPayment)
+      console.log('accountPayment', this.accountPayment);
       this.$api.accountPayments.update(id, this.accountPayment).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister)
-        this.$router.push({ name: this.schema.routes.list.name })
+        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
+        this.$router.push({ name: this.schema.routes.list.name });
       }).catch((err) => {
-        this.$noty.error(err)
+        this.$noty.error(err);
       }).finally(() => {
         this.dialogConfirmation = false;
       });
     },
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

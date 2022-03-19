@@ -5,4 +5,4 @@ export default {
       update: 'Desaja atualizar o contas à pagar?',
     },
   }
-}
+};

@@ -23,9 +23,9 @@ export default {
     return {
       schema: AccountPaymentSchema,
       service: AccountPaymentsService,
-    }
+    };
   },
-}
+};
 
 </script>
 

@@ -22,7 +22,7 @@ const locales = Object.freeze({
 
 export default {
   install: function (Vue) {
-    Vue.prototype.$locales = locales
-    Vue.locales = locales
+    Vue.prototype.$locales = locales;
+    Vue.locales = locales;
   }
-}
+};

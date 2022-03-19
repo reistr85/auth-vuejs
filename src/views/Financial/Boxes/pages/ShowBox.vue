@@ -79,7 +79,7 @@ export default {
       items: {},
       disabledBttn: false,
       idBoxMovementDestroy: null
-    }
+    };
   },
   mounted() {
     this.getBox();
@@ -90,7 +90,7 @@ export default {
       return this.$locales.pt;
     },
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     },
     headerMovements() {
       return this.schema.box_movements;
@@ -105,18 +105,18 @@ export default {
         this.loading = false;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     async getBoxMovements(options = {}) {
       const payload = {
         page: options.page || 1,
-      }
+      };
       this.$api.boxes.getAllBoxMovementsByBoxId(this.id, payload).then((res) => {
         this.items = res.data;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     openDialog({ componentType }) {
       this.dialog = true;
@@ -132,7 +132,7 @@ export default {
           total_value: 0,
           description: ''
         }
-      }
+      };
     },
     handleAction(data) {
       const { type, params } = data;
@@ -164,7 +164,7 @@ export default {
         this.$noty.error(err);
         this.loadingDestroy = false;
         this.dialogDestroy = false;
-      })
+      });
     },
     saveMovement(movement) {
       movement.payment_method_id = 1;
@@ -172,10 +172,10 @@ export default {
         this.$noty.success(this.l.index.alerts.createdRegister);
       }).catch((err) => {
         this.$noty.error(err);
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

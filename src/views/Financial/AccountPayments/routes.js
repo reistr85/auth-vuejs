@@ -21,4 +21,4 @@ export default [
     component: CreateAccountPayment,
     meta: AccountPaymentSchema.routes.show.meta,
   },
-]
+];

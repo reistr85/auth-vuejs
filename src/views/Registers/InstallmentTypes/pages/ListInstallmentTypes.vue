@@ -15,5 +15,5 @@ import DynamicListPage from '@/components/dynamics/DynamicListPage';
 export default {
   name: 'ListInstallmentTypes',
   components: { PageHeader, PageContent, DynamicListPage },
-}
+};
 </script>

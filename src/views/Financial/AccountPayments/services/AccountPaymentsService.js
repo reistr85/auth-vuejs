@@ -12,7 +12,7 @@ const formatResponse = (item) => {
   item.amount_payment_formatted = formatCurrency(item.amount_payment);
   item.amount_formatted = formatCurrency(item.amount);
   item.status_formatted = getText(typeStatusAccountPayments, item.status);
-}
+};
 
 const formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId = (res) => {
   const { data } = res.data;
@@ -21,10 +21,10 @@ const formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId = (res) =
     item.date_payment_formatted = formatCurrency(item.date_payment);
     item.bank_formatted = item.bank.name;
     item.amount_formatted = formatCurrency(item.amount);
-  })
+  });
 
   return res;
-}
+};
 
 const AccountPaymentsService = DynamicService('account-payments', AccountPaymentSchema, {
   formatResponse,
@@ -35,7 +35,7 @@ const AccountPaymentsCommands = () => ({
      const res = await axios.get(`account-payments/${id}/account-payment_installments?page=${payload.page}`);
      return formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId(res);
   }
-})
+});
 
 export default AccountPaymentsService;
-export { AccountPaymentsService, AccountPaymentsCommands }
+export { AccountPaymentsService, AccountPaymentsCommands };

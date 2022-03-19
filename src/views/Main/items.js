@@ -71,4 +71,4 @@ export default [
       { icon: account, title: 'Clientes', route: 'reportcustomers', active: false },
     ],
   },
-]
+];
