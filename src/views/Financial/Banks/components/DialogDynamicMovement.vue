@@ -89,7 +89,7 @@ export default {
             description: '',
             value: 0
           }
-        }
+        };
       }
     },
     disabledDate: {
@@ -128,7 +128,7 @@ export default {
         typeInputOutput: typeInputOutput,
         typeBankMovements: typeBankMovements
       },
-    }
+    };
   },
   methods: {
     save() {
@@ -139,15 +139,14 @@ export default {
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((error) => {
         this.$noty.error(error);
-      })
+      });
       this.$emit('handleActionModal');
     },
     cancel() {
-      this.$emit('update:dialog', false)
+      this.$emit('update:dialog', false);
     }
   }
-  
-}
+};
 </script>
 
 <style>

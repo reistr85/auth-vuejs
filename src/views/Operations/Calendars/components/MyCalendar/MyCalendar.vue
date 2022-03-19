@@ -2,50 +2,15 @@
   <div>
     <v-row class="fill-height">
       <v-col>
-        <v-sheet height="64">
-          <v-toolbar flat>
-            <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">Hoje</v-btn>
-            <v-btn fab text small color="grey darken-2" @click="prev">
-              <v-icon small>mdi-chevron-left</v-icon>
-            </v-btn>
-            <v-btn fab text small color="grey darken-2" @click="next">
-              <v-icon small>mdi-chevron-right</v-icon>
-            </v-btn>
-            <v-toolbar-title v-if="$refs.calendar">
-              {{ $refs.calendar.title }}
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-menu bottom right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  outlined
-                  color="grey darken-2"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <span>{{ typeToLabel[type] }}</span>
-                  <v-icon right>
-                    mdi-menu-down
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item @click="type = 'day'">
-                  <v-list-item-title>Dia</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = 'week'">
-                  <v-list-item-title>Semana</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = 'month'">
-                  <v-list-item-title>Mês</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = '4day'">
-                  <v-list-item-title>4 dias</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-toolbar>
-        </v-sheet>
+        <Header
+          :calendar="$refs.calendar"
+          :type-to-label="typeToLabel"
+          :type="type"
+          @setToday="setToday"
+          @prev="prev"
+          @next="next"
+          @update:type="type = $event" />
+        
         <v-sheet height="600">
           <v-calendar
             ref="calendar"
@@ -107,8 +72,10 @@
 </template>
 
 <script>
+import Header from './components/Header';
 export default {
   name: 'MyCalendar',
+  components: { Header },
   data() {
     return {
       focus: '',
