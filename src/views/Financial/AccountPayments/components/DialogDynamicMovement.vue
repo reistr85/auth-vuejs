@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="12" md="3">
             <DataPicker
-              v-model="movement.box_movements_date"
+              v-model="movement.movements_date"
               label="Data da Lançamento"
               :disabled="disabledDate" />
           </v-col>
@@ -19,14 +19,25 @@
               :disabled="disabledTypeInputOutput"
               :rules="[rules.required]" />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3">
+            <Select 
+              v-model="movement.movement_type" 
+              label="Tipo de Movimentação" 
+              :items="options.typeBankMovements" 
+              itemText="text" 
+              itemValue="value"
+              :rules="[rules.required]" />
+          </v-col>
+          <v-col cols="12" md="3">
             <TextFieldMoney
-              v-model="movement.total_value" 
+              v-model="movement.value" 
               label="Valor Lançamento"
               :length="10"
               :rules="[rules.money]" />
           </v-col>
-          <v-col cols="12" md="4">
+        </v-row>
+        <v-row>
+           <v-col cols="12" md="12">
             <TextField 
               v-model="movement.description" 
               label="Descrição" 
@@ -45,13 +56,14 @@
 </template>
 
 <script>
-import { typeInputOutput } from '@/utils/options';
+import { typeInputOutput, typeBankMovements } from '@/utils/options';
 import Card from '@/components/vuetify/Card';
 import Button from '@/components/vuetify/Button';
 import DataPicker from '@/components/vuetify/DataPicker';
 import Select from '@/components/vuetify/Select';
-import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import TextField from '@/components/vuetify/TextField';
+import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
+import locales from '@/locales/pt-BR';
 import { money, required } from '@/utils/rules';
 
 export default {
@@ -61,8 +73,8 @@ export default {
     Button,
     DataPicker,
     Select,
-    TextFieldMoney,
-    TextField
+    TextField,
+    TextFieldMoney
   },
   props: {
     movement: {
@@ -70,13 +82,14 @@ export default {
       default: () => {
         return {
           movement: {
-            box_id: this.id,
-            box_movements_date: null,
+            bank_id: this.id,
+            movements_date: null,
             type: 'input',
-            total_value: 0,
-            description: ''
+            movement_type: '',
+            description: '',
+            value: 0
           }
-        };
+        }
       }
     },
     disabledDate: {
@@ -112,26 +125,29 @@ export default {
         required: required
       },
       options: {
-        typeInputOutput: typeInputOutput
+        typeInputOutput: typeInputOutput,
+        typeBankMovements: typeBankMovements
       },
-    };
+    }
   },
   methods: {
     save() {
       if(!this.$refs.form.validate()) return;
       
-      this.$emit('handleActionMovement',  {
-        action: 'saveMovement',
-        item: this.movement
-      });
+      this.movement.payment_method_id = 1;
+      this.$api.bankMovements.create(this.movement).then(() => {
+        this.$noty.success(locales.alerts.createdRegister);
+      }).catch((error) => {
+        this.$noty.error(error);
+      })
       this.$emit('handleActionModal');
     },
     cancel() {
-      this.$emit('update:dialog', false);
+      this.$emit('update:dialog', false)
     }
   }
   
-};
+}
 </script>
 
 <style>

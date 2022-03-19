@@ -33,6 +33,7 @@ export default [
       { icon: list, title: 'Categorias', route: 'categories', active: false },
       { icon: list, title: 'Sub Categorias', route: 'subcategories', active: false },
       { icon: list, title: 'Formas de Pagamento', route: 'paymentmethods', active: false },
+      { icon: list, title: 'Tipos de Parcelamento', route: 'installmenttypes', active: false },
       { icon: list, title: 'Bandeira de Cartão', route: 'cardflags', active: false },
     ],
   },
@@ -55,6 +56,7 @@ export default [
     items: [
       { icon: bank, title: 'Bancos', route: 'banks', active: false },
       { icon: box, title: 'Caixa', route: 'boxes', active: false },
+      { icon: bank, title: 'Contas à Pagar', route: 'accountPayments', active: false },
     ],
   },
   {
@@ -69,4 +71,4 @@ export default [
       { icon: account, title: 'Clientes', route: 'reportcustomers', active: false },
     ],
   },
-]
+];

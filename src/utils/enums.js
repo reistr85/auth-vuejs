@@ -36,11 +36,18 @@ const typeAllType = Object.freeze({
   bandeiras: 'card-flags',
 });
 
+const accountPaymentStatus = {
+  PENDING: 'pending',
+  PARTIAL: 'partial',
+  SETTLED: 'settled',
+};
+
 export {
   appointmentStatus,
   orderServiceStatus,
   typeRegisters,
   typeMovement,
   typePerson,
-  typeAllType
+  typeAllType,
+  accountPaymentStatus
 };

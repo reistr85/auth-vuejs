@@ -16,6 +16,7 @@ import OrderServiceSchema from '@/views/Operations/OrderServices/schemas/OrderSe
 import AllTypeSchema from '@/views/Registers/AllTypes/schemas/AllTypeSchema';
 import RegisterSchema from '@/views/Registers/Registers/schemas/RegisterSchema';
 import ServiceSchema from '@/views/Registers/Services/schemas/ServiceSchema';
+import InstallmentTypeSchema from '@/views/Registers/InstallmentTypes/schemas/InstallmentTypeSchema';
 
 // Settings
 import CompanySchema from '@/views/Settings/Companies/schemas/CompanySchema';
@@ -31,6 +32,7 @@ const schemas = Object.freeze({
   allType: AllTypeSchema,
   register: RegisterSchema,
   service: ServiceSchema,
+  installmentType: InstallmentTypeSchema,
   companies: CompanySchema,
   users: UserSchema,
 });

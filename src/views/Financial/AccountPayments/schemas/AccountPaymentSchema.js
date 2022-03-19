@@ -1,0 +1,205 @@
+import { typePageOptions } from '@/utils';
+import { text, calendar, list } from '@/utils/icons';
+import { required } from '@/utils/rules';
+
+export default {
+    domain: 'account-payments',
+    title: 'Contas à Pagar',
+    description: 'Lista de todos os contas à pagar no sistema',
+    createBtn: 'Novo Contas à Pagar',
+    formAddress: false,
+    routes: {
+      list: {
+        name: 'accountPayments',
+        path: '/contas-a-pagar',
+        meta: { typePage: typePageOptions.list, requiresAuth: true, }
+      },
+      create: {
+        name: 'accountPayment-create',
+        path: '/contas-a-pagar/novo',
+        meta: { typePage: typePageOptions.create, requiresAuth: true, }
+      },
+      show: {
+        name: 'accountPayment-show',
+        path: '/contas-a-pagar/:id',
+        meta: { typePage: typePageOptions.show, requiresAuth: true, }
+      },
+    },
+    listActions: {
+      has: true,
+      noShow: false,
+      noDestroy: false,
+      situation: false,
+      more: {
+        has: false,
+        items: []
+      },
+    },
+    filters: {
+      has: true,
+      items: [
+        {
+          type: 'text',
+          label: 'Data de Emissão',
+          name: 'date_issuance_formatted',
+          icon: text,
+          md: 6,
+        },
+        {
+          type: 'text',
+          label: 'Apelido',
+          name: 'nickname',
+          icon: text,
+          md: 4,
+        },
+        {
+          type: 'text',
+          label: 'Código',
+          name: 'code',
+          icon: text,
+          md: 6,
+        },
+        {
+          type: 'text',
+          label: 'Conta',
+          name: 'account',
+          icon: text,
+          md: 6,
+        },
+        {
+          type: 'select',
+          label: 'Tipo de Conta',
+          name: 'type_bank',
+          icon: calendar,
+          md: 6,
+        },
+        {
+          type: 'dataPicker',
+          label: 'Data do Cadastro',
+          name: 'created_at',
+          icon: calendar,
+          md: 6,
+        }
+      ]
+    },
+    fields: [
+      {
+        icon: list,
+        title: 'Dados do Contas à Pagar',
+        openGroup: true,
+        items: [
+          {
+            type: 'text',
+            name: 'title',
+            formattedName: 'title',
+            label: 'Título',
+            align: '',
+            md: '3',
+            rules: [],
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+          {
+            type: 'text',
+            name: 'register_id',
+            formattedName: 'register_formatted',
+            label: 'Pessoa',
+            align: '',
+            md: '3',
+            rules: [],
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+          {
+            type: 'dataPicker',
+            name: 'date_issuance',
+            formattedName: 'date_issuance_formatted',
+            label: 'Data de Emissão',
+            align: '',
+            md: '3',
+            rules: [required],
+            list: true,
+            readonly: false,
+            disabled: false,
+            noInitial: false,
+            now: false,
+          },
+          {
+            type: 'dataPicker',
+            name: 'date_competency',
+            formattedName: 'date_competency_formatted',
+            label: 'Data de Competência',
+            align: '',
+            md: '3',
+            rules: [],
+            list: true,
+            readonly: false,
+            disabled: false,
+            noInitial: false,
+            now: false,
+          },
+          // {
+          //   type: 'dataPicker',
+          //   name: 'date_discharge',
+          //   formattedName: 'date_discharge_formatted',
+          //   label: 'Data de Quitação',
+          //   align: '',
+          //   md: '3',
+          //   rules: [],
+          //   list: true,
+          //   readonly: false,
+          //   disabled: false,
+          //   noInitial: false,
+          //   now: false,
+          // },
+          {
+            type: 'text',
+            name: 'amount_payment',
+            formattedName: 'amount_payment_formatted',
+            label: 'Valor Pago',
+            align: '',
+            md: '3',
+            rules: [],
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+          {
+            type: 'text',
+            name: 'amount',
+            formattedName: 'amount_formatted',
+            label: 'Valor Total',
+            align: '',
+            md: '3',
+            rules: [],
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+          {
+            type: 'text',
+            name: 'status',
+            formattedName: 'status_formatted',
+            label: 'Status',
+            align: '',
+            md: '3',
+            rules: [],
+            list: true,
+            readonly: false,
+            disabled: false,
+          },
+        ],
+      }
+    ],
+    account_payment_installments: [
+      { text: 'Título Parcela', value: 'description' },
+      { text: 'Data de Vencimento', value: 'date_due_formatted' },
+      { text: 'Data de Pagamento', value: 'date_payment_formatted' },
+      { text: 'Banco', value: 'bank_formatted' },
+      { text: 'Valor Parcela', value: 'amount_formatted' },
+      { text: 'Ações', value: 'actions', align: 'end' },
+    ],
+    footer: []
+  };

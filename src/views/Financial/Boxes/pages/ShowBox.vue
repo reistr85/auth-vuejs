@@ -24,12 +24,13 @@
       </ExpansionPanel>
     </PageContent>
 
-    <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
+    <Dialog no-title no-actions :dialog="dialog" :maxWidth="parseInt(1000)">
       <component 
         slot="content" 
         :is="dialogComponent" 
         v-bind="propsComponents"
         @update:dialog="dialog = $event"
+        @handleActionMovement="handleActionMovement"
         @handleActionModal="handleActionModal" />
     </Dialog>
     
@@ -78,15 +79,18 @@ export default {
       items: {},
       disabledBttn: false,
       idBoxMovementDestroy: null
-    }
+    };
   },
   mounted() {
     this.getBox();
     this.getBoxMovements();
   },
   computed: {
+    l() {
+      return this.$locales.pt;
+    },
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     },
     headerMovements() {
       return this.schema.box_movements;
@@ -101,24 +105,24 @@ export default {
         this.loading = false;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     async getBoxMovements(options = {}) {
       const payload = {
         page: options.page || 1,
-      }
+      };
       this.$api.boxes.getAllBoxMovementsByBoxId(this.id, payload).then((res) => {
         this.items = res.data;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     openDialog({ componentType }) {
       this.dialog = true;
       this.dialogComponent = componentType;
       this.propsComponents= {
-        title: 'Lançamento Manual',
+        title: this.l.boxes.showBox.movements.dialogs.manual.title,
         disabledDate: false,
         disabledTypeInputOutput: false,
         readonlyDescription: false,
@@ -128,11 +132,16 @@ export default {
           total_value: 0,
           description: ''
         }
-      }
+      };
     },
     handleAction(data) {
       const { type, params } = data;
       this[type](params);
+    },
+    handleActionMovement(data) {
+      const { action, item } = data;
+      this.dialog = false;
+      this[action](item);
     },
     handleActionModal() {
       this.dialog = false;
@@ -155,10 +164,18 @@ export default {
         this.$noty.error(err);
         this.loadingDestroy = false;
         this.dialogDestroy = false;
-      })
+      });
+    },
+    saveMovement(movement) {
+      movement.payment_method_id = 1;
+      this.$api.boxMovements.create(movement).then(() => {
+        this.$noty.success(this.l.index.alerts.createdRegister);
+      }).catch((err) => {
+        this.$noty.error(err);
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

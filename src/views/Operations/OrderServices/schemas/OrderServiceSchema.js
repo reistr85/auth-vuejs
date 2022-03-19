@@ -6,7 +6,7 @@ import { statusOrderService } from '@/utils/options';
 export default {
     domain: 'order-services',
     title: 'Ordem de Serviços',
-    description: 'Lista de todas as ordem de serviços do sisteema.',
+    description: 'Lista de todas as ordem de serviços do sistema.',
     business: OrderService,
     createBtn: 'Nova Ordem',
     formAddress: false,

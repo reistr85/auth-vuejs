@@ -2,13 +2,13 @@ const statusAppointment = [
   { id: 1, text: 'Pendente', value: 'pending' },
   { id: 2, text: 'Concluido', value: 'done' },
   { id: 3, text: 'Cancelado', value: 'canceled' },
-]
+];
 
 const statusOrderService = [
   { id: 1, text: 'Pendente', value: 'pending' },
   { id: 2, text: 'Finalizado', value: 'finished' },
   { id: 3, text: 'Cancelado', value: 'canceled' },
-]
+];
 
 const typeUser = [
   {id: 1, text: 'Administrador', value: 'admin'},
@@ -332,6 +332,12 @@ const typeBankMovements = [
   { id: 5, text: 'Saque', value: 'withdraw' }
 ];
 
+const typeStatusAccountPayments = [
+  { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Parcial', value: 'partial' },
+  { id: 3, text: 'Quitado', value: 'settled' },
+];
+
 export { 
   statusAppointment,
   statusOrderService,
@@ -348,5 +354,6 @@ export {
   statusBoxes,
   originTypeBoxMovements,
   originTypeBankMovements,
-  typeBankMovements
-}
+  typeBankMovements,
+  typeStatusAccountPayments
+};
