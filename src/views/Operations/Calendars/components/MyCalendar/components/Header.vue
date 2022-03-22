@@ -32,10 +32,6 @@ export default {
     calendar: {
       required: true,
     },
-    // typeToLabel: {
-    //   type: Object,
-    //   required: true,
-    // },
     type: {
       type: String,
       required: true,
@@ -47,7 +43,6 @@ export default {
         month: 'Mês',
         week: 'Semana',
         day: 'Dia',
-        '4day': '4 Dias',
       },
       list: [
         {
@@ -61,10 +56,6 @@ export default {
         {
           label: 'Mês',
           value: 'month'
-        },
-        {
-          label: '4 dias',
-          value: '4day'
         }
       ]
     };

@@ -1,40 +1,23 @@
 <template>
   <v-menu v-bind="$attrs" :close-on-content-click="false" :activator="selectedElement" offset-x>
-    <v-card color="grey lighten-4" min-width="350px" flat>
-      <v-toolbar :color="selectedEvent.color" dark>
-        <v-btn icon>
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
-        <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-        <v-spacer></v-spacer>
-        
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-      </v-toolbar>
+    <Card :color="selectedEvent.color" title="1" min-width="350px" toolbar icon dark>
+      <template slot="toolbar">
+        <h3 v-html="selectedEvent.name"></h3>
+      </template>
 
-      <v-card-text>
-        <span v-html="selectedEvent.details"></span>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-          text
-          color="secondary"
-          @click="selectedOpen = false"
-        >
-          Cancel
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+      <div>
+        Cliente: {{ selectedEvent.name }}
+      </div>
+    </Card>
   </v-menu>
 </template>
 
 <script>
+import Card from '@/components/vuetify/Card';
+
 export default {
   name: 'ToolbarEvent',
+  components: { Card },
   props: {
     selectedElement: {
       required: true

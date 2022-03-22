@@ -47,12 +47,12 @@ export default {
         label: 'Modo Escuro',
         value: false
       }
-    }
+    };
   },
   watch: {
     ['modeDark.value']: {
       handler() {
-        this.modeDarkLocal = this.modeDark
+        this.modeDarkLocal = this.modeDark;
       },
       deep: true,
     },
@@ -60,18 +60,18 @@ export default {
   methods: {
     logout() {
       AuthService.logout().then(() => {
-        window.location = `${process.env.VUE_APP_URL}/login`
+        window.location = `${process.env.VUE_APP_URL}/login`;
       }).catch(() => {
 
-      })
+      });
     },
     handleQuickMenu(type) {
-      eventBus.$emit('handleQuickMenu', { type })
+      eventBus.$emit('handleQuickMenu', { type });
     },
     setModeDark() {
       this.modeDarkLocal.value = !this.modeDarkLocal.value;
-      this.$emit('setModeDark', this.modeDarkLocal)
+      this.$emit('setModeDark', this.modeDarkLocal);
     }
   }
-}
+};
 </script>
