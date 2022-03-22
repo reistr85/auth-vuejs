@@ -3,6 +3,8 @@ const accountSettings = 'mdi-account-settings-outline';
 const address = 'mdi-map-marker-outline';
 const arrowLeft = 'mdi-arrow-left-bold';
 const arrowRight = 'mdi-arrow-right-bold';
+const chevronLeft = 'mdi-chevron-left';
+const chevronRight = 'mdi-chevron-right';
 const bank = 'mdi-bank';
 const box = 'mdi-inbox-multiple';
 const calendar = 'mdi-calendar-month-outline';
@@ -27,15 +29,17 @@ const download = 'mdi-download-box-outline';
 const edit = 'mdi-pencil';
 const email = 'mdi-email-outline';
 const facebook = 'mdi-facebook';
-const google = 'mdi-google-plus'
+const google = 'mdi-google-plus';
 const filter = 'mdi-filter-menu-outline';
-const financial = 'mdi-cash-register'
-const home = 'mdi-home-alert-outline'
+const financial = 'mdi-cash-register';
+const home = 'mdi-home-alert-outline';
 const industry = 'mdi-factory';
 const list = 'mdi-format-list-bulleted-type';
 const lockOutline = 'mdi-lock-outline'; 
 const logout = 'mdi-logout';
-const money = 'mdi-currency-usd'; 
+const menuDown = 'mdi-menu-down';
+const menuUp = 'mdi-menu-up';
+const money = 'mdi-currency-usd';
 const note = 'mdi-file-send-outline'; 
 const noteMultiple = 'mdi-note-multiple'; 
 const numeric = 'mdi-numeric';
@@ -69,6 +73,8 @@ export {
   cellPhone,
   chart,
   check,
+  chevronLeft,
+  chevronRight,
   clipboardArrowUpOutline,
   clipboardArrowDownOutline,
   clipboardPlusOutline,
@@ -96,6 +102,8 @@ export {
   phone,
   plus,
   plusOutline,
+  menuDown,
+  menuUp,
   money,
   note,
   noteMultiple,

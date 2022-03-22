@@ -91,7 +91,7 @@ export default {
       activePicker: null,
       dateFormatted: null,
       picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-    }
+    };
   },
   methods: {
     getDate() {
@@ -99,5 +99,5 @@ export default {
       this.picker = formatDateEN(this.dateFormatted);
     }
   }
-}
+};
 </script>
