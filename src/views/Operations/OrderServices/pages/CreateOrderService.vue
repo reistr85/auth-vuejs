@@ -21,24 +21,33 @@
           @handleAction="handleAction"/>
       </ExpansionPanel>
 
-      <ExpansionPanel v-model="expModel" readonly title="Pagamentos" class="mt-3" multiple :icon="$icons.list">
-        <GenericDataTable
-          action-type="openDialog"
-          componentType="payments"
-          :loading="loading"
-          :headers="headersPayments" 
-          :items="order_service.payments"
-          :order-finished="orderFinished"
-          @handleAction="handleAction" />
-      </ExpansionPanel>
-
-      <ExpansionPanel v-model="expModel" readonly title="Totalizadores" class="mt-3" multiple :icon="$icons.list">
-        <v-row>
-          <v-col cols="12" md="4"><TextFieldMoney v-model="order_service.subtotal" label="Sub Total" readonly /></v-col>
-          <v-col cols="12" md="4"><TextFieldMoney v-model="order_service.discount" label="Desconto" readonly /></v-col>
-          <v-col cols="12" md="4"><TextFieldMoney v-model="order_service.amount" label="Total Final" readonly /></v-col>
-        </v-row>
-      </ExpansionPanel>
+      <v-row>
+        <v-col cols="12" md="8">
+          <ExpansionPanel v-model="expModel" readonly title="Pagamentos" class="mt-3 payments" multiple :icon="$icons.list">
+            <GenericDataTable
+              action-type="openDialog"
+              componentType="payments"
+              :loading="loading"
+              :headers="headersPayments" 
+              :items="order_service.payments"
+              :order-finished="orderFinished"
+              @handleAction="handleAction" />
+          </ExpansionPanel>
+        </v-col>
+        <v-col cols="12" md="4">
+          <ExpansionPanel v-model="expModel" readonly title="Totalizadores" class="mt-3 totalizers" multiple :icon="$icons.list">
+            <div>
+              <v-row class="pt-3 px-5">
+                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.subtotal" label="Sub Total" readonly /></v-col>
+                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.discount" label="Desconto" readonly /></v-col>
+                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.amount" label="Total Final" readonly /></v-col>
+                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.total_paid" label="Total Pago" readonly /></v-col>
+                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.total_payable" label="Falta Pagar" readonly /></v-col>
+              </v-row>
+            </div>
+          </ExpansionPanel>
+        </v-col>
+      </v-row>
 
       <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
         <Button
@@ -55,30 +64,30 @@
           rounded
           class="ml-3"
           :icon="$icons.check"
-          :disabled="orderFinished"
+          :disabled="orderFinished || !saveFinished"
           @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.FINISHED }})" />
       </ExpansionPanel>
+
+      <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1100)">
+        <component 
+          slot="content" 
+          v-bind="dialogProps"
+          :is="dialogComponent"
+          @update:dialog="dialog = $event" 
+          @handleActionModal="handleActionModal" />
+      </Dialog>
+
+      <DialogConfirmation :dialog="dialogConfirmation" @noAction="dialogConfirmation = false" @yesAction="save" />
     </PageContent>
-
-    <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
-      <component 
-        slot="content" 
-        v-bind="dialogProps"
-        :is="dialogComponent"
-        @update:dialog="dialog = $event" 
-        @handleActionModal="handleActionModal" />
-    </Dialog>
-
-    <DialogConfirmation :dialog="dialogConfirmation" @noAction="dialogConfirmation = false" @yesAction="save" />
   </div>
 </template>
 
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import OrderServicesService from '../services/OrderServicesService';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
+import TypePageMixin from '@/mixins/TypePageMixin';
 import Button from '@/components/vuetify/Button';
 import GenericDataTable from '../components/GenericDataTable';
 import Dialog from '@/components/vuetify/Dialog';
@@ -86,8 +95,7 @@ import DialogAddItem from '../components/DialogAddItem';
 import DialogAddPayment from '../components/DialogAddPayment';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import OrderData from '../components/OrderData';
-import { mountParamsRequestFilter } from '@/utils';
-import { messageErrors } from '@/utils'
+import { messageErrors, formatDate, formatCurrency } from '@/utils';
 import { orderServiceStatus } from '@/utils/enums';
 
 const dialogComponents  = Object.freeze({
@@ -112,26 +120,47 @@ export default {
   },
   data() {
     return {
-      service: OrderServicesService,
       expModel: [0],
       loading: false,
-      order_service: {},
+      order_service: {
+        order_date: new Date().toISOString().substr(0, 10),
+        order_number: 0,
+        quantity_services: 0,
+        items: [],
+        payments: [],
+        items_destroy: [],
+        payments_destroy: [],
+      },
       collaborators: [],
       customers: [],
+      payment_methods: [],
+      card_flags: [],
+      banks: [],
       dialog: false,
       dialogComponent: null,
       dialogProps: {},
       dialogConfirmation: false,
-    }
+    };
   },
   mounted() {
-    this.getOrderService();
+    if(this.typePage === this.typePageOptions.show)
+      this.getOrderService();
+
+    if(this.typePage === this.typePageOptions.create)
+      this.getLastOrderNumber();
+
     this.getCollaborators();
     this.getCustomers();
+    this.getMethodPayments();
+    this.getCardFlags();
+    this.getBanks();
   },
   computed: {
+    l() {
+      return this.$locales.pt.orderServices.createOrderService;
+    },
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     },
     headersItems() {
       return this.$schemas.orderService.headerOrderServiceItems;
@@ -141,54 +170,112 @@ export default {
     },
     orderFinished() {
       return this.order_service.status === orderServiceStatus.FINISHED || false;
+    },
+    saveFinished() {
+      return this.order_service.total_paid >= this.order_service.amount || false;
     }
   },
+  mixins: [TypePageMixin],
   methods: {
     getOrderService() {
       this.loading = true;
       this.$api.orderServices.show(this.id).then((res) => {
         this.mountForm(res);
         this.loading = false;
-      }).catch((err) => {
-        console.error(err)
+      }).catch(() => {
         this.loading = false;
-      })
+      });
+    },
+    getLastOrderNumber() {
+      this.$api.orderServices.lastOrderNumber().then((res) => {
+        this.order_service.order_number = res.data.order_number + 1;
+      }).catch(() => {
+        this.loading = false;
+      });
     },
     getCollaborators(params = {}) {
-      const payload = mountParamsRequestFilter(params, 'collaborator', ['type']);
+      const payload = { ...params, filter: { type: 'collaborator' }};
       this.$api.registers.filters(payload).then((res) => {
         this.collaborators = res.data.data.map((item) => {
           return {
             id: item.id,
             text: item.name,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     getCustomers(params = {}) {
-      const payload = mountParamsRequestFilter(params, 'customer', ['type']);
+      const payload = { ...params, filter: { type: 'customer' }};
       this.$api.registers.filters(payload).then((res) => {
         this.customers = res.data.data.map((item) => {
           return {
             id: item.id,
             text: item.name,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
+    },
+    getMethodPayments(params = {}) {
+      const payload = { ...params, filter: { type: 'payment-method' }};
+      this.$api.allTypes.filters(payload).then((res) => {
+        this.payment_methods = res.data.data.map((item) => {
+          return {
+            id: item.id,
+            text: item.description,
+            value: item.id,
+          };
+        });
+      }).catch(() => {
+        this.loading = false;
+      });
+    },
+    getCardFlags(params = {}) {
+      const payload = { ...params, filter: { type: 'card-flag' }};
+      this.$api.allTypes.filters(payload).then((res) => {
+        this.card_flags = res.data.data.map((item) => {
+          return {
+            id: item.id,
+            text: item.description,
+            value: item.id,
+          };
+        });
+      }).catch(() => {
+        this.loading = false;
+      });
+    },
+    getBanks() {
+      this.$api.banks.index().then((res) => {
+        this.banks = res.data.map((item) => {
+          return {
+            id: item.id,
+            text: item.description,
+            value: item.id,
+          };
+        });
+      }).catch(() => {
+        this.loading = false;
+      });
     },
     openDialog({ componentType }) {
       this.dialog = true;
-      this.dialogProps = {
-        collaborators: this.collaborators,
-      }
-
+      this.setPropsDialog(componentType);
       this.dialogComponent = dialogComponents[componentType];
+    },
+    setPropsDialog(componentType) {
+      this.dialogProps = {
+        ...componentType === 'items' && { collaborators: this.collaborators },
+        ...componentType === 'payments' && {
+          banks: this.banks,
+          payment_methods: this.payment_methods,
+          card_flags: this.card_flags
+        }
+      };
     },
     handleAction(data) {
       const { type, params } = data;
@@ -203,6 +290,7 @@ export default {
       this.order_service.items.push({
         id: item.id,
         collaborator: item.collaborator,
+        collaborator_id: item.collaborator?.id,
         amount: item.sale_value,
         amount_formatted: item.sale_value_formatted,
         discount: 0,
@@ -210,27 +298,66 @@ export default {
         number_item: this.setNumberItem(),
         quantity: 1,
         service: { name: item.name },
+        service_id: item.id,
         subtotal: item.sale_value,
         subtotal_formatted: item.sale_value_formatted,
         newItem: true,
-      })
+      });
+      this.totalizers();
+    },
+    addPayment(item) {
+      if((parseFloat(this.order_service.total_paid) + parseFloat(item.value)) > this.order_service.amount) {
+        this.$noty.error(this.l.alerts.totalPaidGreaterAmount);
+        return;
+      }
+
+      this.order_service.payments.push({
+        id: null,
+        bank_id: item.bank.id,
+        payment_date: item.payment_date,
+        payment_date_formatted: formatDate(item.payment_date),
+        payment_method: { id: item.payment_method.id, description: item.payment_method.text },
+        payment_method_id: item.payment_method.id,
+        card_flag: { id: item.card_flag?.id, description: item.card_flag?.text },
+        card_flag_id: item.card_flag?.id ? item.card_flag.id : null,
+        amount_paid: item.value,
+        amount_paid_formatted: formatCurrency(item.value),
+        newItem: true
+      });
+      this.totalizers();
     },
     itemDestroy(params) {
-      const { index, componentType } = params;
+      const { index, componentType, item } = params;
       if(componentType === 'items') {
-        this.order_service.items.splice(index,1)
+        this.order_service.items.splice(index, 1);
+        this.order_service.items_destroy.push(item);
       }
+      this.totalizers();
     },
     confirmSave(data) {
       this.order_service.status = data.status;
       this.dialogConfirmation = true;
     },
     save() {
-      this.orderServicesService.update(5, this.order_service).then(() => {
-        this.$noty.success(this.$locales.alerts.updatedRegister)
-        this.$router.push({ name: this.$schemas.orderService.routes.list.name })
+      this.typePage === this.typePageOptions.create ? this.create() : this.update();
+    },
+    create() {
+      this.$api.orderServices.create(this.order_service).then(() => {
+        this.$noty.success(this.$locales.pt.index.alerts.createdRegister);
+        this.$router.push({ name: this.$schemas.orderService.routes.list.name });
       }).catch((err) => {
-        this.$noty.error(messageErrors(err))
+        this.$noty.error(err);
+      }).finally(() => {
+        this.dialogConfirmation = false;
+      });
+    },
+    update() {
+      const { id } = this.$route.params;
+      this.$api.orderServices.update(id, this.order_service).then(() => {
+        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
+        this.$router.push({ name: this.$schemas.orderService.routes.list.name });
+      }).catch((err) => {
+        this.$noty.error(messageErrors(err));
       }).finally(() => {
         this.dialogConfirmation = false;
       });
@@ -238,18 +365,21 @@ export default {
     mountForm(data) {
       this.order_service = {
         order_date: data.order_date,
+        order_number: data.order_number,
         customer_id: data.customer_id,
         collaborator_id: data.collaborator_id,
         quantity_services: data.quantity_services,
         subtotal: data.subtotal,
         discount: data.discount,
         amount: data.amount,
+        total_paid: data.total_paid,
+        total_payable: 0,
         status: data.status,
-        removedItems: [],
-        removedPayments: [],
         items: [],
-        payments: []
-      }
+        payments: [],
+        items_destroy: [],
+        payments_destroy: [],
+      };
 
       this.order_service.items = data.items.map((item) => {
         return {
@@ -265,31 +395,72 @@ export default {
           amount: item.amount,
           amount_formatted: item.amount_formatted,
           newItem: false
-        }
+        };
       });
 
       this.order_service.payments = data.payments.map((item) => {
         return {
           id: item.id,
+          bank_id: item.bank_id,
           payment_date: item.payment_date,
           payment_date_formatted: item.payment_date_formatted,
           payment_method: { description: item.payment_method.description },
+          payment_method_id: item.payment_method_id,
           card_flag: { description: item.card_flag?.description },
+          card_flag_id: item.card_flag_id,
           amount_paid: item.amount_paid,
           amount_paid_formatted: item.amount_paid_formatted,
           newItem: false
-        }
+        };
       });
+
+      this.totalizers();
     },
     setNumberItem() {
       return this.order_service.items.length + 1;
+    },
+    totalizers() {
+      let quantity_services = 0;
+      let subtotal = 0;
+      let discount = 0;
+      let amount = 0;
+      let total_paid = 0;
+      this.order_service.items.forEach((item) => {
+        quantity_services += 1;
+        subtotal += parseFloat(item.subtotal);
+        discount += parseFloat(item.discount);
+        amount += parseFloat(item.amount);
+      });
+
+      this.order_service.payments.forEach((payment) => {
+        total_paid += parseFloat(payment.amount_paid);
+      });
+      this.order_service.quantity_services = quantity_services;
+      this.order_service.subtotal = subtotal;
+      this.order_service.discount = discount;
+      this.order_service.amount = amount;
+      this.order_service.total_paid = total_paid;
+      this.order_service.total_payable = total_paid >= amount ? 0 :amount - total_paid;
     }
   }
-}
+};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .btn-actions {
   width: 150px;
+}
+
+.payments {
+  min-height: 350px;
+}
+
+.totalizers {
+  height: 350px;
+  
+  div {
+    background-color: #EBEBEB;
+    border-radius: 5px;
+  }
 }
 </style>

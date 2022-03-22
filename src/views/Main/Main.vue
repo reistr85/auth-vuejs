@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <div style="heigth: 100%" v-if="!isLoginRegisterPage">
-      <NavBar :mode-dark="modeDark" @openCloseSideBar="openCloseSideBar" />
+      <NavBar :mode-dark="modeDark" @openCloseSideBar="openCloseSideBar" @setModeDark="setModeDark" />
       
       <v-card height="100%" class="mt-0" :dark="modeDark.value">
         <div class="main">
-          <SideBar ref="refsSideBar" />
+          <SideBar ref="refsSideBar" :mode-dark="modeDark" />
           <ContentMain :mode-dark="modeDark" />
         </div>
       </v-card>
@@ -45,6 +45,11 @@ export default {
     dialogQuickMenu: false,
     typeQuickMenu: null,
   }),
+  provide() {
+    return {
+      modeDark: this.modeDark
+    }
+  },
   mounted() {
     eventBus.$on('handleQuickMenu', this.handleQuickMenu)
 
@@ -74,11 +79,14 @@ export default {
     handleQuickMenu(data) {
       this.typeQuickMenu = data.type;
       this.dialogQuickMenu = !this.dialogQuickMenu;
+    },
+    setModeDark(data) {
+      this.modeDark = data;
     }
   },
   beforeDestroy() {
     eventBus.$off('handleQuickMenu')
-  }
+  },
 };
 </script>
 

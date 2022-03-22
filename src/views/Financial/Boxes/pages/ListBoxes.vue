@@ -14,6 +14,7 @@
         v-bind="propsComponents"
         :is="dialogComponent"
         @update:dialog="dialog = $event"
+        @handleActionMovement="handleActionMovement"
         @handleActionModal="handleActionModal" />
     </Dialog>
     <DialogConfirmation 
@@ -36,8 +37,6 @@ import Button from '@/components/vuetify/Button';
 import DialogOpenBox from '@/views/Financial/Boxes/components/DialogOpenBox';
 import DialogDynamicMovement from '@/views/Financial/Boxes/components/DialogDynamicMovement';
 import DialogConfirmation from '@/components/DialogConfirmation';
-import { messageErrors } from '@/utils';
-import locales from '@/locales/pt-BR';
 
 export default {
   name: 'ListBoxes',
@@ -58,18 +57,22 @@ export default {
       service: BoxesService,
       dialog: false,
       dialogComponent: null,
-      propsComponents: {},
+      propsComponents: {
+        disabledDate: true,
+        disabledTypeInputOutput: true,
+        readonlyDescription: true
+      },
       dialogClosed: false,
       propsClosed: {},
       boxClosed: {},
       eventsClosed: {},
       movement: {},
       boxOpen: false
-    }
+    };
   },
   computed: {
-    locales() {
-      return this.$locales.pt.boxes.listBoxes;
+    l() {
+      return this.$locales.pt;
     }
   },
   methods: {
@@ -77,12 +80,17 @@ export default {
       this.dialog = true;
       this.dialogComponent = DialogOpenBox;
     },
+    handleActionMovement(data) {
+      const { action, item } = data;
+      this.dialog = false;
+      this[action](item);
+    },
     handleActionModal() {
       this.dialog = false;
       this.$refs.dynamicListPage.getAll();
     },
     actionMoreActions(item) {
-      if(item.dataListProps.item.status === 'closed') return this.$noty.error('Caixa fechado!');
+      if(item.dataListProps.item.status === 'closed') return this.$noty.error(this.l.boxes.listBoxes.messages.closed.boxClosed);
       this[item.i.action](item);
     },
     withdrawn(item, automatic = false) {
@@ -91,70 +99,72 @@ export default {
           payment_method_id: 1,
           box_id: item.dataListProps.item.id,
           box_movements_date: null,
-          type: 'output',
+          type: this.$enums.typeMovement.OUTPUT,
           total_value: item.dataListProps.item.total_value,
-          description: 'Sangria Fechamento'
-        }
+          description: this.l.boxes.listBoxes.movements.description
+        };
         this.$api.boxMovements.create(this.movement).then(() => {
-          this.$noty.success(locales.alerts.createdRegister);
+          this.$noty.success(this.l.index.alerts.createdRegister);
         }).catch((err) => {
           this.$noty.error(err);
-        })
+        });
         this.closedBox();
       } else {
         this.dialog = true;
         this.dialogComponent = DialogDynamicMovement;
         this.propsComponents = {
-          title: 'Lançamento de Sangria',
-          disabledDate: true,
-          disabledTypeInputOutput: true,
-          readonlyDescription: true,
+          title: this.l.boxes.listBoxes.movements.dialogs.withdrawn.title,
           movement: {
             box_id: item.dataListProps.item.id,
             box_movements_date: null,
-            type: 'output',
+            type: this.$enums.typeMovement.OUTPUT,
             total_value: 0,
-            description: 'Sangria'
+            description: this.l.boxes.listBoxes.movements.dialogs.withdrawn.description
           }
-        }
+        };
       }
     },
     entrance(item) {
       this.dialog = true;
       this.dialogComponent = DialogDynamicMovement;
       this.propsComponents= {
-        title: 'Lançamento de Suprimento',
-        disabledDate: true,
-        disabledTypeInputOutput: true,
-        readonlyDescription: true,
+        title: this.l.boxes.listBoxes.movements.dialogs.entrance.title,
         movement: {
           box_id: item.dataListProps.item.id,
           box_movements_date: null,
-          type: 'input',
+          type: this.$enums.typeMovement.INPUT,
           total_value: 0,
-          description: 'Suprimento'
+          description: this.l.boxes.listBoxes.movements.dialogs.entrance.description,
         }
-      }
+      };
     },
     closed(item){
       this.dialogClosed = true;
       this.boxClosed = item;
-      this.propsClosed = { message: item.dataListProps.item.total_value > 0 ? this.locales.messages.closed.totalValueLargerZero : this.locales.messages.closed.box }
+      this.propsClosed = { message: item.dataListProps.item.total_value > 0 ? this.l.boxes.listBoxes.messages.closed.totalValueLargerZero : this.l.boxes.listBoxes.messages.closed.box };
       this.eventsClosed = { yesAction: item.dataListProps.item.total_value > 0 ? () => this.withdrawn(item, true) : () => this.closedBox() };
     },
     closedBox() {
       let status = 'closed';
-      BoxesService.update(this.boxClosed.dataListProps.item.id, { status: status }).then(() => {
-        this.$noty.success(locales.alerts.updatedRegister);
+      this.$api.boxes.update(this.boxClosed.dataListProps.item.id, { status: status }).then(() => {
+        this.$noty.success(this.l.index.alerts.updatedRegister);
         this.$refs.dynamicListPage.getAll();
       }).catch((error) => {
-        this.$noty.error(messageErrors(error));
+        this.$noty.error(error);
       }).finally(() => {
         this.dialogClosed = false;
       });
+    },
+    saveMovement(movement) {
+      movement.payment_method_id = 1;
+      this.$api.boxMovements.create(movement).then(() => {
+        this.$noty.success(this.l.index.alerts.createdRegister);
+      }).catch((err) => {
+        this.$noty.error(err);
+      });
     }
   }
-}
+};
 
 </script>
 

@@ -4,15 +4,13 @@
       v-bind="$attrs"
       v-on="$listeners"
       clearable
-      hide-details
-      hide-selected
       :chips="false"
       :items="localItems"
       :loading="loading"
       :search-input.sync="search"
       :ref="refs"
       :id="id"
-      :label="label" 
+      :label="label"
       :rules="rules"
       :dense="dense"
       :readonly="readonly" 

@@ -1,24 +1,24 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
-    <PageContent />
+    <PageHeader :schema="$schemas.calendar" />
+    <PageContent>
+      <MyCalendar />
+    </PageContent>
   </div>
 </template>
 
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import CalendarSchema from '../schemas/CalendarSchema';
-import CalendarsService from '../services/CalendarsService';
+import MyCalendar from '../components/MyCalendar/MyCalendar';
+
 
 export default {
   name: 'ListCalendars',
-  components: { PageHeader, PageContent },
+  components: { PageHeader, PageContent, MyCalendar },
   data() {
     return {
-      schema: CalendarSchema,
-      service: CalendarsService,
-    }
+    };
   },
-}
+};
 </script>

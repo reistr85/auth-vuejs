@@ -10,7 +10,7 @@
       </div>
 
       <v-spacer></v-spacer>
-      <VSwitch :label="modeDark.label" class="mt-6 mr-5" @click="modeDark.value = !modeDark.value" />
+      <VSwitch :label="modeDarkLocal.label" v-model="modeDarkLocal.value" class="mt-6 mr-5" @click="setModeDark()" />
       <NavBarSettings />
     </v-toolbar>
   </v-card>
@@ -43,19 +43,35 @@ export default {
         plusOutline: plusOutline,
       },
       dialog: false,
-    }
+      modeDarkLocal: {
+        label: 'Modo Escuro',
+        value: false
+      }
+    };
+  },
+  watch: {
+    ['modeDark.value']: {
+      handler() {
+        this.modeDarkLocal = this.modeDark;
+      },
+      deep: true,
+    },
   },
   methods: {
     logout() {
       AuthService.logout().then(() => {
-        window.location = `${process.env.VUE_APP_URL}/login`
+        window.location = `${process.env.VUE_APP_URL}/login`;
       }).catch(() => {
 
-      })
+      });
     },
     handleQuickMenu(type) {
-      eventBus.$emit('handleQuickMenu', { type })
+      eventBus.$emit('handleQuickMenu', { type });
+    },
+    setModeDark() {
+      this.modeDarkLocal.value = !this.modeDarkLocal.value;
+      this.$emit('setModeDark', this.modeDarkLocal);
     }
   }
-}
+};
 </script>

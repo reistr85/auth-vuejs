@@ -11,6 +11,7 @@ export default {
     description: 'Lista de todos os cadastros no sistema',
     createBtn: 'Novo Cadastro',
     formAddress: true,
+    itemsPerPage: 10,
     routes: {
       list: {
         name: 'registers',
@@ -44,44 +45,72 @@ export default {
         {
           type: 'select',
           label: 'Tipo de Cadastro',
-          field: 'type',
+          name: 'type',
           icon: list,
           md: 6,
+          items: {
+            data: typeRegister
+          }
         },
         {
           type: 'text',
           label: 'Nome',
-          field: 'name',
+          name: 'name',
           icon: text,
           md: 6,
         },
         {
           type: 'text',
           label: 'Nome Fantasia',
-          field: 'social_name',
+          name: 'social_name',
           icon: text,
           md: 6,
         },
         {
           type: 'text',
           label: 'E-mail',
-          field: 'email',
+          name: 'email',
           icon: text,
           md: 6,
         },
         {
-          type: 'text',
+          type: 'simpleMask',
+          name: 'phone',
           label: 'Telefone',
-          field: 'phone',
-          icon: text,
           md: 6,
+          icon: text,
+          inputMask: '(##)####-####',
+          outputMask: '(##)####-####',
+          applyAfter: false,
+          empty: null,
+          alphanumeric: false,
+          clearable: false
         },
         {
-          type: 'text',
+          type: 'simpleMask',
+          name: 'cell_phone',
           label: 'Celular',
-          field: 'cell_phone',
-          icon: text,
           md: 6,
+          icon: text,
+          inputMask: '(##)#####-####',
+          outputMask: '(##)#####-####',
+          applyAfter: false,
+          empty: null,
+          alphanumeric: false,
+          clearable: false
+        },
+        {
+          type: 'simpleMask',
+          name: 'cnpj',
+          label: 'CNPJ',
+          md: 6,
+          icon: text,
+          inputMask: '##.###.###/####-##',
+          outputMask: '##.###.###/####-##',
+          applyAfter: false,
+          empty: null,
+          alphanumeric: false,
+          clearable: false
         },
       ]
     },
@@ -207,7 +236,7 @@ export default {
             label: 'CNPJ',
             align: '',
             md: '3',
-            list: false,
+            list: true,
             readonly: false,
             disabled: true,
             clearable: true,
@@ -354,4 +383,4 @@ export default {
         md: 2,
       },
     ]
-  }
+  };

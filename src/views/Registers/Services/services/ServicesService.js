@@ -9,7 +9,7 @@ const formatResponse = (item) => {
   item.cost_value_formatted = formatCurrency(item.cost_value);
   item.sale_value_formatted = formatCurrency(item.sale_value);
   item.situation_formatted = getText(typeSituation, item.situation);
-}
+};
 
 const ServicesService = DynamicService('services', ServiceSchema, {
   formatResponse,

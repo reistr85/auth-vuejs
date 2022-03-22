@@ -2,13 +2,13 @@ const statusAppointment = [
   { id: 1, text: 'Pendente', value: 'pending' },
   { id: 2, text: 'Concluido', value: 'done' },
   { id: 3, text: 'Cancelado', value: 'canceled' },
-]
+];
 
 const statusOrderService = [
   { id: 1, text: 'Pendente', value: 'pending' },
   { id: 2, text: 'Finalizado', value: 'finished' },
   { id: 3, text: 'Cancelado', value: 'canceled' },
-]
+];
 
 const typeUser = [
   {id: 1, text: 'Administrador', value: 'admin'},
@@ -43,7 +43,9 @@ const typeSituation = [
 
 const typeAllTypes = [
   {id: 1, text: 'Categoria', value: 'category'},
-  {id: 2, text: 'Sub-Categoria', value: 'sub-category'}
+  {id: 2, text: 'Sub Categoria', value: 'sub-category'},
+  {id: 3, text: 'Forma de Pagamento', value: 'payment-method'},
+  {id: 4, text: 'Bandeira', value: 'card-flag'},
 ];
 
 const UF = [
@@ -314,12 +316,12 @@ const statusBoxes = [
 
 const originTypeBoxMovements = [
   { id: 1, text: 'Manual', value: null },
-  { id: 2, text: 'Order de Serviço', value: 'App\\Models\\OrderService' }
+  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' }
 ];
 
 const originTypeBankMovements = [
-  { id: 1, text: '', value: null },
-  { id: 2, text: 'Order de Serviço', value: 'App\\Models\\OrderService' }
+  { id: 1, text: 'Manual', value: null },
+  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' }
 ];
 
 const typeBankMovements = [
@@ -328,6 +330,12 @@ const typeBankMovements = [
   { id: 3, text: 'Depósito Espécie', value: 'cash' },
   { id: 4, text: 'Depósito Cheque', value: 'check' },
   { id: 5, text: 'Saque', value: 'withdraw' }
+];
+
+const typeStatusAccountPayments = [
+  { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Parcial', value: 'partial' },
+  { id: 3, text: 'Quitado', value: 'settled' },
 ];
 
 export { 
@@ -346,5 +354,6 @@ export {
   statusBoxes,
   originTypeBoxMovements,
   originTypeBankMovements,
-  typeBankMovements
-}
+  typeBankMovements,
+  typeStatusAccountPayments
+};

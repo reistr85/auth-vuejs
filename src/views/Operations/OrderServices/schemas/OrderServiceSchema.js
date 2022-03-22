@@ -6,7 +6,7 @@ import { statusOrderService } from '@/utils/options';
 export default {
     domain: 'order-services',
     title: 'Ordem de Serviços',
-    description: 'Lista de todas as ordem de serviços do sisteema.',
+    description: 'Lista de todas as ordem de serviços do sistema.',
     business: OrderService,
     createBtn: 'Nova Ordem',
     formAddress: false,
@@ -87,6 +87,7 @@ export default {
             type: 'text',
             name: 'customer_id',
             formattedName: 'customer.name',
+            noSortable: true,
             label: 'Cliente',
             align: '',
             md: '1',
@@ -173,4 +174,4 @@ export default {
       { text: 'Valor', value: 'sale_value_formatted' },
     ],
     footer: []
-  }
+  };

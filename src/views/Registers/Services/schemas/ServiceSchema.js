@@ -36,26 +36,26 @@ export default {
     },
     filters: {
       has: true,
+      include: {
+        has: true,
+        value: 'category,subCategory'
+      },
       items: [
         {
           type: 'text',
           label: 'Nome',
-          field: 'name',
+          name: 'name',
           icon: text,
           md: 6,
         },
         {
           type: 'text',
           label: 'Apelido',
-          field: 'nickname',
+          name: 'nickname',
           icon: text,
           md: 6,
         },
       ],
-    },
-    include: {
-      has: true,
-      value: 'category,subCategory'
     },
     fields: [
       {
@@ -80,6 +80,7 @@ export default {
             name: 'category_id',
             formattedName: 'category_formatted',
             label: 'Categoria',
+            noSortable: true,
             align: '',
             md: '3',
             rules: [],
@@ -101,6 +102,7 @@ export default {
             name: 'sub_category_id',
             formattedName: 'sub_category_formatted',
             label: 'Sub Categoria',
+            noSortable: true,
             align: '',
             md: '3',
             rules: [],
@@ -199,4 +201,4 @@ export default {
         md: 2,
       },
     ]
-  }
+  };

@@ -116,12 +116,12 @@ export function messageErrors(err) {
   let message = '';
 
   if(err.status === 422){
-    if(err.data.errors?.length) {
+    if(err.data.message) {
+      message += `<li class="item-error">${err.data.message}</li>`;
+    } else {
       Object.keys(err.data.errors).forEach(function(key) {
         message += `<li class="item-error">${err.data.errors[key][0]}</li>`;
       });
-    } else {
-      message += `<li class="item-error">${err.data.message}</li>`;
     }
   }else{
     message += `<li class="item-error">Erro desconhecido, tente novamente.</li>`;
@@ -170,8 +170,34 @@ export const typePageOptions = {
   statement: 'statement'
 }
 
-export function mountParamsRequestFilter(params, filter, customFields) {
-  return { ...params, page: 1, per_page: 10, filter, customFields: customFields.map((item) => {
-    return { field: item }
-  })}
+export function mountParamsRequestFilter(params, filter, search_global = false) {
+  let payload = {};
+  if(search_global) {
+    return {
+      ...params,
+      page: params?.page || 1,
+      per_page: params?.per_page || 10,
+      filter,
+      search_global,
+      customFields: customFields.map((item) => {
+        return { field: item }
+      }
+    )}
+  }else{
+    return { 
+      ...params,
+      page: params?.page || 1,
+      per_page: params?.per_page || 10,
+      filter,
+      search_global,
+      customFields: Object.keys(customFields).customFields.map((key) => {
+        // console.log(key)
+        return { [key]: key }
+      })
+    }
+  }
+}
+
+export function onlyNumbers(str) {
+  return str.replace(/\D/g, "");
 }

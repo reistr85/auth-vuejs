@@ -22,10 +22,10 @@ export default {
     return {
       schema: AppointmentSchema,
       service: AppointmentsService,
-    }
+    };
   },
   methods: {}
-}
+};
 </script>
 
 <style lang="scss" scoped>

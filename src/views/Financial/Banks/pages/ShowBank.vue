@@ -42,6 +42,8 @@
         @update:dialog="dialog = $event"
         @handleActionModal="handleActionModal" />
     </Dialog>
+
+    <DialogConfirmation :dialog="dialogDestroy" :loading="loadingDestroy" @noAction="dialogDestroy = false" @yesAction="itemDestroy" />
   </div>
 </template>
 
@@ -56,6 +58,8 @@ import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Button from '@/components/vuetify/Button';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogDynamicMovement from '@/views/Financial/Banks/components/DialogDynamicMovement';
+import DialogConfirmation from '@/components/DialogConfirmation';
+import locales from '@/locales/pt-BR';
 import { arrowLeft } from '@/utils/icons';
 
 export default {
@@ -69,7 +73,8 @@ export default {
     TextFieldMoney,
     Button,
     Dialog,
-    DialogDynamicMovement
+    DialogDynamicMovement,
+    DialogConfirmation
   },
   props: {},
   data() {
@@ -78,15 +83,18 @@ export default {
       expModel: [0],
       bank: {},
       loading: false,
+      loadingDestroy: false,
       dialog: false,
+      dialogDestroy: false,
       dialogComponent: null,
       propsComponents: null,
-      items: {},
       disabledBttn: false,
+      items: {},
       icons: {
         arrowLeft: arrowLeft,
-      }
-    }
+      },
+      idBankMovementDestroy: null
+    };
   },
   mounted() {
     this.getBank();
@@ -94,7 +102,7 @@ export default {
   },
   computed: {
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     },
     headerMovements() {
       return this.schema.bank_movements;
@@ -109,18 +117,18 @@ export default {
         this.loading = false;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     async getBankMovements(options = {}) {
       const payload = {
         page: options.page || 1,
-      }
+      };
       this.$api.banks.getAllBankMovementsByBankId(this.id, payload).then((res) => {
         this.items = res.data;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     openDialog({ componentType }) {
       this.dialog = true;
@@ -135,7 +143,7 @@ export default {
           movement_date: null,
           value: 0
         }
-      }
+      };
     },
     handleAction(data) {
       const { type, params } = data;
@@ -145,9 +153,27 @@ export default {
       this.dialog = false;
       this.getBank();
       this.getBankMovements();
+    },
+    handleItemDestroy(params) {
+      this.dialogDestroy = true;
+      this.idBankMovementDestroy = params.item.id;
+    },
+    itemDestroy() {
+      this.loadingDestroy = true;
+      this.$api.bankMovements.delete(this.idBankMovementDestroy).then(() => {
+        this.$noty.success(locales.alerts.deletedRegister);
+        this.loadingDestroy = false;
+        this.dialogDestroy = false;
+        this.getBank();
+        this.getBankMovements();
+      }).catch((err) => {
+        this.$noty.error(err);
+        this.loadingDestroy = false;
+        this.dialogDestroy = false;
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

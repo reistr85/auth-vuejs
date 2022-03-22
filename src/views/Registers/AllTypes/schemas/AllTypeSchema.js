@@ -1,29 +1,82 @@
+import AllType from '@/business/AllType';
 import { typePageOptions } from '@/utils';
 import { text, list } from '@/utils/icons';
 import { required } from '@/utils/rules';
-import { typeYesNo, typeAllTypes } from '@/utils/options';
+import { typeYesNo } from '@/utils/options';
 
 export default {
     domain: 'all-types',
     title: 'Tipos Gerais',
     description: 'Lista de todos os tipos gerais do sistema',
-    createBtn: 'Novo Tipo',
+    business: AllType,
+    createBtn: '',
     formAddress: false,
     routes: {
       list: {
-        name: 'allTypes',
-        path: '/tipos-gerais',
-        meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        category: {
+          name: 'categories',
+          path: '/categorias',
+          meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        },
+        subCategory: {
+          name: 'subcategories',
+          path: '/sub-categorias',
+          meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        },
+        payment: {
+          name: 'paymentmethods',
+          path: '/pagamentos',
+          meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        },
+        cardFlag: {
+          name: 'cardflags',
+          path: '/bandeiras',
+          meta: { typePage: typePageOptions.list, requiresAuth: true, }
+        }
       },
       create: {
-        name: 'allType-create',
-        path: '/tipos-gerais/novo',
-        meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        category: {
+          name: 'categories-create',
+          path: '/categorias/novo',
+          meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        },
+        subCategory: {
+          name: 'subcategories-create',
+          path: '/sub-categorias/novo',
+          meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        },
+        payment: {
+          name: 'paymentmethods-create',
+          path: '/pagamentos/novo',
+          meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        },
+        cardFlag: {
+          name: 'cardflags-create',
+          path: '/bandeiras/novo',
+          meta: { typePage: typePageOptions.create, requiresAuth: true, }
+        }
       },
       show: {
-        name: 'allType-show',
-        path: '/tipos-gerais/:id',
-        meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        category: {
+          name: 'categories-show',
+          path: '/categorias/:id',
+          meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        },
+        subCategory: {
+          name: 'subcategories-show',
+          path: '/sub-categorias/:id',
+          meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        },
+        payment: {
+          name: 'paymentmethods-show',
+          path: '/pagamentos/:id',
+          meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        },
+        cardFlag: {
+          name: 'cardflags-show',
+          path: '/bandeiras/:id',
+          meta: { typePage: typePageOptions.show, requiresAuth: true, }
+        }
       }
     },
     listActions: {
@@ -40,13 +93,10 @@ export default {
       has: true,
       items: [
         {
-          type: 'select',
-          label: 'Tipo',
-          name: 'type',
-          icon: list,
-          items: {
-            data: typeAllTypes,
-          },
+          type: 'text',
+          label: 'Descrição',
+          name: 'description',
+          icon: text,
           md: 6,
         },
         {
@@ -56,13 +106,6 @@ export default {
           icon: text,
           md: 6,
         },
-        {
-          type: 'text',
-          label: 'Descrição',
-          name: 'description',
-          icon: text,
-          md: 12,
-        },
       ]
     },
     fields: [
@@ -71,21 +114,6 @@ export default {
         title: 'Dados do Tipo Geral',
         openGroup: true,
         items: [
-          {
-            type: 'select',
-            name: 'type',
-            formattedName: 'type_formatted',
-            label: 'Tipo',
-            align: '',
-            md: '4',
-            rules: [required],
-            list: true,
-            readonly: false,
-            disabled: false,
-            items: typeAllTypes,
-            itemText: 'text',
-            itemValue: 'value'
-          },
           {
             type: 'text',
             name: 'description',
@@ -131,4 +159,4 @@ export default {
       }
     ],
     footer: []
-  }
+  };

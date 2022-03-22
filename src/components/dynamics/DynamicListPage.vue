@@ -1,4 +1,3 @@
-<!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
 <template>
   <div>
     <div>
@@ -7,13 +6,15 @@
       </div>
       <div class="mb-5 d-flex justify-space-between">
         <div class="d-flex flex-wrap  justify-start">
-          <Chip 
-            v-for="(item, index) in searches" :key="index"
-            dense
-            close
-            class="mr-2"
-            :label="`${item.label}: ${item.formattedValue}`" 
-            @click:close="closeChip(item)" />
+          <div v-for="(item, index) in searchChips" :key="index">
+            <Chip 
+              v-if="!item.noChip"
+              dense
+              close
+              class="mr-2"
+              :label="`${item.label}: ${item.formattedValue}`" 
+              @click:close="closeChip(item)" />
+          </div>
         </div>
         <div>
           <SearchListPage ref="searchListPage" :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
@@ -24,7 +25,7 @@
     <v-data-table
       v-model="selected"
       item-key="id"
-      class="elevation-1 certus-data-list"
+      class="elevation-1"
       dense
       :show-expand="schema.showExpand"
       :loading="loading"
@@ -51,7 +52,7 @@
         <Chip :label="item.status_formatted" small :color="colorsStatus[item.status]" />
       </template>
 
-      <template v-slot:[`item.actions`]="props" style="width: 200px">
+      <template v-slot:[`item.actions`]="props">
         <ActionsListPage 
           :schema="schema" 
           :icons="icons" 
@@ -83,17 +84,17 @@ const COLORS_STATUS = Object.freeze({
   finished: 'success',
   open: 'secondary',
   closed: 'primary'
-})
+});
 
 const COLORS_SITUATION = Object.freeze({
   active: 'success',
   disabled: 'light',
-})
+});
 
 const COLORS_USE_NICKNAME = Object.freeze({
   yes: 'success',
   no: 'light',
-})
+});
 
 export default {
   name: 'DynamicListPage',
@@ -106,7 +107,16 @@ export default {
     service: {
       type: Object,
     },
+    fixedFilter: {
+      type: Boolean,
+      default: false,
+    },
+    fixedFilterParams: {
+      type: Object,
+      default: () => {},
+    }
   },
+  inject: ['modeDark'],
   data() {
     return {
       icons: {
@@ -125,29 +135,54 @@ export default {
       dialog: false,
       loading: false,
       loadingDestroy: false,
-      searches: '',
+      searches: {},
+      searchChips: [],
       headers: [],
-      localItems: {},
       options: {},
+      localItems: {},
       totalLocalItems: 10,
       noGetDynamicItems: false,
       chips: {},
       colorsStatus: COLORS_STATUS,
       colorsSituation: COLORS_SITUATION,
       colorsUseNickname: COLORS_USE_NICKNAME,
-    }
+    };
   },
   mounted() {
     this.setHeaders();
-    this.getAll();
+  },
+  computed: {
+    paramsPaginator() {
+      let params = { page: this.options.page, per_page: this.options.itemsPerPage, sortBy: this.options.sortBy[0],
+        sortDesc: this.options.sortDesc[0] ? 'desc' : 'asc' };
+
+      if(params.sortBy) {
+        const arr = params.sortBy.split('_');
+        if(arr[arr.length-1] === 'formatted') {
+          let sortBy = '';
+          arr.forEach((i, index) => {
+            if(index < (arr.length - 1)) sortBy += `${i}_`;
+          });
+          params.sortBy = sortBy.substring(0, sortBy.length - 1);
+        }
+      }
+
+      return params;
+    }
   },
   watch: {
     options: {
       handler () {
-        this.getAll();
+        (this.searchChips.length || this.fixedFilter) ? this.searchItems(this.searches) : this.getAll();
       },
       deep: true,
     },
+    fixedFilterParams: {
+      handler() {
+        this.searchItems(this.searches);
+      },
+      deep: true
+    }
   },
   methods: {
     setHeaders() {
@@ -159,7 +194,7 @@ export default {
                 text: item.label,
                 value: item.formattedName ? item.formattedName : item.name,
                 align: item.align ? item.align : 'start',
-                sortable: item.sortable ? item.sortable : true,
+                sortable: !item.noSortable || false,
               }
             );
           }
@@ -187,19 +222,25 @@ export default {
           }
         );
       }
-
+      
       if(this.schema.listActions.has) {
-        this.headers.push({ text: 'Ações', value: 'actions', sortable: false, align: 'end', class: 'action-column-header', cellClass: 'action-column',});
+        this.headers.push({
+          text: 'Ações',
+          value: 'actions',
+          sortable: false,
+          align: 'end',
+          cellClass: 'action-column',
+        });
       }
     },
     getAll() {
       this.loading = true;
 
+      
       const params = {
-        page: this.options.page,
-        totalItemsPerPage: this.options.itemsPerPage,
+        ...this.paramsPaginator,
         customSearch: this.search,
-      }
+      };
 
       this.service.index(params).then((res) => {
         this.localItems = res.data;
@@ -209,22 +250,14 @@ export default {
         if(this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
       }).catch((err) => {
-        console.error(`DynamicListPage GetDataFromApi error: ${err}`)
+        console.error(`DynamicListPage GetDataFromApi error: ${err}`);
         this.loading = false;
         this.$noty.error('Erro ao receber os itens.');
       });
     },
-    getFilters() {
-      this.loading = true;
-
-      const params = {
-        page: this.options.page,
-        relations: this.schema.filters.relations,
-        totalItemsPerPage: this.options.itemsPerPage,
-        customSearch: this.search,
-      }
-
-      this.service.filters(params, this.searches).then((res) => {
+    getFilters(payload) {
+      payload = { ...payload, ...this.paramsPaginator, };
+      this.service.filters(payload).then((res) => {
         this.localItems = res.data;
         this.totalLocalItems = res.data.total;
         this.loading = false;
@@ -232,34 +265,43 @@ export default {
         if(this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
       }).catch((err) => {
-        console.error(`DynamicListPage GetDataFromApi error: ${err}`)
+        console.error(`DynamicListPage Filters error: ${err}`);
         this.loading = false;
         this.$noty.error('Erro ao receber os itens.');
       });
     },
     searchItems(search) {
-      this.searches = [];
-      this.searches = Object.keys(search)
-        .filter((item) =>  search[item].value)
-        .map((item) => {
-          return {
-            domain: this.schema.domain,
-            name: search[item].name,
-            label: search[item].label,
-            value: search[item].value,
-            formattedValue: search[item].formattedValue,
-          }
-        })
+      if(this.fixedFilter) search[this.fixedFilterParams.name] = { ...this.fixedFilterParams };
 
-      this.getFilters();
-    },
-    closeChip(value) {
-      this.searches = this.searches.filter((item) => {
-        if (item.name === value.name) this.$refs.searchListPage.localItem[item.name] = '';
-        return item.name != value.name
+      this.searches = search;
+      this.searchChips = [];
+      let filter = {};
+      Object.keys(search).forEach((key) => {
+        filter[key] = search[key].value;
+        this.searchChips.push({ 
+          name: search[key].name,
+          label: search[key].label,
+          value: search[key].value,
+          formattedValue: search[key].formattedValue,
+          noChip: search[key].noChip
+        });
       });
 
-      this.getFilters();
+      const payload = { params: { ...this.paramsPaginator }, filter, };
+      this.getFilters(payload);
+    },
+    closeChip(value) {
+      this.searchChips = this.searchChips.filter((item) => {
+        if (item.name === value.name) this.$refs.searchListPage.localItem[item.name] = '';
+        return item.name != value.name;
+      });
+
+      let payload = {};
+      this.searchChips.forEach((item) => {
+        payload[item.name] = item;
+      });
+
+      this.searchItems(payload);
     },
     openDialogDestroy(item) {
       this.selected.push(item);
@@ -300,24 +342,24 @@ export default {
       this.loading = true;
       let situation = this.types.typeSituation[0].value;
       item.dataListProps.item.situation === this.types.typeSituation[0].value ? situation = this.types.typeSituation[1].value : situation = this.types.typeSituation[0].value;
-      
+      console.log('situation', situation);
       this.service.update(item.dataListProps.item.id, { situation: situation }).then(() => {
         this.getAll();
         this.loading = false;
-      }).catch(() => {
+      }).catch((err) => {
+        console.log('err', err);
         this.loading = false;
         this.$noty.error('Erro ao atualizar a situação.');
       });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
-.action-column, .action-column-header {
+.action-column {
   right: 0px;
   position: sticky;
-  background-color: #fff;
   padding: 0 5px !important;
   width: 100px;
 }

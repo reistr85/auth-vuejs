@@ -52,7 +52,6 @@ import DataPicker from '@/components/vuetify/DataPicker';
 import Select from '@/components/vuetify/Select';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import TextField from '@/components/vuetify/TextField';
-import locales from '@/locales/pt-BR';
 import { money, required } from '@/utils/rules';
 
 export default {
@@ -77,7 +76,7 @@ export default {
             total_value: 0,
             description: ''
           }
-        }
+        };
       }
     },
     disabledDate: {
@@ -115,26 +114,24 @@ export default {
       options: {
         typeInputOutput: typeInputOutput
       },
-    }
+    };
   },
   methods: {
     save() {
       if(!this.$refs.form.validate()) return;
       
-      this.movement.payment_method_id = 1;
-      this.$api.boxMovements.create(this.movement).then(() => {
-        this.$noty.success(locales.alerts.createdRegister);
-      }).catch((err) => {
-        this.$noty.error(err);
-      })
+      this.$emit('handleActionMovement',  {
+        action: 'saveMovement',
+        item: this.movement
+      });
       this.$emit('handleActionModal');
     },
     cancel() {
-      this.$emit('update:dialog', false)
+      this.$emit('update:dialog', false);
     }
   }
   
-}
+};
 </script>
 
 <style>

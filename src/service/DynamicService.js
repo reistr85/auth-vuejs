@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import axios from './';
 import { messageErrors } from '@/utils';
 
@@ -9,54 +8,47 @@ const DynamicService = (endpoint, schema, options = {}) => ({
   get options() {
     return options;
   },
-  mountMessageErrors(err) {
-    let message = '';
-
-    if(err.status === 422){
-      Object.keys(err.data.errors).forEach(function(key) {
-        message += `<li class="item-error">${err.data.errors[key][0]}</li>`;
-      });
-    }else{
-      message += `<li class="item-error">Erro desconhecido, tente novamente.</li>`;
-    }
-    
-    return message;
-  },
-  mountFilter(customFields, filter) {
+  mountFilter(filter) {
     let paramsFilter = '';
-    const fields = customFields.length ? customFields : schema.filters.items;
-
-    fields.forEach((item) => {
-      paramsFilter += `&filter[${item.field}]=${filter}`
-    })
-
+    Object.keys(filter).forEach((key) => {
+      paramsFilter += `&filter[${key}]=${filter[key]}`;
+    });
     return paramsFilter;
   },
   async index(params = null){
-    let items = {}
+    let items = {};
     let page = 1;
     let totalItemsPerPage = 10;
     let url = '';
 
     if(params){
       page = params.page;
-      totalItemsPerPage = params.totalItemsPerPage;
+      totalItemsPerPage = params.per_page;
+      const { sortBy, sortDesc } = params;
       url = `${endpoint}?page=${page}&per_page=${totalItemsPerPage}`;
+      if(sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
     }
+
 
     if(!params)
       url = `${endpoint}`;
 
     await axios.get(url).then((res) => {
       if (options.formatResponse && typeof options.formatResponse === 'function') {
-        res.data.data.forEach((item) => {
-          options.formatResponse(item);
-        });
+        if(res.data?.data) {
+          res.data.data.forEach((item) => {
+            options.formatResponse(item);
+          });
+        }else{
+          res.data.forEach((item) => {
+            options.formatResponse(item);
+          });
+        }
       }
 
       items = res;
     }).catch((err) => {
-      console.error(`DynamicService Index error: ${err}`)
+      console.error(`DynamicService Index error: ${err}`);
     });
 
     return items;
@@ -73,7 +65,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async create(params){
     return new Promise((resolve, reject) => {
@@ -85,7 +77,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async update(id, params){
     return new Promise((resolve, reject) => {
@@ -98,7 +90,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async createOrUpdateFile(id, params, type = 'post'){
     return new Promise((resolve, reject) => {
@@ -117,7 +109,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async delete(id){
     return new Promise((resolve, reject) => {
@@ -126,18 +118,19 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       }).catch((err) => {
         reject(messageErrors(err.response));
       });
-    })
+    });
   },
   async filters(params){
     try {
-      const { page, per_page, filter, customFields } = params;
+      const { page, per_page, filter, sortBy, sortDesc } = params;
       let url = `filters?domain=${endpoint}`;
       let items = {};
       
       if(page) url += `&page=${page}&per_page=${per_page || 10}`;
-      if(filter && schema.filters.has) url += this.mountFilter(customFields, filter)
-      if(schema.filters?.has && schema.include?.has) url += `&include=${schema.include?.value}`;
-      if(params.search_global) url += `&search_global=true`;
+      if(filter && schema.filters.has) url += this.mountFilter(filter);
+      if(schema.filters?.has && schema.filters?.include?.has) url += `&include=${schema.filters?.include?.value}`;
+      if(params.search_global) url += '&search_global=true';
+      if(sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
 
       await axios.get(url).then((res) => {
         if (options.formatResponse && typeof options.formatResponse === 'function') {
@@ -148,12 +141,12 @@ const DynamicService = (endpoint, schema, options = {}) => ({
 
         items = res;
       }).catch((err) => {
-        console.error(`DynamicService Filter error: ${err}`)
+        console.error(`DynamicService Filter error: ${err}`);
       });
 
       return items;
     }catch(err) {
-      console.error(err)
+      console.error(err);
     }
   },
 });
