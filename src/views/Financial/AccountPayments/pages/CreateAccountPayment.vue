@@ -141,7 +141,6 @@ export default {
     },
     update() {
       const { id } = this.$route.params;
-      console.log('accountPayment', this.accountPayment);
       this.$api.accountPayments.update(id, this.accountPayment).then(() => {
         this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
         this.$router.push({ name: this.schema.routes.list.name });

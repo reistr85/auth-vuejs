@@ -342,11 +342,12 @@ export default {
       this.loading = true;
       let situation = this.types.typeSituation[0].value;
       item.dataListProps.item.situation === this.types.typeSituation[0].value ? situation = this.types.typeSituation[1].value : situation = this.types.typeSituation[0].value;
-      
+      console.log('situation', situation);
       this.service.update(item.dataListProps.item.id, { situation: situation }).then(() => {
         this.getAll();
         this.loading = false;
-      }).catch(() => {
+      }).catch((err) => {
+        console.log('err', err);
         this.loading = false;
         this.$noty.error('Erro ao atualizar a situação.');
       });
