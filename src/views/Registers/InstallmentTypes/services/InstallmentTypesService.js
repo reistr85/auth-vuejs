@@ -11,7 +11,7 @@ const formatResponse = (item) => {
 };
 
 const formatRequest = (form) => {
-  form.interval_installments = form.interval_installments.split(','); 
+  form.interval_installments = form.interval_installments?.split(','); 
 };
 
 const InstallmentTypesService = DynamicService('installment-types', InstallmentTypeSchema, {

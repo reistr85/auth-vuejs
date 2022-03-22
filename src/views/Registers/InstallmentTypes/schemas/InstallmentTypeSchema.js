@@ -42,8 +42,8 @@ export default {
       items: [
         {
           type: 'text',
-          label: 'Nome',
-          name: 'name',
+          label: 'Descrição',
+          name: 'description',
           icon: text,
           md: 6,
         },

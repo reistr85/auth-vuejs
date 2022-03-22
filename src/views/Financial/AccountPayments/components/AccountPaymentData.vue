@@ -51,7 +51,7 @@ import TextField from '@/components/vuetify/TextField';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 
 export default {
-  name: 'OrderData',
+  name: 'AccountPaymentData',
   components: {
     DataPicker,
     AutoComplete,
