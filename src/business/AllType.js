@@ -1,11 +1,16 @@
 /* eslint-disable no-unused-vars */
-import { typeAllType } from '@/utils/enums';
+import CreateAllType from '../locales/pt-BR/allTypes/CreateAllType';
+
+const getTypeURL = () => {
+  return window.location.href.split('/')[3];
+};
 
 export default {
   beforeList: (formValue) => {
   },
   beforeSave: (formValue) => {
-    formValue.type = typeAllType[window.location.href.split('/')[3]];
+    const { typeURLPt } = CreateAllType;
+    formValue.type = typeURLPt[getTypeURL()];
   },
   changes: {
   },

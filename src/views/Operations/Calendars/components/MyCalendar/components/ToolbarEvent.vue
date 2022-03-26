@@ -5,21 +5,21 @@
         <h3 v-html="selectedEvent.name"></h3>
       </template>
 
-      <div>
-        <p><span class="font-weight-black">Colaborador:</span> {{ selectedEvent.collaborator }}</p>
-        <p><span class="font-weight-black">Cliente:</span> {{ selectedEvent.customer }}</p>
-        <p><span class="font-weight-black">Data:</span> {{ date }}</p>
-        <p><span class="font-weight-black">Hora:</span> {{ hours }}</p>
-        <p><span class="font-weight-black">Serviço(s):</span> {{ selectedEvent.customer }}</p>
-        <p><span class="font-weight-black">Valor:</span> {{ amount }}</p>
-        <p class="d-flex"><span class="font-weight-black mr-3">Status:</span> <Chip :label="status.label" :color="status.color" /></p>
-      </div>
+      <template>
+        <p><span class="font-weight-black">{{ l.titles.collaborator }}:</span> {{ selectedEvent.collaborator }}</p>
+        <p><span class="font-weight-black">{{ l.titles.customer }}:</span> {{ selectedEvent.customer }}</p>
+        <p><span class="font-weight-black">{{ l.titles.date }}:</span> {{ date }}</p>
+        <p><span class="font-weight-black">{{ l.titles.hour }}:</span> {{ hours }}</p>
+        <p><span class="font-weight-black">{{ l.titles.services }}:</span> {{ selectedEvent.customer }}</p>
+        <p><span class="font-weight-black">{{ l.titles.amount }}:</span> {{ amount }}</p>
+        <p class="d-flex"><span class="font-weight-black mr-3">Status:</span> <Chip :label="status.label" :color="status.color" dark /></p>
+      </template>
 
-      <div class="mt-10">
-        <Button label="Confirmar" small color="success" />
-        <Button label="Finalizar" small color="blue" dark class="mx-2" />
-        <Button label="Cancelar" small color="primary" />
-      </div>
+      <template class="mt-10">
+        <Button :label="l.buttons.confirmed" v-if="selectedEvent.displayBtnConfirmed" small color="success" class="mr-2" />
+        <Button :label="l.buttons.finish" v-if="selectedEvent.displayBtnFinished" dark small color="blue" class="mr-2" />
+        <Button :label="l.buttons.cancel" v-if="selectedEvent.displayBtnCancel" small color="primary" />
+      </template>
     </Card>
   </v-menu>
 </template>
@@ -31,7 +31,10 @@ import Chip from '@/components/vuetify/Chip';
 import { formatCurrency } from '@/utils';
 
 const STATUS_COLOR = Object.freeze({
-  pending: 'warning'
+  pending: 'warning',
+  confirmed: 'blue',
+  done: 'gray',
+  canceled: 'red',
 });
 
 export default {
@@ -47,6 +50,9 @@ export default {
   },
   computed: {
     l () {
+      return this.$locales.pt.calendars.ListCalendars.myCalendar.toolbarEve;
+    },
+    lOrderServices () {
       return this.$locales.pt.orderServices;
     },
     date() {
@@ -59,8 +65,11 @@ export default {
       return formatCurrency(this.selectedEvent.amount);
     },
     status () {
-      return { label: this.l.listOrderServices.status[this.selectedEvent.status], color: STATUS_COLOR[this.selectedEvent.status] };
-    }
+      return {
+        label: this.lOrderServices.listOrderServices.status[this.selectedEvent.status],
+        color: STATUS_COLOR[this.selectedEvent.status]
+      };
+    },
   }
 };
 </script>
