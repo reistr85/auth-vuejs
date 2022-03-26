@@ -3,6 +3,7 @@ import CreateAccountPayment from '@/locales/pt-BR/accountPayments/CreateAccountP
 import ListBoxes from '@/locales/pt-BR/boxes/ListBoxes';
 import ShowBox from '@/locales/pt-BR/boxes/ShowBox';
 import CreateOrderService from '@/locales/pt-BR/orderServices/CreateOrderService';
+import ListOrderServices from '@/locales/pt-BR/orderServices/ListOrderServices';
 
 const locales = Object.freeze({
   pt: {
@@ -15,6 +16,7 @@ const locales = Object.freeze({
       showBox: ShowBox,
     },
     orderServices: {
+      listOrderServices: ListOrderServices,
       createOrderService: CreateOrderService,
     }
   }

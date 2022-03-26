@@ -14,5 +14,5 @@ export default {
       action: 'situation',
     }
   },
-  dynamicFormPage: {}
-}
+  dynamicFormPage: {},
+};

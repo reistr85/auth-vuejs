@@ -83,13 +83,22 @@ export default {
       this.$api.appointments.index().then((res) => {
         this.events = res.data.data.map((appointment) => {
           const [ year, month, day ] = appointment.appointment_date.split('-');
-          const [ hour, minute,  second ] = appointment.initial_hour.split(':');
-          const date = new Date(year, (month - 1), day, hour, minute, second);
-          
+          const [ initialHour, initialMinute,  initialSecond ] = appointment.initial_hour.split(':');
+          const [ finalHour, finalMinute,  finalSecond ] = appointment.final_hour.split(':');
+          const dateInitial = new Date(year, (month - 1), day, initialHour, initialMinute, initialSecond);
+          const dateFinal = new Date(year, (month - 1), day, finalHour, finalMinute, finalSecond);
           return {
               name: `${appointment.collaborator.name} | ${appointment.customer.name}`,
-              start: date,
-              end: date,
+              collaborator: appointment.collaborator.name,
+              customer: appointment.customer.name,
+              date:  dateInitial,
+              initialHour: `${initialHour}:${initialMinute}`,
+              finalHour: `${finalHour}:${finalMinute}`,
+              amount: appointment.amount,
+              status: appointment.status,
+              services: appointment,
+              start: dateInitial,
+              end: dateFinal,
               color: this.colors[this.rnd(0, this.colors.length - 1)],
               timed: false,
             };
