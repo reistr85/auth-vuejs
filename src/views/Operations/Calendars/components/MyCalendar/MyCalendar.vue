@@ -2,13 +2,21 @@
   <div>
     <v-row class="fill-height">
       <v-col>
+        <template>
+          <div class="d-flex">
+            <div v-for="(legend, index) in legends" :key="index" class="mr-5">
+              <span :class="['box-legend', legend.color]"></span> {{ legend.label }}
+            </div>
+          </div>
+        </template>
+
         <Header
           :calendar="$refs.calendar"
           :type="type"
           @setToday="focus = ''"
           @nextPrev="nextPrev"
           @update:type="type = $event" />
-        
+
         <v-sheet height="600">
           <v-calendar
             ref="calendar"
@@ -32,6 +40,13 @@
 import Header from './components/Header';
 import ToolbarEvent from './components/ToolbarEvent';
 
+const COLORS = Object.freeze({
+  pending: 'orange',
+  confirmed: 'blue',
+  done: 'grey',
+  canceled: 'red'
+});
+
 export default {
   name: 'MyCalendar',
   components: { Header, ToolbarEvent },
@@ -43,12 +58,24 @@ export default {
       selectedElement: null,
       selectedOpen: false,
       events: [],
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
     };
   },
   mounted () {
     this.$refs.calendar.checkChange();
+  },
+  computed: {
+    lAppointments () {
+      return this.$locales.pt.appointments;
+    },
+    legends () {
+      console.log(this.lAppointments);
+      return Object.keys(COLORS).map((color) => {
+        return {
+          label: this.lAppointments.ListAppointments.status[color],
+          color: COLORS[color]
+        };
+      });
+    }
   },
   methods: {
     viewDay ({ date }) {
@@ -83,16 +110,28 @@ export default {
       this.$api.appointments.index().then((res) => {
         this.events = res.data.data.map((appointment) => {
           const [ year, month, day ] = appointment.appointment_date.split('-');
-          const [ hour, minute,  second ] = appointment.initial_hour.split(':');
-          const date = new Date(year, (month - 1), day, hour, minute, second);
-          
+          const [ initialHour, initialMinute,  initialSecond ] = appointment.initial_hour.split(':');
+          const [ finalHour, finalMinute,  finalSecond ] = appointment.final_hour.split(':');
+          const dateInitial = new Date(year, (month - 1), day, initialHour, initialMinute, initialSecond);
+          const dateFinal = new Date(year, (month - 1), day, finalHour, finalMinute, finalSecond);
           return {
-              name: `${appointment.collaborator.name} | ${appointment.customer.name}`,
-              start: date,
-              end: date,
-              color: this.colors[this.rnd(0, this.colors.length - 1)],
-              timed: false,
-            };
+            name: `${appointment.collaborator.name} | ${appointment.customer.name}`,
+            collaborator: appointment.collaborator.name,
+            customer: appointment.customer.name,
+            date:  dateInitial,
+            initialHour: `${initialHour}:${initialMinute}`,
+            finalHour: `${finalHour}:${finalMinute}`,
+            amount: appointment.amount,
+            status: appointment.status,
+            services: appointment,
+            start: dateInitial,
+            end: dateFinal,
+            color: COLORS[appointment.status],
+            timed: false,
+            displayBtnConfirmed: (appointment.status === this.$enums.appointmentStatus.PENDING) || false,
+            displayBtnFinished: appointment.status === this.$enums.appointmentStatus.CONFIRMED || false,
+            displayBtnCancel: appointment.status !== this.$enums.appointmentStatus.CANCELED || false,
+          };
         });
       });
     },
@@ -103,6 +142,10 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.box-legend {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
 </style>

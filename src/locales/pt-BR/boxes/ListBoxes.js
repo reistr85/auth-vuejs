@@ -18,5 +18,7 @@ export default {
         description: 'Suprimento'
       }
     },
+  },
+  dialogOpenBox: {
   }
 };

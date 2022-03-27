@@ -9,18 +9,18 @@
       </DynamicListPage>
     </PageContent>
     <Dialog :dialog="dialog" :maxWidth="parseInt(1000)" no-title no-actions>
-      <component 
-        slot="content" 
+      <component
+        slot="content"
         v-bind="propsComponents"
         :is="dialogComponent"
         @update:dialog="dialog = $event"
         @handleActionMovement="handleActionMovement"
         @handleActionModal="handleActionModal" />
     </Dialog>
-    <DialogConfirmation 
+    <DialogConfirmation
       v-bind="propsClosed"
       v-on="eventsClosed"
-      :dialog="dialogClosed" 
+      :dialog="dialogClosed"
       :maxWidth="parseInt(1000)"
       @noAction="dialogClosed = false" />
   </div>
@@ -40,7 +40,7 @@ import DialogConfirmation from '@/components/DialogConfirmation';
 
 export default {
   name: 'ListBoxes',
-  components: { 
+  components: {
     PageHeader,
     PageContent,
     DynamicListPage,
@@ -90,7 +90,7 @@ export default {
       this.$refs.dynamicListPage.getAll();
     },
     actionMoreActions(item) {
-      if(item.dataListProps.item.status === 'closed') return this.$noty.error(this.l.boxes.listBoxes.messages.closed.boxClosed);
+      if (item.dataListProps.item.status === 'closed') return this.$noty.error(this.l.boxes.listBoxes.messages.closed.boxClosed);
       this[item.i.action](item);
     },
     withdrawn(item, automatic = false) {
@@ -138,7 +138,7 @@ export default {
         }
       };
     },
-    closed(item){
+    closed(item) {
       this.dialogClosed = true;
       this.boxClosed = item;
       this.propsClosed = { message: item.dataListProps.item.total_value > 0 ? this.l.boxes.listBoxes.messages.closed.totalValueLargerZero : this.l.boxes.listBoxes.messages.closed.box };
