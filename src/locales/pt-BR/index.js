@@ -14,6 +14,8 @@ export default {
       updatedRegister: 'Registro atualizado com sucesso',
       deletedRegister: 'Registro excluído com sucesso',
       errorCreatingRegister: 'Erro ao criar o registro',
+      success: 'Realizado com sucesso',
+      error: 'Error, tente novamente',
     },
     dynamicListPage: {
       listActions: {

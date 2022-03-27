@@ -29,7 +29,13 @@
             @click:more="viewDay"
             @click:date="viewDay"
             @change="updateRange" />
-            <ToolbarEvent v-model="selectedOpen" :selectedElement="selectedElement" :selectedEvent="selectedEvent" />
+
+          <ToolbarEvent
+            v-model="selectedOpen"
+            :selectedElement="selectedElement"
+            :selectedEvent="selectedEvent"
+            @update:selectedOpen="selectedOpen = $event"
+            @handlerAction="handlerAction" />
         </v-sheet>
       </v-col>
     </v-row>
@@ -44,7 +50,7 @@ const COLORS = Object.freeze({
   pending: 'orange',
   confirmed: 'blue',
   done: 'grey',
-  canceled: 'red'
+  canceled: 'primary'
 });
 
 export default {
@@ -68,7 +74,6 @@ export default {
       return this.$locales.pt.appointments;
     },
     legends () {
-      console.log(this.lAppointments);
       return Object.keys(COLORS).map((color) => {
         return {
           label: this.lAppointments.ListAppointments.status[color],
@@ -115,6 +120,7 @@ export default {
           const dateInitial = new Date(year, (month - 1), day, initialHour, initialMinute, initialSecond);
           const dateFinal = new Date(year, (month - 1), day, finalHour, finalMinute, finalSecond);
           return {
+            id: appointment.id,
             name: `${appointment.collaborator.name} | ${appointment.customer.name}`,
             collaborator: appointment.collaborator.name,
             customer: appointment.customer.name,
@@ -135,9 +141,20 @@ export default {
         });
       });
     },
-    rnd (a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a;
+    handlerAction (data) {
+      const { action, event, status } = data;
+      this[action](event, status);
     },
+    updateAppointment (event, status) {
+      this.selectedOpen = false;
+      this.selectedEvent.color = COLORS[status];
+
+      this.$api.appointments.update(event.id, { status }).then(() => {
+        this.$noty.success(this.$locales.pt.default.alerts.success);
+      }).catch(() => {
+        this.$noty.error(this.$locales.pt.default.alerts.error);
+      });
+    }
   },
 };
 </script>

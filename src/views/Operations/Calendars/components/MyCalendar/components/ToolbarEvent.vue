@@ -16,9 +16,10 @@
       </template>
 
       <template class="mt-10">
-        <Button :label="l.buttons.confirmed" v-if="selectedEvent.displayBtnConfirmed" small color="success" class="mr-2" />
-        <Button :label="l.buttons.finish" v-if="selectedEvent.displayBtnFinished" dark small color="blue" class="mr-2" />
-        <Button :label="l.buttons.cancel" v-if="selectedEvent.displayBtnCancel" small color="primary" />
+        <Button :label="l.buttons.confirmed" v-if="selectedEvent.displayBtnConfirmed" small color="success" class="mr-2" @click="handlerAction($enums.appointmentStatus.CONFIRMED)" />
+        <Button :label="l.buttons.finish" v-if="selectedEvent.displayBtnFinished" dark small color="blue" class="mr-2" @click="handlerAction($enums.appointmentStatus.DONE)" />
+        <Button :label="l.buttons.cancel" v-if="selectedEvent.displayBtnCancel" small color="primary" class="mr-2" @click="handlerAction($enums.appointmentStatus.CANCELED)" />
+        <Button :label="l.buttons.close" small @click="$emit('update:selectedOpen', false)" />
       </template>
     </Card>
   </v-menu>
@@ -70,6 +71,11 @@ export default {
         color: STATUS_COLOR[this.selectedEvent.status]
       };
     },
+  },
+  methods: {
+    handlerAction (status) {
+      this.$emit('handlerAction', { action: 'updateAppointment', event: this.selectedEvent, status });
+    }
   }
 };
 </script>

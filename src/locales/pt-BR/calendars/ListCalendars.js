@@ -12,7 +12,8 @@ export default {
       buttons: {
         confirmed: 'Confirmar',
         finish: 'Finalizar',
-        cancel: 'Cancelar'
+        cancel: 'Cancelar',
+        close: 'Fechar',
       }
     }
   },

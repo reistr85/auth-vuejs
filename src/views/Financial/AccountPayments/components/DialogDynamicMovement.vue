@@ -10,27 +10,27 @@
               :disabled="disabledDate" />
           </v-col>
           <v-col cols="12" md="3">
-            <Select 
-              v-model="movement.type" 
-              label="Entrada / Saída" 
-              :items="options.typeInputOutput" 
-              itemText="text" 
+            <Select
+              v-model="movement.type"
+              label="Entrada / Saída"
+              :items="options.typeInputOutput"
+              itemText="text"
               itemValue="value"
               :disabled="disabledTypeInputOutput"
               :rules="[rules.required]" />
           </v-col>
           <v-col cols="12" md="3">
-            <Select 
-              v-model="movement.movement_type" 
-              label="Tipo de Movimentação" 
-              :items="options.typeBankMovements" 
-              itemText="text" 
+            <Select
+              v-model="movement.movement_type"
+              label="Tipo de Movimentação"
+              :items="options.typeBankMovements"
+              itemText="text"
               itemValue="value"
               :rules="[rules.required]" />
           </v-col>
           <v-col cols="12" md="3">
             <TextFieldMoney
-              v-model="movement.value" 
+              v-model="movement.value"
               label="Valor Lançamento"
               :length="10"
               :rules="[rules.money]" />
@@ -38,9 +38,9 @@
         </v-row>
         <v-row>
            <v-col cols="12" md="12">
-            <TextField 
-              v-model="movement.description" 
-              label="Descrição" 
+            <TextField
+              v-model="movement.description"
+              label="Descrição"
               :rules="[rules.required]"
               :readonly="readonlyDescription"
               v-on:keyup.enter="save" />
@@ -68,8 +68,8 @@ import { money, required } from '@/utils/rules';
 
 export default {
   name: 'DialogDynamicMovement',
-  components: { 
-    Card, 
+  components: {
+    Card,
     Button,
     DataPicker,
     Select,
@@ -89,7 +89,7 @@ export default {
             description: '',
             value: 0
           }
-        }
+        };
       }
     },
     disabledDate: {
@@ -128,26 +128,25 @@ export default {
         typeInputOutput: typeInputOutput,
         typeBankMovements: typeBankMovements
       },
-    }
+    };
   },
   methods: {
     save() {
-      if(!this.$refs.form.validate()) return;
-      
+      if (!this.$refs.form.validate()) return;
+
       this.movement.payment_method_id = 1;
       this.$api.bankMovements.create(this.movement).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((error) => {
         this.$noty.error(error);
-      })
+      });
       this.$emit('handleActionModal');
     },
     cancel() {
-      this.$emit('update:dialog', false)
+      this.$emit('update:dialog', false);
     }
   }
-  
-}
+};
 </script>
 
 <style>
