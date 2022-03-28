@@ -3,7 +3,7 @@
     <PageHeader :schema="$schemas.installmentType" />
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados Tipos do Parcelamento" multiple :icon="$icons.list">
-        <InstallmentTypeData 
+        <InstallmentTypeData
           :installment-type="installment_type"
           @handleActionGenerate="handleActionGenerate" />
       </ExpansionPanel>
@@ -39,9 +39,9 @@ import InstallmentTypeData from '../components/InstallmentTypeData';
 
 export default {
   name: 'CreateInstallmentType',
-  components: { 
-    PageHeader, 
-    PageContent, 
+  components: {
+    PageHeader,
+    PageContent,
     ExpansionPanel,
     Button,
     InstallmentTypeData
@@ -58,7 +58,7 @@ export default {
     };
   },
   mounted() {
-    if(this.typePage === this.typePageOptions.show)
+    if (this.typePage === this.typePageOptions.show)
       this.getInstallmentType();
   },
   computed: {
