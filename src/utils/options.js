@@ -316,12 +316,16 @@ const statusBoxes = [
 
 const originTypeBoxMovements = [
   { id: 1, text: 'Manual', value: null },
-  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' }
+  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' },
+  { id: 3, text: 'Contas à Pagar', value: 'App\\Models\\AccountPayment'},
+  { id: 4, text: 'Contas à Receber', value: 'App\\Models\\AccountReceive'}
 ];
 
 const originTypeBankMovements = [
   { id: 1, text: 'Manual', value: null },
-  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' }
+  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' },
+  { id: 3, text: 'Contas à Pagar', value: 'App\\Models\\AccountPayment' },
+  { id: 4, text: 'Contas à Receber', value: 'App\\Models\\AccountReceive'}
 ];
 
 const typeBankMovements = [
@@ -344,7 +348,7 @@ const typeStatusAccountPaymentInstallments = [
 ];
 
 
-export { 
+export {
   statusAppointment,
   statusOrderService,
   typeUser,

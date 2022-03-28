@@ -7,17 +7,17 @@
           :account-payment="accountPayment"
           :registers="registers"
           :installment-type="installment_type"
-          :account-finished="accountFinished"
+          :account-finished="disabledButton"
           @eventsGenerateInstallment="eventsGenerateInstallment" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Parcelas" class="mt-3" multiple :icon="$icons.list">
         <GenericDataTable
           :loading="loading"
-          :headers="headerInstallments" 
+          :headers="headerInstallments"
           :items="accountPayment.installments"
           @getInstallments="getAccountPaymentInstallments"
-          :disabledBttn="disabledBttn"
+          :disabledButton="disabledButton"
           @handleAction="handleAction"/>
       </ExpansionPanel>
 
@@ -40,22 +40,23 @@
           rounded
           class="ml-3"
           :icon="$icons.save"
+          :disabled="disabledButton"
           @click="handleAction({ type: 'confirmSave', params: { status: $enums.accountPaymentStatus.PENDING }})" />
       </ExpansionPanel>
 
-      <DialogConfirmation 
+      <DialogConfirmation
         v-bind="propsConfirmation"
-        :dialog="dialogConfirmation" 
+        :dialog="dialogConfirmation"
         :maxWidth="parseInt(1000)"
-        @noAction="dialogConfirmation = false" 
+        @noAction="dialogConfirmation = false"
         @yesAction="save" />
 
-      <DialogConfirmation 
-        :dialog="dialogPaid" 
+      <DialogConfirmation
+        :dialog="dialogPaid"
         :loading="loadingPaid"
-        :message="messagePaid" 
+        :message="messagePaid"
         :maxWidth="parseInt(1000)"
-        @noAction="dialogPaid = false" 
+        @noAction="dialogPaid = false"
         @yesAction="itemPaid" />
     </PageContent>
   </div>
@@ -76,9 +77,9 @@ import DialogConfirmation from '@/components/DialogConfirmation';
 
 export default {
   name: 'CreateAccountPayment',
-  components: { 
-    PageHeader, 
-    PageContent, 
+  components: {
+    PageHeader,
+    PageContent,
     ExpansionPanel,
     Button,
     AccountPaymentData,
@@ -94,7 +95,7 @@ export default {
       loading: false,
       loadingPaid: false,
       accountFinished: false,
-      disabledBttn: false,
+      disabledButton: false,
       accountPayment: {
         date_issuance: new Date().toISOString().substr(0, 10),
         installments: [],
@@ -110,12 +111,11 @@ export default {
     };
   },
   mounted() {
-    if(this.typePage === this.typePageOptions.show)
+    if (this.typePage === this.typePageOptions.show)
       this.getAccountPayment();
 
     this.getRegisters();
     this.getInstallmentTypes();
-    this.totalizers();
   },
   computed: {
     l() {
@@ -135,13 +135,8 @@ export default {
       this.$api.accountPayments.show(this.id).then((res) => {
         this.accountPayment = res;
         this.loading = false;
-        let amount_pending = 0;
-        amount_pending = parseFloat(this.accountPayment.amount) - parseFloat(this.accountPayment.amount_payment);
-        this.accountPaymentTotals = {
-          amount_pending: amount_pending,
-          amount: this.accountPayment.amount,
-          amount_payment: this.accountPayment.amount_payment,
-        };
+        this.totalizers(res);
+        if (this.accountPayment.status === 'settled') this.disabledButton = true;
       }).catch((err) => {
         console.error(err);
         this.loading = false;
@@ -175,13 +170,13 @@ export default {
         this.loading = false;
       });
     },
-    totalizers() {
+    totalizers(accountPayment) {
       let amount_pending = 0;
-      amount_pending = parseFloat(this.accountPayment.amount) - parseFloat(this.accountPayment.amount_payment);
+      amount_pending = parseFloat(accountPayment.amount) - parseFloat(accountPayment.amount_payment);
       this.accountPaymentTotals = {
+        amount: accountPayment.amount,
         amount_pending: amount_pending,
-        amount: this.accountPayment.amount,
-        amount_payment: this.accountPayment.amount_payment,
+        amount_payment: accountPayment.amount_payment,
       };
     },
     getRegisters() {
@@ -221,8 +216,8 @@ export default {
     confirmSave(data) {
       this.accountPayment.status = data.status;
       this.dialogConfirmation = true;
-      this.propsConfirmation = { message: this.typePage === this.typePageOptions.create 
-        ? this.l.accountPayments.createAccountPayment.messages.save.create 
+      this.propsConfirmation = { message: this.typePage === this.typePageOptions.create
+        ? this.l.accountPayments.createAccountPayment.messages.save.create
         : this.l.accountPayments.createAccountPayment.messages.save.update };
     },
     save() {
@@ -230,7 +225,7 @@ export default {
     },
     create() {
       this.$api.accountPayments.create(this.accountPayment).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.createdRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
         this.$router.push({ name: this.schema.routes.list.name });
       }).catch((err) => {
         this.$noty.error(err);
@@ -241,7 +236,7 @@ export default {
     update() {
       const { id } = this.$route.params;
       this.$api.accountPayments.update(id, this.accountPayment).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.$router.push({ name: this.schema.routes.list.name });
       }).catch((err) => {
         this.$noty.error(err);
@@ -250,7 +245,7 @@ export default {
       });
     },
     eventsGenerateInstallment(id) {
-      if(this.accountPayment.installments.length) console.log('ja contem parcelas criadas');
+      if (this.accountPayment.installments.length)console.log('ja contem parcelas criadas');
       this.getGenerateInstallments(id);
     },
     getGenerateInstallments(id) {
@@ -280,7 +275,7 @@ export default {
         this.loading = false;
       });
     },
-     handleItemPaid(params) {
+    handleItemPaid(params) {
       this.dialogPaid = true;
       this.messagePaid = 'Deseja fazer o pagamento da parcela ' + params.item.description;
       this.installmentPaid = {
@@ -295,18 +290,21 @@ export default {
       };
     },
     itemPaid() {
+      this.loading = true;
+      this.loadingPaid = true;
       this.$api.accountPaymentInstallments.update(this.installmentPaid.id, this.installmentPaid).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
+        this.loading = false;
         this.loadingPaid = false;
         this.dialogPaid = false;
         this.getAccountPayment();
       }).catch((err) => {
         this.$noty.error(err);
       }).finally(() => {
+        this.loading = false;
         this.loadingPaid = false;
         this.dialogPaid = false;
       });
-      this.totalizers();
     }
   }
 };

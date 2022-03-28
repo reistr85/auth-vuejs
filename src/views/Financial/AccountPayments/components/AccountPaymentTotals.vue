@@ -4,19 +4,19 @@
       <TextFieldMoney
         v-model="accountPayment.amount_pending"
         label="Valor Pendente"
-        :disabled="true" />
+        :readonly="true" />
     </v-col>
     <v-col cols="12" md="4">
       <TextFieldMoney
         v-model="accountPayment.amount_payment"
         label="Valor Pago" 
-        :disabled="true" />
+        :readonly="true" />
     </v-col>
     <v-col cols="12" md="4">
       <TextFieldMoney
         v-model="accountPayment.amount"
         label="Valor Total"
-        :disabled="true" />
+        :readonly="true" />
     </v-col>
   </v-row>
 </template>

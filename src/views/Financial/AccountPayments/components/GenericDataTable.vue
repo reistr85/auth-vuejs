@@ -15,10 +15,12 @@
        <Button 
           type-icon color="gray"
           :icon="$icons.edit"
+          :disabled="disabledButton"
           @click="$emit('handleAction', handleAction('handleItemEdit', props))" />
         <Button 
           type-icon color="green"
           :icon="$icons.check"
+          :disabled="disabledButton"
           @click="$emit('handleAction', handleAction('handleItemPaid', props))" />
       </template>
     </DataTable>
@@ -49,7 +51,7 @@ export default {
     //   type: String,
     //   required: true,
     // },
-    disabledBttn: {
+    disabledButton: {
       type: Boolean,
       default: false,
     }

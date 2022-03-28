@@ -2,7 +2,7 @@ import axios from 'axios';
 import DynamicService from '@/service/DynamicService';
 import AccountPaymentSchema from '../schemas/AccountPaymentSchema';
 import { formatCurrency, formatDate, getText } from '@/utils';
-import { typeStatusAccountPayments } from '@/utils/options';
+import { typeStatusAccountPayments, typeStatusAccountPaymentInstallments } from '@/utils/options';
 
 const formatResponse = (item) => {
   item.register_formatted = item.register.name;
@@ -21,7 +21,7 @@ const formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId = (res) =
     item.date_payment_formatted = formatDate(item.date_payment);
     item.bank_formatted = item.bank?.description;
     item.amount_formatted = formatCurrency(item.amount);
-    item.status_formatted = item.status;
+    item.status_formatted = getText(typeStatusAccountPaymentInstallments, item.status);
   });
 
   return res;
