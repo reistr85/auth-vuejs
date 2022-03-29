@@ -93,7 +93,7 @@ export default {
       box.total_value = box.initial_value;
       this.$api.boxes.create(box).then((res) => {
         this.localItems = res.data;
-        this.$noty.success(this.l.index.alerts.createdRegister);
+        this.$noty.success(this.l.default.alerts.createdRegister);
       }).catch((error) => {
         this.$noty.error(error);
       });

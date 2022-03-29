@@ -316,20 +316,25 @@ const statusBoxes = [
 
 const originTypeBoxMovements = [
   { id: 1, text: 'Manual', value: null },
-  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' }
+  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' },
+  { id: 3, text: 'Contas à Pagar', value: 'App\\Models\\AccountPayment'},
+  { id: 4, text: 'Contas à Receber', value: 'App\\Models\\AccountReceive'}
 ];
 
 const originTypeBankMovements = [
   { id: 1, text: 'Manual', value: null },
-  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' }
+  { id: 2, text: 'Ordem de Serviço', value: 'App\\Models\\OrderService' },
+  { id: 3, text: 'Contas à Pagar', value: 'App\\Models\\AccountPayment' },
+  { id: 4, text: 'Contas à Receber', value: 'App\\Models\\AccountReceive'}
 ];
 
 const typeBankMovements = [
-  { id: 1, text: 'Pix', value: 'pix' },
-  { id: 2, text: 'Transferência', value: 'tranfer' },
-  { id: 3, text: 'Depósito Espécie', value: 'cash' },
-  { id: 4, text: 'Depósito Cheque', value: 'check' },
-  { id: 5, text: 'Saque', value: 'withdraw' }
+  { id: 1, text: 'Depósito Cheque', value: 'check' },
+  { id: 2, text: 'Depósito Espécie', value: 'cash' },
+  { id: 3, text: 'Pgto Boleto', value: 'billet' },
+  { id: 4, text: 'Pix', value: 'pix' },
+  { id: 5, text: 'Saque', value: 'withdraw' },
+  { id: 6, text: 'Transferência', value: 'tranfer' },
 ];
 
 const typeStatusAccountPayments = [
@@ -338,7 +343,13 @@ const typeStatusAccountPayments = [
   { id: 3, text: 'Quitado', value: 'settled' },
 ];
 
-export { 
+const typeStatusAccountPaymentInstallments = [
+  { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Pago', value: 'paid' },
+];
+
+
+export {
   statusAppointment,
   statusOrderService,
   typeUser,
@@ -355,5 +366,6 @@ export {
   originTypeBoxMovements,
   originTypeBankMovements,
   typeBankMovements,
-  typeStatusAccountPayments
+  typeStatusAccountPayments,
+  typeStatusAccountPaymentInstallments
 };

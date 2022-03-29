@@ -104,7 +104,7 @@ export default {
           description: this.l.boxes.listBoxes.movements.description
         };
         this.$api.boxMovements.create(this.movement).then(() => {
-          this.$noty.success(this.l.index.alerts.createdRegister);
+          this.$noty.success(this.l.default.alerts.createdRegister);
         }).catch((err) => {
           this.$noty.error(err);
         });
@@ -147,7 +147,7 @@ export default {
     closedBox() {
       let status = 'closed';
       this.$api.boxes.update(this.boxClosed.dataListProps.item.id, { status: status }).then(() => {
-        this.$noty.success(this.l.index.alerts.updatedRegister);
+        this.$noty.success(this.l.default.alerts.updatedRegister);
         this.$refs.dynamicListPage.getAll();
       }).catch((error) => {
         this.$noty.error(error);
@@ -158,7 +158,7 @@ export default {
     saveMovement(movement) {
       movement.payment_method_id = 1;
       this.$api.boxMovements.create(movement).then(() => {
-        this.$noty.success(this.l.index.alerts.createdRegister);
+        this.$noty.success(this.l.default.alerts.createdRegister);
       }).catch((err) => {
         this.$noty.error(err);
       });

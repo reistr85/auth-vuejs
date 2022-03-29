@@ -1,29 +1,27 @@
 <template>
   <div>
     <div class="d-flex justify-end mb-5">
-      <Button 
-        label="Adicionar Lançamento" 
-        small 
-        :icon="$icons.plus" 
-        color="secondary" 
-        rounded 
-        class="btn-actions"
-        :disabled="disabledBttn"
-        @click="$emit('handleAction', handleAction(actionType))" />
     </div>
     <DataTable
+      no-sync
       no-search
       itemKey="number_item"
       :headers="headers"
       :items="items"
       :loading="loading"
-      @getItems="getItems">
+      @getInstallments="getInstallments">
 
      <template v-slot:actions="{ props }">
-        <Button 
-          type-icon color="red"
-          :icon="$icons.destroy"
-          @click="$emit('handleAction', handleAction('handleItemDestroy', props))" />
+       <Button
+          type-icon color="gray"
+          :icon="$icons.edit"
+          :disabled="disabledButton"
+          @click="$emit('handleAction', handleAction('handleItemEdit', props))" />
+        <Button
+          type-icon color="green"
+          :icon="$icons.check"
+          :disabled="disabledButton"
+          @click="$emit('handleAction', handleAction('handleItemPaid', props))" />
       </template>
     </DataTable>
   </div>
@@ -42,35 +40,27 @@ export default {
       default: () => [],
     },
     items: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [],
     },
     loading: {
       type: Boolean,
       default: false,
     },
-    actionType: {
-      type: String,
-      required: true,
-    },
-    componentType: {
-      type: String,
-      required: true,
-    },
-    disabledBttn: {
+    disabledButton: {
       type: Boolean,
       default: false,
     }
   },
   methods: {
     handleAction(type, data = null) {
-      return { type, params: { ...data, componentType: this.componentType}}
+      return { type, params: { ...data }};
     },
-    getItems(options) {
-      this.$emit('getItems', options);
+    getInstallments(options) {
+      this.$emit('getAccountPaymentInstallments', options);
     }
   }
-}
+};
 </script>
 
 <style>

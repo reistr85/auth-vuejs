@@ -16,24 +16,23 @@
           action-type="openDialog"
           componentType="DialogDynamicMovement"
           :loading="loading"
-          :headers="headerMovements" 
+          :headers="headerMovements"
           :items="items"
           @getItems="getBoxMovements"
-          :disabledBttn="disabledBttn"
+          :disabledButton="disabledButton"
           @handleAction="handleAction"/>
       </ExpansionPanel>
     </PageContent>
 
     <Dialog no-title no-actions :dialog="dialog" :maxWidth="parseInt(1000)">
-      <component 
-        slot="content" 
-        :is="dialogComponent" 
+      <component
+        slot="content"
+        :is="dialogComponent"
         v-bind="propsComponents"
         @update:dialog="dialog = $event"
         @handleActionMovement="handleActionMovement"
         @handleActionModal="handleActionModal" />
     </Dialog>
-    
     <DialogConfirmation :dialog="dialogDestroy" :loading="loadingDestroy" @noAction="dialogDestroy = false" @yesAction="itemDestroy" />
   </div>
 </template>
@@ -53,8 +52,8 @@ import locales from '@/locales/pt-BR';
 
 export default {
   name: 'ShowBox',
-  components: { 
-    PageHeader, 
+  components: {
+    PageHeader,
     PageContent,
     GenericDataTable,
     ExpansionPanel,
@@ -77,7 +76,7 @@ export default {
       dialogComponent: null,
       propsComponents: null,
       items: {},
-      disabledBttn: false,
+      disabledButton: false,
       idBoxMovementDestroy: null
     };
   },
@@ -101,7 +100,7 @@ export default {
       this.loading = true;
       this.$api.boxes.show(this.id).then((res) => {
         this.box = res;
-        if(this.box.status === 'closed') this.disabledBttn = true;
+        if (this.box.status === 'closed') this.disabledButton = true;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
@@ -169,7 +168,7 @@ export default {
     saveMovement(movement) {
       movement.payment_method_id = 1;
       this.$api.boxMovements.create(movement).then(() => {
-        this.$noty.success(this.l.index.alerts.createdRegister);
+        this.$noty.success(this.l.default.alerts.createdRegister);
       }).catch((err) => {
         this.$noty.error(err);
       });

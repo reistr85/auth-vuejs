@@ -15,7 +15,7 @@
           action-type="openDialog"
           componentType="items"
           :loading="loading"
-          :headers="headersItems" 
+          :headers="headersItems"
           :items="order_service.items"
           :order-finished="orderFinished"
           @handleAction="handleAction"/>
@@ -28,7 +28,7 @@
               action-type="openDialog"
               componentType="payments"
               :loading="loading"
-              :headers="headersPayments" 
+              :headers="headersPayments"
               :items="order_service.payments"
               :order-finished="orderFinished"
               @handleAction="handleAction" />
@@ -69,11 +69,11 @@
       </ExpansionPanel>
 
       <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1100)">
-        <component 
-          slot="content" 
+        <component
+          slot="content"
           v-bind="dialogProps"
           :is="dialogComponent"
-          @update:dialog="dialog = $event" 
+          @update:dialog="dialog = $event"
           @handleActionModal="handleActionModal" />
       </Dialog>
 
@@ -143,10 +143,10 @@ export default {
     };
   },
   mounted() {
-    if(this.typePage === this.typePageOptions.show)
+    if (this.typePage === this.typePageOptions.show)
       this.getOrderService();
 
-    if(this.typePage === this.typePageOptions.create)
+    if (this.typePage === this.typePageOptions.create)
       this.getLastOrderNumber();
 
     this.getCollaborators();
@@ -306,7 +306,7 @@ export default {
       this.totalizers();
     },
     addPayment(item) {
-      if((parseFloat(this.order_service.total_paid) + parseFloat(item.value)) > this.order_service.amount) {
+      if ((parseFloat(this.order_service.total_paid) + parseFloat(item.value)) > this.order_service.amount) {
         this.$noty.error(this.l.alerts.totalPaidGreaterAmount);
         return;
       }
@@ -328,7 +328,7 @@ export default {
     },
     itemDestroy(params) {
       const { index, componentType, item } = params;
-      if(componentType === 'items') {
+      if (componentType === 'items') {
         this.order_service.items.splice(index, 1);
         this.order_service.items_destroy.push(item);
       }
@@ -343,7 +343,7 @@ export default {
     },
     create() {
       this.$api.orderServices.create(this.order_service).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.createdRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
         this.$router.push({ name: this.$schemas.orderService.routes.list.name });
       }).catch((err) => {
         this.$noty.error(err);
@@ -354,7 +354,7 @@ export default {
     update() {
       const { id } = this.$route.params;
       this.$api.orderServices.update(id, this.order_service).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.$router.push({ name: this.$schemas.orderService.routes.list.name });
       }).catch((err) => {
         this.$noty.error(messageErrors(err));
@@ -457,8 +457,7 @@ export default {
 
 .totalizers {
   height: 350px;
-  
-  div {
+  div{
     background-color: #EBEBEB;
     border-radius: 5px;
   }
