@@ -20,6 +20,7 @@ const formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId = (res) =
     item.date_due_formatted = formatDate(item.date_due);
     item.date_payment_formatted = formatDate(item.date_payment);
     item.bank_formatted = item.bank?.description;
+    item.payment_method_formatted = item.payment_method?.description,
     item.amount_formatted = formatCurrency(item.amount);
     item.status_formatted = getText(typeStatusAccountPaymentInstallments, item.status);
   });
@@ -33,8 +34,8 @@ const AccountPaymentsService = DynamicService('account-payments', AccountPayment
 
 const AccountPaymentsCommands = () => ({
   async getAllAccountPaymentInstallmentsByAccountPaymentId(id, payload) {
-     const res = await axios.get(`account-payments/${id}/account-payments-installments?page=${payload.page}`);
-     return formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId(res);
+    const res = await axios.get(`account-payments/${id}/account-payments-installments?page=${payload.page}`);
+    return formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId(res);
   }
 });
 

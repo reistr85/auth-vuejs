@@ -329,11 +329,12 @@ const originTypeBankMovements = [
 ];
 
 const typeBankMovements = [
-  { id: 1, text: 'Pix', value: 'pix' },
-  { id: 2, text: 'Transferência', value: 'tranfer' },
-  { id: 3, text: 'Depósito Espécie', value: 'cash' },
-  { id: 4, text: 'Depósito Cheque', value: 'check' },
-  { id: 5, text: 'Saque', value: 'withdraw' }
+  { id: 1, text: 'Depósito Cheque', value: 'check' },
+  { id: 2, text: 'Depósito Espécie', value: 'cash' },
+  { id: 3, text: 'Pgto Boleto', value: 'billet' },
+  { id: 4, text: 'Pix', value: 'pix' },
+  { id: 5, text: 'Saque', value: 'withdraw' },
+  { id: 6, text: 'Transferência', value: 'tranfer' },
 ];
 
 const typeStatusAccountPayments = [

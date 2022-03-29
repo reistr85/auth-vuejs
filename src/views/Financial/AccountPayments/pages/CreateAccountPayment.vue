@@ -15,7 +15,7 @@
         <GenericDataTable
           :loading="loading"
           :headers="headerInstallments"
-          :items="accountPayment.installments"
+          :items="installments"
           @getInstallments="getAccountPaymentInstallments"
           :disabledButton="disabledButton"
           @handleAction="handleAction"/>
@@ -44,12 +44,14 @@
           @click="handleAction({ type: 'confirmSave', params: { status: $enums.accountPaymentStatus.PENDING }})" />
       </ExpansionPanel>
 
-      <DialogConfirmation
-        v-bind="propsConfirmation"
-        :dialog="dialogConfirmation"
-        :maxWidth="parseInt(1000)"
-        @noAction="dialogConfirmation = false"
-        @yesAction="save" />
+      <Dialog no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
+        <component
+          slot="content"
+          :is="dialogComponent"
+          v-bind="propsEditInstallment"
+          @update:dialog="dialog = $event"
+          @handleActionInstallmentSave="handleActionInstallmentSave" />
+      </Dialog>
 
       <DialogConfirmation
         :dialog="dialogPaid"
@@ -57,7 +59,14 @@
         :message="messagePaid"
         :maxWidth="parseInt(1000)"
         @noAction="dialogPaid = false"
-        @yesAction="itemPaid" />
+        @yesAction="itemPaid()" />
+
+      <DialogConfirmation
+        v-bind="propsConfirmation"
+        :dialog="dialogConfirmation"
+        :maxWidth="parseInt(1000)"
+        @noAction="dialogConfirmation = false"
+        @yesAction="save" />
     </PageContent>
   </div>
 </template>
@@ -72,7 +81,9 @@ import AccountPaymentSchema from '../schemas/AccountPaymentSchema';
 import AccountPaymentsService from '../services/AccountPaymentsService';
 import AccountPaymentData from '../components/AccountPaymentData';
 import AccountPaymentTotals from '../components/AccountPaymentTotals';
+import DialogEditInstallment from '../components/DialogEditInstallment';
 import GenericDataTable from '../components/GenericDataTable';
+import Dialog from '@/components/vuetify/Dialog';
 import DialogConfirmation from '@/components/DialogConfirmation';
 
 export default {
@@ -85,6 +96,8 @@ export default {
     AccountPaymentData,
     AccountPaymentTotals,
     GenericDataTable,
+    DialogEditInstallment,
+    Dialog,
     DialogConfirmation
   },
   data() {
@@ -100,12 +113,17 @@ export default {
         date_issuance: new Date().toISOString().substr(0, 10),
         installments: [],
       },
+      installments: [],
       accountPaymentTotals: {},
       registers: [],
       installment_type: [],
+      dialog: false,
       dialogConfirmation: null,
+      dialogComponent: null,
+      dialogEditInstallment: false,
       dialogPaid: false,
       propsConfirmation: {},
+      propsEditInstallment: null,
       installmentPaid: null,
       messagePaid: null,
     };
@@ -137,8 +155,7 @@ export default {
         this.loading = false;
         this.totalizers(res);
         if (this.accountPayment.status === 'settled') this.disabledButton = true;
-      }).catch((err) => {
-        console.error(err);
+      }).catch(() => {
         this.loading = false;
       });
       this.getAccountPaymentInstallments();
@@ -149,7 +166,7 @@ export default {
         page: options.page || 1,
       };
       this.$api.accountPayments.getAllAccountPaymentInstallmentsByAccountPaymentId(this.id, payload).then((res) => {
-        this.accountPayment.installments = res.data.data.map((item) => {
+        this.installments = res.data.data.map((item) => {
           return {
             id: item.id,
             description: item.description,
@@ -157,7 +174,10 @@ export default {
             date_due_formatted: item.date_due_formatted,
             date_payment: item.date_payment,
             date_payment_formatted: item.date_payment_formatted,
+            bank_id: item.bank_id,
             bank_formatted: item.bank_formatted,
+            payment_method_id: item.payment_method_id,
+            payment_method_formatted: item.payment_method_formatted,
             amount: item.amount,
             amount_formatted: item.amount_formatted,
             status: item.status,
@@ -165,8 +185,7 @@ export default {
           };
         });
         this.loading = false;
-      }).catch((err) => {
-        console.error(err);
+      }).catch(() => {
         this.loading = false;
       });
     },
@@ -245,7 +264,7 @@ export default {
       });
     },
     eventsGenerateInstallment(id) {
-      if (this.accountPayment.installments.length)console.log('ja contem parcelas criadas');
+      if (this.installments.length)console.log('ja contem parcelas criadas');
       this.getGenerateInstallments(id);
     },
     getGenerateInstallments(id) {
@@ -256,7 +275,7 @@ export default {
       };
       this.$api.installmentTypes.generateInstallments(payload).then((res) => {
         let parcel = 0;
-        this.accountPayment.installments = res.data.map((item) => {
+        this.installments = res.data.map((item) => {
           parcel += 1;
           return {
             description: this.accountPayment.title + '-' + parcel + '/' + res.data.length,
@@ -270,10 +289,35 @@ export default {
             status: 'pending',
           };
         });
+        this.accountPayment.installments = this.installments;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
       });
+    },
+    handleItemEdit(params) {
+      this.dialog = true;
+      this.dialogEditInstallment = true;
+      this.dialogComponent = DialogEditInstallment;
+      this.propsEditInstallment = {
+        disabled: this.disabledButton,
+        installment: {
+          account_payment_id: this.accountPayment.id,
+          id: params.item.id,
+          description: params.item.description,
+          date_due: params.item.date_due,
+          date_payment: params.item.date_payment,
+          payment_method_id: params.item.payment_method_id,
+          bank_id: params.item.bank_id,
+          amount: params.item.amount,
+          status: params.item.status
+        }
+      };
+    },
+    handleActionInstallmentSave() {
+      this.dialog = false;
+      this.dialogEditInstallment = false;
+      this.getAccountPaymentInstallments();
     },
     handleItemPaid(params) {
       this.dialogPaid = true;
@@ -283,8 +327,9 @@ export default {
         id: params.item.id,
         description: params.item.description,
         date_due: params.item.date_due,
-        date_payment: params.item.date_due,
-        bank_id: 1,
+        date_payment: params.item.date_payment,
+        payment_method_id: params.item.payment_method_id,
+        bank_id: params.item.bank_id,
         amount: params.item.amount,
         status: 'paid',
       };
@@ -297,7 +342,6 @@ export default {
         this.loading = false;
         this.loadingPaid = false;
         this.dialogPaid = false;
-        this.getAccountPayment();
       }).catch((err) => {
         this.$noty.error(err);
       }).finally(() => {
@@ -305,6 +349,7 @@ export default {
         this.loadingPaid = false;
         this.dialogPaid = false;
       });
+      this.getAccountPaymentInstallments();
     }
   }
 };
