@@ -140,7 +140,6 @@ export default {
     save(installment) {
       if (!this.$refs.form.validate()) return;
       this.$api.accountPaymentInstallments.update(installment.id, installment).then(() => {
-        this.$noty.success(this.l.default.alerts.updatedRegister);
       }).catch((error) => {
         this.$noty.error(error);
       });
