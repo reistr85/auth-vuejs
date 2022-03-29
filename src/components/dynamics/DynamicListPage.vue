@@ -7,12 +7,12 @@
       <div class="mb-5 d-flex justify-space-between">
         <div class="d-flex flex-wrap  justify-start">
           <div v-for="(item, index) in searchChips" :key="index">
-            <Chip 
+            <Chip
               v-if="!item.noChip"
               dense
               close
               class="mr-2"
-              :label="`${item.label}: ${item.formattedValue}`" 
+              :label="`${item.label}: ${item.formattedValue}`"
               @click:close="closeChip(item)" />
           </div>
         </div>
@@ -53,9 +53,9 @@
       </template>
 
       <template v-slot:[`item.actions`]="props">
-        <ActionsListPage 
-          :schema="schema" 
-          :icons="icons" 
+        <ActionsListPage
+          :schema="schema"
+          :icons="icons"
           :data-list-props="props"
           @openDialogDestroy="openDialogDestroy"
           @actionMoreActions="actionMoreActions" />
@@ -156,12 +156,12 @@ export default {
       let params = { page: this.options.page, per_page: this.options.itemsPerPage, sortBy: this.options.sortBy[0],
         sortDesc: this.options.sortDesc[0] ? 'desc' : 'asc' };
 
-      if(params.sortBy) {
+      if (params.sortBy) {
         const arr = params.sortBy.split('_');
-        if(arr[arr.length-1] === 'formatted') {
+        if (arr[arr.length-1] === 'formatted') {
           let sortBy = '';
           arr.forEach((i, index) => {
-            if(index < (arr.length - 1)) sortBy += `${i}_`;
+            if (index < (arr.length - 1)) sortBy += `${i}_`;
           });
           params.sortBy = sortBy.substring(0, sortBy.length - 1);
         }
@@ -188,20 +188,18 @@ export default {
     setHeaders() {
       this.schema.fields.forEach(form => {
         form.items.forEach(item => {
-          if(item.list) {
-            this.headers.push(
-              {
-                text: item.label,
-                value: item.formattedName ? item.formattedName : item.name,
-                align: item.align ? item.align : 'start',
-                sortable: !item.noSortable || false,
-              }
-            );
+          if (item.list) {
+            this.headers.push({
+              text: item.label,
+              value: item.formattedName ? item.formattedName : item.name,
+              align: item.align ? item.align : 'start',
+              sortable: !item.noSortable || false,
+            });
           }
         });
       });
 
-      if(this.schema.listActions.status) {
+      if (this.schema.listActions.status) {
         this.headers.push(
           {
             text: 'Status',
@@ -212,7 +210,7 @@ export default {
         );
       }
 
-      if(this.schema.listActions.situation) {
+      if (this.schema.listActions.situation) {
         this.headers.push(
           {
             text: 'Situação',
@@ -222,8 +220,8 @@ export default {
           }
         );
       }
-      
-      if(this.schema.listActions.has) {
+
+      if (this.schema.listActions.has) {
         this.headers.push({
           text: 'Ações',
           value: 'actions',
@@ -236,7 +234,6 @@ export default {
     getAll() {
       this.loading = true;
 
-      
       const params = {
         ...this.paramsPaginator,
         customSearch: this.search,
@@ -246,8 +243,8 @@ export default {
         this.localItems = res.data;
         this.totalLocalItems = res.data.total;
         this.loading = false;
-        
-        if(this.schema.business != undefined)
+
+        if (this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
       }).catch((err) => {
         console.error(`DynamicListPage GetDataFromApi error: ${err}`);
@@ -261,8 +258,8 @@ export default {
         this.localItems = res.data;
         this.totalLocalItems = res.data.total;
         this.loading = false;
-        
-        if(this.schema.business != undefined)
+
+        if (this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
       }).catch((err) => {
         console.error(`DynamicListPage Filters error: ${err}`);
@@ -271,14 +268,14 @@ export default {
       });
     },
     searchItems(search) {
-      if(this.fixedFilter) search[this.fixedFilterParams.name] = { ...this.fixedFilterParams };
+      if (this.fixedFilter) search[this.fixedFilterParams.name] = { ...this.fixedFilterParams };
 
       this.searches = search;
       this.searchChips = [];
       let filter = {};
       Object.keys(search).forEach((key) => {
         filter[key] = search[key].value;
-        this.searchChips.push({ 
+        this.searchChips.push({
           name: search[key].name,
           label: search[key].label,
           value: search[key].value,
@@ -308,7 +305,7 @@ export default {
       this.dialog = true;
     },
     destroy() {
-      if(!this.noGetDynamicItems){
+      if (!this.noGetDynamicItems){
         const { id } = this.selected[0].item;
 
         this.service.delete(id).then(() => {
@@ -320,7 +317,7 @@ export default {
         });
 
         this.clearProps();
-      }else{
+      } else {
         this.loadingDestroy = true;
         this.clearProps();
       }
@@ -332,7 +329,7 @@ export default {
       this.dialog = false;
     },
     actionMoreActions(item) {
-      if(item.i.action === 'situation') {
+      if (item.i.action === 'situation') {
         this.situation(item);
         return;
       }

@@ -25,31 +25,44 @@
             :events="events"
             :event-color="getEventColor"
             :type="type"
-            @click:event="showEvent"
+            @click:event="openToolbarEvent"
             @click:more="viewDay"
             @click:date="viewDay"
-            @change="updateRange" />
-            <ToolbarEvent v-model="selectedOpen" :selectedElement="selectedElement" :selectedEvent="selectedEvent" />
+            @change="getAppointments" />
+
+          <ToolbarEvent
+            v-model="selectedOpen"
+            :selectedElement="selectedElement"
+            :selectedEvent="selectedEvent"
+            @update:selectedOpen="selectedOpen = $event"
+            @handlerAction="handlerAction" />
         </v-sheet>
       </v-col>
     </v-row>
+
+    <DialogConfirmation
+      :dialog="dialog"
+      :message="dialogMessage"
+      @noAction="dialog = false"
+      @yesAction="dialogAction" />
   </div>
 </template>
 
 <script>
 import Header from './components/Header';
 import ToolbarEvent from './components/ToolbarEvent';
+import DialogConfirmation from '@/components/DialogConfirmation';
 
 const COLORS = Object.freeze({
   pending: 'orange',
   confirmed: 'blue',
   done: 'grey',
-  canceled: 'red'
+  canceled: 'primary'
 });
 
 export default {
   name: 'MyCalendar',
-  components: { Header, ToolbarEvent },
+  components: { Header, ToolbarEvent, DialogConfirmation },
   data() {
     return {
       focus: '',
@@ -58,17 +71,22 @@ export default {
       selectedElement: null,
       selectedOpen: false,
       events: [],
+      dialog: false,
+      dialogMessage: null,
+      infoActionSelected: {},
     };
   },
   mounted () {
     this.$refs.calendar.checkChange();
   },
   computed: {
+    l () {
+      return this.$locales.pt.calendars.ListCalendars.myCalendar;
+    },
     lAppointments () {
       return this.$locales.pt.appointments;
     },
     legends () {
-      console.log(this.lAppointments);
       return Object.keys(COLORS).map((color) => {
         return {
           label: this.lAppointments.ListAppointments.status[color],
@@ -88,7 +106,7 @@ export default {
     nextPrev(type) {
       this.$refs.calendar[type]();
     },
-    showEvent ({ nativeEvent, event }) {
+    openToolbarEvent ({ nativeEvent, event }) {
       const open = () => {
         this.selectedEvent = event;
         this.selectedElement = nativeEvent.target;
@@ -104,39 +122,70 @@ export default {
 
       nativeEvent.stopPropagation();
     },
-    updateRange ({ start, end }) {
-      start;
-      end;
+    getAppointments () {
       this.$api.appointments.index().then((res) => {
-        this.events = res.data.data.map((appointment) => {
-          const [ year, month, day ] = appointment.appointment_date.split('-');
-          const [ initialHour, initialMinute,  initialSecond ] = appointment.initial_hour.split(':');
-          const [ finalHour, finalMinute,  finalSecond ] = appointment.final_hour.split(':');
-          const dateInitial = new Date(year, (month - 1), day, initialHour, initialMinute, initialSecond);
-          const dateFinal = new Date(year, (month - 1), day, finalHour, finalMinute, finalSecond);
-          return {
-            name: `${appointment.collaborator.name} | ${appointment.customer.name}`,
-            collaborator: appointment.collaborator.name,
-            customer: appointment.customer.name,
-            date:  dateInitial,
-            initialHour: `${initialHour}:${initialMinute}`,
-            finalHour: `${finalHour}:${finalMinute}`,
-            amount: appointment.amount,
-            status: appointment.status,
-            services: appointment,
-            start: dateInitial,
-            end: dateFinal,
-            color: COLORS[appointment.status],
-            timed: false,
-            displayBtnConfirmed: (appointment.status === this.$enums.appointmentStatus.PENDING) || false,
-            displayBtnFinished: appointment.status === this.$enums.appointmentStatus.CONFIRMED || false,
-            displayBtnCancel: appointment.status !== this.$enums.appointmentStatus.CANCELED || false,
-          };
-        });
+        this.events = this.mountEvents(res.data.data);
       });
     },
-    rnd (a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a;
+    mountEvents (appointments) {
+      return appointments.map((appointment) => {
+        const dateInitial = this.mountDateISO(appointment.appointment_date, appointment.initial_hour);
+        const dateFinal = this.mountDateISO(appointment.appointment_date, appointment.final_hour);
+
+        return {
+          id: appointment.id,
+          name: appointment.customer.name,
+          collaborator: appointment.collaborator.name,
+          customer: appointment.customer.name,
+          date:  dateInitial,
+          initialHour: appointment.initial_hour,
+          finalHour: appointment.final_hour,
+          amount: appointment.amount,
+          status: appointment.status,
+          services: appointment,
+          start: dateInitial,
+          end: dateFinal,
+          color: COLORS[appointment.status],
+          timed: false,
+          displayBtnConfirmed: (appointment.status === this.$enums.appointmentStatus.PENDING) || false,
+          displayBtnFinished: appointment.status === this.$enums.appointmentStatus.CONFIRMED || false,
+          displayBtnCancel: (appointment.status !== this.$enums.appointmentStatus.CANCELED && appointment.status !== this.$enums.appointmentStatus.DONE) || false,
+        };
+      });
+    },
+    handlerAction (data) {
+      this.dialog = true;
+      const { action, event, status } = data;
+      this.dialogMessage = this.l.dialog[status];
+      this.infoActionSelected = { action, event, status};
+    },
+    updateAppointment (event, status) {
+      this.$api.appointments.update(event.id, { status }).then(() => {
+        this.changeInfoEvent(status);
+        this.$noty.success(this.$locales.pt.default.alerts.success);
+      }).catch(() => {
+        this.$noty.error(this.$locales.pt.default.alerts.error);
+      }).finally(() => {
+        this.dialog = false;
+      });
+    },
+    changeInfoEvent (status) {
+      this.selectedEvent.color = COLORS[status];
+      this.selectedEvent.displayBtnConfirmed = (status === this.$enums.appointmentStatus.PENDING) || false;
+      this.selectedEvent.displayBtnFinished = status === this.$enums.appointmentStatus.CONFIRMED || false;
+      this.selectedEvent.displayBtnCancel = (status !== this.$enums.appointmentStatus.CANCELED && status !== this.$enums.appointmentStatus.DONE) || false;
+    },
+    mountDateISO (date, time) {
+      const [ year, month, day ] = date.split('-');
+      const [ hour, minute,  second ] = time.split(':');
+      return new Date(year, (month - 1), day, hour, minute, second);
+    },
+    openDialog () {
+
+    },
+    dialogAction () {
+      const { action, event, status } = this.infoActionSelected;
+      this[action](event, status);
     },
   },
 };
