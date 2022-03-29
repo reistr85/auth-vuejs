@@ -12,12 +12,12 @@
       @getInstallments="getInstallments">
 
      <template v-slot:actions="{ props }">
-       <Button 
+       <Button
           type-icon color="gray"
           :icon="$icons.edit"
           :disabled="disabledButton"
           @click="$emit('handleAction', handleAction('handleItemEdit', props))" />
-        <Button 
+        <Button
           type-icon color="green"
           :icon="$icons.check"
           :disabled="disabledButton"
@@ -47,10 +47,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    // componentType: {
-    //   type: String,
-    //   required: true,
-    // },
     disabledButton: {
       type: Boolean,
       default: false,

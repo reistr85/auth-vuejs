@@ -46,7 +46,6 @@ const api = Object.freeze({
   services: ServicesService,
   boxes: { ...BoxesService, ...BoxesCommands() },
   boxMovements: BoxMovementsService,
-  
   // Settings
   companies: { ...CompaniesService, ...CompaniesCommands() },
   users: UsersService,

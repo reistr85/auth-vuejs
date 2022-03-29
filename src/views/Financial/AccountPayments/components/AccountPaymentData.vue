@@ -8,14 +8,14 @@
         :readonly="accountFinished" />
     </v-col>
     <v-col cols="12" md="3">
-      <DataPicker 
-        v-model="accountPayment.date_issuance" 
+      <DataPicker
+        v-model="accountPayment.date_issuance"
         label="Data de Emissão"
         :readonly="accountFinished" />
     </v-col>
     <v-col cols="12" md="3">
-      <DataPicker 
-        v-model="accountPayment.date_discharge" 
+      <DataPicker
+        v-model="accountPayment.date_discharge"
         label="Data da Quitação"
         :readonly="true" />
     </v-col>

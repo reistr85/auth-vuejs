@@ -59,7 +59,7 @@ export default {
       localBanks: [],
       localPaymentMethods: [],
       localCardFlags: [],
-    }
+    };
   },
   mounted() {
     this.localBanks = this.banks;
@@ -68,16 +68,16 @@ export default {
   },
   methods: {
     payment() {
-      if(!this.$refs.formPayment.validate())
+      if (!this.$refs.formPayment.validate())
         return;
 
       this.$emit('handleActionModal', {
         action: 'addPayment',
         item: this.form
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style>
