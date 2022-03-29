@@ -15,31 +15,31 @@ const DynamicService = (endpoint, schema, options = {}) => ({
     });
     return paramsFilter;
   },
-  async index(params = null){
+  async index(params = null) {
     let items = {};
     let page = 1;
     let totalItemsPerPage = 10;
     let url = '';
 
-    if(params){
+    if (params){
       page = params.page;
       totalItemsPerPage = params.per_page;
       const { sortBy, sortDesc } = params;
       url = `${endpoint}?page=${page}&per_page=${totalItemsPerPage}`;
-      if(sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
+      if (sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
     }
 
 
-    if(!params)
+    if (!params)
       url = `${endpoint}`;
 
     await axios.get(url).then((res) => {
       if (options.formatResponse && typeof options.formatResponse === 'function') {
-        if(res.data?.data) {
+        if (res.data?.data) {
           res.data.data.forEach((item) => {
             options.formatResponse(item);
           });
-        }else{
+        } else {
           res.data.forEach((item) => {
             options.formatResponse(item);
           });
@@ -53,7 +53,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
 
     return items;
   },
-  async show(id){
+  async show(id) {
     return new Promise((resolve, reject) => {
       let item = {};
       axios.get(`${endpoint}/${id}`).then((res) => {
@@ -67,7 +67,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       });
     });
   },
-  async create(params){
+  async create(params) {
     return new Promise((resolve, reject) => {
       if (options.formatRequest && typeof options.formatRequest === 'function') {
         options.formatRequest(params);
@@ -79,7 +79,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       });
     });
   },
-  async update(id, params){
+  async update(id, params) {
     return new Promise((resolve, reject) => {
       if (options.formatRequest && typeof options.formatRequest === 'function') {
         options.formatRequest(params);
@@ -92,7 +92,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       });
     });
   },
-  async createOrUpdateFile(id, params, type = 'post'){
+  async createOrUpdateFile(id, params, type = 'post') {
     return new Promise((resolve, reject) => {
       let payload = new FormData();
       payload.append('file', true);
@@ -103,7 +103,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
 
       const method_put = type === 'put' ? '?_method=PUT' : '';
       const url = `${endpoint}/${id}${method_put}`;
-      
+
       axios.post(url, payload).then(() => {
         resolve(true);
       }).catch((err) => {
@@ -111,7 +111,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       });
     });
   },
-  async delete(id){
+  async delete(id) {
     return new Promise((resolve, reject) => {
       axios.delete(`${endpoint}/${id}`).then(() => {
         resolve(true);
@@ -120,17 +120,17 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       });
     });
   },
-  async filters(params){
+  async filters(params) {
     try {
       const { page, per_page, filter, sortBy, sortDesc } = params;
       let url = `filters?domain=${endpoint}`;
       let items = {};
-      
-      if(page) url += `&page=${page}&per_page=${per_page || 10}`;
-      if(filter && schema.filters.has) url += this.mountFilter(filter);
-      if(schema.filters?.has && schema.filters?.include?.has) url += `&include=${schema.filters?.include?.value}`;
-      if(params.search_global) url += '&search_global=true';
-      if(sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
+
+      if (page) url += `&page=${page}&per_page=${per_page || 10}`;
+      if (filter && schema.filters.has) url += this.mountFilter(filter);
+      if (schema.filters?.has && schema.filters?.include?.has) url += `&include=${schema.filters?.include?.value}`;
+      if (params.search_global) url += '&search_global=true';
+      if (sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
 
       await axios.get(url).then((res) => {
         if (options.formatResponse && typeof options.formatResponse === 'function') {
@@ -145,7 +145,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       });
 
       return items;
-    }catch(err) {
+    } catch (err) {
       console.error(err);
     }
   },

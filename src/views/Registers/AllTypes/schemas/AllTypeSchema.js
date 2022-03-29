@@ -5,158 +5,158 @@ import { required } from '@/utils/rules';
 import { typeYesNo } from '@/utils/options';
 
 export default {
-    domain: 'all-types',
-    title: 'Tipos Gerais',
-    description: 'Lista de todos os tipos gerais do sistema',
-    business: AllType,
-    createBtn: '',
-    formAddress: false,
-    routes: {
-      list: {
-        category: {
-          name: 'categories',
-          path: '/categorias',
-          meta: { typePage: typePageOptions.list, requiresAuth: true, }
-        },
-        subCategory: {
-          name: 'subcategories',
-          path: '/sub-categorias',
-          meta: { typePage: typePageOptions.list, requiresAuth: true, }
-        },
-        payment: {
-          name: 'paymentmethods',
-          path: '/pagamentos',
-          meta: { typePage: typePageOptions.list, requiresAuth: true, }
-        },
-        cardFlag: {
-          name: 'cardflags',
-          path: '/bandeiras',
-          meta: { typePage: typePageOptions.list, requiresAuth: true, }
-        }
+  domain: 'all-types',
+  title: 'Tipos Gerais',
+  description: 'Lista de todos os tipos gerais do sistema',
+  business: AllType,
+  createBtn: '',
+  formAddress: false,
+  routes: {
+    list: {
+      category: {
+        name: 'categories',
+        path: '/categorias',
+        meta: { typePage: typePageOptions.list, requiresAuth: true, }
       },
-      create: {
-        category: {
-          name: 'categories-create',
-          path: '/categorias/novo',
-          meta: { typePage: typePageOptions.create, requiresAuth: true, }
-        },
-        subCategory: {
-          name: 'subcategories-create',
-          path: '/sub-categorias/novo',
-          meta: { typePage: typePageOptions.create, requiresAuth: true, }
-        },
-        payment: {
-          name: 'paymentmethods-create',
-          path: '/pagamentos/novo',
-          meta: { typePage: typePageOptions.create, requiresAuth: true, }
-        },
-        cardFlag: {
-          name: 'cardflags-create',
-          path: '/bandeiras/novo',
-          meta: { typePage: typePageOptions.create, requiresAuth: true, }
-        }
+      subCategory: {
+        name: 'subcategories',
+        path: '/sub-categorias',
+        meta: { typePage: typePageOptions.list, requiresAuth: true, }
       },
-      show: {
-        category: {
-          name: 'categories-show',
-          path: '/categorias/:id',
-          meta: { typePage: typePageOptions.show, requiresAuth: true, }
-        },
-        subCategory: {
-          name: 'subcategories-show',
-          path: '/sub-categorias/:id',
-          meta: { typePage: typePageOptions.show, requiresAuth: true, }
-        },
-        payment: {
-          name: 'paymentmethods-show',
-          path: '/pagamentos/:id',
-          meta: { typePage: typePageOptions.show, requiresAuth: true, }
-        },
-        cardFlag: {
-          name: 'cardflags-show',
-          path: '/bandeiras/:id',
-          meta: { typePage: typePageOptions.show, requiresAuth: true, }
-        }
+      payment: {
+        name: 'paymentmethods',
+        path: '/pagamentos',
+        meta: { typePage: typePageOptions.list, requiresAuth: true, }
+      },
+      cardFlag: {
+        name: 'cardflags',
+        path: '/bandeiras',
+        meta: { typePage: typePageOptions.list, requiresAuth: true, }
       }
     },
-    listActions: {
-      has: true,
-      noShow: false,
-      noDestroy: false,
-      situation: true,
-      more: {
-        has: true,
-        items: []
+    create: {
+      category: {
+        name: 'categories-create',
+        path: '/categorias/novo',
+        meta: { typePage: typePageOptions.create, requiresAuth: true, }
       },
+      subCategory: {
+        name: 'subcategories-create',
+        path: '/sub-categorias/novo',
+        meta: { typePage: typePageOptions.create, requiresAuth: true, }
+      },
+      payment: {
+        name: 'paymentmethods-create',
+        path: '/pagamentos/novo',
+        meta: { typePage: typePageOptions.create, requiresAuth: true, }
+      },
+      cardFlag: {
+        name: 'cardflags-create',
+        path: '/bandeiras/novo',
+        meta: { typePage: typePageOptions.create, requiresAuth: true, }
+      }
     },
-    filters: {
+    show: {
+      category: {
+        name: 'categories-show',
+        path: '/categorias/:id',
+        meta: { typePage: typePageOptions.show, requiresAuth: true, }
+      },
+      subCategory: {
+        name: 'subcategories-show',
+        path: '/sub-categorias/:id',
+        meta: { typePage: typePageOptions.show, requiresAuth: true, }
+      },
+      payment: {
+        name: 'paymentmethods-show',
+        path: '/pagamentos/:id',
+        meta: { typePage: typePageOptions.show, requiresAuth: true, }
+      },
+      cardFlag: {
+        name: 'cardflags-show',
+        path: '/bandeiras/:id',
+        meta: { typePage: typePageOptions.show, requiresAuth: true, }
+      }
+    }
+  },
+  listActions: {
+    has: true,
+    noShow: false,
+    noDestroy: false,
+    situation: true,
+    more: {
       has: true,
+      items: []
+    },
+  },
+  filters: {
+    has: true,
+    items: [
+      {
+        type: 'text',
+        label: 'Descrição',
+        name: 'description',
+        icon: text,
+        md: 6,
+      },
+      {
+        type: 'text',
+        label: 'Apelido',
+        name: 'nickname',
+        icon: text,
+        md: 6,
+      },
+    ]
+  },
+  fields: [
+    {
+      icon: list,
+      title: 'Dados do Tipo Geral',
+      openGroup: true,
       items: [
         {
           type: 'text',
-          label: 'Descrição',
           name: 'description',
-          icon: text,
-          md: 6,
+          formattedName: 'description',
+          label: 'Descrição',
+          align: '',
+          md: '4',
+          rules: [required],
+          list: true,
+          readonly: false,
+          disabled: false,
+          counter: 100,
         },
         {
           type: 'text',
-          label: 'Apelido',
           name: 'nickname',
-          icon: text,
-          md: 6,
+          formattedName: 'nickname',
+          label: 'Apelido',
+          align: '',
+          md: '4',
+          required: true,
+          list: true,
+          readonly: false,
+          disabled: false,
         },
-      ]
-    },
-    fields: [
-      {
-        icon: list,
-        title: 'Dados do Tipo Geral',
-        openGroup: true,
-        items: [
-          {
-            type: 'text',
-            name: 'description',
-            formattedName: 'description',
-            label: 'Descrição',
-            align: '',
-            md: '4',
-            rules: [required],
-            list: true,
-            readonly: false,
-            disabled: false,
-            counter: 100,
-          },
-          {
-            type: 'text',
-            name: 'nickname',
-            formattedName: 'nickname',
-            label: 'Apelido',
-            align: '',
-            md: '4',
-            required: true,
-            list: true,
-            readonly: false,
-            disabled: false,
-          },
-          {
-            type: 'select',
-            name: 'use_nickname',
-            formattedName: 'use_nickname_formatted',
-            label: 'Usar Apelido',
-            align: '',
-            md: '3',
-            rules: [required],
-            list: true,
-            readonly: false,
-            disabled: false,
-            items: typeYesNo,
-            default: 'no',
-            itemText: 'text',
-            itemValue: 'value'
-          },
-        ],
-      }
-    ],
-    footer: []
-  };
+        {
+          type: 'select',
+          name: 'use_nickname',
+          formattedName: 'use_nickname_formatted',
+          label: 'Usar Apelido',
+          align: '',
+          md: '3',
+          rules: [required],
+          list: true,
+          readonly: false,
+          disabled: false,
+          items: typeYesNo,
+          default: 'no',
+          itemText: 'text',
+          itemValue: 'value'
+        },
+      ],
+    }
+  ],
+  footer: []
+};

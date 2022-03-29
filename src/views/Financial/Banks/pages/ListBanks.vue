@@ -23,7 +23,7 @@ export default {
     return {
       schema: BankSchema,
       service: BanksService,
-    }
+    };
   },
   methods: {
     actionMoreActions(item) {
@@ -31,10 +31,10 @@ export default {
     },
     bankStatement(item) {
       const id = item.dataListProps.item.id;
-      this.$router.push({ name: BankSchema.routes.statement.name, params: { id } })
+      this.$router.push({ name: BankSchema.routes.statement.name, params: { id } });
     }
   }
-}
+};
 
 </script>
 

@@ -10,14 +10,14 @@
           <v-expansion-panel-content>
             <v-row>
               <v-col cols="12" xs="12" sm="12" md="6" :lg="item.md" v-for="(item, iItem) in group.items" :key="iItem">
-                <component v-model="localItem[item.name]" :is="typesComponents[item.type]" v-if="!item.noForm" 
+                <component v-model="localItem[item.name]" :is="typesComponents[item.type]" v-if="!item.noForm"
                   v-bind="getProps(item)" v-on="getEvents(item)" />
               </v-col>
             </v-row>
           </v-expansion-panel-content>
 
           <v-expansion-panel-content v-if="group.type === 'dataTable'">
-            <!-- <DataTable 
+            <!-- <DataTable
               show-select
               single-select
               :headers="[]"
@@ -26,11 +26,11 @@
               <!-- {{ getItemsChildren(group) }} -->
               {{ itemsChildren[group.service.items] }}
           </v-expansion-panel-content>
-          
+
           <v-expansion-panel-content v-if="group.type === 'address'">
             <AddressFormPage :address="address" @setAddressByZipCode="setAddressByZipCode" />
           </v-expansion-panel-content>
-        </v-expansion-panel>      
+        </v-expansion-panel>
       </v-expansion-panels>
 
       <div class="mt-5">
@@ -48,7 +48,7 @@ import { save, arrowLeft } from '@/utils/icons';
 import locales from '@/locales/pt-BR';
 import TypePageMixin from '@/mixins/TypePageMixin';
 import Icon from '@/components/vuetify/Icon';
-import typesComponents from '@/utils/typesComponents'
+import typesComponents from '@/utils/typesComponents';
 import Button from '@/components/vuetify/Button';
 import AddressFormPage from './components/AddressFormPage';
 import DataTable from '@/components/vuetify/DataTable';
@@ -83,7 +83,7 @@ export default {
       address: {},
       itemsSelect: {},
       itemsChildren: {}
-    }
+    };
   },
   mounted() {
     this.mountItemsSelects();
@@ -93,7 +93,7 @@ export default {
   mixins: [TypePageMixin],
   methods: {
     getProps(item) {
-      return  { 
+      return  {
         label: item.label,
         readonly: item.readonly,
         disabled: item.disabled,
@@ -106,23 +106,23 @@ export default {
         ...item.type === 'integer' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty },
         ...item.type === 'simpleMask' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty, alphanumeric: item.alphanumeric },
         ...item.type === 'dataPicker' && { model: item.name, noInitial: item.noInitial, now: item.now  },
-      }
+      };
     },
     getEvents(item) {
-      return  { change: () => this.changeBusiness(item) }
+      return  { change: () => this.changeBusiness(item) };
     },
     show() {
       const { id } = this.$route.params;
       this.service.show(id).then((res) => {
-        let form = {}
+        let form = {};
         this.schema.fields.forEach((group) => {
           group.items.forEach((item) => {
-            form[item.name] = res[item.name]
-            if(item.type === 'select' && item.multiple) form[item.name] = res[item.name].split(', ');
-          })
-        })
-        
-        this.localItem = form
+            form[item.name] = res[item.name];
+            if (item.type === 'select' && item.multiple) form[item.name] = res[item.name].split(', ');
+          });
+        });
+
+        this.localItem = form;
         this.address = res.address || {};
         this.handlerBeforeForm();
       }).catch((err) => {
@@ -131,20 +131,20 @@ export default {
       });
     },
     save() {
-      if(!this.$refs.form.validate())
+      if (!this.$refs.form.validate())
         return;
 
       this.loadingSave = true;
 
-      if(this.schema.business){
+      if  (this.schema.business){
         if ( typeof this.schema.business.beforeSave === 'function' )
-          this.schema.business.beforeSave(this.localItem)
+          this.schema.business.beforeSave(this.localItem);
       }
 
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
     },
-    create(){
-      if(this.schema.formAddress) this.localItem.address = this.address;
+    create() {
+      if (this.schema.formAddress) this.localItem.address = this.address;
       this.service.create(this.localItem).then(() => {
         this.$noty.success(locales.alerts.createdRegister);
         this.$router.back();
@@ -156,10 +156,10 @@ export default {
     },
     update() {
       const { id } = this.$route.params;
-      if(this.schema.formAddress) this.localItem.address = this.address;
+      if (this.schema.formAddress) this.localItem.address = this.address;
 
       this.service.update(id, this.localItem).then(() => {
-        this.$noty.success(locales.alerts.updatedRegister)
+        this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.$router.back();
         this.loadingSave = false;
       }).catch((err) => {
@@ -168,53 +168,50 @@ export default {
       });
     },
     setAddressByZipCode(address) {
-      if(!address)
+      if (!address)
         return;
 
-      this.address = { ...address }
+      this.address = { ...address };
     },
     mountItemsSelects() {
       this.schema.fields.forEach((field, index) => {
-        if(field.openGroup)
-          this.panel.push(index)
+        if (field.openGroup)
+          this.panel.push(index);
 
         field.items.forEach((item) => {
-          if(item.default) this.localItem[item.name] = item.default;
+          if (item.default) this.localItem[item.name] = item.default;
 
-          if(item.type === 'select' && item.service?.has) {
+          if (item.type === 'select' && item.service?.has) {
             axios[item.service.verb](`${item.service.endpoint}?${item.service.queryParams}`).then((res) => {
               const items = res.data.data.map((i) => {
-                return { [item.itemText]: i[item.itemText], [item.itemValue]: i[item.itemValue] }
+                return { [item.itemText]: i[item.itemText], [item.itemValue]: i[item.itemValue] };
               });
               items.unshift({ [item.itemText]: '', [item.itemValue]: 0 });
               this.$set(this.itemsSelect, item.name, items);
-            }).catch((err) => {
-              console.error(err)
+            }).catch(() => {
             });
-          }else{
+          } else {
             this.$set(this.itemsSelect, item.name, item.items);
           }
         });
       });
     },
     changeBusiness(item) {
-      if(this.schema.business?.changes[item.name]) this.schema.business?.changes[item.name](this.localItem, this.schema.fields, item)
+      if (this.schema.business?.changes[item.name]) this.schema.business?.changes[item.name](this.localItem, this.schema.fields, item);
     },
     getItemsChildren() {
       this.schema.fields.forEach((field) => {
-        if(field.type === 'dataTable') {
-          console.log(field.service)
+        if (field.type === 'dataTable') {
           axios[field.service.verb](`${field.service.endpoint}?${field.service.queryParams}`).then((res) => {
             this.$set(this.itemsChildren, 'all_types', res.data);
-          }).catch((err) => {
-            console.error(err)
+          }).catch(() => {
           });
         }
       });
     },
     handlerBeforeForm() {
-      if(this.schema.business?.beforeForm) this.schema.business?.beforeForm(this.localItem, this.schema.fields)
+      if (this.schema.business?.beforeForm) this.schema.business?.beforeForm(this.localItem, this.schema.fields);
     }
   }
-}
+};
 </script>
