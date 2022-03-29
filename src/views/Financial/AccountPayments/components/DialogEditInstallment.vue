@@ -54,7 +54,7 @@
       </v-form>
     </div>
     <div slot="actions">
-        <Button label="Cancelar" :icon="$icons.cancel" color="primary" rounded class="" @click="cancel()" />
+        <Button label="Cancelar" :icon="$icons.cancel" color="primary" rounded class="" @click="$emit('update:dialog', false)" />
         <Button label="Salvar" :icon="$icons.plus" color="secondary" rounded class="ml-3" @click="save(installment)" />
     </div>
   </Card>
@@ -142,11 +142,9 @@ export default {
       this.$api.accountPaymentInstallments.update(installment.id, installment).then(() => {
       }).catch((error) => {
         this.$noty.error(error);
+      }).finally(() => {
+        this.$emit('handleActionInstallmentSave');
       });
-      this.$emit('handleActionInstallmentSave');
-    },
-    cancel() {
-      this.$emit('update:dialog', false);
     },
   }
 };

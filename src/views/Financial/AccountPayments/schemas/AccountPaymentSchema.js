@@ -10,17 +10,17 @@ export default {
   formAddress: false,
   routes: {
     list: {
-      name: 'accountPayments',
+      name: 'accountpayments',
       path: '/contas-a-pagar',
       meta: { typePage: typePageOptions.list, requiresAuth: true, }
     },
     create: {
-      name: 'accountPayment-create',
+      name: 'accountpayment-create',
       path: '/contas-a-pagar/novo',
       meta: { typePage: typePageOptions.create, requiresAuth: true, }
     },
     show: {
-      name: 'accountPayment-show',
+      name: 'accountpayment-show',
       path: '/contas-a-pagar/:id',
       meta: { typePage: typePageOptions.show, requiresAuth: true, }
     },

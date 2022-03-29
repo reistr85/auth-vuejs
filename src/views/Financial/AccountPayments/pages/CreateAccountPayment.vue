@@ -16,8 +16,8 @@
           :loading="loading"
           :headers="headerInstallments"
           :items="installments"
-          @getInstallments="getAccountPaymentInstallments"
           :disabledButton="disabledButton"
+          @getInstallments="getAccountPaymentInstallments"
           @handleAction="handleAction"/>
       </ExpansionPanel>
 
@@ -46,9 +46,9 @@
 
       <Dialog no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
         <component
+          v-bind="propsEditInstallment"
           slot="content"
           :is="dialogComponent"
-          v-bind="propsEditInstallment"
           @update:dialog="dialog = $event"
           @handleActionInstallmentSave="handleActionInstallmentSave" />
       </Dialog>
@@ -348,8 +348,8 @@ export default {
         this.loading = false;
         this.loadingPaid = false;
         this.dialogPaid = false;
+        this.getAccountPayment();
       });
-      this.getAccountPaymentInstallments();
     }
   }
 };
