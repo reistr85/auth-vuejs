@@ -338,6 +338,12 @@ const typeStatusAccountPayments = [
   { id: 3, text: 'Quitado', value: 'settled' },
 ];
 
+const typeStatusAccountPaymentInstallments = [
+  { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Pago', value: 'paid' },
+];
+
+
 export { 
   statusAppointment,
   statusOrderService,
@@ -355,5 +361,6 @@ export {
   originTypeBoxMovements,
   originTypeBankMovements,
   typeBankMovements,
-  typeStatusAccountPayments
+  typeStatusAccountPayments,
+  typeStatusAccountPaymentInstallments
 };

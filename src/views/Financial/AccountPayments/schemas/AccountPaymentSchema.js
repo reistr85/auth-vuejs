@@ -128,9 +128,9 @@ export default {
           },
           {
             type: 'dataPicker',
-            name: 'date_competency',
-            formattedName: 'date_competency_formatted',
-            label: 'Data de Competência',
+            name: 'date_discharge',
+            formattedName: 'date_discharge_formatted',
+            label: 'Data de Quitação',
             align: '',
             md: '3',
             rules: [],
@@ -199,6 +199,7 @@ export default {
       { text: 'Data de Pagamento', value: 'date_payment_formatted' },
       { text: 'Banco', value: 'bank_formatted' },
       { text: 'Valor Parcela', value: 'amount_formatted' },
+      { text: 'Status', value: 'status_formatted' },
       { text: 'Ações', value: 'actions', align: 'end' },
     ],
     footer: []
