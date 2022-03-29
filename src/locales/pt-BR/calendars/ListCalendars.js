@@ -1,5 +1,10 @@
 export default {
   myCalendar: {
+    dialog: {
+      confirmed: 'Deseja Confirmar este Agendamento?',
+      done: 'Deseja Finalizar este Agendamento?',
+      canceled: 'Deseja Cancelar este Agendamento?',
+    },
     toolbarEve: {
       titles: {
         collaborator: 'Colaborador',
@@ -14,7 +19,7 @@ export default {
         finish: 'Finalizar',
         cancel: 'Cancelar',
         close: 'Fechar',
-      }
+      },
     }
   },
 };
