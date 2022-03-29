@@ -9,7 +9,7 @@
     <v-col cols="12" md="4">
       <TextFieldMoney
         v-model="accountPayment.amount_payment"
-        label="Valor Pago" 
+        label="Valor Pago"
         :readonly="true" />
     </v-col>
     <v-col cols="12" md="4">
