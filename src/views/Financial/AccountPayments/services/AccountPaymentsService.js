@@ -15,7 +15,7 @@ const formatResponse = (item) => {
 };
 
 const formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId = (res) => {
-  const { data } = res.data;
+  const { data } = res;
   data.forEach((item) => {
     item.date_due_formatted = formatDate(item.date_due);
     item.date_payment_formatted = formatDate(item.date_payment);
