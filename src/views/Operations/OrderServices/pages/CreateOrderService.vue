@@ -3,11 +3,7 @@
     <PageHeader :schema="$schemas.orderService" />
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados da Ordem" multiple :icon="$icons.list">
-        <OrderData
-          :order-service="order_service"
-          :customers="customers"
-          :collaborators="collaborators"
-          :order-finished="orderFinished" />
+        <OrderData v-bind="orderDataProps" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
@@ -149,6 +145,10 @@ export default {
     if (this.typePage === this.typePageOptions.create)
       this.getLastOrderNumber();
 
+    const appointment_id = this.$route.params.appointment_id;
+    if (appointment_id)
+      this.getAppointment(appointment_id);
+
     this.getCollaborators();
     this.getCustomers();
     this.getMethodPayments();
@@ -173,6 +173,12 @@ export default {
     },
     saveFinished() {
       return this.order_service.total_paid >= this.order_service.amount || false;
+    },
+    dateNow () {
+      return new Date().toISOString().substr(0, 10);
+    },
+    orderDataProps () {
+      return { orderService: this.order_service, customers: this.customers, collaborators: this.collaborators, orderFinished:  this.orderFinished };
     }
   },
   mixins: [TypePageMixin],
@@ -386,6 +392,7 @@ export default {
           id: item.id,
           number_item: item.number_item,
           collaborator: { id: item.collaborator.id, name: item.collaborator.name },
+          collaborator_id: item.collaborator.id,
           service: { name: item.service.name },
           subtotal: item.subtotal,
           subtotal_formatted: item.subtotal_formatted,
@@ -441,6 +448,46 @@ export default {
       this.order_service.amount = amount;
       this.order_service.total_paid = total_paid;
       this.order_service.total_payable = total_paid >= amount ? 0 :amount - total_paid;
+    },
+    getAppointment (id) {
+      this.$api.appointments.show(id).then((res) => {
+        const appointment = res;
+        this.mountForm({
+          order_date: this.dateNow,
+          customer_id: appointment.customer_id,
+          collaborator_id: appointment.collaborator_id,
+          quantity_services: appointment.items.length,
+          subtotal: 0,
+          discount: 0,
+          amount: 0,
+          total_paid: 0,
+          total_payable: 0,
+          status: this.$enums.orderServiceStatus.PENDING,
+          items: appointment.items.map((item, index) => {
+            return {
+              id: item.id,
+              number_item: index + 1,
+              collaborator: { id: appointment.collaborator.id, name: appointment.collaborator.name },
+              collaborator_id: appointment.collaborator.id,
+              service: { name: item.service.name },
+              subtotal: item.subtotal,
+              subtotal_formatted: formatCurrency(item.subtotal),
+              quantity: item.quantity,
+              discount: item.discount,
+              discount_formatted: formatCurrency(item.discount),
+              amount: item.amount,
+              amount_formatted: formatCurrency(item.amount),
+              newItem: true
+            };
+          }),
+          payments: [],
+          items_destroy: [],
+          payments_destroy: [],
+        });
+        this.getLastOrderNumber();
+      }).catch(() => {
+
+      });
     }
   }
 };

@@ -12,7 +12,7 @@ const formatResponse = (item) => {
 };
 
 const formatRequest = (form) => {
-  form.interval_installments = form.interval_installments?.split(','); 
+  form.interval_installments = form.interval_installments?.split(',');
 };
 
 const InstallmentTypesService = DynamicService('installment-types', InstallmentTypeSchema, {
@@ -32,8 +32,8 @@ const formatResponseGenerateInstallments = (res) => {
 
 const InstallmentTypesCommands = () => ({
   async generateInstallments(payload) {
-      const res = await axios.post('installment-types/generate-installments', payload);
-      return formatResponseGenerateInstallments(res);
+    const res = await axios.post('installment-types/generate-installments', payload);
+    return formatResponseGenerateInstallments(res);
   }
 });
 

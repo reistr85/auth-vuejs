@@ -4,6 +4,7 @@ export default {
       confirmed: 'Deseja Confirmar este Agendamento?',
       done: 'Deseja Finalizar este Agendamento?',
       canceled: 'Deseja Cancelar este Agendamento?',
+      createOrderService: 'Deseja Criar uma Order de Serviço?',
     },
     toolbarEve: {
       titles: {
