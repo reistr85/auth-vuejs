@@ -167,6 +167,7 @@ export default {
         this.$noty.error(this.$locales.pt.default.alerts.error);
       }).finally(() => {
         this.dialog = false;
+        if (status === this.$enums.appointmentStatus.DONE) this.openDialogCreateOrderService();
       });
     },
     changeInfoEvent (status) {
@@ -180,13 +181,19 @@ export default {
       const [ hour, minute,  second ] = time.split(':');
       return new Date(year, (month - 1), day, hour, minute, second);
     },
-    openDialog () {
-
+    openDialogCreateOrderService () {
+      this.dialog = true;
+      this.dialogMessage = this.l.dialog.createOrderService;
+      this.infoActionSelected = { action: 'createOrderService', event: null, status: null };
     },
     dialogAction () {
       const { action, event, status } = this.infoActionSelected;
       this[action](event, status);
     },
+    createOrderService () {
+      this.dialog = false;
+      this.$router.push({ name: this.$schemas.orderService.routes.create.name, params: { appointment_id: this.selectedEvent.id } });
+    }
   },
 };
 </script>
