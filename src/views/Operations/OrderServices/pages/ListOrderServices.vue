@@ -21,7 +21,7 @@ export default {
     return {
       schema: OrderServiceSchema,
       service: OrderServicesService,
-    }
+    };
   },
-}
+};
 </script>

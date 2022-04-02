@@ -10,12 +10,12 @@ export default {
   data() {
     return {
       modeDark: {
-      value: false,
-      label: 'Modo Escuro'
-    },
-    }
+        value: false,
+        label: 'Modo Escuro'
+      },
+    };
   }
-}
+};
 </script>
 
 <style>

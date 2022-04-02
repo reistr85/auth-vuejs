@@ -14,7 +14,7 @@
         <TextField v-model="address.neighborhood" label="Bairro" :loading="loading" />
       </v-col>
     </v-row>
-    
+
     <v-row>
       <v-col cols="12" sm="12" md="6" lg="6">
         <TextField v-model="address.street" label="Endereço" :loading="loading" />
@@ -34,14 +34,14 @@ import { calendar } from '@/utils/icons';
 import { mask } from 'vue-the-mask';
 import { zipCode } from '@/utils/masks';
 import { UF } from '@/utils/options';
-import { debounce } from "@/plugins/debounce.js";
-import TextField from '@/components/vuetify/TextField'
-import TextFieldSimpleMask from '@/components/vuetify/TextFieldSimpleMask'
-import Select from '@/components/vuetify/Select'
+import { debounce } from '@/plugins/debounce.js';
+import TextField from '@/components/vuetify/TextField';
+import TextFieldSimpleMask from '@/components/vuetify/TextFieldSimpleMask';
+import Select from '@/components/vuetify/Select';
 import axios from 'axios';
 
 export default {
-  name: 'AddresFormPages',
+  name: 'AddressFormPages',
   components: { TextField, Select, TextFieldSimpleMask },
   props: {
     address: {
@@ -64,11 +64,11 @@ export default {
       panel: [0],
       valid: false,
       loading: false,
-    }
+    };
   },
   computed: {
     propsZipCode() {
-      return { 
+      return {
         required: true,
         list: true,
         readonly: false,
@@ -77,12 +77,12 @@ export default {
         outputMask: '########',
         applyAfter: false,
         empty: null,
-      }
+      };
     }
   },
   watch: {
     ['address.zip_code']: debounce(function () {
-      if(this.address.zip_code.length === 8) {
+      if (this.address.zip_code.length === 8) {
         this.getAddress();
       }
     }, 2000),
@@ -94,13 +94,13 @@ export default {
         this.loading = false;
         this.$emit('setAddressByZipCode', res.data);
       }).catch(() => {
-        this.$noty.error('Erro ao localizar o Endereço')
+        this.$noty.error('Erro ao localizar o Endereço');
         this.loading = false;
         this.$emit('setAddressByZipCode', null);
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style>

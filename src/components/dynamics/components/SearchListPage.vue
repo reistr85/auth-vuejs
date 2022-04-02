@@ -11,7 +11,7 @@
       <v-card-text>
         <v-row>
           <v-col :md="item.md" v-for="(item, index) in items" :key="index">
-            <component 
+            <component
               :is="getComponent(item)"
               v-bind="getPropsComponent(item)"
               v-model="localItem[item.name]"
@@ -44,7 +44,7 @@ const TYPES_COMPONENT = Object.freeze({
   select: Select,
   dataPicker: DataPicker,
   simpleMask: TextFieldSimpleMask,
-})
+});
 
 export default {
   name: 'SearchListPage',
@@ -66,52 +66,51 @@ export default {
       search: '',
       form: {},
       localItem: {}
-    }
+    };
   },
   methods: {
     getComponent(item) {
-      item
       return TYPES_COMPONENT[item.type];
     },
     getPropsComponent(item) {
-      return { 
+      return {
         label: item.label,
         icon: item.icon,
         ...item.type === 'text' && { type: item.type, },
         ...item.type === 'select' && { items: item.items?.data, },
         ...item.type === 'dataPicker' && { noInitial: true, },
         ...item.type === 'simpleMask' && { name: item.name, clearable: item.clearable, inputMask: item.inputMask, outputMask: item.outputMask, applyAfter: item.applyAfter, empty: item.empty, alphanumeric: item.alphanumeric },
-      }
+      };
     },
     setFormValue(field) {
-      _.set(this.form, field.name, { 
-          name: field.name,
-          label: field.label,
-          value: field.type === 'simpleMask' ? onlyNumbers(this.localItem[field.name]) : this.localItem[field.name],
-          formattedValue: this.localItem[field.name],
-        });
+      _.set(this.form, field.name, {
+        name: field.name,
+        label: field.label,
+        value: field.type === 'simpleMask' ? onlyNumbers(this.localItem[field.name]) : this.localItem[field.name],
+        formattedValue: this.localItem[field.name],
+      });
     },
-    getFomattedValues(field, value) {
+    getFormattedValues(field, value) {
       let formattedValue = '';
-      switch(field.type) {
-        case 'select': formattedValue =getText(field.items.data, value); break;
-        case 'dataPicker': formattedValue = formatDate(value); break;
-        case 'simpleMask': formattedValue = onlyNumbers(value); break;
-        default: formattedValue = value;
+      switch (field.type) {
+      case 'select': formattedValue =getText(field.items.data, value); break;
+      case 'dataPicker': formattedValue = formatDate(value); break;
+      case 'simpleMask': formattedValue = onlyNumbers(value); break;
+      default: formattedValue = value;
       }
 
       return formattedValue;
     },
     clearFilters() {
       Object.keys(this.form).forEach((key) => {
-        this.localItem[key] = ''
+        this.localItem[key] = '';
       });
       this.form = {};
       this.menu = false;
       this.$emit('searchItems', this.form);
     }
   }
-}
+};
 </script>
 
 <style>

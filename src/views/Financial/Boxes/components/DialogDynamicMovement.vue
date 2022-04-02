@@ -10,26 +10,26 @@
               :disabled="disabledDate" />
           </v-col>
           <v-col cols="12" md="3">
-            <Select 
-              v-model="movement.type" 
-              label="Entrada / Saída" 
-              :items="options.typeInputOutput" 
-              itemText="text" 
+            <Select
+              v-model="movement.type"
+              label="Entrada / Saída"
+              :items="options.typeInputOutput"
+              itemText="text"
               itemValue="value"
               :disabled="disabledTypeInputOutput"
               :rules="[rules.required]" />
           </v-col>
           <v-col cols="12" md="2">
             <TextFieldMoney
-              v-model="movement.total_value" 
+              v-model="movement.total_value"
               label="Valor Lançamento"
               :length="10"
               :rules="[rules.money]" />
           </v-col>
           <v-col cols="12" md="4">
-            <TextField 
-              v-model="movement.description" 
-              label="Descrição" 
+            <TextField
+              v-model="movement.description"
+              label="Descrição"
               :rules="[rules.required]"
               :readonly="readonlyDescription"
               v-on:keyup.enter="save" />
@@ -56,8 +56,8 @@ import { money, required } from '@/utils/rules';
 
 export default {
   name: 'DialogDynamicMovement',
-  components: { 
-    Card, 
+  components: {
+    Card,
     Button,
     DataPicker,
     Select,
@@ -118,8 +118,8 @@ export default {
   },
   methods: {
     save() {
-      if(!this.$refs.form.validate()) return;
-      
+      if (!this.$refs.form.validate()) return;
+
       this.$emit('handleActionMovement',  {
         action: 'saveMovement',
         item: this.movement
@@ -130,7 +130,6 @@ export default {
       this.$emit('update:dialog', false);
     }
   }
-  
 };
 </script>
 

@@ -33,10 +33,9 @@ export default {
   computed: {
     value: {
       get() {
-        return this.$attrs.value || ''
+        return this.$attrs.value || '';
       },
       set() {
-        
       }
     }
   },
@@ -106,7 +105,7 @@ export default {
       default: '',
     },
   }
-}
+};
 </script>
 
 <style>

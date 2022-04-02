@@ -21,4 +21,4 @@ export default [
     component: CreateService,
     meta: ServiceSchema.routes.show.meta,
   },
-]
+];

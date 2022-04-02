@@ -7,7 +7,7 @@
           <img src="@/assets/ilustration-data-time.png" alt="" height="200">
           <Resume :appointment="appointment" />
         </div>
-        
+
         <div class="content-appointments--boddy---right calendar-hour">
           <div class="content-appointments--boddy---right----date-time">
             <v-date-picker v-model="date" v-if="!dateSelected" @input="selectDate"></v-date-picker>
@@ -82,34 +82,34 @@ export default {
       dateSelected: false,
       initialHourSelected: false,
       finalHourSelected: false,
-    }
+    };
   },
   computed: {
     allowedStep() {
-      return m => m % 30 === 0
+      return m => m % 30 === 0;
     },
   },
   methods: {
     selectDate() {
       this.dateSelected = true;
-      this.$emit('setDate', this.date)
+      this.$emit('setDate', this.date);
     },
     selectHour(type) {
-      if(type === 'initial') {
-        const hour = this.initialHour.split(':')
+      if (type === 'initial') {
+        const hour = this.initialHour.split(':');
         this.initialHourSelected = true;
-        hour[1] === '00' ? this.finalHour = `${hour[0]}:30` : this.finalHour = `${parseInt(hour[0]) + 1}:00`
+        hour[1] === '00' ? this.finalHour = `${hour[0]}:30` : this.finalHour = `${parseInt(hour[0]) + 1}:00`;
       }
 
       this.finalHourSelected = true;
-      this.$emit('setHour', { initialHour: this.initialHour, finalHour: this.finalHour })
+      this.$emit('setHour', { initialHour: this.initialHour, finalHour: this.finalHour });
     },
     setStep() {
       this.reset();
       this.$emit('setStep', 3);
     },
     finish() {
-      this.$emit('finish')
+      this.$emit('finish');
       this.reset();
     },
     reset() {
@@ -118,9 +118,9 @@ export default {
       this.resetHour();
     },
     resetHour() {
-      if(this.$refs.dataPickerInitial) {
-        this.$refs.dataPickerInitial.selecting = 1
-        this.$refs.dataPickerFinal.selecting = 1
+      if (this.$refs.dataPickerInitial) {
+        this.$refs.dataPickerInitial.selecting = 1;
+        this.$refs.dataPickerFinal.selecting = 1;
       }
 
       this.initialHour = null;
@@ -129,7 +129,7 @@ export default {
       this.finalHourSelected = false;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

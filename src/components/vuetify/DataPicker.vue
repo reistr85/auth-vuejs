@@ -7,9 +7,9 @@
       :disabled="disabled"
       offset-y
       min-width="auto">
-      
+
       <template v-slot:activator="{ on, attrs }">
-        <TextField 
+        <TextField
           v-model="dateFormatted"
           v-on="on"
           v-bind="attrs"

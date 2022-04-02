@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels 
+  <v-expansion-panels
     v-bind="$attrs"
     v-on="$listeners"
     :multiple="multiple"

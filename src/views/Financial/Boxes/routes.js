@@ -21,4 +21,4 @@ export default [
     component: ShowBox,
     meta: BoxSchema.routes.show.meta,
   },
-]
+];

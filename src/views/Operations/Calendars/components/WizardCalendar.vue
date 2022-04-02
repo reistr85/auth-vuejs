@@ -11,11 +11,11 @@ export default {
   data () {
     return {
       icons: {},
-    }
+    };
   },
   methods: {
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

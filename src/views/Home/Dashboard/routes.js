@@ -8,4 +8,4 @@ export default [
     component: Home,
     meta: HomeSchema.routes.home.meta,
   },
-]
+];

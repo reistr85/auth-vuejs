@@ -5,17 +5,17 @@
     v-on="$listeners"
     :ref="refs"
     :id="id"
-    :type="type" 
-    :label="label" 
+    :type="type"
+    :label="label"
     :rules="rules"
     :dense="dense"
-    :readonly="readonly" 
+    :readonly="readonly"
     :outlined="outlined"
     :disabled="disabled"
     :prepend-icon="icon"
     :loading="loading"
     :items="items"
-    :item-text="itemText" 
+    :item-text="itemText"
     :item-value="itemValue"
     :multiple="multiple">
   </v-select>
@@ -94,7 +94,7 @@ export default {
       default: false,
     },
   },
-}
+};
 </script>
 
 <style>

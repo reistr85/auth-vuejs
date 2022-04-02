@@ -10,4 +10,4 @@ export default {
       meta: { typePage: null, requiresAuth: true, }
     },
   },
-}
+};

@@ -22,10 +22,10 @@ export default {
     return {
       schema: BankSchema,
       service: BanksService,
-    }
+    };
   },
   methods: {}
-}
+};
 </script>
 
 <style lang="scss" scoped>

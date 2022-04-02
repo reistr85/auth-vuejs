@@ -1,6 +1,6 @@
 import AuthSchema from './schemas/AuthSchema';
-import Login from '../Auth/pages/Login'
-import Register from '../Auth/pages/Register'
+import Login from '../Auth/pages/Login';
+import Register from '../Auth/pages/Register';
 
 export default [
   {
@@ -15,4 +15,4 @@ export default [
     component: Register,
     meta:{}
   },
-]
+];

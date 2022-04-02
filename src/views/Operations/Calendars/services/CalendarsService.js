@@ -1,8 +1,7 @@
 import DynamicService from '@/service/DynamicService';
 
-const formatResponse = (item) => {
-  item
-}
+const formatResponse = () => {
+};
 
 const CalendarService = DynamicService('calendars', {
   formatResponse,

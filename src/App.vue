@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Main from '@/views/Main/Main'
+import Main from '@/views/Main/Main';
 
 export default {
   name: 'App',

@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import { google, facebook } from '@/utils/icons'
-import { isLogged } from '@/utils'
-import Button from '@/components/vuetify/Button'
-import TextField from '@/components/vuetify/TextField'
+import { google, facebook } from '@/utils/icons';
+import { isLogged } from '@/utils';
+import Button from '@/components/vuetify/Button';
+import TextField from '@/components/vuetify/TextField';
 import AuthService from '../services/AuthService';
 import BreakPointMixin from '@/mixins/BreakPointMixin';
 
@@ -54,17 +54,17 @@ export default {
         password: '',
       },
       loading: false,
-    }
+    };
   },
   mixins: [BreakPointMixin],
   mounted() {
-    if(isLogged)
-      this.$router.push({ name: 'home' })
+    if (isLogged)
+      this.$router.push({ name: 'home' });
   },
   computed: {
     valid: {
       get() {
-        return this.user.email && this.user.password ? true : false
+        return this.user.email && this.user.password ? true : false;
       },
       set() {
         return true;
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     login() {
-      if(this.valid) {
+      if (this.valid) {
         this.loading = true;
 
         AuthService.login(this.user).then(() => {
@@ -81,12 +81,12 @@ export default {
           window.location = process.env.VUE_APP_URL;
         }).catch((err) => {
           this.loading = false;
-          console.error(err)
+          console.error(err);
         });
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
