@@ -3,7 +3,7 @@
     <v-toolbar :dark="modeDark.value">
       <v-app-bar-nav-icon @click="$emit('openCloseSideBar')"></v-app-bar-nav-icon>
       <v-toolbar-title>Company</v-toolbar-title>
-      
+
       <div class="ml-10">
         <Button label='Criar Agenda' rounded color='primary' class="mx-2" :icon="icons.plusOutline" @click="handleQuickMenu('calendar')" />
         <Button label='Agendamento' rounded color='primary' class="mx-2" :icon="icons.calendar" @click="handleQuickMenu('appointment')" />

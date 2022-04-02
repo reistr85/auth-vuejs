@@ -21,4 +21,4 @@ export default [
     component: CreateCompany,
     meta: CompanySchema.routes.show.meta
   },
-]
+];

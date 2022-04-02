@@ -7,7 +7,7 @@
       </div>
 
       <div>
-        <Button 
+        <Button
           color="primary"
           v-if="(schema.createBtn && typePage === typePageOptions.list) || createBtn"
           rounded
@@ -16,7 +16,7 @@
           :class="[height < 500 ? 'btnWidth' : '']"
           @click="$router.push({ name: createBtnRouteName })" />
 
-        <Button 
+        <Button
           color="light"
           v-if="typePage === typePageOptions.create || typePage === typePageOptions.show"
           label="Voltar"
@@ -26,7 +26,7 @@
           @click="$router.back()" />
       </div>
     </div>
-    <v-divider class="my-5"></v-divider>    
+    <v-divider class="my-5"></v-divider>
   </div>
 </template>
 
@@ -59,18 +59,18 @@ export default {
         plusOutline: plusOutline,
         arrowLeft: arrowLeft,
       }
-    }
+    };
   },
   computed: {
     createBtnLabel() {
-      return this.createBtn || this.schema.createBtn
+      return this.createBtn || this.schema.createBtn;
     },
     createBtnRouteName() {
-      return this.createBtnRoute || this.schema.routes.create.name
+      return this.createBtnRoute || this.schema.routes.create.name;
     }
   },
   mixins: [TypePageMixin, BreakPointMixin],
-}
+};
 </script>
 
 <style scoped>

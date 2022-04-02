@@ -21,4 +21,4 @@ export default [
     component: CreateRegister,
     meta: RegisterSchema.routes.show.meta,
   },
-]
+];

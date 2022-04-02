@@ -2,7 +2,7 @@
   <v-app>
     <div style="heigth: 100%" v-if="!isLoginRegisterPage">
       <NavBar :mode-dark="modeDark" @openCloseSideBar="openCloseSideBar" @setModeDark="setModeDark" />
-      
+
       <v-card height="100%" class="mt-0" :dark="modeDark.value">
         <div class="main">
           <SideBar ref="refsSideBar" :mode-dark="modeDark" />
@@ -10,7 +10,7 @@
         </div>
       </v-card>
     </div>
-    
+
     <div style="heigth: 100%" v-else>
       <router-view></router-view>
     </div>
@@ -48,27 +48,27 @@ export default {
   provide() {
     return {
       modeDark: this.modeDark
-    }
+    };
   },
   mounted() {
-    eventBus.$on('handleQuickMenu', this.handleQuickMenu)
+    eventBus.$on('handleQuickMenu', this.handleQuickMenu);
 
-    if (!localStorage.getItem(`${this.appName}.themeMode`)) localStorage.setItem(`${this.appName}.themeMode`, 'light')
+    if (!localStorage.getItem(`${this.appName}.themeMode`)) localStorage.setItem(`${this.appName}.themeMode`, 'light');
     localStorage.getItem(`${this.appName}.themeMode`) === 'dark' ? this.modeDark.value = true : this.modeDark.value = false;
   },
   computed: {
     isLoginRegisterPage() {
-      return this.$route.name === 'login' || this.$route.name === 'register'
+      return this.$route.name === 'login' || this.$route.name === 'register';
     }
   },
   watch: {
     ['modeDark.value']() {
       if (this.modeDark.value) {
         this.modeDark.label = 'Modo Claro';
-        localStorage.setItem(`${this.appName}.themeMode`, 'dark')
-      }else{
+        localStorage.setItem(`${this.appName}.themeMode`, 'dark');
+      } else {
         this.modeDark.label = 'Modo Escuro';
-        localStorage.setItem(`${this.appName}.themeMode`, 'light')
+        localStorage.setItem(`${this.appName}.themeMode`, 'light');
       }
     },
   },
@@ -85,7 +85,7 @@ export default {
     }
   },
   beforeDestroy() {
-    eventBus.$off('handleQuickMenu')
+    eventBus.$off('handleQuickMenu');
   },
 };
 </script>

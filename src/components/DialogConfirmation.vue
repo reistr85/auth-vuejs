@@ -44,11 +44,11 @@ export default {
         return {
           noBtn: 'red',
           yesBtn: 'green'
-        }
+        };
       }
     }
   },
   methods: {
   }
-}
+};
 </script>

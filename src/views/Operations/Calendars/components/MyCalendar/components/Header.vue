@@ -7,7 +7,7 @@
 
       <v-toolbar-title v-if="calendar">{{ calendar.title }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      
+
       <v-menu bottom right>
         <template v-slot:activator="{ on, attrs }">
           <Button :label="typeToLabel[type]" v-bind="attrs" v-on="on" :icon="$icons.menuDown" outlined class="" />

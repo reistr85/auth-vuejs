@@ -1,30 +1,30 @@
 <template>
   <div>
-    <div class="d-flex justify-end mb-5">
-      <Button 
-        label="Adicionar" 
-        small 
-        color="secondary" 
-        rounded 
-        class="btn-actions" 
-        :icon="$icons.plus" 
-        :disabled="orderFinished"
+    <div class='d-flex justify-end mb-5'>
+      <Button
+        label='Adicionar'
+        small
+        color='secondary'
+        rounded
+        class='btn-actions'
+        :icon='$icons.plus'
+        :disabled='orderFinished'
         @click="$emit('handleAction', handleAction(actionType))" />
     </div>
     <DataTable
       no-sync
       no-search
       hide-default-footer
-      itemKey="number_item"
-      :headers="headers"
-      :items="items"
-      :loading="loading">
+      itemKey='number_item'
+      :headers='headers'
+      :items='items'
+      :loading='loading'>
 
-      <template v-slot:actions="{ props }">
-        <Button 
-          type-icon color="red"
-          :icon="$icons.destroy"
-          :disabled="orderFinished || !props.item.newItem"
+      <template v-slot:actions='{ props }'>
+        <Button
+          type-icon color='red'
+          :icon='$icons.destroy'
+          :disabled='orderFinished || !props.item.newItem'
           @click="$emit('handleAction', handleAction('itemDestroy', props))" />
       </template>
     </DataTable>
@@ -66,10 +66,10 @@ export default {
   },
   methods: {
     handleAction(type, data = null) {
-      return { type, params: { ...data, componentType: this.componentType}}
+      return { type, params: { ...data, componentType: this.componentType}};
     }
   }
-}
+};
 </script>
 
 <style>

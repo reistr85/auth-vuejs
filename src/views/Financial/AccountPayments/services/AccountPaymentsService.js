@@ -2,7 +2,7 @@ import axios from 'axios';
 import DynamicService from '@/service/DynamicService';
 import AccountPaymentSchema from '../schemas/AccountPaymentSchema';
 import { formatCurrency, formatDate, getText } from '@/utils';
-import { typeStatusAccountPayments } from '@/utils/options';
+import { typeStatusAccountPayments, typeStatusAccountPaymentInstallments } from '@/utils/options';
 
 const formatResponse = (item) => {
   item.register_formatted = item.register.name;
@@ -15,12 +15,14 @@ const formatResponse = (item) => {
 };
 
 const formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId = (res) => {
-  const { data } = res.data;
+  const { data } = res;
   data.forEach((item) => {
-    item.date_due_formatted = formatDate(item.date_due, true);
-    item.date_payment_formatted = formatCurrency(item.date_payment);
-    item.bank_formatted = item.bank.name;
+    item.date_due_formatted = formatDate(item.date_due);
+    item.date_payment_formatted = formatDate(item.date_payment);
+    item.bank_formatted = item.bank?.description;
+    item.payment_method_formatted = item.payment_method?.description,
     item.amount_formatted = formatCurrency(item.amount);
+    item.status_formatted = getText(typeStatusAccountPaymentInstallments, item.status);
   });
 
   return res;
@@ -32,8 +34,8 @@ const AccountPaymentsService = DynamicService('account-payments', AccountPayment
 
 const AccountPaymentsCommands = () => ({
   async getAllAccountPaymentInstallmentsByAccountPaymentId(id, payload) {
-     const res = await axios.get(`account-payments/${id}/account-payment_installments?page=${payload.page}`);
-     return formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId(res);
+    const res = await axios.get(`account-payments/${id}/account-payments-installments?page=${payload.page}`);
+    return formatResponseGetAllAccountPaymentInstallmentsByAccountPaymentId(res);
   }
 });
 

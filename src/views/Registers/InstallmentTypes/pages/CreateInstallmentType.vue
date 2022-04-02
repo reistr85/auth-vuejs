@@ -3,7 +3,7 @@
     <PageHeader :schema="$schemas.installmentType" />
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados Tipos do Parcelamento" multiple :icon="$icons.list">
-        <InstallmentTypeData 
+        <InstallmentTypeData
           :installment-type="installment_type"
           @handleActionGenerate="handleActionGenerate" />
       </ExpansionPanel>
@@ -39,9 +39,9 @@ import InstallmentTypeData from '../components/InstallmentTypeData';
 
 export default {
   name: 'CreateInstallmentType',
-  components: { 
-    PageHeader, 
-    PageContent, 
+  components: {
+    PageHeader,
+    PageContent,
     ExpansionPanel,
     Button,
     InstallmentTypeData
@@ -58,7 +58,7 @@ export default {
     };
   },
   mounted() {
-    if(this.typePage === this.typePageOptions.show)
+    if (this.typePage === this.typePageOptions.show)
       this.getInstallmentType();
   },
   computed: {
@@ -85,7 +85,7 @@ export default {
     },
     create() {
       this.$api.installmentTypes.create(this.installment_type).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.createdRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
         this.$router.push({ name: this.schema.routes.list.name });
       }).catch((err) => {
         this.$noty.error(err);
@@ -94,7 +94,7 @@ export default {
     update() {
       const { id } = this.$route.params;
       this.$api.installmentTypes.update(id, this.installment_type).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.$router.push({ name: this.schema.routes.list.name });
       }).catch((err) => {
         this.$noty.error(err);

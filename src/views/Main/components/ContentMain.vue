@@ -12,10 +12,10 @@ export default {
   name: 'ContentMain',
   data() {
     return {
-    }
+    };
   },
   mixins: [BreakPointMixin],
-}
+};
 </script>
 
 <style scope>

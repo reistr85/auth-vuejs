@@ -51,7 +51,12 @@
     },
     "rules": {
       "semi": "error",
-      "quotes": [2, "single", { "avoidEscape": true }]
+      "quotes": [2, "single", { "avoidEscape": true }],
+      "indent": ["error", 2],
+      "space-before-blocks": ["error", { "functions": "always" }],
+      "arrow-spacing": ["error"],
+      "keyword-spacing": ["error", { "before": true, "after": true }],
+      "no-trailing-spaces": ["error"]
     },
     "overrides": [
       {

@@ -8,4 +8,4 @@ export default [
     component: ListCalendars,
     meta: CalendarSchema.routes.list.meta,
   },
-]
+];

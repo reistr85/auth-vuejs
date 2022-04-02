@@ -10,7 +10,7 @@ const formatResponse = (item) => {
   item.initial_value_formatted = formatCurrency(item.initial_value);
   item.total_value_formatted = formatCurrency(item.total_value);
   item.status_formatted = getText(statusBoxes, item.status);
-}
+};
 
 const formatResponseGetAllBoxMovementsByBoxId = (res) => {
   const { data } = res.data;
@@ -18,10 +18,10 @@ const formatResponseGetAllBoxMovementsByBoxId = (res) => {
     item.box_movements_date_formatted = formatDate(item.box_movements_date, true);
     item.total_value_formatted = formatCurrency(item.total_value);
     item.origin_type_formatted = getText(originTypeBoxMovements, item.origin_type);
-  })
+  });
 
   return res;
-}
+};
 
 const BoxesService = DynamicService('boxes', BoxSchema, {
   formatResponse,
@@ -29,10 +29,10 @@ const BoxesService = DynamicService('boxes', BoxSchema, {
 
 const BoxesCommands = () => ({
   async getAllBoxMovementsByBoxId(id, payload) {
-     const res = await axios.get(`boxes/${id}/box-movements?page=${payload.page}`);
-     return formatResponseGetAllBoxMovementsByBoxId(res);
+    const res = await axios.get(`boxes/${id}/box-movements?page=${payload.page}`);
+    return formatResponseGetAllBoxMovementsByBoxId(res);
   }
-})
+});
 
 export default BoxesService;
-export { BoxesService, BoxesCommands }
+export { BoxesService, BoxesCommands };

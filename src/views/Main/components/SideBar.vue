@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import Icon from '@/components/vuetify/Icon'
+import Icon from '@/components/vuetify/Icon';
 import BreakPointMixin from '@/mixins/BreakPointMixin';
 import items from '../items';
 
@@ -59,18 +59,18 @@ export default {
     return {
       items: items,
       drawer: false,
-    }
+    };
   },
   mounted() {
     const menuGroupName = localStorage.getItem(`${process.env.VUE_APP_NAME}.menuGroupName`);
 
-    if(menuGroupName) {
+    if (menuGroupName) {
       this.items.forEach((item) => {
-        if(item.menuGroupName === menuGroupName) {
+        if (item.menuGroupName === menuGroupName) {
           item.active = true;
           item.items.forEach((c) => {
             c.active = false;
-            if(c.route === this.$route.name) c.active = true;
+            if (c.route === this.$route.name) c.active = true;
           });
         }
       });
@@ -79,30 +79,30 @@ export default {
   mixins: [BreakPointMixin],
   methods: {
     menuNavigator(item, child) {
-      localStorage.setItem(`${process.env.VUE_APP_NAME}.menuGroupName`, item.menuGroupName)
+      localStorage.setItem(`${process.env.VUE_APP_NAME}.menuGroupName`, item.menuGroupName);
 
       this.items.forEach((i) => {
         i.items.forEach((c) => {
           c.active = false;
         });
-      })
+      });
 
       item.active = true;
       child.active = true;
-      this.$router.push({ name: child.route }).catch(() => {})
+      this.$router.push({ name: child.route }).catch(() => {});
     },
     drawerEvent() {
       this.drawer = !this.drawer;
     },
     getClassMenuActive(value) {
-      if(value) {
+      if (value) {
         return this.modeDark.value ? 'childActiveDark' : 'childActiveLight';
       }
 
       return '';
     }
   }
-}
+};
 </script>
 
 <style>

@@ -19,10 +19,10 @@ export default {
   data() {
     return {
       schema: HomeSchema,
-    }
+    };
   },
   methods: {}
-}
+};
 </script>
 
 <style lang="scss" scoped>

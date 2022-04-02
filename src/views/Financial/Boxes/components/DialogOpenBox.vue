@@ -10,15 +10,15 @@
               :disabled="disabled" />
           </v-col>
           <v-col cols="12" md="6">
-            <AutoComplete 
-              v-model="box.employee_id" 
-              label="Funcionário Responsável" 
-              :items="employees" 
+            <AutoComplete
+              v-model="box.employee_id"
+              label="Funcionário Responsável"
+              :items="employees"
               :rules="[rules.required]" />
           </v-col>
           <v-col cols="12" md="3">
             <TextFieldMoney
-              v-model="box.initial_value" 
+              v-model="box.initial_value"
               label="Valor Inicial"
               :length="10"
               v-on:keyup.enter="save" />
@@ -50,7 +50,7 @@ export default {
     AutoComplete,
     TextFieldMoney
   },
-  data () {
+  data() {
     return {
       icons: {},
       valid: true,
@@ -62,7 +62,7 @@ export default {
         initial_value: 0
       },
       employees: [],
-    }
+    };
   },
   mounted() {
     this.getEmployees();
@@ -74,44 +74,44 @@ export default {
   },
   methods: {
     getEmployees(params = {}) {
-      const payload = { ...params, filter: { type: this.$enums.typeRegisters.EMPLOYEE }};
+      const payload = { ...params, filter: { type: this.$enums.typeRegister.EMPLOYEE }};
       this.$api.registers.filters(payload).then((res) => {
         this.employees = res.data.data.map((item) => {
           return {
             id: item.id,
             text: item.name,
             value: item.id,
-          }
-        })
+          };
+        });
       }).catch(() => {
         this.loading = false;
-      })
+      });
     },
     save(box) {
-      if(!this.$refs.form.validate()) return;
+      if (!this.$refs.form.validate()) return;
 
       box.total_value = box.initial_value;
       this.$api.boxes.create(box).then((res) => {
         this.localItems = res.data;
-        this.$noty.success(this.l.index.alerts.createdRegister);
+        this.$noty.success(this.l.default.alerts.createdRegister);
       }).catch((error) => {
         this.$noty.error(error);
-      })
+      });
       this.$emit('handleActionModal');
       this.resetFormBox();
     },
     cancel() {
-      this.$emit('update:dialog', false)
+      this.$emit('update:dialog', false);
     },
     resetFormBox() {
       this.box = {
         box_date: null,
         employee_id: '',
         initial_value: 0
-      }
+      };
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

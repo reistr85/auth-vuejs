@@ -9,22 +9,22 @@
               label="Quantidade de parcelas" />
           </v-col>
           <v-col cols="12" md="12">
-            <TextField 
-              v-model="installment.days_first_installment" 
+            <TextField
+              v-model="installment.days_first_installment"
               label="Carência da 1ª parcela" />
           </v-col>
           <v-col cols="12" md="12">
-            <TextField 
-              v-model="installment.days_between_installment" 
+            <TextField
+              v-model="installment.days_between_installment"
               label="Dias entre parcelas"
               v-on:keyup.enter="generate" />
           </v-col>
         </v-row>
         <v-row>
            <v-col cols="12" md="12">
-            <TextField 
-              v-model="installment.interval" 
-              label="Parcelas" 
+            <TextField
+              v-model="installment.interval"
+              label="Parcelas"
               :readonly="true" />
           </v-col>
         </v-row>
@@ -45,8 +45,8 @@ import TextField from '@/components/vuetify/TextField';
 
 export default {
   name: 'DialogGenerateInstallment',
-  components: { 
-    Card, 
+  components: {
+    Card,
     Button,
     TextField
   },
@@ -55,10 +55,10 @@ export default {
       type: Object,
       default: () => {
         return {
-            installment_amount: 1,
-            days_first_installment: 0,
-            days_between_installment: 30,
-            interval: '',
+          installment_amount: 1,
+          days_first_installment: 0,
+          days_between_installment: 30,
+          interval: '',
         };
       }
     },
@@ -94,7 +94,6 @@ export default {
 
         for (let i = 1; i < Number(this.installment.installment_amount); i += 1) {
           this.currentInterval += Number(this.installment.days_between_installment);
-          console.log(this.currentInterval);
           this.installment.interval += `${this.currentInterval},`;
         }
         this.installment.interval = this.installment.interval.substr(0, this.installment.interval.length - 1);

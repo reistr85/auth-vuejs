@@ -15,5 +15,5 @@ import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 export default {
   name: 'CreateService',
   components: { PageHeader, PageContent, DynamicFormPage },
-}
+};
 </script>

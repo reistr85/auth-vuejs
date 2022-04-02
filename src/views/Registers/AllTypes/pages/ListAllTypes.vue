@@ -1,14 +1,14 @@
 <template>
   <div>
     <PageHeader
-      :schema="$schemas.allType"
+      :schema="schema"
       :create-btn="createBtnName"
       :create-btn-route="createBtnRoute" />
     <PageContent>
       <DynamicListPage
         ref="dynamicListPage"
         fixed-filter
-        :schema="$schemas.allType"
+        :schema="schema"
         :service="$api.allTypes"
         :fixed-filter-params="fixedFilterParams" />
     </PageContent>
@@ -21,10 +21,30 @@ import PageContent from '@/components/PageContent';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
 
 const TYPES = Object.freeze({
-  categories: { filter: 'category', label: 'Nova Categoria', routerName: 'categories-create' },
-  subcategories: { filter: 'sub-category', label: 'Nova Sub Categoria', routerName: 'subcategories-create' },
-  paymentmethods: { filter: 'payment-method', label: 'Nova Forma de Pagemento', routerName: 'paymentmethods-create' },
-  cardflags: { filter: 'card-flags', label: 'Nova Bandeira', routerName: 'cardflags-create' },
+  categories: {
+    filter: 'category',
+    label: 'Nova Categoria',
+    routerName: 'categories-create',
+    routeNameShow: 'categories-show'
+  },
+  subcategories: {
+    filter: 'sub-category',
+    label: 'Nova Sub Categoria',
+    routerName: 'subcategories-create',
+    routeNameShow: 'subcategories-show'
+  },
+  paymentmethods: {
+    filter: 'payment-method',
+    label: 'Nova Forma de Pagemento',
+    routerName: 'paymentmethods-create',
+    routeNameShow: 'paymentmethods-show'
+  },
+  cardflags: {
+    filter: 'card-flags',
+    label: 'Nova Bandeira',
+    routerName: 'cardflags-create',
+    routeNameShow: 'cardflags-show'
+  },
 });
 
 export default {
@@ -35,9 +55,12 @@ export default {
       fixedFilterParams: {},
       createBtnName: '',
       createBtnRoute: '',
-    }
+    };
   },
   computed: {
+    schema () {
+      return { ...this.$schemas.allType, routes: { show: { name: TYPES[this.$route.name].routeNameShow } } };
+    },
     routerName() {
       return this.$route.name;
     },
@@ -62,7 +85,7 @@ export default {
         label: 'Tipo',
         value: TYPES[this.$route.name].filter,
         formattedValue: TYPES[this.$route.name].filter, noChip: true,
-      }
+      };
     },
     setCreateBtnName() {
       this.createBtnName = TYPES[this.$route.name].label;
@@ -71,5 +94,5 @@ export default {
       this.createBtnRoute = TYPES[this.$route.name].routerName;
     }
   }
-}
+};
 </script>

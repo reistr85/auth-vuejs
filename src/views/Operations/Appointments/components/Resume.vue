@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { formatCurrency, formatDate } from '@/utils'
+import { formatCurrency, formatDate } from '@/utils';
 
 export default {
   name: 'Resume',
@@ -26,13 +26,13 @@ export default {
   },
   computed: {
     amount() {
-      return formatCurrency(this.appointment.amount)
+      return formatCurrency(this.appointment.amount);
     },
     date() {
-      return formatDate(this.appointment.appointment_date)
+      return formatDate(this.appointment.appointment_date);
     }
   }
-}
+};
 </script>
 
 <style>

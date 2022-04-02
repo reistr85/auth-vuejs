@@ -9,7 +9,7 @@ const formatResponse = (item) => {
   item.account_type_formatted = getText(typeAccount, item.account_type);
   item.bank_number_formatted = getText(typeBankNumber, item.bank_number);
   item.situation_formatted = getText(typeSituation, item.situation);
-}
+};
 
 const formatResponseGetAllBankMovementsByBankId = (res) => {
   const { data } = res.data;
@@ -18,10 +18,10 @@ const formatResponseGetAllBankMovementsByBankId = (res) => {
     item.value_formatted = formatCurrency(item.value);
     item.origin_type_formatted = getText(originTypeBankMovements, item.origin_type);
     item.movement_type_formatted = getText(typeBankMovements, item.movement_type);
-  })
+  });
 
   return res;
-}
+};
 
 const RegistersService = DynamicService('banks', BankSchema, {
   formatResponse,
@@ -29,10 +29,10 @@ const RegistersService = DynamicService('banks', BankSchema, {
 
 const BanksCommands = () => ({
   async getAllBankMovementsByBankId(id, payload) {
-     const res = await axios.get(`banks/${id}/bank-movements?page=${payload.page}`);
-     return formatResponseGetAllBankMovementsByBankId(res);
+    const res = await axios.get(`banks/${id}/bank-movements?page=${payload.page}`);
+    return formatResponseGetAllBankMovementsByBankId(res);
   }
-})
+});
 
 export default RegistersService;
-export { RegistersService, BanksCommands }
+export { RegistersService, BanksCommands };

@@ -5,25 +5,76 @@
         <h3 v-html="selectedEvent.name"></h3>
       </template>
 
-      <div>
-        Cliente: {{ selectedEvent.name }}
-      </div>
+      <template>
+        <p><span class="font-weight-black">{{ l.titles.collaborator }}:</span> {{ selectedEvent.collaborator }}</p>
+        <p><span class="font-weight-black">{{ l.titles.customer }}:</span> {{ selectedEvent.customer }}</p>
+        <p><span class="font-weight-black">{{ l.titles.date }}:</span> {{ date }}</p>
+        <p><span class="font-weight-black">{{ l.titles.hour }}:</span> {{ hours }}</p>
+        <p><span class="font-weight-black">{{ l.titles.services }}:</span> {{ selectedEvent.customer }}</p>
+        <p><span class="font-weight-black">{{ l.titles.amount }}:</span> {{ amount }}</p>
+        <p class="d-flex"><span class="font-weight-black mr-3">Status:</span> <Chip :label="status.label" :color="status.color" dark /></p>
+      </template>
+
+      <template class="mt-10">
+        <Button :label="l.buttons.confirmed" v-if="selectedEvent.displayBtnConfirmed" small color="success" class="mr-2" @click="handlerAction($enums.appointmentStatus.CONFIRMED)" />
+        <Button :label="l.buttons.finish" v-if="selectedEvent.displayBtnFinished" dark small color="blue" class="mr-2" @click="handlerAction($enums.appointmentStatus.DONE)" />
+        <Button :label="l.buttons.cancel" v-if="selectedEvent.displayBtnCancel" small color="primary" class="mr-2" @click="handlerAction($enums.appointmentStatus.CANCELED)" />
+        <Button :label="l.buttons.close" small @click="$emit('update:selectedOpen', false)" />
+      </template>
     </Card>
   </v-menu>
 </template>
 
 <script>
 import Card from '@/components/vuetify/Card';
+import Button from '@/components/vuetify/Button';
+import Chip from '@/components/vuetify/Chip';
+import { formatCurrency } from '@/utils';
+
+const STATUS_COLOR = Object.freeze({
+  pending: 'warning',
+  confirmed: 'blue',
+  done: 'gray',
+  canceled: 'red',
+});
 
 export default {
   name: 'ToolbarEvent',
-  components: { Card },
+  components: { Card, Button, Chip },
   props: {
     selectedElement: {
       required: true
     },
     selectedEvent: {
       required: true
+    }
+  },
+  computed: {
+    l () {
+      return this.$locales.pt.calendars.ListCalendars.myCalendar.toolbarEve;
+    },
+    lOrderServices () {
+      return this.$locales.pt.orderServices;
+    },
+    date() {
+      return `${this.selectedEvent.date?.getDate()}/${this.selectedEvent.date?.getMonth()}/${this.selectedEvent.date?.getFullYear()}`;
+    },
+    hours() {
+      return `${this.selectedEvent.initialHour} às ${this.selectedEvent.finalHour}`;
+    },
+    amount () {
+      return formatCurrency(this.selectedEvent.amount);
+    },
+    status () {
+      return {
+        label: this.lOrderServices.listOrderServices.status[this.selectedEvent.status],
+        color: STATUS_COLOR[this.selectedEvent.status]
+      };
+    },
+  },
+  methods: {
+    handlerAction (status) {
+      this.$emit('handlerAction', { action: 'updateAppointment', event: this.selectedEvent, status });
     }
   }
 };

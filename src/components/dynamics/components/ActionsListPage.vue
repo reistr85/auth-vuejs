@@ -27,7 +27,14 @@
       </v-card>
     </v-menu>
 
-    <v-btn icon v-if="!schema.listActions.noShow" class="my-1" fab color="secondary" x-small :to="{name: schema.routes.show.name, params: {id: dataListProps.item.id}}">
+    <v-btn
+      v-if="!schema.listActions.noShow"
+      icon
+      class="my-1"
+      fab
+      color="secondary"
+      x-small
+      :to="{name: schema.routes.show.name, params: {id: dataListProps.item.id}}">
       <v-icon dark>{{ icons.view }}</v-icon>
     </v-btn>
 

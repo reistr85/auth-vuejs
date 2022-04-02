@@ -15,7 +15,7 @@ import WizardCalendar from '@/views/Operations/Calendars/components/WizardCalend
 const typesComponents = {
   appointment: WizardAppointment,
   calendar: WizardCalendar
-}
+};
 
 export default {
   name: 'QuickMenu',
@@ -31,23 +31,23 @@ export default {
   },
   computed: {
     propsComponents() {
-      return  { 
+      return  {
         ...this.type === 'appointment' && { ref: 'wizardAppointment' },
         ...this.type === 'calendar' && { ref: 'wizardCalendar' },
-      }
+      };
     },
   },
   data() {
     return {
       typesComponents: typesComponents,
-    }
+    };
   },
   methods: {
     cancel() {
       eventBus.$emit('handleQuickMenu', { type: null });
     }
   }
-}
+};
 </script>
 
 <style>

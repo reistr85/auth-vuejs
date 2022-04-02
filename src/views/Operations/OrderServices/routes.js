@@ -21,4 +21,4 @@ export default [
     component: CreateOrderService,
     meta: OrderServiceSchema.routes.show.meta,
   },
-]
+];

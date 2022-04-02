@@ -3,11 +3,7 @@
     <PageHeader :schema="$schemas.orderService" />
     <PageContent>
       <ExpansionPanel v-model="expModel" readonly title="Dados da Ordem" multiple :icon="$icons.list">
-        <OrderData
-          :order-service="order_service"
-          :customers="customers"
-          :collaborators="collaborators"
-          :order-finished="orderFinished" />
+        <OrderData v-bind="orderDataProps" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
@@ -15,7 +11,7 @@
           action-type="openDialog"
           componentType="items"
           :loading="loading"
-          :headers="headersItems" 
+          :headers="headersItems"
           :items="order_service.items"
           :order-finished="orderFinished"
           @handleAction="handleAction"/>
@@ -28,7 +24,7 @@
               action-type="openDialog"
               componentType="payments"
               :loading="loading"
-              :headers="headersPayments" 
+              :headers="headersPayments"
               :items="order_service.payments"
               :order-finished="orderFinished"
               @handleAction="handleAction" />
@@ -69,11 +65,11 @@
       </ExpansionPanel>
 
       <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1100)">
-        <component 
-          slot="content" 
+        <component
+          slot="content"
           v-bind="dialogProps"
           :is="dialogComponent"
-          @update:dialog="dialog = $event" 
+          @update:dialog="dialog = $event"
           @handleActionModal="handleActionModal" />
       </Dialog>
 
@@ -143,11 +139,15 @@ export default {
     };
   },
   mounted() {
-    if(this.typePage === this.typePageOptions.show)
+    if (this.typePage === this.typePageOptions.show)
       this.getOrderService();
 
-    if(this.typePage === this.typePageOptions.create)
+    if (this.typePage === this.typePageOptions.create)
       this.getLastOrderNumber();
+
+    const appointment_id = this.$route.params.appointment_id;
+    if (appointment_id)
+      this.getAppointment(appointment_id);
 
     this.getCollaborators();
     this.getCustomers();
@@ -173,6 +173,12 @@ export default {
     },
     saveFinished() {
       return this.order_service.total_paid >= this.order_service.amount || false;
+    },
+    dateNow () {
+      return new Date().toISOString().substr(0, 10);
+    },
+    orderDataProps () {
+      return { orderService: this.order_service, customers: this.customers, collaborators: this.collaborators, orderFinished:  this.orderFinished };
     }
   },
   mixins: [TypePageMixin],
@@ -306,7 +312,7 @@ export default {
       this.totalizers();
     },
     addPayment(item) {
-      if((parseFloat(this.order_service.total_paid) + parseFloat(item.value)) > this.order_service.amount) {
+      if ((parseFloat(this.order_service.total_paid) + parseFloat(item.value)) > this.order_service.amount) {
         this.$noty.error(this.l.alerts.totalPaidGreaterAmount);
         return;
       }
@@ -328,7 +334,7 @@ export default {
     },
     itemDestroy(params) {
       const { index, componentType, item } = params;
-      if(componentType === 'items') {
+      if (componentType === 'items') {
         this.order_service.items.splice(index, 1);
         this.order_service.items_destroy.push(item);
       }
@@ -343,7 +349,7 @@ export default {
     },
     create() {
       this.$api.orderServices.create(this.order_service).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.createdRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
         this.$router.push({ name: this.$schemas.orderService.routes.list.name });
       }).catch((err) => {
         this.$noty.error(err);
@@ -354,7 +360,7 @@ export default {
     update() {
       const { id } = this.$route.params;
       this.$api.orderServices.update(id, this.order_service).then(() => {
-        this.$noty.success(this.$locales.pt.index.alerts.updatedRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.$router.push({ name: this.$schemas.orderService.routes.list.name });
       }).catch((err) => {
         this.$noty.error(messageErrors(err));
@@ -386,6 +392,7 @@ export default {
           id: item.id,
           number_item: item.number_item,
           collaborator: { id: item.collaborator.id, name: item.collaborator.name },
+          collaborator_id: item.collaborator.id,
           service: { name: item.service.name },
           subtotal: item.subtotal,
           subtotal_formatted: item.subtotal_formatted,
@@ -441,6 +448,46 @@ export default {
       this.order_service.amount = amount;
       this.order_service.total_paid = total_paid;
       this.order_service.total_payable = total_paid >= amount ? 0 :amount - total_paid;
+    },
+    getAppointment (id) {
+      this.$api.appointments.show(id).then((res) => {
+        const appointment = res;
+        this.mountForm({
+          order_date: this.dateNow,
+          customer_id: appointment.customer_id,
+          collaborator_id: appointment.collaborator_id,
+          quantity_services: appointment.items.length,
+          subtotal: 0,
+          discount: 0,
+          amount: 0,
+          total_paid: 0,
+          total_payable: 0,
+          status: this.$enums.orderServiceStatus.PENDING,
+          items: appointment.items.map((item, index) => {
+            return {
+              id: item.id,
+              number_item: index + 1,
+              collaborator: { id: appointment.collaborator.id, name: appointment.collaborator.name },
+              collaborator_id: appointment.collaborator.id,
+              service: { name: item.service.name },
+              subtotal: item.subtotal,
+              subtotal_formatted: formatCurrency(item.subtotal),
+              quantity: item.quantity,
+              discount: item.discount,
+              discount_formatted: formatCurrency(item.discount),
+              amount: item.amount,
+              amount_formatted: formatCurrency(item.amount),
+              newItem: true
+            };
+          }),
+          payments: [],
+          items_destroy: [],
+          payments_destroy: [],
+        });
+        this.getLastOrderNumber();
+      }).catch(() => {
+
+      });
     }
   }
 };
@@ -457,8 +504,7 @@ export default {
 
 .totalizers {
   height: 350px;
-  
-  div {
+  div{
     background-color: #EBEBEB;
     border-radius: 5px;
   }

@@ -30,12 +30,12 @@
 </template>
 
 <script>
-import { google, facebook } from '@/utils/icons'
-import { isLogged } from '@/utils'
+import { google, facebook } from '@/utils/icons';
+import { isLogged } from '@/utils';
 import { mask } from 'vue-the-mask';
 import { cell_phone } from '@/utils/masks';
-import Button from '@/components/vuetify/Button'
-import TextField from '@/components/vuetify/TextField'
+import Button from '@/components/vuetify/Button';
+import TextField from '@/components/vuetify/TextField';
 import { CompaniesCommands } from '@/views/Settings/Companies/services/CompaniesService';
 
 export default {
@@ -59,16 +59,16 @@ export default {
         first: true,
       },
       loading: false,
-    }
+    };
   },
   mounted() {
-    if(isLogged)
-      this.$router.push({ name: 'home' })
+    if (isLogged)
+      this.$router.push({ name: 'home' });
   },
   computed: {
     valid: {
       get() {
-        return this.user.email && this.user.password ? true : false
+        return this.user.email && this.user.password ? true : false;
       },
       set() {
         return true;
@@ -77,21 +77,21 @@ export default {
   },
   methods: {
     register() {
-      if(this.valid) {
+      if (this.valid) {
         this.loading = true;
 
         CompaniesCommands().store(this.user).then(() => {
           this.loading = false;
-          this.$router.push({ name: 'home' })
+          this.$router.push({ name: 'home' });
           // window.location = process.env.VUE_APP_URL;
         }).catch((err) => {
           this.loading = false;
-          console.error(err)
+          console.error(err);
         });
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

@@ -21,4 +21,4 @@ export default [
     component: CreateUser,
     meta: UserSchema.routes.show.meta
   },
-]
+];

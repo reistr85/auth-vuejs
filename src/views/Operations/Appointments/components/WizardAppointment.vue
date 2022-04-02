@@ -96,53 +96,53 @@ export default {
         services: [],
         status: appointmentStatus.PENDING,
       }
-    }
+    };
   },
   methods: {
     getRegisters(data) {
       this.loadingDataTable = true;
       const filters = [{ name: 'type', value: data.type }, { name: 'name', value: data.search }];
-      
+
       RegistersService.filters(this.setParams(data), filters).then((res) => {
         data.type === 'customer' ? this.customers = res.data : this.collaborators = res.data;
         this.loadingDataTable = false;
       }).catch(() => {
         this.loadingDataTable = false;
-      })
+      });
     },
     getServices(data) {
       this.loadingDataTable = true;
       const filters = [{ name: 'name', value: data.search }];
-      
+
       ServicesService.filters(this.setParams(data), filters).then((res) => {
         this.services = res.data;
         this.loadingDataTable = false;
       }).catch(() => {
         this.loadingDataTable = false;
-      })
+      });
     },
     setStep(step) {
-      if(step === 0) {
+      if (step === 0) {
         this.steps = 1;
-        this.$refs.stepOne.$refs.dataTable.selected = []
-        this.$refs.stepTow.$refs.dataTable.selected = []
-        this.$refs.stepThree.$refs.dataTable.selected = []
+        this.$refs.stepOne.$refs.dataTable.selected = [];
+        this.$refs.stepTow.$refs.dataTable.selected = [];
+        this.$refs.stepThree.$refs.dataTable.selected = [];
         this.$emit('cancel');
         return;
       }
 
-      this.steps = step
+      this.steps = step;
     },
     selectDataAppointment(params) {
       const { data, type } = params;
-      if(type === 'customer' || type === 'collaborator') {
+      if (type === 'customer' || type === 'collaborator') {
         this.appointment[`${type}_id`] = data.length ? data[0].id : 0;
         this.appointment[`${type}_name`] = data.length ? data[0].name : '';
-      }else if(type === 'service'){
+      } else if (type === 'service'){
         let amount = 0;
         this.appointment.services = data.map((item) => {
-          amount += parseFloat(item.sale_value)
-          return { id: item.id }
+          amount += parseFloat(item.sale_value);
+          return { id: item.id };
         });
 
         this.appointment.amount = amount;
@@ -157,16 +157,16 @@ export default {
       this.appointment.final_hour = data.finalHour;
     },
     setParams(data) {
-      return { page: data.options?.page || 1, totalItemsPerPage: 5 }
+      return { page: data.options?.page || 1, totalItemsPerPage: 5 };
     },
     finish() {
       AppointmentsService.create(this.appointment).then(() => {
         this.resetAppointment();
-        this.setStep(0)
+        this.setStep(0);
         this.$noty.success(locales.alerts.createdRegister);
       }).catch((err) => {
         this.$noty.error(messageErrors(err));
-      })
+      });
     },
     resetAppointment() {
       this.steps = 1;
@@ -183,10 +183,10 @@ export default {
         qtd_items: 0,
         services: [],
         status: appointmentStatus.PENDING,
-      }
+      };
     },
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

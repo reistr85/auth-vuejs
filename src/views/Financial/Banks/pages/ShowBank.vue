@@ -17,7 +17,7 @@
           action-type="openDialog"
           componentType="DialogDynamicMovement"
           :loading="loading"
-          :headers="headerMovements" 
+          :headers="headerMovements"
           :items="items"
           @getItems="getBankMovements"
           :disabledBttn="disabledBttn"
@@ -35,9 +35,9 @@
     </PageContent>
 
     <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
-      <component 
-        slot="content" 
-        :is="dialogComponent" 
+      <component
+        slot="content"
+        :is="dialogComponent"
         v-bind="propsComponents"
         @update:dialog="dialog = $event"
         @handleActionModal="handleActionModal" />
@@ -64,8 +64,8 @@ import { arrowLeft } from '@/utils/icons';
 
 export default {
   name: 'ShowBank',
-  components: { 
-    PageHeader, 
+  components: {
+    PageHeader,
     PageContent,
     GenericDataTable,
     ExpansionPanel,
@@ -113,7 +113,7 @@ export default {
       this.loading = true;
       this.$api.banks.show(this.id).then((res) => {
         this.bank = res;
-        if(this.bank.situation === 'disabled') this.disabledBttn = true;
+        if (this.bank.situation === 'disabled') this.disabledBttn = true;
         this.loading = false;
       }).catch(() => {
         this.loading = false;

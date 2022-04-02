@@ -113,7 +113,7 @@ export default {
       search: '',
       selected: [],
       options: {},
-    }
+    };
   },
   watch: {
     options: {
@@ -152,33 +152,33 @@ export default {
         per_page: this.options.itemsPerPage,
         filter: this.search,
         search_global: true
-      })
+      });
     },
     handleAction() {
-      this.$emit('selected', this.selected)
+      this.$emit('selected', this.selected);
     },
     clickRow(data) {
-      if(this.singleSelect) {
-        this.selected.length && data.id === this.selected[0].id ? this.selected = [] :  this.selected = [data]
-      }else{
+      if (this.singleSelect) {
+        this.selected.length && data.id === this.selected[0].id ? this.selected = [] :  this.selected = [data];
+      } else {
         const filter = this.selected.find((item) => {
           return item.id === data.id;
         });
 
-        if(!filter) {
-          this.selected.push(data)
-        }else{
+        if (!filter) {
+          this.selected.push(data);
+        } else {
           this.selected.forEach((item, index) => {
-            if(item.id === data.id) {
+            if (item.id === data.id) {
               this.selected.splice(index, 1);
             }
           });
         }
       }
-      this.$emit('selected', this.selected)
+      this.$emit('selected', this.selected);
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

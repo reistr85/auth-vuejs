@@ -21,4 +21,4 @@ export default [
   //   component: CreateAppointment,
   //   meta: AppointmentSchema.routes.show.meta,
   // },
-]
+];
