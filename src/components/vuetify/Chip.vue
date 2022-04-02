@@ -26,9 +26,9 @@ export default {
   data() {
     return {
       chip1: true,
-    }
+    };
   }
-}
+};
 </script>
 
 <style>

@@ -3,11 +3,11 @@
     v-bind="$attrs"
     v-on="$listeners"
     :ref="refs"
-    :type="type" 
-    :label="label" 
+    :type="type"
+    :label="label"
     :rules="rules"
     :dense="dense"
-    :readonly="readonly" 
+    :readonly="readonly"
     :counter="counter"
     :outlined="outlined"
     :disabled="disabled"
@@ -67,7 +67,7 @@ export default {
       default: true,
     },
   },
-}
+};
 </script>
 
 <style>

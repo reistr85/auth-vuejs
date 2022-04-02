@@ -13,11 +13,11 @@
       :label="label"
       :rules="rules"
       :dense="dense"
-      :readonly="readonly" 
+      :readonly="readonly"
       :outlined="outlined"
       :disabled="disabled"
       :prepend-icon="icon"
-      :item-text="itemText" 
+      :item-text="itemText"
       :item-value="itemValue"
       :multiple="multiple"
       :return-object="returnObject" />
@@ -101,11 +101,11 @@ export default {
     return {
       search: '',
       localItems: []
-    }
+    };
   },
   watch: {
     search () {
-      this.$emit('getItems', this.search)
+      this.$emit('getItems', this.search);
     },
     items: {
       handler() {
@@ -114,7 +114,7 @@ export default {
       deep: true,
     }
   },
-}
+};
 </script>
 
 <style>

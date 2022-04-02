@@ -34,9 +34,9 @@ export default {
       icons: {
         dotsVertical: dotsVertical
       }
-    }
+    };
   }
-}
+};
 </script>
 
 <style>
