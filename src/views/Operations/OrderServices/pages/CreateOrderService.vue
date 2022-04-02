@@ -73,7 +73,7 @@
           @handleActionModal="handleActionModal" />
       </Dialog>
 
-      <DialogConfirmation :dialog="dialogConfirmation" @noAction="dialogConfirmation = false" @yesAction="save" />
+      <DialogConfirmation :dialog="dialogConfirmation" :message="dialogConfirmationMessage" @noAction="dialogConfirmation = false" @yesAction="save" />
     </PageContent>
   </div>
 </template>
@@ -136,6 +136,7 @@ export default {
       dialogComponent: null,
       dialogProps: {},
       dialogConfirmation: false,
+      dialogConfirmationMessage: '',
     };
   },
   mounted() {
@@ -341,7 +342,9 @@ export default {
       this.totalizers();
     },
     confirmSave(data) {
-      this.order_service.status = data.status;
+      const { status } = data;
+      this.order_service.status = status;
+      this.dialogConfirmationMessage = status === this.$enums.orderServiceStatus.PENDING ? this.l.dialogConfirmation.message.save : this.l.dialogConfirmation.message.saveFinish;
       this.dialogConfirmation = true;
     },
     save() {

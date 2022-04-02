@@ -16,9 +16,11 @@
       </template>
 
       <template class="mt-10">
-        <Button :label="l.buttons.confirmed" v-if="selectedEvent.displayBtnConfirmed" small color="success" class="mr-2" @click="handlerAction($enums.appointmentStatus.CONFIRMED)" />
-        <Button :label="l.buttons.finish" v-if="selectedEvent.displayBtnFinished" dark small color="blue" class="mr-2" @click="handlerAction($enums.appointmentStatus.DONE)" />
-        <Button :label="l.buttons.cancel" v-if="selectedEvent.displayBtnCancel" small color="primary" class="mr-2" @click="handlerAction($enums.appointmentStatus.CANCELED)" />
+        <Button :label="l.buttons.confirmed" v-if="selectedEvent.displayBtnConfirmed" small color="success" class="mr-2" @click="handlerAction({ action: 'updateAppointment', status: $enums.appointmentStatus.CONFIRMED })" />
+        <Button :label="l.buttons.finish" v-if="selectedEvent.displayBtnFinished" dark small color="blue" class="mr-2" @click="handlerAction({ action: 'updateAppointment', status: $enums.appointmentStatus.DONE })" />
+        <Button :label="l.buttons.cancel" v-if="selectedEvent.displayBtnCancel" small color="primary" class="mr-2" @click="handlerAction({ action: 'updateAppointment', status: $enums.appointmentStatus.CANCELED })" />
+        <Button :label="l.buttons.createOrderService" v-if="selectedEvent.displayBtnCreateOrderService" class="mr-2" color="orange" small @click="handlerAction({ action: 'handlerOrderService', status: 'create' })" />
+        <Button :label="l.buttons.showOrderService" v-if="selectedEvent.displayBtnShowOrderService" class="mr-2" color="orange" small @click="handlerAction({ action: 'handlerOrderService', status: 'show' })" />
         <Button :label="l.buttons.close" small @click="$emit('update:selectedOpen', false)" />
       </template>
     </Card>
@@ -73,8 +75,8 @@ export default {
     },
   },
   methods: {
-    handlerAction (status) {
-      this.$emit('handlerAction', { action: 'updateAppointment', event: this.selectedEvent, status });
+    handlerAction ({ action, status }) {
+      this.$emit('handlerAction', { action: action, event: this.selectedEvent, status });
     }
   }
 };

@@ -143,6 +143,7 @@ export default {
           amount: appointment.amount,
           status: appointment.status,
           services: appointment,
+          order_service_id: appointment.order_service ? appointment.order_service.id : null,
           start: dateInitial,
           end: dateFinal,
           color: COLORS[appointment.status],
@@ -150,14 +151,21 @@ export default {
           displayBtnConfirmed: (appointment.status === this.$enums.appointmentStatus.PENDING) || false,
           displayBtnFinished: appointment.status === this.$enums.appointmentStatus.CONFIRMED || false,
           displayBtnCancel: (appointment.status !== this.$enums.appointmentStatus.CANCELED && appointment.status !== this.$enums.appointmentStatus.DONE) || false,
+          displayBtnCreateOrderService: (appointment.status === this.$enums.appointmentStatus.DONE && appointment.order_service_id) || false,
+          displayBtnShowOrderService: (appointment.status === this.$enums.appointmentStatus.DONE && !appointment.order_service_id) || false,
         };
       });
     },
     handlerAction (data) {
-      this.dialog = true;
       const { action, event, status } = data;
-      this.dialogMessage = this.l.dialog[status];
-      this.infoActionSelected = { action, event, status};
+
+      if (action === 'handlerOrderService') {
+        console.log(action, action, status);
+      } else {
+        this.dialog = true;
+        this.dialogMessage = this.l.dialog[status];
+        this.infoActionSelected = { action, event, status};
+      }
     },
     updateAppointment (event, status) {
       this.$api.appointments.update(event.id, { status }).then(() => {
@@ -167,7 +175,7 @@ export default {
         this.$noty.error(this.$locales.pt.default.alerts.error);
       }).finally(() => {
         this.dialog = false;
-        if (status === this.$enums.appointmentStatus.DONE) this.openDialogCreateOrderService();
+        if (status === this.$enums.appointmentStatus.DONE && !event.order_service_id) this.openDialogCreateOrderService();
       });
     },
     changeInfoEvent (status) {

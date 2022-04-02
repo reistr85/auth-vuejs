@@ -20,6 +20,8 @@ export default {
         finish: 'Finalizar',
         cancel: 'Cancelar',
         close: 'Fechar',
+        createOrderService: 'Criar Ordem Serviço',
+        showOrderService: 'Ver Ordem Serviço'
       },
     }
   },
