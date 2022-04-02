@@ -1,40 +1,39 @@
 <template>
-  <Card title="Adicionar Item">
+  <Card title='Adicionar Item'>
     <DataTable
       show-select
       single-select
-      :headers="addItemHeaders"
-      :items="items"
-      :loading="loading"
-      @selected="setService"
-      @getItems="getServices">
+      :headers='addItemHeaders'
+      :items='items'
+      :loading='loading'
+      @selected='setService'
+      @getItems='getServices'>
 
-      <template slot="custom-header">
-        <v-form v-model="valid" ref="form" lazy-validation>
+      <template slot='custom-header'>
+        <v-form v-model='valid' ref='form' lazy-validation>
           <AutoComplete
-            v-model="collaborator"
-            label="Colaborador"
+            v-model='collaborator'
+            label='Colaborador'
             return-object
-            :items="localCollaborators" />
+            :items='localCollaborators' />
         </v-form>
       </template>
     </DataTable>
 
-    <div slot="actions">
-      <Button 
-        label="Cancelar" 
-        color="primary" 
-        rounded 
-        class=""
-        :icon="$icons.cancel" 
+    <div slot='actions'>
+      <Button
+        label='Cancelar'
+        color='primary'
+        rounded
+        :icon='$icons.cancel'
         @click="$emit('update:dialog', false)" />
-      <Button 
-        label="Adicionar" 
-        color="secondary" 
-        rounded 
-        class="ml-3" 
-        :disabled="!serviceSelected"
-        :icon="$icons.plus" 
+      <Button
+        label='Adicionar'
+        color='secondary'
+        rounded
+        class='ml-3'
+        :disabled='!serviceSelected'
+        :icon='$icons.plus'
         @click="add()" />
     </div>
   </Card>
@@ -67,7 +66,7 @@ export default {
       loading: true,
       collaborator: {},
       localCollaborators: [],
-    }
+    };
   },
   mounted() {
     this.getServices();
@@ -80,7 +79,7 @@ export default {
   },
   methods: {
     setService(data) {
-      this.serviceSelected = data[0]
+      this.serviceSelected = data[0];
     },
     getServices(params = {}) {
       this.loading = true;
@@ -94,7 +93,7 @@ export default {
       });
     },
     add() {
-      if(!this.collaborator.id) {
+      if (!this.collaborator.id) {
         this.$noty.error('Selecione o Colaborador');
         return;
       }
@@ -102,11 +101,11 @@ export default {
       this.$emit('handleActionModal', {
         action: 'addItem',
         item: {
-          ...this.serviceSelected, collaborator: { ...this.collaborator, name: this.collaborator.text } } 
-      })
+          ...this.serviceSelected, collaborator: { ...this.collaborator, name: this.collaborator.text } }
+      });
     }
   }
-}
+};
 </script>
 
 <style>

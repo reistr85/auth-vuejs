@@ -6,23 +6,23 @@
         label="Descrição" />
     </v-col>
     <v-col cols="12" md="4">
-      <TextField 
-        v-model="installmentType.interval_installments" 
+      <TextField
+        v-model="installmentType.interval_installments"
         label="Dias entre Parcelas" />
     </v-col>
     <v-col cols="12" md="3">
-    <Button 
-        label="Gerar Parcelas" 
-        small 
-        :icon="$icons.plus" 
-        color="secondary" 
-        rounded 
+    <Button
+        label="Gerar Parcelas"
+        small
+        :icon="$icons.plus"
+        color="secondary"
+        rounded
         class="btn-actions mt-1"
         @click="openDialog()" />
     </v-col>
     <v-col cols="12" md="2">
-      <Select 
-        v-model="installmentType.use_input_value" 
+      <Select
+        v-model="installmentType.use_input_value"
         label="Usar Entrada"
         :items=typeYesNo />
     </v-col>
@@ -37,10 +37,10 @@
         label="Observações" />
     </v-col>
     <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(600)">
-      <component 
-        slot="content" 
+      <component
+        slot="content"
         :is="dialogComponent"
-        @update:dialog="dialog = $event" 
+        @update:dialog="dialog = $event"
         @handleActionGenerate="handleActionGenerate" />
     </Dialog>
   </v-row>

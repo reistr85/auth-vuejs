@@ -1,35 +1,35 @@
 <template>
   <v-row>
-    <v-col cols="12" md="2">
-      <DataPicker 
-        v-model="orderService.order_date" 
-        label="Data da Ordem"
-        :disabled="orderFinished" />
+    <v-col cols='12' md='2'>
+      <DataPicker
+        v-model="orderService.order_date"
+        label='Data da Ordem'
+        :disabled='orderFinished' />
     </v-col>
-    <v-col cols="12" md="2">
+    <v-col cols='12' md='2'>
       <TextFieldInteger
         v-model="orderService.order_number"
-        label="Número"
-        :readonly="orderFinished || typePage === typePageOptions.show" />
+        label='Número'
+        :readonly='orderFinished || typePage === typePageOptions.show' />
     </v-col>
-    <v-col cols="12" md="3">
+    <v-col cols='12' md='3'>
       <AutoComplete
         v-model="orderService.collaborator_id"
-        label="Colaborador"
-        :items="collaborators"
-        :readonly="orderFinished" />
+        label='Colaborador'
+        :items='collaborators'
+        :readonly='orderFinished' />
     </v-col>
-    <v-col cols="12" md="3">
+    <v-col cols='12' md='3'>
       <AutoComplete
         v-model="orderService.customer_id"
-        label="Cliente"
-        :items="customers"
-        :readonly="orderFinished" />
+        label='Cliente'
+        :items='customers'
+        :readonly='orderFinished' />
     </v-col>
-    <v-col cols="12" md="2">
+    <v-col cols='12' md='2'>
       <TextFieldInteger
         v-model="orderService.quantity_services"
-        label="Quant. Itens"
+        label='Quant. Itens'
         readonly />
     </v-col>
   </v-row>
@@ -67,7 +67,7 @@ export default {
     },
   },
   mixins: [TypePageMixin],
-}
+};
 </script>
 
 <style>

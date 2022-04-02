@@ -144,4 +144,4 @@ export default {
       md: 2,
     },
   ]
-}
+};

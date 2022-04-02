@@ -21,18 +21,18 @@ const formatResponse = (item) => {
     i.payment_date_formatted = formatDate(i.payment_date);
     i.amount_paid_formatted = formatCurrency(i.amount_paid);
   });
-}
+};
 
-const OrdderServiceService = DynamicService('order-services', OrderServiceSchema, {
+const OrderServiceService = DynamicService('order-services', OrderServiceSchema, {
   formatResponse,
 });
 
-const OrdderServiceCommands = () => ({
+const OrderServiceCommands = () => ({
   async lastOrderNumber() {
-     return await axios.post(`order-services/last-order-number`);
+    return await axios.post('order-services/last-order-number');
   }
-})
+});
 
 
-export default OrdderServiceService;
-export { OrdderServiceService, OrdderServiceCommands }
+export default OrderServiceService;
+export { OrderServiceService, OrderServiceCommands };

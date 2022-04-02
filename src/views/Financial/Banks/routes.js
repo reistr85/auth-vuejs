@@ -28,4 +28,4 @@ export default [
     component: ShowBank,
     meta: BankSchema.routes.statement.meta,
   },
-]
+];

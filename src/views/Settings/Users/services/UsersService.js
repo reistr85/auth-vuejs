@@ -4,7 +4,7 @@ import { getText } from '@/utils';
 
 const formatResponse = (item) => {
   item.type_formatted = getText(typeUser, item.type);
-}
+};
 
 const UsersService = DynamicService('users', {
   formatResponse,

@@ -17,7 +17,7 @@
             @input="selectDataAppointment({ data: $event, autoComplete: true})" />
         <Resume :appointment="appointment" />
       </div>
-      
+
       <div class="content-appointments--boddy---right">
         <div class="content-appointments--boddy---right----data-appointment">
           <DataTable
@@ -74,7 +74,7 @@ export default {
       ],
       search: '',
       disabledBtnNext: true,
-    }
+    };
   },
   mixins: [SelectDataAppointment('collaborator')],
   methods: {
@@ -82,7 +82,7 @@ export default {
       this.$emit('getItems', { ...options, type: 'collaborator' });
     },
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
