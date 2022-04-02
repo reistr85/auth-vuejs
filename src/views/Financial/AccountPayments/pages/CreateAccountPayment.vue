@@ -22,8 +22,7 @@
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Totais" class="mt-3" multiple :icon="$icons.list">
-        <AccountPaymentTotals
-          :account-payment="accountPaymentTotals" />
+        <AccountPaymentTotals :account-payment="accountPaymentTotals" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
@@ -166,7 +165,7 @@ export default {
         page: options.page || 1,
       };
       this.$api.accountPayments.getAllAccountPaymentInstallmentsByAccountPaymentId(this.id, payload).then((res) => {
-        this.installments = res.data.data.map((item) => {
+        this.installments = res.data.map((item) => {
           return {
             id: item.id,
             description: item.description,

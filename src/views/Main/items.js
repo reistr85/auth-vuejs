@@ -10,7 +10,7 @@ import {
   home,
   list,
   sale,
-  tune, 
+  tune,
 } from '@/utils/icons';
 
 export default [
@@ -56,7 +56,7 @@ export default [
     items: [
       { icon: bank, title: 'Bancos', route: 'banks', active: false },
       { icon: box, title: 'Caixa', route: 'boxes', active: false },
-      { icon: bank, title: 'Contas à Pagar', route: 'accountPayments', active: false },
+      { icon: bank, title: 'Contas à Pagar', route: 'accountpayments', active: false },
     ],
   },
   {
