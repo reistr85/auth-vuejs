@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="$schemas.appointment" />
     <PageContent>
-      <DynamicListPage :schema="schema" :service="service" />
+      <DynamicListPage :schema="$schemas.appointment" :service="$api.appointments" />
     </PageContent>
   </div>
 </template>
@@ -10,9 +10,7 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import AppointmentSchema from '../schemas/AppointmentSchema';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
-import AppointmentsService from '../services/AppointmentsService';
 
 export default {
   name: 'ListAppointments',
@@ -20,11 +18,11 @@ export default {
   props: {},
   data() {
     return {
-      schema: AppointmentSchema,
-      service: AppointmentsService,
     };
   },
-  methods: {}
+  mounted() {
+    console.log(this.$api.allTypes);
+  }
 };
 </script>
 

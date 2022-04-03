@@ -1,76 +1,35 @@
 <template>
   <div>
-    <PageHeader :schema="$schemas.orderService" />
+    <PageHeader :schema="$schemas.appointment" />
     <PageContent>
-      <ExpansionPanel v-model="expModel" readonly title="Dados da Ordem" multiple :icon="$icons.list">
+      <ExpansionPanel v-model="expModel" readonly title="Dados do Agendamento" multiple :icon="$icons.list">
         <OrderData v-bind="orderDataProps" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
-        <GenericDataTable
-          action-type="openDialog"
-          componentType="items"
-          :loading="loading"
-          :headers="headersItems"
-          :items="order_service.items"
-          :order-finished="orderFinished"
-          @handleAction="handleAction"/>
+        <GenericDataTable action-type="openDialog" componentType="items" :loading="loading" :headers="headersItems"
+          :items="order_service.items" :order-finished="orderFinished" @handleAction="handleAction"/>
       </ExpansionPanel>
 
-      <v-row>
-        <v-col cols="12" md="8">
-          <ExpansionPanel v-model="expModel" readonly title="Pagamentos" class="mt-3 payments" multiple :icon="$icons.list">
-            <GenericDataTable
-              action-type="openDialog"
-              componentType="payments"
-              :loading="loading"
-              :headers="headersPayments"
-              :items="order_service.payments"
-              :order-finished="orderFinished"
-              @handleAction="handleAction" />
-          </ExpansionPanel>
-        </v-col>
-        <v-col cols="12" md="4">
-          <ExpansionPanel v-model="expModel" readonly title="Totalizadores" class="mt-3 totalizers" multiple :icon="$icons.list">
-            <div>
-              <v-row class="pt-3 px-5">
-                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.subtotal" label="Sub Total" readonly /></v-col>
-                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.discount" label="Desconto" readonly /></v-col>
-                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.amount" label="Total Final" readonly /></v-col>
-                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.total_paid" label="Total Pago" readonly /></v-col>
-                <v-col cols="12" md="6"><TextFieldMoney v-model="order_service.total_payable" label="Falta Pagar" readonly /></v-col>
-              </v-row>
-            </div>
-          </ExpansionPanel>
-        </v-col>
-      </v-row>
+      <ExpansionPanel v-model="expModel" readonly title="Totalizadores" class="mt-3" multiple :icon="$icons.list">
+        <v-row>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.subtotal" label="Sub Total" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.discount" label="Desconto" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.amount" label="Total Final" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.total_paid" label="Total Pago" readonly /></v-col>
+          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.total_payable" label="Falta Pagar" readonly /></v-col>
+        </v-row>
+      </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
-        <Button
-          label="Salvar"
-          color="primary"
-          rounded
-          class=""
-          :icon="$icons.save"
-          :disabled="orderFinished"
+        <Button label="Salvar" color="primary" rounded :icon="$icons.save" :disabled="orderFinished"
           @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.PENDING }})" />
-        <Button
-          label="Salvar e Finalizar"
-          color="success"
-          rounded
-          class="ml-3"
-          :icon="$icons.check"
-          :disabled="orderFinished || !saveFinished"
+        <Button label="Salvar e Finalizar" color="success" rounded class="ml-3" :icon="$icons.check" :disabled="orderFinished || !saveFinished"
           @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.FINISHED }})" />
       </ExpansionPanel>
 
       <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1100)">
-        <component
-          slot="content"
-          v-bind="dialogProps"
-          :is="dialogComponent"
-          @update:dialog="dialog = $event"
-          @handleActionModal="handleActionModal" />
+        <component slot="content" v-bind="dialogProps" :is="dialogComponent" @update:dialog="dialog = $event" @handleActionModal="handleActionModal" />
       </Dialog>
 
       <DialogConfirmation :dialog="dialogConfirmation" :message="dialogConfirmationMessage" @noAction="dialogConfirmation = false" @yesAction="save" />
@@ -88,7 +47,6 @@ import Button from '@/components/vuetify/Button';
 import GenericDataTable from '../components/GenericDataTable';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogAddItem from '../components/DialogAddItem';
-import DialogAddPayment from '../components/DialogAddPayment';
 import DialogConfirmation from '@/components/DialogConfirmation';
 import OrderData from '../components/OrderData';
 import { messageErrors, formatDate, formatCurrency } from '@/utils';
@@ -96,11 +54,10 @@ import { orderServiceStatus } from '@/utils/enums';
 
 const dialogComponents  = Object.freeze({
   items: DialogAddItem,
-  payments: DialogAddPayment,
 });
 
 export default {
-  name: 'CreateOrderService',
+  name: 'CreateAppointment',
   components: {
     PageHeader,
     PageContent,
@@ -110,7 +67,6 @@ export default {
     GenericDataTable,
     Dialog,
     DialogAddItem,
-    DialogAddPayment,
     DialogConfirmation,
     OrderData,
   },

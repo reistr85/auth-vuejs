@@ -1,4 +1,5 @@
 import DynamicService from '@/service/DynamicService';
+import AppointmentSchema from '../schemas/AppointmentSchema';
 import { formatDate, getText } from '@/utils';
 import { statusAppointment } from '@/utils/options';
 
@@ -9,7 +10,7 @@ const formatResponse = (item) => {
   item.status_formatted = getText(statusAppointment, item.status);
 };
 
-const AppointmentService = DynamicService('appointments', {
+const AppointmentService = DynamicService('appointments',  AppointmentSchema, {
   formatResponse,
 });
 
