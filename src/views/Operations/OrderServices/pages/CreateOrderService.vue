@@ -146,7 +146,7 @@ export default {
     if (this.typePage === this.typePageOptions.create)
       this.getLastOrderNumber();
 
-    const appointment_id = this.$route.params.appointment_id;
+    const appointment_id = this.$route.query.appointment_id;
     if (appointment_id)
       this.getAppointment(appointment_id);
 
@@ -377,6 +377,7 @@ export default {
         order_number: data.order_number,
         customer_id: data.customer_id,
         collaborator_id: data.collaborator_id,
+        appointment_id: (this.$route.query.appointment_id || data.appointment_id) || null,
         quantity_services: data.quantity_services,
         subtotal: data.subtotal,
         discount: data.discount,

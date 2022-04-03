@@ -10,41 +10,19 @@
           </div>
         </template>
 
-        <Header
-          :calendar="$refs.calendar"
-          :type="type"
-          @setToday="focus = ''"
-          @nextPrev="nextPrev"
+        <Header :calendar="$refs.calendar" :type="type" @setToday="focus = ''" @nextPrev="nextPrev"
           @update:type="type = $event" />
-
         <v-sheet height="600">
-          <v-calendar
-            ref="calendar"
-            v-model="focus"
-            color="primary"
-            :events="events"
-            :event-color="getEventColor"
-            :type="type"
-            @click:event="openToolbarEvent"
-            @click:more="viewDay"
-            @click:date="viewDay"
-            @change="getAppointments" />
+          <v-calendar ref="calendar" v-model="focus" color="primary" :events="events" :event-color="getEventColor"
+            :type="type" @click:event="openToolbarEvent" @click:more="viewDay" @click:date="viewDay" @change="getAppointments" />
 
-          <ToolbarEvent
-            v-model="selectedOpen"
-            :selectedElement="selectedElement"
-            :selectedEvent="selectedEvent"
-            @update:selectedOpen="selectedOpen = $event"
-            @handlerAction="handlerAction" />
+          <ToolbarEvent v-model="selectedOpen" :selectedElement="selectedElement" :selectedEvent="selectedEvent"
+            @update:selectedOpen="selectedOpen = $event" @handlerAction="handlerAction" />
         </v-sheet>
       </v-col>
     </v-row>
 
-    <DialogConfirmation
-      :dialog="dialog"
-      :message="dialogMessage"
-      @noAction="dialog = false"
-      @yesAction="dialogAction" />
+    <DialogConfirmation :dialog="dialog" :message="dialogMessage" @noAction="dialog = false" @yesAction="dialogAction" />
   </div>
 </template>
 
@@ -151,8 +129,8 @@ export default {
           displayBtnConfirmed: (appointment.status === this.$enums.appointmentStatus.PENDING) || false,
           displayBtnFinished: appointment.status === this.$enums.appointmentStatus.CONFIRMED || false,
           displayBtnCancel: (appointment.status !== this.$enums.appointmentStatus.CANCELED && appointment.status !== this.$enums.appointmentStatus.DONE) || false,
-          displayBtnCreateOrderService: (appointment.status === this.$enums.appointmentStatus.DONE && appointment.order_service_id) || false,
-          displayBtnShowOrderService: (appointment.status === this.$enums.appointmentStatus.DONE && !appointment.order_service_id) || false,
+          displayBtnCreateOrderService: (appointment.status === this.$enums.appointmentStatus.DONE && !appointment.order_service) || false,
+          displayBtnShowOrderService: (appointment.status === this.$enums.appointmentStatus.DONE && appointment.order_service) || false,
         };
       });
     },
@@ -160,11 +138,11 @@ export default {
       const { action, event, status } = data;
 
       if (action === 'handlerOrderService') {
-        console.log(action, action, status);
+        status === 'create' ? this.openDialogCreateOrderService() : this.$router.push({ name: this.$schemas.orderService.routes.show.name, params: { id: event.order_service_id } });
       } else {
         this.dialog = true;
         this.dialogMessage = this.l.dialog[status];
-        this.infoActionSelected = { action, event, status};
+        this.infoActionSelected = { action, event, status };
       }
     },
     updateAppointment (event, status) {
@@ -183,6 +161,8 @@ export default {
       this.selectedEvent.displayBtnConfirmed = (status === this.$enums.appointmentStatus.PENDING) || false;
       this.selectedEvent.displayBtnFinished = status === this.$enums.appointmentStatus.CONFIRMED || false;
       this.selectedEvent.displayBtnCancel = (status !== this.$enums.appointmentStatus.CANCELED && status !== this.$enums.appointmentStatus.DONE) || false;
+      this.selectedEvent.displayBtnCreateOrderService = (status === this.$enums.appointmentStatus.DONE && !this.selectedEvent.order_service_id) || false;
+      this.selectedEvent.displayBtnShowOrderService = (status === this.$enums.appointmentStatus.DONE && this.selectedEvent.order_service_id) || false;
     },
     mountDateISO (date, time) {
       const [ year, month, day ] = date.split('-');
@@ -200,7 +180,7 @@ export default {
     },
     createOrderService () {
       this.dialog = false;
-      this.$router.push({ name: this.$schemas.orderService.routes.create.name, params: { appointment_id: this.selectedEvent.id } });
+      this.$router.push({ name: this.$schemas.orderService.routes.create.name, query: { appointment_id: this.selectedEvent.id } });
     }
   },
 };
