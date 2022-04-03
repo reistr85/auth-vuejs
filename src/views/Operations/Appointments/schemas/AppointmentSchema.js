@@ -6,7 +6,7 @@ export default {
   domain: 'appointments',
   title: 'Agendamentos',
   description: 'Lista de todos os agendamentos no sistema',
-  createBtn: '',
+  createBtn: 'Novo Agendamento',
   formAddress: true,
   showExpand: false,
   routes: {
