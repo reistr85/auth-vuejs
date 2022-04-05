@@ -1,10 +1,10 @@
 <template>
   <v-row>
-    <v-col cols='12' md='2'>
+    <v-col cols="12" md="2">
       <DataPicker
         v-model="orderService.order_date"
-        label='Data da Ordem'
-        :disabled='orderFinished' />
+        label="Data da Ordem"
+        :disabled="orderFinished" />
     </v-col>
     <v-col cols='12' md='2'>
       <TextFieldInteger
