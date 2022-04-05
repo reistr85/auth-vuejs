@@ -30,6 +30,11 @@ const typePerson = Object.freeze({
   PJ: 'J',
 });
 
+const typeYesNo = Object.freeze({
+  YES: 'yes',
+  NO: 'no',
+});
+
 const typeAllType = Object.freeze({
   CATEGORY: 'category',
   SUB_CATEGORY: 'sub-category',
@@ -49,6 +54,7 @@ export {
   typeRegister,
   typeMovement,
   typePerson,
+  typeYesNo,
   typeAllType,
   accountPaymentStatus
 };

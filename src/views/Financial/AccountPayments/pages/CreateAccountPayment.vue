@@ -175,6 +175,7 @@ export default {
             date_payment_formatted: item.date_payment_formatted,
             bank_id: item.bank_id,
             bank_formatted: item.bank_formatted,
+            box: item.box,
             payment_method_id: item.payment_method_id,
             payment_method_formatted: item.payment_method_formatted,
             amount: item.amount,
@@ -308,6 +309,7 @@ export default {
           date_payment: params.item.date_payment,
           payment_method_id: params.item.payment_method_id,
           bank_id: params.item.bank_id,
+          box: params.item.box,
           amount: params.item.amount,
           status: params.item.status
         }

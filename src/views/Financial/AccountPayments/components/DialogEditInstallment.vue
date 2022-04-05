@@ -32,16 +32,24 @@
               itemValue="value"
               :readonly="disabled" />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <Select
               v-model="installment.bank_id"
               label="Banco"
               :items="banks"
               itemText="text"
               itemValue="value"
-              :readonly="disabled" />
+              :readonly="disabledBank"
+              @change="changeBank()" />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="2">
+            <VSwitch
+              v-model="installment.box"
+              label="Usar Caixa"
+              class="mt-1 mr-3"
+              @click="setBox()" />
+          </v-col>
+          <v-col cols="12" md="3">
             <TextFieldMoney
               v-model="installment.amount"
               label="Valor Parcela"
@@ -67,6 +75,7 @@ import DataPicker from '@/components/vuetify/DataPicker';
 import TextField from '@/components/vuetify/TextField';
 import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import Select from '@/components/vuetify/Select';
+import VSwitch from '@/components/vuetify/VSwitch';
 import { required } from '@/utils/rules';
 
 export default {
@@ -77,7 +86,8 @@ export default {
     DataPicker,
     Select,
     TextField,
-    TextFieldMoney
+    TextFieldMoney,
+    VSwitch
   },
   props: {
     installment: {
@@ -98,11 +108,23 @@ export default {
       },
       banks: [],
       paymentMethods: [],
+      disabledBank: false,
     };
   },
   mounted() {
+    console.log('installment', this.installment);
     this.getBanks();
     this.getPaymentMethods();
+  },
+  watch: {
+    installment: {
+      handler() {
+        console.log('installment watch', this.installment);
+        this.installment.box = this.installment.box === this.$enums.typeYesNo.YES ? true : false;
+        console.log('installment 2', this.installment);
+      },
+      deep: true
+    }
   },
   computed: {
     l() {
@@ -139,16 +161,35 @@ export default {
     },
     save(installment) {
       if (!this.$refs.form.validate()) return;
+      installment.box = installment.box === true ? this.$enums.typeYesNo.YES : this.$enums.typeYesNo.NO;
       this.$api.accountPaymentInstallments.update(installment.id, installment).then(() => {
       }).catch((error) => {
         this.$noty.error(error);
       }).finally(() => {
         this.$emit('handleActionInstallmentSave');
+        this.resetForm();
       });
     },
+    resetForm() {
+      this.installment = null;
+    },
+    setBox() {
+      this.installment.box = !this.installment.box;
+      if (this.installment.box) {
+        this.installment.bank_id = null; this.disabledBank = true;
+      } else {
+        this.disabledBank = false;
+      }
+    },
+    changeBank() {
+      if (this.installment.box) {
+        this.installment.box = false;
+      }
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+
 </style>
