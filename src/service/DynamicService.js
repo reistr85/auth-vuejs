@@ -40,7 +40,6 @@ const DynamicService = (endpoint, schema, options = {}) => ({
             options.formatResponse(item);
           });
         } else {
-          console.log(2);
           res.data.forEach((item) => {
             options.formatResponse(item);
           });

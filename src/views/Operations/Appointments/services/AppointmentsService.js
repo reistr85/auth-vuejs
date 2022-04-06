@@ -1,3 +1,4 @@
+import axios from '@/service';
 import DynamicService from '@/service/DynamicService';
 import AppointmentSchema from '../schemas/AppointmentSchema';
 import { formatDate, getText } from '@/utils';
@@ -14,4 +15,11 @@ const AppointmentService = DynamicService('appointments',  AppointmentSchema, {
   formatResponse,
 });
 
+const AppointmentCommands = () => ({
+  async lastAppointmentNumber() {
+    return await axios.post('appointments/last-appointment-number');
+  }
+});
+
 export default AppointmentService;
+export { AppointmentService, AppointmentCommands };
