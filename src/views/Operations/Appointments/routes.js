@@ -19,7 +19,7 @@ export default [
   {
     path: AppointmentSchema.routes.show.path,
     name: AppointmentSchema.routes.show.name,
-    component: ListAppointments,
+    component: CreateAppointment,
     meta: AppointmentSchema.routes.show.meta,
   },
 ];

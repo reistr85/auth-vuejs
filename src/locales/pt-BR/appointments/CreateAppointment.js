@@ -11,7 +11,8 @@ export default {
     number: 'Número',
     collaborator: 'Colaborador',
     customer: 'Cliente',
-    qtdServices: 'Qtde. Itens',
+    initialHour: 'Início',
+    finalHour: 'Fim',
   },
   items: {
     title: 'Itens',
@@ -30,6 +31,7 @@ export default {
     }
   },
   totalizers: {
+    qtdServices: 'Qtde. Itens',
     title: 'Totalizadores',
     subtotal: 'Subb Total',
     discount: 'Desconto',

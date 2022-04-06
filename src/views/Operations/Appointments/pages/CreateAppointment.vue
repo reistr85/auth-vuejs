@@ -7,7 +7,7 @@
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly :title="l.items.title" class="mt-3" multiple :icon="$icons.list">
-        <Items v-bind="genericDataTableProps" @handleAction="handleAction"/>
+        <Items v-bind="ItemsProps" @handleAction="handleAction"/>
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly :title="l.totalizers.title" class="mt-3" multiple :icon="$icons.list">
@@ -65,13 +65,14 @@ export default {
       expModel: [0],
       loading: false,
       appointment: {
+        initial_hour: '00:00:00',
+        final_hour: '00:00:00',
         appointment_date: new Date().toISOString().substr(0, 10),
         appointment_number: 0,
-        quantity_services: 0,
+        qtd_items: 0,
+        amount: 0,
         items: [],
-        payments: [],
         items_destroy: [],
-        payments_destroy: [],
       },
       collaborators: [],
       customers: [],
@@ -118,7 +119,7 @@ export default {
     appointmentDataProps () {
       return { customers: this.customers, collaborators: this.collaborators, appointmentFinished:  this.appointmentFinished };
     },
-    genericDataTableProps () {
+    ItemsProps () {
       return { actionType: 'openDialog', componentType: 'items', loading:  this.loading, headers: this.headersItems,
         items: this.appointment.items };
     }
@@ -222,9 +223,9 @@ export default {
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
     },
     create() {
-      this.$api.orderServices.create(this.appointment).then(() => {
+      this.$api.appointments.create(this.appointment).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
-        this.$router.push({ name: this.$schemas.orderService.routes.list.name });
+        this.$router.push({ name: this.$schemas.appointment.routes.list.name });
       }).catch((err) => {
         this.$noty.error(err);
       }).finally(() => {
