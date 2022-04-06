@@ -174,7 +174,7 @@ export default {
             date_payment: item.date_payment,
             date_payment_formatted: item.date_payment_formatted,
             bank_id: item.bank_id,
-            bank_formatted: item.bank_formatted,
+            bank_formatted: item.box == this.$enums.typeYesNo.YES? 'Caixa' : item.bank_formatted,
             box: item.box,
             payment_method_id: item.payment_method_id,
             payment_method_formatted: item.payment_method_formatted,
@@ -296,11 +296,16 @@ export default {
       });
     },
     handleItemEdit(params) {
+      console.log('params', params);
       this.dialog = true;
       this.dialogEditInstallment = true;
       this.dialogComponent = DialogEditInstallment;
       this.propsEditInstallment = {
-        disabled: this.disabledButton,
+        disabled: params.item.status == this.$enums.accountPaymentStatus.SETTLED ? true : false,
+        box: {
+          label: 'Usar Caixa',
+          value: params.item.box == this.$enums.typeYesNo.YES ? true : false
+        },
         installment: {
           account_payment_id: this.accountPayment.id,
           id: params.item.id,
@@ -309,7 +314,7 @@ export default {
           date_payment: params.item.date_payment,
           payment_method_id: params.item.payment_method_id,
           bank_id: params.item.bank_id,
-          box: params.item.box,
+          box: params.item.box == this.$enums.typeYesNo.YES ? true : false,
           amount: params.item.amount,
           status: params.item.status
         }
@@ -330,6 +335,7 @@ export default {
         date_due: params.item.date_due,
         date_payment: params.item.date_payment,
         payment_method_id: params.item.payment_method_id,
+        box: params.item.box,
         bank_id: params.item.bank_id,
         amount: params.item.amount,
         status: 'paid',

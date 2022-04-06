@@ -43,20 +43,10 @@
               @change="changeBank()" />
           </v-col>
           <v-col cols="12" md="2">
-            <VSwitch
-              v-model="installment.box"
-              label="Usar Caixa"
-              class="mt-1 mr-3"
-              @click="setBox()" />
+            <VSwitch :label="boxLocal.label" v-model="boxLocal.value"  class="mt-1 mr-3" @click="setBox()" />
           </v-col>
           <v-col cols="12" md="3">
-            <TextFieldMoney
-              v-model="installment.amount"
-              label="Valor Parcela"
-              :length="10"
-              :rules="[rules.required]"
-              :readonly="disabled"
-              v-on:keyup.enter="save" />
+            <TextFieldMoney v-model="installment.amount" label="Valor Parcela" :length="10" :rules="[rules.required]" :readonly="disabled" v-on:keyup.enter="save" />
           </v-col>
         </v-row>
       </v-form>
@@ -109,19 +99,22 @@ export default {
       banks: [],
       paymentMethods: [],
       disabledBank: false,
+      boxLocal: {
+        label: 'Usar Caixa',
+        value: false
+      }
     };
   },
   mounted() {
-    console.log('installment', this.installment);
+    this.boxLocal.value = this.installment.box;
     this.getBanks();
     this.getPaymentMethods();
   },
   watch: {
-    installment: {
+    ['installment.box']: {
       handler() {
-        console.log('installment watch', this.installment);
-        this.installment.box = this.installment.box === this.$enums.typeYesNo.YES ? true : false;
-        console.log('installment 2', this.installment);
+        console.log(this.installment);
+        this.boxLocal.value = this.installment.box;
       },
       deep: true
     }
@@ -161,17 +154,13 @@ export default {
     },
     save(installment) {
       if (!this.$refs.form.validate()) return;
-      installment.box = installment.box === true ? this.$enums.typeYesNo.YES : this.$enums.typeYesNo.NO;
+      installment.box = this.boxLocal.value == true ? this.$enums.typeYesNo.YES : this.$enums.typeYesNo.NO;
       this.$api.accountPaymentInstallments.update(installment.id, installment).then(() => {
       }).catch((error) => {
         this.$noty.error(error);
       }).finally(() => {
         this.$emit('handleActionInstallmentSave');
-        this.resetForm();
       });
-    },
-    resetForm() {
-      this.installment = null;
     },
     setBox() {
       this.installment.box = !this.installment.box;
