@@ -57,6 +57,7 @@ export default [
       { icon: bank, title: 'Bancos', route: 'banks', active: false },
       { icon: box, title: 'Caixa', route: 'boxes', active: false },
       { icon: bank, title: 'Contas à Pagar', route: 'accountpayments', active: false },
+      { icon: bank, title: 'Contas à Receber', route: 'accountreceives', active: false },
     ],
   },
   {

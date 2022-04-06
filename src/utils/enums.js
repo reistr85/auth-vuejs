@@ -48,6 +48,12 @@ const accountPaymentStatus = Object.freeze({
   SETTLED: 'settled',
 });
 
+const accountReceiveStatus = Object.freeze({
+  PENDING: 'pending',
+  PARTIAL: 'partial',
+  SETTLED: 'settled',
+});
+
 export {
   appointmentStatus,
   orderServiceStatus,
@@ -56,5 +62,6 @@ export {
   typePerson,
   typeYesNo,
   typeAllType,
-  accountPaymentStatus
+  accountPaymentStatus,
+  accountReceiveStatus
 };

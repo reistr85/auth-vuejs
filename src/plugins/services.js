@@ -3,7 +3,9 @@ import AuthService from '@/views/Auth/services/AuthService';
 
 // Financial
 import AccountPaymentsService, { AccountPaymentsCommands } from '@/views/Financial/AccountPayments/services/AccountPaymentsService';
+import AccountReceivesService, { AccountReceivesCommands } from '@/views/Financial/AccountReceives/services/AccountReceivesService';
 import AccountPaymentInstallmentsService from '@/views/Financial/AccountPayments/services/AccountPaymentInstallmentsService';
+import AccountReceiveInstallmentsService from '@/views/Financial/AccountReceives/services/AccountReceiveInstallmentsService';
 import BanksService, { BanksCommands } from '@/views/Financial/Banks/services/BanksService';
 import BankMovementsService from '@/views/Financial/Banks/services/BankMovementsService';
 
@@ -30,7 +32,9 @@ const api = Object.freeze({
 
   // Financial
   accountPayments: { ...AccountPaymentsService, ...AccountPaymentsCommands() },
+  accountReceives: { ...AccountReceivesService, ...AccountReceivesCommands() },
   accountPaymentInstallments: AccountPaymentInstallmentsService,
+  accountReceiveInstallments: AccountReceiveInstallmentsService,
   banks: { ...BanksService, ...BanksCommands() },
   bankMovements: BankMovementsService,
 
