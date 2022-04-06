@@ -1,16 +1,5 @@
 <template>
   <div>
-<<<<<<< HEAD
-    <div class='d-flex justify-end mb-5'>
-      <Button
-        label='Adicionar'
-        small
-        color='secondary'
-        rounded
-        class='btn-actions'
-        :icon='$icons.plus'
-        :disabled='orderFinished'
-=======
     <div class="d-flex justify-end mb-5">
       <Button
         label="Adicionar"
@@ -20,7 +9,6 @@
         class="btn-actions"
         :icon="$icons.plus"
         :disabled="orderFinished"
->>>>>>> refactor eslint
         @click="$emit('handleAction', handleAction(actionType))" />
     </div>
     <DataTable
@@ -78,11 +66,7 @@ export default {
   },
   methods: {
     handleAction(type, data = null) {
-<<<<<<< HEAD
-      return { type, params: { ...data, componentType: this.componentType}};
-=======
       return { type, params: { ...data, componentType: this.componentType} };
->>>>>>> refactor eslint
     }
   }
 };
