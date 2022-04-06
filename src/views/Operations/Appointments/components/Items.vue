@@ -36,7 +36,7 @@ import DataTable from '@/components/vuetify/DataTable';
 import Button from '@/components/vuetify/Button';
 
 export default {
-  name: 'GenericDataTable',
+  name: 'Items',
   components: { Button, DataTable },
   props: {
     headers: {

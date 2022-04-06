@@ -173,5 +173,22 @@ export default {
       ],
     },
   ],
+  headerAppointmentItems: [
+    { text: 'Item', value: 'number_item' },
+    { text: 'Colaborador', value: 'collaborator.name' },
+    { text: 'Serviço', value: 'service.name' },
+    { text: 'Sub total', value: 'subtotal_formatted' },
+    { text: 'Quant.', value: 'quantity' },
+    { text: 'Desconto.', value: 'discount_formatted' },
+    { text: 'Vlr. Total.', value: 'amount_formatted' },
+    { text: 'Ações.', value: 'actions', align: 'end' },
+  ],
+  headerAddItem: [
+    { text: 'Código', value: 'id' },
+    { text: 'Categoria', value: 'category.description' },
+    { text: 'Sub Categoria', value: 'sub_category.description' },
+    { text: 'Serviço', value: 'name' },
+    { text: 'Valor', value: 'sale_value_formatted' },
+  ],
   footer: []
 };

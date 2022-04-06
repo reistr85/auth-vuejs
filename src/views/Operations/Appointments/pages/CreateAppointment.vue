@@ -2,37 +2,27 @@
   <div>
     <PageHeader :schema="$schemas.appointment" />
     <PageContent>
-      <ExpansionPanel v-model="expModel" readonly title="Dados do Agendamento" multiple :icon="$icons.list">
-        <OrderData v-bind="orderDataProps" />
+      <ExpansionPanel v-model="expModel" readonly :title="l.appointmentData.title" multiple :icon="$icons.list">
+        <AppointmentData v-bind="appointmentDataProps" />
       </ExpansionPanel>
 
-      <ExpansionPanel v-model="expModel" readonly title="Itens" class="mt-3" multiple :icon="$icons.list">
-        <GenericDataTable action-type="openDialog" componentType="items" :loading="loading" :headers="headersItems"
-          :items="order_service.items" :order-finished="orderFinished" @handleAction="handleAction"/>
+      <ExpansionPanel v-model="expModel" readonly :title="l.items.title" class="mt-3" multiple :icon="$icons.list">
+        <Items v-bind="ItemsProps" @handleAction="handleAction"/>
       </ExpansionPanel>
 
-      <ExpansionPanel v-model="expModel" readonly title="Totalizadores" class="mt-3" multiple :icon="$icons.list">
-        <v-row>
-          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.subtotal" label="Sub Total" readonly /></v-col>
-          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.discount" label="Desconto" readonly /></v-col>
-          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.amount" label="Total Final" readonly /></v-col>
-          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.total_paid" label="Total Pago" readonly /></v-col>
-          <v-col cols="12" md="2"><TextFieldMoney v-model="order_service.total_payable" label="Falta Pagar" readonly /></v-col>
-        </v-row>
+      <ExpansionPanel v-model="expModel" readonly :title="l.totalizers.title" class="mt-3" multiple :icon="$icons.list">
+        <Totalizers />
       </ExpansionPanel>
 
-      <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
-        <Button label="Salvar" color="primary" rounded :icon="$icons.save" :disabled="orderFinished"
-          @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.PENDING }})" />
-        <Button label="Salvar e Finalizar" color="success" rounded class="ml-3" :icon="$icons.check" :disabled="orderFinished || !saveFinished"
-          @click="handleAction({ type: 'confirmSave', params: { status: $enums.orderServiceStatus.FINISHED }})" />
+      <ExpansionPanel v-model="expModel" readonly :title="l.actions.title" class="mt-3" multiple :icon="$icons.list">
+        <Button :label="l.actions.save" color="primary" rounded :icon="$icons.save" :disabled="appointmentFinished" @click="save()" />
       </ExpansionPanel>
 
       <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1100)">
-        <component slot="content" v-bind="dialogProps" :is="dialogComponent" @update:dialog="dialog = $event" @handleActionModal="handleActionModal" />
+        <DialogAddItem slot="content" v-bind="dialogProps" @update:dialog="dialog = $event" @handleActionModal="handleActionModal" />
       </Dialog>
 
-      <DialogConfirmation :dialog="dialogConfirmation" :message="dialogConfirmationMessage" @noAction="dialogConfirmation = false" @yesAction="save" />
+      <DialogConfirmation :dialog="dialogConfirmation" :message="l.actions.message" @noAction="dialogConfirmation = false" @yesAction="save" />
     </PageContent>
   </div>
 </template>
@@ -41,16 +31,16 @@
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
-import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 import TypePageMixin from '@/mixins/TypePageMixin';
 import Button from '@/components/vuetify/Button';
-import GenericDataTable from '../components/GenericDataTable';
+import Items from '../components/Items';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogAddItem from '../components/DialogAddItem';
 import DialogConfirmation from '@/components/DialogConfirmation';
-import OrderData from '../components/OrderData';
-import { messageErrors, formatDate, formatCurrency } from '@/utils';
-import { orderServiceStatus } from '@/utils/enums';
+import AppointmentData from '../components/AppointmentData';
+import Totalizers from '../components/Totalizers';
+import { messageErrors } from '@/utils';
+import { appointmentStatus } from '@/utils/enums';
 
 const dialogComponents  = Object.freeze({
   items: DialogAddItem,
@@ -63,95 +53,91 @@ export default {
     PageContent,
     ExpansionPanel,
     Button,
-    TextFieldMoney,
-    GenericDataTable,
+    Items,
     Dialog,
     DialogAddItem,
     DialogConfirmation,
-    OrderData,
+    AppointmentData,
+    Totalizers,
   },
   data() {
     return {
       expModel: [0],
       loading: false,
-      order_service: {
-        order_date: new Date().toISOString().substr(0, 10),
-        order_number: 0,
-        quantity_services: 0,
+      appointment: {
+        initial_hour: '00:00:00',
+        final_hour: '00:00:00',
+        appointment_date: new Date().toISOString().substr(0, 10),
+        appointment_number: 0,
+        qtd_items: 0,
+        amount: 0,
         items: [],
-        payments: [],
         items_destroy: [],
-        payments_destroy: [],
       },
       collaborators: [],
       customers: [],
-      payment_methods: [],
-      card_flags: [],
-      banks: [],
       dialog: false,
       dialogComponent: null,
       dialogProps: {},
       dialogConfirmation: false,
-      dialogConfirmationMessage: '',
+    };
+  },
+  provide() {
+    return {
+      appointment:  this.appointment,
     };
   },
   mounted() {
     if (this.typePage === this.typePageOptions.show)
-      this.getOrderService();
+      this.getAppointment();
 
     if (this.typePage === this.typePageOptions.create)
-      this.getLastOrderNumber();
-
-    const appointment_id = this.$route.query.appointment_id;
-    if (appointment_id)
-      this.getAppointment(appointment_id);
+      this.getLastAppointmentNumber();
 
     this.getCollaborators();
     this.getCustomers();
-    this.getMethodPayments();
-    this.getCardFlags();
-    this.getBanks();
   },
   computed: {
-    l() {
-      return this.$locales.pt.orderServices.createOrderService;
+    l () {
+      return this.$locales.pt.appointments.CreateAppointment;
     },
     id() {
       return this.$route.params.id;
     },
     headersItems() {
-      return this.$schemas.orderService.headerOrderServiceItems;
+      return this.$schemas.appointment.headerAppointmentItems;
     },
-    headersPayments() {
-      return this.$schemas.orderService.headerOrderServicePayments;
-    },
-    orderFinished() {
-      return this.order_service.status === orderServiceStatus.FINISHED || false;
+    appointmentFinished() {
+      return this.appointment.status === appointmentStatus.DONE || false;
     },
     saveFinished() {
-      return this.order_service.total_paid >= this.order_service.amount || false;
+      return this.appointment.total_paid >= this.appointment.amount || false;
     },
     dateNow () {
       return new Date().toISOString().substr(0, 10);
     },
-    orderDataProps () {
-      return { orderService: this.order_service, customers: this.customers, collaborators: this.collaborators, orderFinished:  this.orderFinished };
+    appointmentDataProps () {
+      return { customers: this.customers, collaborators: this.collaborators, appointmentFinished:  this.appointmentFinished };
+    },
+    ItemsProps () {
+      return { actionType: 'openDialog', componentType: 'items', loading:  this.loading, headers: this.headersItems,
+        items: this.appointment.items };
     }
   },
   mixins: [TypePageMixin],
   methods: {
-    getOrderService() {
+    getAppointment() {
       this.loading = true;
-      this.$api.orderServices.show(this.id).then((res) => {
+      this.$api.appointments.show(this.id).then((res) => {
         this.mountForm(res);
         this.loading = false;
       }).catch(() => {
         this.loading = false;
       });
     },
-    getLastOrderNumber() {
-      this.$api.orderServices.lastOrderNumber().then((res) => {
-        this.order_service.order_number = res.data.order_number + 1;
+    getLastAppointmentNumber() {
+      this.$api.appointments.lastAppointmentNumber().then((res) => {
+        this.appointment.appointment_number = res.data.appointment_number + 1;
       }).catch(() => {
         this.loading = false;
       });
@@ -184,61 +170,13 @@ export default {
         this.loading = false;
       });
     },
-    getMethodPayments(params = {}) {
-      const payload = { ...params, filter: { type: 'payment-method' }};
-      this.$api.allTypes.filters(payload).then((res) => {
-        this.payment_methods = res.data.data.map((item) => {
-          return {
-            id: item.id,
-            text: item.description,
-            value: item.id,
-          };
-        });
-      }).catch(() => {
-        this.loading = false;
-      });
-    },
-    getCardFlags(params = {}) {
-      const payload = { ...params, filter: { type: 'card-flag' }};
-      this.$api.allTypes.filters(payload).then((res) => {
-        this.card_flags = res.data.data.map((item) => {
-          return {
-            id: item.id,
-            text: item.description,
-            value: item.id,
-          };
-        });
-      }).catch(() => {
-        this.loading = false;
-      });
-    },
-    getBanks() {
-      this.$api.banks.index().then((res) => {
-        this.banks = res.data.map((item) => {
-          return {
-            id: item.id,
-            text: item.description,
-            value: item.id,
-          };
-        });
-      }).catch(() => {
-        this.loading = false;
-      });
-    },
     openDialog({ componentType }) {
       this.dialog = true;
       this.setPropsDialog(componentType);
       this.dialogComponent = dialogComponents[componentType];
     },
     setPropsDialog(componentType) {
-      this.dialogProps = {
-        ...componentType === 'items' && { collaborators: this.collaborators },
-        ...componentType === 'payments' && {
-          banks: this.banks,
-          payment_methods: this.payment_methods,
-          card_flags: this.card_flags
-        }
-      };
+      this.dialogProps = { ...componentType === 'items' && { collaborators: this.collaborators }};
     },
     handleAction(data) {
       const { type, params } = data;
@@ -250,7 +188,7 @@ export default {
       this[action](item);
     },
     addItem(item) {
-      this.order_service.items.push({
+      this.appointment.items.push({
         id: item.id,
         collaborator: item.collaborator,
         collaborator_id: item.collaborator?.id,
@@ -268,48 +206,26 @@ export default {
       });
       this.totalizers();
     },
-    addPayment(item) {
-      if ((parseFloat(this.order_service.total_paid) + parseFloat(item.value)) > this.order_service.amount) {
-        this.$noty.error(this.l.alerts.totalPaidGreaterAmount);
-        return;
-      }
-
-      this.order_service.payments.push({
-        id: null,
-        bank_id: item.bank.id,
-        payment_date: item.payment_date,
-        payment_date_formatted: formatDate(item.payment_date),
-        payment_method: { id: item.payment_method.id, description: item.payment_method.text },
-        payment_method_id: item.payment_method.id,
-        card_flag: { id: item.card_flag?.id, description: item.card_flag?.text },
-        card_flag_id: item.card_flag?.id ? item.card_flag.id : null,
-        amount_paid: item.value,
-        amount_paid_formatted: formatCurrency(item.value),
-        newItem: true
-      });
-      this.totalizers();
-    },
     itemDestroy(params) {
       const { index, componentType, item } = params;
       if (componentType === 'items') {
-        this.order_service.items.splice(index, 1);
-        this.order_service.items_destroy.push(item);
+        this.appointment.items.splice(index, 1);
+        this.appointment.items_destroy.push(item);
       }
       this.totalizers();
     },
     confirmSave(data) {
       const { status } = data;
-      this.order_service.status = status;
-      this.dialogConfirmationMessage = status === this.$enums.orderServiceStatus.PENDING ? this.l.dialogConfirmation.message.save : this.l.dialogConfirmation.message.saveFinish;
+      this.appointment.status = status;
       this.dialogConfirmation = true;
     },
     save() {
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
     },
     create() {
-      this.$api.orderServices.create(this.order_service).then(() => {
+      this.$api.appointments.create(this.appointment).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
-        this.$router.push({ name: this.$schemas.orderService.routes.list.name });
+        this.$router.push({ name: this.$schemas.appointment.routes.list.name });
       }).catch((err) => {
         this.$noty.error(err);
       }).finally(() => {
@@ -318,7 +234,7 @@ export default {
     },
     update() {
       const { id } = this.$route.params;
-      this.$api.orderServices.update(id, this.order_service).then(() => {
+      this.$api.orderServices.update(id, this.appointment).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.$router.push({ name: this.$schemas.orderService.routes.list.name });
       }).catch((err) => {
@@ -328,7 +244,7 @@ export default {
       });
     },
     mountForm(data) {
-      this.order_service = {
+      this.appointment = {
         order_date: data.order_date,
         order_number: data.order_number,
         customer_id: data.customer_id,
@@ -347,7 +263,7 @@ export default {
         payments_destroy: [],
       };
 
-      this.order_service.items = data.items.map((item) => {
+      this.appointment.items = data.items.map((item) => {
         return {
           id: item.id,
           number_item: item.number_item,
@@ -365,7 +281,7 @@ export default {
         };
       });
 
-      this.order_service.payments = data.payments.map((item) => {
+      this.appointment.payments = data.payments.map((item) => {
         return {
           id: item.id,
           bank_id: item.bank_id,
@@ -384,71 +300,25 @@ export default {
       this.totalizers();
     },
     setNumberItem() {
-      return this.order_service.items.length + 1;
+      return this.appointment.items.length + 1;
     },
     totalizers() {
       let quantity_services = 0;
       let subtotal = 0;
       let discount = 0;
       let amount = 0;
-      let total_paid = 0;
-      this.order_service.items.forEach((item) => {
+      this.appointment.items.forEach((item) => {
         quantity_services += 1;
         subtotal += parseFloat(item.subtotal);
         discount += parseFloat(item.discount);
         amount += parseFloat(item.amount);
       });
 
-      this.order_service.payments.forEach((payment) => {
-        total_paid += parseFloat(payment.amount_paid);
-      });
-      this.order_service.quantity_services = quantity_services;
-      this.order_service.subtotal = subtotal;
-      this.order_service.discount = discount;
-      this.order_service.amount = amount;
-      this.order_service.total_paid = total_paid;
-      this.order_service.total_payable = total_paid >= amount ? 0 :amount - total_paid;
+      this.appointment.quantity_services = quantity_services;
+      this.appointment.subtotal = subtotal;
+      this.appointment.discount = discount;
+      this.appointment.amount = amount;
     },
-    getAppointment (id) {
-      this.$api.appointments.show(id).then((res) => {
-        const appointment = res;
-        this.mountForm({
-          order_date: this.dateNow,
-          customer_id: appointment.customer_id,
-          collaborator_id: appointment.collaborator_id,
-          quantity_services: appointment.items.length,
-          subtotal: 0,
-          discount: 0,
-          amount: 0,
-          total_paid: 0,
-          total_payable: 0,
-          status: this.$enums.orderServiceStatus.PENDING,
-          items: appointment.items.map((item, index) => {
-            return {
-              id: item.id,
-              number_item: index + 1,
-              collaborator: { id: appointment.collaborator.id, name: appointment.collaborator.name },
-              collaborator_id: appointment.collaborator.id,
-              service: { name: item.service.name },
-              subtotal: item.subtotal,
-              subtotal_formatted: formatCurrency(item.subtotal),
-              quantity: item.quantity,
-              discount: item.discount,
-              discount_formatted: formatCurrency(item.discount),
-              amount: item.amount,
-              amount_formatted: formatCurrency(item.amount),
-              newItem: true
-            };
-          }),
-          payments: [],
-          items_destroy: [],
-          payments_destroy: [],
-        });
-        this.getLastOrderNumber();
-      }).catch(() => {
-
-      });
-    }
   }
 };
 </script>

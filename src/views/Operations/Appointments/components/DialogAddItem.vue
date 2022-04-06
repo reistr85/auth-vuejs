@@ -1,41 +1,17 @@
 <template>
-  <Card title='Adicionar Item'>
-    <DataTable
-      show-select
-      single-select
-      :headers='addItemHeaders'
-      :items='items'
-      :loading='loading'
-      @selected='setService'
-      @getItems='getServices'>
-
+  <Card :title="l.title">
+    <DataTable show-select single-select :headers='addItemHeaders' :items='items' :loading='loading' @selected='setService' @getItems='getServices'>
       <template slot='custom-header'>
         <v-form v-model='valid' ref='form' lazy-validation>
-          <AutoComplete
-            v-model='collaborator'
-            label='Colaborador'
-            return-object
-            :items='localCollaborators' />
+          <AutoComplete v-model='collaborator' :label="l.dataTable.autoCompleteTitle" return-object :items='localCollaborators' />
         </v-form>
       </template>
     </DataTable>
 
-    <div slot='actions'>
-      <Button
-        label='Cancelar'
-        color='primary'
-        rounded
-        :icon='$icons.cancel'
-        @click="$emit('update:dialog', false)" />
-      <Button
-        label='Adicionar'
-        color='secondary'
-        rounded
-        class='ml-3'
-        :disabled='!serviceSelected'
-        :icon='$icons.plus'
-        @click="add()" />
-    </div>
+    <template slot='actions'>
+      <Button :label='l.actions.cancel' color='primary' rounded :icon='$icons.cancel' @click="$emit('update:dialog', false)" />
+      <Button :label='l.actions.add' color='secondary' rounded class='ml-3' :disabled='!serviceSelected' :icon='$icons.plus' @click="add()" />
+    </template>
   </Card>
 </template>
 
@@ -73,8 +49,11 @@ export default {
     this.localCollaborators = this.collaborators;
   },
   computed: {
+    l () {
+      return this.$locales.pt.appointments.CreateAppointment.dialogAddItem;
+    },
     addItemHeaders() {
-      return this.$schemas.orderService.headerAddItem;
+      return this.$schemas.appointment.headerAddItem;
     },
   },
   methods: {
@@ -94,7 +73,7 @@ export default {
     },
     add() {
       if (!this.collaborator.id) {
-        this.$noty.error('Selecione o Colaborador');
+        this.$noty.error(this.l.notifications.error);
         return;
       }
 
