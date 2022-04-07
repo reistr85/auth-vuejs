@@ -15,8 +15,13 @@ import TextFieldMoney from '@/components/vuetify/TextFieldMoney';
 
 export default {
   name: 'Totalizers',
-  inject: ['appointment'],
   components: { Row, Col, TextFieldInteger, TextFieldMoney },
+  props: {
+    appointment: {
+      type: Object,
+      required: true,
+    }
+  },
   computed: {
     l () {
       return this.$locales.pt.appointments.CreateAppointment.totalizers;

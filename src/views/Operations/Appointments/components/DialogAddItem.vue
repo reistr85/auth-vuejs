@@ -77,10 +77,15 @@ export default {
         return;
       }
 
+      this.serviceSelected.service_id = this.serviceSelected.id;
+      delete this.serviceSelected.id;
+
       this.$emit('handleActionModal', {
         action: 'addItem',
         item: {
-          ...this.serviceSelected, collaborator: { ...this.collaborator, name: this.collaborator.text } }
+          ...this.serviceSelected,
+          collaborator: { ...this.collaborator, name: this.collaborator.text }
+        }
       });
     }
   }

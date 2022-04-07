@@ -20,7 +20,7 @@
         :label="l.date"
         :disabled='appointmentFinished' />
     </Col>
-    <Col cols='12' md='2'>
+    <Col cols='12' md='1'>
       <TextFieldInteger
         v-model="appointment.appointment_number"
         :label="l.number"
@@ -33,7 +33,7 @@
         :items='collaborators'
         :readonly='appointmentFinished' />
     </Col>
-    <Col cols='12' md='2'>
+    <Col cols='12' md='3'>
       <AutoComplete
         v-model="appointment.customer_id"
         :label="l.customer"
@@ -55,7 +55,6 @@ import { times } from '@/utils/options';
 
 export default {
   name: 'AppointmentData',
-  inject: ['appointment'],
   components: {
     Row,
     Col,
@@ -65,6 +64,10 @@ export default {
     TextFieldInteger,
   },
   props: {
+    appointment: {
+      type: Object,
+      required:  true
+    },
     collaborators: {
       type: Array,
       default: () => []
@@ -89,7 +92,3 @@ export default {
   mixins: [TypePageMixin],
 };
 </script>
-
-<style>
-
-</style>

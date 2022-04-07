@@ -1,7 +1,6 @@
 import AppointmentSchema from './schemas/AppointmentSchema';
 import ListAppointments from './pages/ListAppointments';
 import CreateAppointment from './pages/CreateAppointment';
-// import CreateAppointment from './pages/CreateAppointment';
 
 export default [
   {
