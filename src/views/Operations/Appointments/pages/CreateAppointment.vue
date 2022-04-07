@@ -15,14 +15,14 @@
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly :title="l.actions.title" class="mt-3" multiple :icon="$icons.list">
-        <Button :label="l.actions.save" color="primary" rounded :icon="$icons.save" :disabled="appointmentFinished" @click="save()" />
+        <Button :label="l.actions.save" color="primary" rounded :icon="$icons.save" :disabled="appointmentFinished" @click="dialogConfirmation = true" />
       </ExpansionPanel>
 
       <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1100)">
         <DialogAddItem slot="content" v-bind="dialogProps" @update:dialog="dialog = $event" @handleActionModal="handleActionModal" />
       </Dialog>
 
-      <DialogConfirmation :dialog="dialogConfirmation" :message="l.actions.message" @noAction="dialogConfirmation = false" @yesAction="save" />
+      <DialogConfirmation :dialog="dialogConfirmation" :message="l.actions.message" :maxWidth="parseInt(530)" @noAction="dialogConfirmation = false" @yesAction="save" />
     </PageContent>
   </div>
 </template>
@@ -210,11 +210,6 @@ export default {
         this.appointment.items_destroy.push(item);
       }
       this.totalizers();
-    },
-    confirmSave(data) {
-      const { status } = data;
-      this.appointment.status = status;
-      this.dialogConfirmation = true;
     },
     save() {
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
