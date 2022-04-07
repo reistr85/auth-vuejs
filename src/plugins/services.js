@@ -8,7 +8,7 @@ import BanksService, { BanksCommands } from '@/views/Financial/Banks/services/Ba
 import BankMovementsService from '@/views/Financial/Banks/services/BankMovementsService';
 
 // Operations
-import AppointmentsService from '@/views/Operations/Appointments/services/AppointmentsService';
+import AppointmentsService, { AppointmentCommands } from '@/views/Operations/Appointments/services/AppointmentsService';
 import CalendarsService from '@/views/Operations/Calendars/services/CalendarsService';
 import OrderServicesService, { OrderServiceCommands } from '@/views/Operations/OrderServices/services/OrderServicesService';
 
@@ -35,7 +35,7 @@ const api = Object.freeze({
   bankMovements: BankMovementsService,
 
   // Operations
-  appointments: AppointmentsService,
+  appointments: { ...AppointmentsService, ...AppointmentCommands() },
   calendars: CalendarsService,
   orderServices: { ...OrderServicesService, ...OrderServiceCommands() },
 
@@ -46,6 +46,7 @@ const api = Object.freeze({
   services: ServicesService,
   boxes: { ...BoxesService, ...BoxesCommands() },
   boxMovements: BoxMovementsService,
+
   // Settings
   companies: { ...CompaniesService, ...CompaniesCommands() },
   users: UsersService,

@@ -1,5 +1,6 @@
 const statusAppointment = [
   { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Confirmado', value: 'confirmed' },
   { id: 2, text: 'Concluido', value: 'done' },
   { id: 3, text: 'Cancelado', value: 'canceled' },
 ];
@@ -348,6 +349,57 @@ const typeStatusAccountPaymentInstallments = [
   { id: 2, text: 'Pago', value: 'paid' },
 ];
 
+const times = [
+  { id: 1, text: '00:00', value: '00:00:00' },
+  { id: 2, text: '00:30', value: '00:30:00' },
+  { id: 3, text: '01:00', value: '01:00:00' },
+  { id: 4, text: '01:30', value: '01:30:00' },
+  { id: 5, text: '02:00', value: '02:00:00' },
+  { id: 6, text: '02:30', value: '02:30:00' },
+  { id: 7, text: '03:00', value: '03:00:00' },
+  { id: 8, text: '03:30', value: '03:30:00' },
+  { id: 9, text: '04:00', value: '04:00:00' },
+  { id: 10, text: '04:30', value: '04:30:00' },
+  { id: 11, text: '05:00', value: '05:00:00' },
+  { id: 12, text: '05:30', value: '05:30:00' },
+  { id: 13, text: '06:00', value: '06:00:00' },
+  { id: 14, text: '06:30', value: '06:30:00' },
+  { id: 15, text: '07:00', value: '07:00:00' },
+  { id: 16, text: '07:30', value: '07:30:00' },
+  { id: 17, text: '08:00', value: '08:00:00' },
+  { id: 18, text: '08:30', value: '08:30:00' },
+  { id: 19, text: '09:00', value: '09:00:00' },
+  { id: 20, text: '09:30', value: '09:30:00' },
+  { id: 21, text: '10:00', value: '10:00:00' },
+  { id: 22, text: '10:30', value: '10:30:00' },
+  { id: 23, text: '11:00', value: '11:00:00' },
+  { id: 24, text: '11:30', value: '11:30:00' },
+  { id: 25, text: '12:00', value: '12:00:00' },
+  { id: 26, text: '12:30', value: '12:30:00' },
+  { id: 27, text: '13:00', value: '13:00:00' },
+  { id: 28, text: '13:30', value: '13:30:00' },
+  { id: 29, text: '14:00', value: '14:00:00' },
+  { id: 30, text: '14:30', value: '14:30:00' },
+  { id: 31, text: '15:00', value: '15:00:00' },
+  { id: 32, text: '15:30', value: '15:30:00' },
+  { id: 33, text: '16:00', value: '16:00:00' },
+  { id: 34, text: '16:30', value: '16:30:00' },
+  { id: 35, text: '17:00', value: '17:00:00' },
+  { id: 36, text: '17:30', value: '17:30:00' },
+  { id: 37, text: '18:00', value: '18:00:00' },
+  { id: 38, text: '18:30', value: '18:30:00' },
+  { id: 39, text: '19:00', value: '19:00:00' },
+  { id: 40, text: '19:30', value: '19:30:00' },
+  { id: 41, text: '20:00', value: '20:00:00' },
+  { id: 42, text: '20:30', value: '20:30:00' },
+  { id: 43, text: '21:00', value: '21:00:00' },
+  { id: 44, text: '21:30', value: '21:30:00' },
+  { id: 45, text: '22:00', value: '22:00:00' },
+  { id: 46, text: '22:30', value: '22:30:00' },
+  { id: 47, text: '23:00', value: '23:00:00' },
+  { id: 48, text: '23:30', value: '23:30:00' },
+];
+
 
 export {
   statusAppointment,
@@ -367,5 +419,6 @@ export {
   originTypeBankMovements,
   typeBankMovements,
   typeStatusAccountPayments,
-  typeStatusAccountPaymentInstallments
+  typeStatusAccountPaymentInstallments,
+  times
 };

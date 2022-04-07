@@ -73,7 +73,7 @@
           @handleActionModal="handleActionModal" />
       </Dialog>
 
-      <DialogConfirmation :dialog="dialogConfirmation" @noAction="dialogConfirmation = false" @yesAction="save" />
+      <DialogConfirmation :dialog="dialogConfirmation" :message="dialogConfirmationMessage" @noAction="dialogConfirmation = false" @yesAction="save" />
     </PageContent>
   </div>
 </template>
@@ -100,7 +100,7 @@ const dialogComponents  = Object.freeze({
 });
 
 export default {
-  name: 'CreateCreateOrderService',
+  name: 'CreateOrderService',
   components: {
     PageHeader,
     PageContent,
@@ -136,6 +136,7 @@ export default {
       dialogComponent: null,
       dialogProps: {},
       dialogConfirmation: false,
+      dialogConfirmationMessage: '',
     };
   },
   mounted() {
@@ -145,7 +146,7 @@ export default {
     if (this.typePage === this.typePageOptions.create)
       this.getLastOrderNumber();
 
-    const appointment_id = this.$route.params.appointment_id;
+    const appointment_id = this.$route.query.appointment_id;
     if (appointment_id)
       this.getAppointment(appointment_id);
 
@@ -341,7 +342,9 @@ export default {
       this.totalizers();
     },
     confirmSave(data) {
-      this.order_service.status = data.status;
+      const { status } = data;
+      this.order_service.status = status;
+      this.dialogConfirmationMessage = status === this.$enums.orderServiceStatus.PENDING ? this.l.dialogConfirmation.message.save : this.l.dialogConfirmation.message.saveFinish;
       this.dialogConfirmation = true;
     },
     save() {
@@ -374,6 +377,7 @@ export default {
         order_number: data.order_number,
         customer_id: data.customer_id,
         collaborator_id: data.collaborator_id,
+        appointment_id: (this.$route.query.appointment_id || data.appointment_id) || null,
         quantity_services: data.quantity_services,
         subtotal: data.subtotal,
         discount: data.discount,
