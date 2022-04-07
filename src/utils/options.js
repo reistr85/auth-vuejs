@@ -1,5 +1,6 @@
 const statusAppointment = [
   { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Confirmado', value: 'confirmed' },
   { id: 2, text: 'Concluido', value: 'done' },
   { id: 3, text: 'Cancelado', value: 'canceled' },
 ];

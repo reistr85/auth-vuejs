@@ -83,7 +83,8 @@ const COLORS_STATUS = Object.freeze({
   canceled: 'primary',
   finished: 'success',
   open: 'secondary',
-  closed: 'primary'
+  closed: 'primary',
+  confirmed: 'secondary'
 });
 
 const COLORS_SITUATION = Object.freeze({

@@ -33,7 +33,7 @@ export default {
   totalizers: {
     qtdServices: 'Qtde. Itens',
     title: 'Totalizadores',
-    subtotal: 'Subb Total',
+    subtotal: 'Sub Total',
     discount: 'Desconto',
     amount: 'Valor Final',
   },

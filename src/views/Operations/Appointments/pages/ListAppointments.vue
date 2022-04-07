@@ -15,16 +15,5 @@ import DynamicListPage from '@/components/dynamics/DynamicListPage';
 export default {
   name: 'ListAppointments',
   components: { PageHeader, PageContent, DynamicListPage },
-  props: {},
-  data() {
-    return {
-    };
-  },
-  mounted() {
-  }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

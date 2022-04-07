@@ -11,18 +11,18 @@
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly :title="l.totalizers.title" class="mt-3" multiple :icon="$icons.list">
-        <Totalizers />
+        <Totalizers :appointment="appointment" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly :title="l.actions.title" class="mt-3" multiple :icon="$icons.list">
-        <Button :label="l.actions.save" color="primary" rounded :icon="$icons.save" :disabled="appointmentFinished" @click="save()" />
+        <Button :label="l.actions.save" color="primary" rounded :icon="$icons.save" :disabled="appointmentFinished" @click="dialogConfirmation = true" />
       </ExpansionPanel>
 
       <Dialog no-title no-actions :dialog="dialog"  :maxWidth="parseInt(1100)">
         <DialogAddItem slot="content" v-bind="dialogProps" @update:dialog="dialog = $event" @handleActionModal="handleActionModal" />
       </Dialog>
 
-      <DialogConfirmation :dialog="dialogConfirmation" :message="l.actions.message" @noAction="dialogConfirmation = false" @yesAction="save" />
+      <DialogConfirmation :dialog="dialogConfirmation" :message="l.actions.message" :maxWidth="parseInt(530)" @noAction="dialogConfirmation = false" @yesAction="save" />
     </PageContent>
   </div>
 </template>
@@ -82,11 +82,6 @@ export default {
       dialogConfirmation: false,
     };
   },
-  provide() {
-    return {
-      appointment:  this.appointment,
-    };
-  },
   mounted() {
     if (this.typePage === this.typePageOptions.show)
       this.getAppointment();
@@ -117,7 +112,7 @@ export default {
       return new Date().toISOString().substr(0, 10);
     },
     appointmentDataProps () {
-      return { customers: this.customers, collaborators: this.collaborators, appointmentFinished:  this.appointmentFinished };
+      return { appointment: this.appointment, customers: this.customers, collaborators: this.collaborators, appointmentFinished:  this.appointmentFinished };
     },
     ItemsProps () {
       return { actionType: 'openDialog', componentType: 'items', loading:  this.loading, headers: this.headersItems,
@@ -189,19 +184,21 @@ export default {
     },
     addItem(item) {
       this.appointment.items.push({
-        id: item.id,
+        id: item.id || null,
         collaborator: item.collaborator,
         collaborator_id: item.collaborator?.id,
-        amount: item.sale_value,
-        amount_formatted: item.sale_value_formatted,
-        discount: 0,
-        discount_formatted: 'R$0,00',
-        number_item: this.setNumberItem(),
-        quantity: 1,
         service: { name: item.name },
-        service_id: item.id,
+        service_id: item.service_id,
+        unity_value: item.sale_value,
+        unity_value_formatted: item.sale_value_formatted,
+        quantity: 1,
         subtotal: item.sale_value,
         subtotal_formatted: item.sale_value_formatted,
+        discount: 0,
+        discount_formatted: 'R$0,00',
+        amount: item.sale_value,
+        amount_formatted: item.sale_value_formatted,
+        number_item: this.setNumberItem(),
         newItem: true,
       });
       this.totalizers();
@@ -213,11 +210,6 @@ export default {
         this.appointment.items_destroy.push(item);
       }
       this.totalizers();
-    },
-    confirmSave(data) {
-      const { status } = data;
-      this.appointment.status = status;
-      this.dialogConfirmation = true;
     },
     save() {
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
@@ -234,9 +226,9 @@ export default {
     },
     update() {
       const { id } = this.$route.params;
-      this.$api.orderServices.update(id, this.appointment).then(() => {
+      this.$api.appointments.update(id, this.appointment).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
-        this.$router.push({ name: this.$schemas.orderService.routes.list.name });
+        this.$router.push({ name: this.$schemas.appointment.routes.list.name });
       }).catch((err) => {
         this.$noty.error(messageErrors(err));
       }).finally(() => {
@@ -245,12 +237,13 @@ export default {
     },
     mountForm(data) {
       this.appointment = {
-        order_date: data.order_date,
-        order_number: data.order_number,
+        appointment_date: data.appointment_date,
+        initial_hour: data.initial_hour,
+        final_hour: data.final_hour,
+        appointment_number: data.appointment_number,
         customer_id: data.customer_id,
         collaborator_id: data.collaborator_id,
-        appointment_id: (this.$route.query.appointment_id || data.appointment_id) || null,
-        quantity_services: data.quantity_services,
+        qtd_items: data.qtd_items,
         subtotal: data.subtotal,
         discount: data.discount,
         amount: data.amount,
@@ -258,9 +251,7 @@ export default {
         total_payable: 0,
         status: data.status,
         items: [],
-        payments: [],
         items_destroy: [],
-        payments_destroy: [],
       };
 
       this.appointment.items = data.items.map((item) => {
@@ -270,6 +261,8 @@ export default {
           collaborator: { id: item.collaborator.id, name: item.collaborator.name },
           collaborator_id: item.collaborator.id,
           service: { name: item.service.name },
+          unity_value: item.unity_value,
+          unity_value_formatted: item.unity_value_formatted,
           subtotal: item.subtotal,
           subtotal_formatted: item.subtotal_formatted,
           quantity: item.quantity,
@@ -280,41 +273,25 @@ export default {
           newItem: false
         };
       });
-
-      this.appointment.payments = data.payments.map((item) => {
-        return {
-          id: item.id,
-          bank_id: item.bank_id,
-          payment_date: item.payment_date,
-          payment_date_formatted: item.payment_date_formatted,
-          payment_method: { description: item.payment_method.description },
-          payment_method_id: item.payment_method_id,
-          card_flag: { description: item.card_flag?.description },
-          card_flag_id: item.card_flag_id,
-          amount_paid: item.amount_paid,
-          amount_paid_formatted: item.amount_paid_formatted,
-          newItem: false
-        };
-      });
-
       this.totalizers();
     },
     setNumberItem() {
       return this.appointment.items.length + 1;
     },
     totalizers() {
-      let quantity_services = 0;
+      let qtd_items = 0;
       let subtotal = 0;
       let discount = 0;
       let amount = 0;
       this.appointment.items.forEach((item) => {
-        quantity_services += 1;
+        console.log(item);
+        qtd_items += 1;
         subtotal += parseFloat(item.subtotal);
         discount += parseFloat(item.discount);
         amount += parseFloat(item.amount);
       });
 
-      this.appointment.quantity_services = quantity_services;
+      this.appointment.qtd_items = qtd_items;
       this.appointment.subtotal = subtotal;
       this.appointment.discount = discount;
       this.appointment.amount = amount;
