@@ -19,8 +19,8 @@
           </v-col>
           <v-col cols="12" md="4">
             <DataPicker
-              v-model="installment.date_payment"
-              label="Data de Pagamento"
+              v-model="installment.date_receive"
+              label="Data de Recebimento"
               :readonly="disabled" />
           </v-col>
           <v-col cols="12" md="4">
@@ -108,7 +108,7 @@ export default {
   mounted() {
     this.boxLocal.value = this.installment.box;
     this.getBanks();
-    this.getPaymentMethods();
+    this.getReceiveMethods();
   },
   watch: {
     ['installment.box']: {
@@ -138,7 +138,7 @@ export default {
         this.loading = false;
       });
     },
-    getPaymentMethods(params = {}) {
+    getReceiveMethods(params = {}) {
       const payload = { ...params, filter: { type: this.$enums.typeAllType.PAYMENT_METHOD }};
       this.$api.allTypes.filters(payload).then((res) => {
         this.paymentMethods = res.data.data.map((item) => {
@@ -155,7 +155,7 @@ export default {
     save(installment) {
       if (!this.$refs.form.validate()) return;
       installment.box = this.boxLocal.value == true ? this.$enums.typeYesNo.YES : this.$enums.typeYesNo.NO;
-      this.$api.accountPaymentInstallments.update(installment.id, installment).then(() => {
+      this.$api.accountReceiveInstallments.update(installment.id, installment).then(() => {
       }).catch((error) => {
         this.$noty.error(error);
       }).finally(() => {

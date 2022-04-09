@@ -30,6 +30,11 @@ const typePerson = Object.freeze({
   PJ: 'J',
 });
 
+const typeYesNo = Object.freeze({
+  YES: 'yes',
+  NO: 'no',
+});
+
 const typeAllType = Object.freeze({
   CATEGORY: 'category',
   SUB_CATEGORY: 'sub-category',
@@ -43,12 +48,20 @@ const accountPaymentStatus = Object.freeze({
   SETTLED: 'settled',
 });
 
+const accountReceiveStatus = Object.freeze({
+  PENDING: 'pending',
+  PARTIAL: 'partial',
+  SETTLED: 'settled',
+});
+
 export {
   appointmentStatus,
   orderServiceStatus,
   typeRegister,
   typeMovement,
   typePerson,
+  typeYesNo,
   typeAllType,
-  accountPaymentStatus
+  accountPaymentStatus,
+  accountReceiveStatus
 };

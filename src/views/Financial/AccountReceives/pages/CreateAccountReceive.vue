@@ -2,9 +2,9 @@
   <div>
     <PageHeader :schema="schema" />
     <PageContent>
-      <ExpansionPanel v-model="expModel" readonly title="Dados Contas à Pagar" multiple :icon="$icons.list">
-        <AccountPaymentData
-          :account-payment="accountPayment"
+      <ExpansionPanel v-model="expModel" readonly title="Dados Contas à Receber" multiple :icon="$icons.list">
+        <AccountReceiveData
+          :account-receive="accountReceive"
           :registers="registers"
           :installment-type="installment_type"
           :account-finished="disabledButton"
@@ -17,12 +17,12 @@
           :headers="headerInstallments"
           :items="installments"
           :disabledButton="disabledButton"
-          @getInstallments="getAccountPaymentInstallments"
+          @getInstallments="getAccountReceiveInstallments"
           @handleAction="handleAction"/>
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Totais" class="mt-3" multiple :icon="$icons.list">
-        <AccountPaymentTotals :account-payment="accountPaymentTotals" />
+        <AccountReceiveTotals :account-receive="accountReceiveTotals" />
       </ExpansionPanel>
 
       <ExpansionPanel v-model="expModel" readonly title="Ações" class="mt-3" multiple :icon="$icons.list">
@@ -40,7 +40,7 @@
           class="ml-3"
           :icon="$icons.save"
           :disabled="disabledButton"
-          @click="handleAction({ type: 'confirmSave', params: { status: $enums.accountPaymentStatus.PENDING }})" />
+          @click="handleAction({ type: 'confirmSave', params: { status: $enums.accountReceiveStatus.PENDING }})" />
       </ExpansionPanel>
 
       <Dialog no-actions :dialog="dialog"  :maxWidth="parseInt(1000)">
@@ -76,24 +76,24 @@ import PageContent from '@/components/PageContent';
 import ExpansionPanel from '@/components/vuetify/ExpansionPanel';
 import TypePageMixin from '@/mixins/TypePageMixin';
 import Button from '@/components/vuetify/Button';
-import AccountPaymentSchema from '../schemas/AccountPaymentSchema';
-import AccountPaymentsService from '../services/AccountPaymentsService';
-import AccountPaymentData from '../components/AccountPaymentData';
-import AccountPaymentTotals from '../components/AccountPaymentTotals';
+import AccountReceiveSchema from '../schemas/AccountReceiveSchema';
+import AccountReceivesService from '../services/AccountReceivesService';
+import AccountReceiveData from '../components/AccountReceiveData';
+import AccountReceiveTotals from '../components/AccountReceiveTotals';
 import DialogEditInstallment from '../components/DialogEditInstallment';
 import GenericDataTable from '../components/GenericDataTable';
 import Dialog from '@/components/vuetify/Dialog';
 import DialogConfirmation from '@/components/DialogConfirmation';
 
 export default {
-  name: 'CreateAccountPayment',
+  name: 'CreateAccountReceive',
   components: {
     PageHeader,
     PageContent,
     ExpansionPanel,
     Button,
-    AccountPaymentData,
-    AccountPaymentTotals,
+    AccountReceiveData,
+    AccountReceiveTotals,
     GenericDataTable,
     DialogEditInstallment,
     Dialog,
@@ -101,19 +101,19 @@ export default {
   },
   data() {
     return {
-      schema: AccountPaymentSchema,
-      service: AccountPaymentsService,
+      schema: AccountReceiveSchema,
+      service: AccountReceivesService,
       expModel: [0],
       loading: false,
       loadingPaid: false,
       accountFinished: false,
       disabledButton: false,
-      accountPayment: {
+      accountReceive: {
         date_issuance: new Date().toISOString().substr(0, 10),
         installments: [],
       },
       installments: [],
-      accountPaymentTotals: {},
+      accountReceiveTotals: {},
       registers: [],
       installment_type: [],
       dialog: false,
@@ -129,7 +129,7 @@ export default {
   },
   mounted() {
     if (this.typePage === this.typePageOptions.show)
-      this.getAccountPayment();
+      this.getAccountReceive();
 
     this.getRegisters();
     this.getInstallmentTypes();
@@ -142,37 +142,37 @@ export default {
       return this.$route.params.id;
     },
     headerInstallments() {
-      return this.schema.account_payment_installments;
+      return this.schema.account_receive_installments;
     },
   },
   mixins: [TypePageMixin],
   methods: {
-    getAccountPayment() {
+    getAccountReceive() {
       this.loading = true;
-      this.$api.accountPayments.show(this.id).then((res) => {
-        this.accountPayment = res;
+      this.$api.accountReceives.show(this.id).then((res) => {
+        this.accountReceive = res;
         this.loading = false;
         this.totalizers(res);
-        if (this.accountPayment.status === 'settled') this.disabledButton = true;
+        if (this.accountReceive.status === 'settled') this.disabledButton = true;
       }).catch(() => {
         this.loading = false;
       });
-      this.getAccountPaymentInstallments();
+      this.getAccountReceiveInstallments();
     },
-    getAccountPaymentInstallments(options = {}) {
+    getAccountReceiveInstallments(options = {}) {
       this.loading = true;
       const payload = {
         page: options.page || 1,
       };
-      this.$api.accountPayments.getAllAccountPaymentInstallmentsByAccountPaymentId(this.id, payload).then((res) => {
+      this.$api.accountReceives.getAllAccountReceiveInstallmentsByAccountReceiveId(this.id, payload).then((res) => {
         this.installments = res.data.map((item) => {
           return {
             id: item.id,
             description: item.description,
             date_due: item.date_due,
             date_due_formatted: item.date_due_formatted,
-            date_payment: item.date_payment,
-            date_payment_formatted: item.date_payment_formatted,
+            date_receive: item.date_receive,
+            date_receive_formatted: item.date_receive_formatted,
             bank_id: item.bank_id,
             bank_formatted: item.box == this.$enums.typeYesNo.YES? 'Caixa' : item.bank_formatted,
             box: item.box,
@@ -189,13 +189,13 @@ export default {
         this.loading = false;
       });
     },
-    totalizers(accountPayment) {
+    totalizers(accountReceive) {
       let amount_pending = 0;
-      amount_pending = parseFloat(accountPayment.amount) - parseFloat(accountPayment.amount_payment);
-      this.accountPaymentTotals = {
-        amount: accountPayment.amount,
+      amount_pending = parseFloat(accountReceive.amount) - parseFloat(accountReceive.amount_receive);
+      this.accountReceiveTotals = {
+        amount: accountReceive.amount,
         amount_pending: amount_pending,
-        amount_payment: accountPayment.amount_payment,
+        amount_receive: accountReceive.amount_receive,
       };
     },
     getRegisters() {
@@ -233,17 +233,17 @@ export default {
       this[type](params);
     },
     confirmSave(data) {
-      this.accountPayment.status = data.status;
+      this.accountReceive.status = data.status;
       this.dialogConfirmation = true;
       this.propsConfirmation = { message: this.typePage === this.typePageOptions.create
-        ? this.l.accountPayments.createAccountPayment.messages.save.create
-        : this.l.accountPayments.createAccountPayment.messages.save.update };
+        ? this.l.accountReceives.createAccountReceive.messages.save.create
+        : this.l.accountReceives.createAccountReceive.messages.save.update };
     },
     save() {
       this.typePage === this.typePageOptions.create ? this.create() : this.update();
     },
     create() {
-      this.$api.accountPayments.create(this.accountPayment).then(() => {
+      this.$api.accountReceives.create(this.accountReceive).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
         this.$router.push({ name: this.schema.routes.list.name });
       }).catch((err) => {
@@ -254,7 +254,7 @@ export default {
     },
     update() {
       const { id } = this.$route.params;
-      this.$api.accountPayments.update(id, this.accountPayment).then(() => {
+      this.$api.accountReceives.update(id, this.accountReceive).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.$router.push({ name: this.schema.routes.list.name });
       }).catch((err) => {
@@ -271,47 +271,46 @@ export default {
       this.loading = true;
       const payload = {
         installment_type_id: id,
-        amount: this.accountPayment.amount,
+        amount: this.accountReceive.amount,
       };
       this.$api.installmentTypes.generateInstallments(payload).then((res) => {
         let parcel = 0;
         this.installments = res.data.map((item) => {
           parcel += 1;
           return {
-            description: this.accountPayment.title + '-' + parcel + '/' + res.data.length,
+            description: this.accountReceive.title + '-' + parcel + '/' + res.data.length,
             date_due: item.due_date,
             date_due_formatted: item.due_date_formatted,
-            date_payment: item.due_payment,
-            date_payment_formatted: item.due_payment_formatted,
+            date_receive: item.due_receive,
+            date_receive_formatted: item.due_receive_formatted,
             bank_id: 1,
             amount: item.value,
             amount_formatted: item.value_formatted,
             status: 'pending',
           };
         });
-        this.accountPayment.installments = this.installments;
+        this.accountReceive.installments = this.installments;
         this.loading = false;
       }).catch(() => {
         this.loading = false;
       });
     },
     handleItemEdit(params) {
-      console.log('params', params);
       this.dialog = true;
       this.dialogEditInstallment = true;
       this.dialogComponent = DialogEditInstallment;
       this.propsEditInstallment = {
-        disabled: params.item.status == this.$enums.accountPaymentStatus.SETTLED ? true : false,
+        disabled: params.item.status == this.$enums.accountReceiveStatus.SETTLED ? true : false,
         box: {
           label: 'Usar Caixa',
           value: params.item.box == this.$enums.typeYesNo.YES ? true : false
         },
         installment: {
-          account_payment_id: this.accountPayment.id,
+          account_receive_id: this.accountReceive.id,
           id: params.item.id,
           description: params.item.description,
           date_due: params.item.date_due,
-          date_payment: params.item.date_payment,
+          date_receive: params.item.date_receive,
           payment_method_id: params.item.payment_method_id,
           bank_id: params.item.bank_id,
           box: params.item.box == this.$enums.typeYesNo.YES ? true : false,
@@ -323,17 +322,17 @@ export default {
     handleActionInstallmentSave() {
       this.dialog = false;
       this.dialogEditInstallment = false;
-      this.getAccountPaymentInstallments();
+      this.getAccountReceiveInstallments();
     },
     handleItemPaid(params) {
       this.dialogPaid = true;
-      this.messagePaid = 'Deseja fazer o pagamento da parcela ' + params.item.description;
+      this.messagePaid = 'Deseja fazer o recebimento da parcela ' + params.item.description;
       this.installmentPaid = {
-        account_payment_id: this.accountPayment.id,
+        account_receive_id: this.accountReceive.id,
         id: params.item.id,
         description: params.item.description,
         date_due: params.item.date_due,
-        date_payment: params.item.date_payment,
+        date_receive: params.item.date_receive,
         payment_method_id: params.item.payment_method_id,
         box: params.item.box,
         bank_id: params.item.bank_id,
@@ -344,7 +343,7 @@ export default {
     itemPaid() {
       this.loading = true;
       this.loadingPaid = true;
-      this.$api.accountPaymentInstallments.update(this.installmentPaid.id, this.installmentPaid).then(() => {
+      this.$api.accountReceiveInstallments.update(this.installmentPaid.id, this.installmentPaid).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.loading = false;
         this.loadingPaid = false;
@@ -355,7 +354,7 @@ export default {
         this.loading = false;
         this.loadingPaid = false;
         this.dialogPaid = false;
-        this.getAccountPayment();
+        this.getAccountReceive();
       });
     }
   }
