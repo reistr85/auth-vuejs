@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class='d-flex justify-end mb-5'>
+    <div class="d-flex justify-end mb-5">
       <Button
-        label='Adicionar'
+        label="Adicionar"
         small
-        color='secondary'
+        color="secondary"
         rounded
-        class='btn-actions'
-        :icon='$icons.plus'
-        :disabled='orderFinished'
+        class="btn-actions"
+        :icon="$icons.plus"
+        :disabled="orderFinished"
         @click="$emit('handleAction', handleAction(actionType))" />
     </div>
     <DataTable
@@ -20,11 +20,11 @@
       :items='items'
       :loading='loading'>
 
-      <template v-slot:actions='{ props }'>
+      <template v-slot:actions="{ props }">
         <Button
-          type-icon color='red'
-          :icon='$icons.destroy'
-          :disabled='orderFinished || !props.item.newItem'
+          type-icon color="red"
+          :icon="$icons.destroy"
+          :disabled="orderFinished || !props.item.newItem"
           @click="$emit('handleAction', handleAction('itemDestroy', props))" />
       </template>
     </DataTable>
@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     handleAction(type, data = null) {
-      return { type, params: { ...data, componentType: this.componentType}};
+      return { type, params: { ...data, componentType: this.componentType} };
     }
   }
 };

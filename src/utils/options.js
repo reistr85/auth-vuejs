@@ -400,6 +400,17 @@ const times = [
   { id: 48, text: '23:30', value: '23:30:00' },
 ];
 
+const typeStatusAccountReceives = [
+  { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Parcial', value: 'partial' },
+  { id: 3, text: 'Quitado', value: 'settled' },
+];
+
+const typeStatusAccountReceiveInstallments = [
+  { id: 1, text: 'Pendente', value: 'pending' },
+  { id: 2, text: 'Pago', value: 'paid' },
+];
+
 
 export {
   statusAppointment,
@@ -420,5 +431,7 @@ export {
   typeBankMovements,
   typeStatusAccountPayments,
   typeStatusAccountPaymentInstallments,
-  times
+  times,
+  typeStatusAccountReceives,
+  typeStatusAccountReceiveInstallments
 };

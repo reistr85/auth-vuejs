@@ -11,8 +11,7 @@ import BreakPointMixin from '@/mixins/BreakPointMixin';
 export default {
   name: 'ContentMain',
   data() {
-    return {
-    };
+    return {};
   },
   mixins: [BreakPointMixin],
 };

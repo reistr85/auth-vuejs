@@ -2,7 +2,8 @@
 import { routes as allTypes } from '@/views/Registers/AllTypes';
 import { routes as appointments } from '@/views/Operations/Appointments';
 import { routes as auth } from '@/views/Auth';
-import { routes as accountPayments } from '@/views/Financial/AccountPayments';
+import { routes as accountpayments } from '@/views/Financial/AccountPayments';
+import { routes as accountreceives } from '@/views/Financial/AccountReceives';
 import { routes as banks } from '@/views/Financial/Banks';
 import { routes as boxes } from '@/views/Financial/Boxes';
 import { routes as calendars } from '@/views/Operations/Calendars';
@@ -19,7 +20,8 @@ export default [
   ...allTypes,
   ...appointments,
   ...auth,
-  ...accountPayments,
+  ...accountpayments,
+  ...accountreceives,
   ...banks,
   ...boxes,
   ...calendars,

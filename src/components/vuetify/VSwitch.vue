@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'Swit',
+  name: 'Switch',
   props: {
     label: {
       type: String,
