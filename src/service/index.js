@@ -1,12 +1,13 @@
 import axios from 'axios';
-axios.defaults.baseURL = process.env.VUE_APP_URL_API;
+
+axios.defaults.baseURL = process.env.VUE_APP_NODE_ENV === 'development' ? 'api/v1' : process.env.VUE_APP_URL_API;
 
 axios.interceptors.request.use(
   async config => {
-    const access_token = localStorage.getItem(`${process.env.VUE_APP_NAME}.access_token`);
+    const token = localStorage.getItem(`${process.env.VUE_APP_NAME}.token`);
 
     config.headers = {
-      'Authorization': `Bearer ${access_token}`,
+      'Authorization': `Bearer ${token}`,
       'ApiKey': process.env.VUE_APP_API_KEY,
     };
 
@@ -21,10 +22,9 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status == 401){
-      localStorage.removeItem(`${process.env.VUE_APP_NAME}.access_token`);
+    if (error.response?.status == 401){
+      localStorage.removeItem(`${process.env.VUE_APP_NAME}.token`);
       localStorage.removeItem(`${process.env.VUE_APP_NAME}.user`);
-      localStorage.removeItem(`${process.env.VUE_APP_NAME}.company`);
 
       const url = window.location.href.toString().split('/');
 

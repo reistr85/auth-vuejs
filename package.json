@@ -21,6 +21,7 @@
     "vuetify-mask": "^1.1.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.3.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
@@ -30,6 +31,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "jest": "^27.4.7",
+    "miragejs": "^0.1.45",
     "regenerator-runtime": "^0.13.9",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
@@ -51,12 +53,36 @@
     },
     "rules": {
       "semi": "error",
-      "quotes": [2, "single", { "avoidEscape": true }],
-      "indent": ["error", 2],
-      "space-before-blocks": ["error", { "functions": "always" }],
-      "arrow-spacing": ["error"],
-      "keyword-spacing": ["error", { "before": true, "after": true }],
-      "no-trailing-spaces": ["error"]
+      "quotes": [
+        2,
+        "single",
+        {
+          "avoidEscape": true
+        }
+      ],
+      "indent": [
+        "error",
+        2
+      ],
+      "space-before-blocks": [
+        "error",
+        {
+          "functions": "always"
+        }
+      ],
+      "arrow-spacing": [
+        "error"
+      ],
+      "keyword-spacing": [
+        "error",
+        {
+          "before": true,
+          "after": true
+        }
+      ],
+      "no-trailing-spaces": [
+        "error"
+      ]
     },
     "overrides": [
       {

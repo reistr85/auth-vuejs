@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Vue from 'vue';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
@@ -9,6 +10,10 @@ import Schemas from './plugins/schemas';
 import './plugins/vuetify-mask.js';
 import './plugins/toasts';
 import router from './router';
+import { makeServer } from './server/index';
+
+Vue.config.productionTip = false;
+
 
 Vue.config.productionTip = false;
 Vue.use(Icons);
@@ -16,6 +21,10 @@ Vue.use(Services);
 Vue.use(Enums);
 Vue.use(Locales);
 Vue.use(Schemas);
+
+if (process.env.VUE_APP_NODE_ENV === 'development') {
+  makeServer();
+}
 
 new Vue({
   vuetify,
