@@ -51,10 +51,10 @@ export default {
         cell_phone: cell_phone
       },
       user: {
-        name: '',
-        email: '',
-        cell_phone: '',
-        password: '',
+        name: 'Renan Reis',
+        email: 'reistr85@gmail.com',
+        cell_phone: '84988481941',
+        password: '12345678',
         first: true,
       },
       loading: false,
@@ -77,7 +77,17 @@ export default {
   methods: {
     register() {
       if (this.valid) {
-        this.loading = true;
+        this.$api.auth.register(this.user).then(() => {
+          this.loading = false;
+          // window.location = process.env.VUE_APP_URL;
+        }).catch(() => {
+          this.loading = false;
+          // if (err.response.status === 401) {
+          //   this.$noty.error(this.l.noty.emailOrPasswordInvalid);
+          // } else {
+          //   this.$noty.error(this.l.noty.errorLogin);
+          // }
+        });
       }
     }
   }

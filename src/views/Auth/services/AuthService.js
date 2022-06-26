@@ -12,6 +12,15 @@ const AuthService = {
       });
     });
   },
+  register(payload) {
+    return new Promise((resolve, reject) => {
+      axios.post('auth/register', payload).then((res) => {
+        resolve(res);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  },
   logout() {
     return new Promise((resolve) => {
       this.clearLocalStorage();

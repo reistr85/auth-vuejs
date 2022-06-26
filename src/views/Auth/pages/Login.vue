@@ -9,7 +9,6 @@
 
 <script>
 import { isLogged } from '@/utils';
-import AuthService from '../services/AuthService';
 import BreakPointMixin from '@/mixins/BreakPointMixin';
 import LoginFormLeft from './components/LoginFormLeft';
 import LoginFormRight from './components/LoginFormRight';
@@ -35,7 +34,7 @@ export default {
   methods: {
     login(user) {
       this.loading = true;
-      AuthService.login(user).then(() => {
+      this.$api.auth.login(user).then(() => {
         this.loading = false;
         window.location = process.env.VUE_APP_URL;
       }).catch((err) => {
