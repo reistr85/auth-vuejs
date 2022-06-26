@@ -9,7 +9,7 @@ export default (server) => {
       return new Response(401, {}, { errors: { message: 'unauthorized' } });
     }
 
-    return { user: response.attrs, token: process.env.VUE_APP_TOKEN_JWT };
+    return new Response(200, {}, { user: response.attrs, token: process.env.VUE_APP_TOKEN_JWT });
   });
   server.post('/auth/register', (schema, request) => {
     const attrs = JSON.parse(request.requestBody);

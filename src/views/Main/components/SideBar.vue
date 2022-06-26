@@ -19,7 +19,7 @@
           <template v-slot:activator>
             <v-list-item-content>
               <v-list-item-title>
-                <Icon :icon="item.icon" class="mr-3" dense />
+                <Icon :icon="$icons[item.icon]" class="mr-3" dense />
                 {{ item.title }}
               </v-list-item-title>
             </v-list-item-content>
@@ -28,7 +28,7 @@
           <v-list-item v-for="child in item.items" :class="getClassMenuActive(child.active)" :key="child.title" link @click="menuNavigator(item, child)">
             <v-list-item-content>
               <v-list-item-title color="primary" :prepend-icon="item.icon">
-                <Icon :icon="child.icon" class="mr-3" dense />
+                <Icon :icon="$icons[child.icon]" class="mr-3" dense />
                 {{ child.title }}
               </v-list-item-title>
             </v-list-item-content>
@@ -62,19 +62,7 @@ export default {
     };
   },
   mounted() {
-    const menuGroupName = localStorage.getItem(`${process.env.VUE_APP_NAME}.menuGroupName`);
-
-    if (menuGroupName) {
-      this.items.forEach((item) => {
-        if (item.menuGroupName === menuGroupName) {
-          item.active = true;
-          item.items.forEach((c) => {
-            c.active = false;
-            if (c.route === this.$route.name) c.active = true;
-          });
-        }
-      });
-    }
+    this.openMenuGroup();
   },
   mixins: [BreakPointMixin],
   methods: {
@@ -100,6 +88,21 @@ export default {
       }
 
       return '';
+    },
+    openMenuGroup () {
+      const menuGroupName = localStorage.getItem(`${process.env.VUE_APP_NAME}.menuGroupName`);
+
+      if (menuGroupName) {
+        this.items.forEach((item) => {
+          if (item.menuGroupName === menuGroupName) {
+            item.active = true;
+            item.items.forEach((c) => {
+              c.active = false;
+              if (c.route === this.$route.name) c.active = true;
+            });
+          }
+        });
+      }
     }
   }
 };

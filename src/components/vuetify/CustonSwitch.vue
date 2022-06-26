@@ -1,10 +1,12 @@
 <template>
-  <v-switch v-bind="$attrs" v-on="$listeners" :label="label"></v-switch>
+  <div>
+    <v-switch v-bind="$attrs" v-on="$listeners" :label="label"></v-switch>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Switch',
+  name: 'CustonSwitch',
   props: {
     label: {
       type: String,

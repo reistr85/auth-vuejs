@@ -30,7 +30,7 @@
       :show-expand="schema.showExpand"
       :loading="loading"
       :headers="headers"
-      :items="localItems.data"
+      :items="localItems[schema.domain]"
       :options.sync="options"
       :server-items-length="totalLocalItems"
       :single-select="schema.singleSelect"
@@ -174,6 +174,7 @@ export default {
   watch: {
     options: {
       handler () {
+        this.getAll();
         (this.searchChips.length || this.fixedFilter) ? this.searchItems(this.searches) : this.getAll();
       },
       deep: true,
@@ -242,7 +243,7 @@ export default {
 
       this.service.index(params).then((res) => {
         this.localItems = res.data;
-        this.totalLocalItems = res.data.total;
+        this.totalLocalItems = 5;
         this.loading = false;
 
         if (this.schema.business != undefined)
