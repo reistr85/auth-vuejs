@@ -116,13 +116,9 @@ export function messageErrors(err) {
   let message = '';
 
   if(err.status === 422){
-    if(err.data.message) {
-      message += `<li class="item-error">${err.data.message}</li>`;
-    } else {
-      Object.keys(err.data.errors).forEach(function(key) {
-        message += `<li class="item-error">${err.data.errors[key][0]}</li>`;
-      });
-    }
+    Object.keys(err.data.errors).forEach(function(key) {
+      message += `<li class="item-error">${err.data.errors[key]}</li>`;
+    });
   }else{
     message += `<li class="item-error">Erro desconhecido, tente novamente.</li>`;
   }

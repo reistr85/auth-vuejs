@@ -15,6 +15,12 @@ const AuthService = {
   register(payload) {
     return new Promise((resolve, reject) => {
       axios.post('auth/register', payload).then((res) => {
+        this.login({ email: payload.email, password: payload.password }).then(() => {
+          window.location = process.env.VUE_APP_URL;
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
         resolve(res);
       }).catch((err) => {
         reject(err);

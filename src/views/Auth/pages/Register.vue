@@ -31,7 +31,7 @@
 
 <script>
 import { google, facebook } from '@/utils/icons';
-import { isLogged } from '@/utils';
+import { isLogged, messageErrors } from '@/utils';
 import { mask } from 'vue-the-mask';
 import { cell_phone } from '@/utils/masks';
 import Button from '@/components/vuetify/Button';
@@ -79,14 +79,13 @@ export default {
       if (this.valid) {
         this.$api.auth.register(this.user).then(() => {
           this.loading = false;
-          // window.location = process.env.VUE_APP_URL;
-        }).catch(() => {
+        }).catch((err) => {
           this.loading = false;
-          // if (err.response.status === 401) {
-          //   this.$noty.error(this.l.noty.emailOrPasswordInvalid);
-          // } else {
-          //   this.$noty.error(this.l.noty.errorLogin);
-          // }
+          if (err.response.status === 422) {
+            this.$noty.error(messageErrors(err.response));
+          } else {
+            this.$noty.error(this.l.noty.errorRegister);
+          }
         });
       }
     }
