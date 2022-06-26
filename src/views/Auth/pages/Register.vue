@@ -36,7 +36,6 @@ import { mask } from 'vue-the-mask';
 import { cell_phone } from '@/utils/masks';
 import Button from '@/components/vuetify/Button';
 import TextField from '@/components/vuetify/TextField';
-import { CompaniesCommands } from '@/views/Settings/Companies/services/CompaniesService';
 
 export default {
   name: 'Login',
@@ -79,15 +78,6 @@ export default {
     register() {
       if (this.valid) {
         this.loading = true;
-
-        CompaniesCommands().store(this.user).then(() => {
-          this.loading = false;
-          this.$router.push({ name: 'home' });
-          // window.location = process.env.VUE_APP_URL;
-        }).catch((err) => {
-          this.loading = false;
-          console.error(err);
-        });
       }
     }
   }

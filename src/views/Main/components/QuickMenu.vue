@@ -9,13 +9,8 @@
 <script>
 import eventBus from '@/utils/eventBus';
 import Dialog from '@/components/vuetify/Dialog';
-import WizardAppointment from '@/views/Operations/Appointments/components/WizardAppointment';
-import WizardCalendar from '@/views/Operations/Calendars/components/WizardCalendar';
 
-const typesComponents = {
-  appointment: WizardAppointment,
-  calendar: WizardCalendar
-};
+const typesComponents = {};
 
 export default {
   name: 'QuickMenu',
