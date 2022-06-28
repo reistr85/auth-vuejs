@@ -5,6 +5,7 @@ import { typeUser } from '@/utils/options';
 
 export default {
   domain: 'users',
+  domainSingle: 'user',
   title: 'Usuários',
   description: 'Lista de todos os usuários cadastrados no sistema',
   createBtn: 'Novo Usuário',
@@ -80,6 +81,7 @@ export default {
     {
       title: 'Dados do Usuário',
       icon: users,
+      openGroup: true,
       items: [
         {
           type: 'text',
@@ -134,7 +136,7 @@ export default {
           disabled: false,
         },
       ],
-    }
+    },
   ],
   footer: [
     {

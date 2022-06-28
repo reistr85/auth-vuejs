@@ -12,6 +12,10 @@ import './plugins/toasts';
 import router from './router';
 import { makeServer } from './server/index';
 
+if (process.env.VUE_APP_NODE_ENV === 'development') {
+  makeServer();
+}
+
 Vue.config.productionTip = false;
 
 
@@ -21,10 +25,6 @@ Vue.use(Services);
 Vue.use(Enums);
 Vue.use(Locales);
 Vue.use(Schemas);
-
-if (process.env.VUE_APP_NODE_ENV === 'development') {
-  makeServer();
-}
 
 new Vue({
   vuetify,

@@ -63,6 +63,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
         }
         resolve(item);
       }).catch((err) => {
+        console.error(`DynamicService Show error: ${err}`);
         reject(messageErrors(err.response));
       });
     });
@@ -75,6 +76,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       axios.post(`${endpoint}`, params).then(() => {
         resolve(true);
       }).catch((err) => {
+        console.error(`DynamicService Create error: ${err}`);
         reject(messageErrors(err.response));
       });
     });

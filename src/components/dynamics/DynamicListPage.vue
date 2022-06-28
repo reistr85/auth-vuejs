@@ -1,26 +1,10 @@
 <template>
   <div>
-    <div>
-      <div class="mb-3">
-        <slot name="custom-header" />
-      </div>
-      <div class="mb-5 d-flex justify-space-between">
-        <div class="d-flex flex-wrap  justify-start">
-          <div v-for="(item, index) in searchChips" :key="index">
-            <Chip
-              v-if="!item.noChip"
-              dense
-              close
-              class="mr-2"
-              :label="`${item.label}: ${item.formattedValue}`"
-              @click:close="closeChip(item)" />
-          </div>
-        </div>
-        <div>
-          <SearchListPage ref="searchListPage" :items="schema.filters.items" v-if="schema.filters.has" @searchItems="searchItems" />
-        </div>
-      </div>
-    </div>
+    <DynamicListPageHeader
+      :schema="schema"
+      :searchChips="searchChips"
+      @searchItems="searchItems"
+      @closeChip="closeChip" />
 
     <v-data-table
       v-model="selected"
@@ -73,9 +57,9 @@
 import { search, view, destroy, dotsVertical, filter, cancel, check } from '@/utils/icons';
 import { typeSituation } from '@/utils/options';
 import DialogConfirmation from '@/components/DialogConfirmation';
-import SearchListPage from './components/SearchListPage';
 import ActionsListPage from './components/ActionsListPage';
 import Chip from '@/components/vuetify/Chip';
+import DynamicListPageHeader from './components/DynamicListPageHeader';
 
 const COLORS_STATUS = Object.freeze({
   pending: 'warning',
@@ -99,7 +83,7 @@ const COLORS_USE_NICKNAME = Object.freeze({
 
 export default {
   name: 'DynamicListPage',
-  components: { DialogConfirmation, SearchListPage, Chip, ActionsListPage },
+  components: { DialogConfirmation, Chip, ActionsListPage, DynamicListPageHeader },
   props: {
     schema: {
       type: Object,

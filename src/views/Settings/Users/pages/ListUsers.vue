@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="$schemas.user" />dddd
     <PageContent>
-      <DynamicListPage :schema="schema" :service="service" />
+      <DynamicListPage :schema="$schemas.user" :service="$api.users" />
     </PageContent>
   </div>
 </template>
@@ -10,18 +10,10 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import UserSchema from '../schemas/UserSchema';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
-import UsersService from '../services/UsersService';
 
 export default {
   name: 'ListUser',
-  components: { PageHeader, PageContent, DynamicListPage },
-  data() {
-    return {
-      schema: UserSchema,
-      service: UsersService,
-    };
-  },
+  components: { PageHeader, PageContent, DynamicListPage }
 };
 </script>

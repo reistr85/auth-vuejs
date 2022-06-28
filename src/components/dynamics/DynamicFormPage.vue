@@ -34,7 +34,7 @@
       </v-expansion-panels>
 
       <div class="mt-5">
-        <Button label="Voltar" color="light" class="mr-2" rounded :icon="icons.arrowLeft" :loading="loadingSave" @click="$router.back()" />
+        <Button label="Voltar" color="light" class="mr-2" rounded :icon="icons.arrowLeft" @click="$router.back()" />
         <Button label="Salvar" color="primary"  rounded :icon="icons.save" :loading="loadingSave" @click="save" />
       </div>
     </v-form>
@@ -45,7 +45,6 @@
 import axios from 'axios';
 import { mask } from 'vue-the-mask';
 import { save, arrowLeft } from '@/utils/icons';
-import locales from '@/locales/pt-BR';
 import TypePageMixin from '@/mixins/TypePageMixin';
 import Icon from '@/components/vuetify/Icon';
 import typesComponents from '@/utils/typesComponents';
@@ -111,17 +110,16 @@ export default {
     getEvents(item) {
       return  { change: () => this.changeBusiness(item) };
     },
-    show() {
+    async show() {
       const { id } = this.$route.params;
       this.service.show(id).then((res) => {
         let form = {};
         this.schema.fields.forEach((group) => {
           group.items.forEach((item) => {
-            form[item.name] = res[item.name];
+            form[item.name] = res[this.schema.domainSingle][item.name];
             if (item.type === 'select' && item.multiple) form[item.name] = res[item.name].split(', ');
           });
         });
-
         this.localItem = form;
         this.address = res.address || {};
         this.handlerBeforeForm();
@@ -146,10 +144,11 @@ export default {
     create() {
       if (this.schema.formAddress) this.localItem.address = this.address;
       this.service.create(this.localItem).then(() => {
-        this.$noty.success(locales.alerts.createdRegister);
+        this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
         this.$router.back();
         this.loadingSave = false;
       }).catch((err) => {
+        console.error(`Create error: ${err}`);
         this.loadingSave = false;
         this.$noty.error(err);
       });

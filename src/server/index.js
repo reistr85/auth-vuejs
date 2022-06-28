@@ -20,7 +20,7 @@ export function makeServer({ environment = 'development' } = {}) {
     },
 
     routes() {
-      this.namespace = 'api/v1';
+      this.namespace = '/api/v1';
       authRoutes(this);
       usersRoutes(this);
     },

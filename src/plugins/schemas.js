@@ -7,7 +7,7 @@ import UserSchema from '@/views/Settings/Users/schemas/UserSchema';
 const schemas = Object.freeze({
   auth: AuthSchema,
   home: HomeSchema,
-  users: UserSchema,
+  user: UserSchema,
 });
 
 export default {

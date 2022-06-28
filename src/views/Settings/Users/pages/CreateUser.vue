@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="schema" />
+    <PageHeader :schema="$schemas.user" />
     <PageContent>
-      <DynamicFormPage :schema="schema" :service="service" />
+      <DynamicFormPage :schema="$schemas.user" :service="$api.users" />
     </PageContent>
   </div>
 </template>
@@ -10,18 +10,13 @@
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageContent from '@/components/PageContent';
-import UserSchema from '../schemas/UserSchema';
-import UsersService from '../services/UsersService';
 import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 
 export default {
   name: 'CreateUser',
   components: { PageHeader, PageContent, DynamicFormPage },
   data() {
-    return {
-      schema: UserSchema,
-      service: UsersService,
-    };
-  },
+    return {};
+  }
 };
 </script>
