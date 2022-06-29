@@ -1,6 +1,11 @@
 const account = 'mdi-account-plus-outline';
+const accountTie = 'mdi-account-tie';
 const accountSettings = 'mdi-account-settings-outline';
+const accountSwitch = 'mdi-account-switch';
 const address = 'mdi-map-marker-outline';
+const agent = 'mdi-briefcase-account';
+const alarm = 'mdi-alarm';
+const allTypes = 'mdi-arrow-expand-all';
 const arrowLeft = 'mdi-arrow-left-bold';
 const arrowRight = 'mdi-arrow-right-bold';
 const chevronLeft = 'mdi-chevron-left';
@@ -11,6 +16,7 @@ const calendar = 'mdi-calendar-month-outline';
 const calendarEdit = 'mdi-calendar-edit';
 const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
+const certificateOutline = 'mdi-certificate-outline';
 const chart = 'mdi-chart-box-outline';
 const check = 'mdi-check-bold';
 const clipboardArrowUpOutline = 'mdi-clipboard-arrow-up-outline';
@@ -18,6 +24,7 @@ const clipboardArrowDownOutline = 'mdi-clipboard-arrow-down-outline';
 const clipboardPlusOutline = 'mdi-clipboard-plus-outline';
 const clipboardMinusOutline = 'mdi-clipboard-minus-outline';
 const clipboardFlowOutline = 'mdi-clipboard-flow-outline';
+const clockListOutline = 'mdi-clipboard-text-clock-outline';
 const close = 'mdi-close';
 const copy = 'mdi-content-copy';
 const databaseSearch = 'mdi-database-search';
@@ -61,8 +68,13 @@ const web = 'mdi-web';
 
 export {
   account,
+  accountTie,
   accountSettings,
+  accountSwitch,
   address,
+  agent,
+  alarm,
+  allTypes,
   arrowLeft,
   arrowRight,
   bank,
@@ -71,6 +83,7 @@ export {
   calendarEdit,
   cancel,
   cellPhone,
+  certificateOutline,
   chart,
   check,
   chevronLeft,
@@ -80,6 +93,7 @@ export {
   clipboardPlusOutline,
   clipboardMinusOutline,
   clipboardFlowOutline,
+  clockListOutline,
   close,
   copy,
   databaseSearch,
