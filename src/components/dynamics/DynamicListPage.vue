@@ -226,8 +226,9 @@ export default {
       };
 
       this.service.index(params).then((res) => {
+        const { total } = res.data;
         this.localItems = res.data;
-        this.totalLocalItems = 5;
+        this.totalLocalItems = total;
         this.loading = false;
 
         if (this.schema.business != undefined)

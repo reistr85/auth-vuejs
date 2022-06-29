@@ -11,7 +11,7 @@ export default (server) => {
     updated_at: '2022-06-10 00:00:00',
     deleted_at: null,
   });
-  server.createList('user', 5);
+  server.createList('user', 30);
 };
 
 export const factory = {

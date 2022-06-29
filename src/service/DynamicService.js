@@ -25,7 +25,7 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       page = params.page;
       totalItemsPerPage = params.per_page;
       const { sortBy, sortDesc } = params;
-      url = `${endpoint}?page=${page}&per_page=${totalItemsPerPage}`;
+      url = `${endpoint}?page=${page}&perPage=${totalItemsPerPage}`;
       if (sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
     }
 

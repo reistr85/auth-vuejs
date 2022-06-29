@@ -1,6 +1,11 @@
+import { pagination } from '../pagination';
+
 export default (server) => {
-  server.get('/users', (schema) => {
-    return schema.users.all();
+  server.get('/users', (schema, request) => {
+    const users = schema.users.all();
+    const { page, perPage } = request.queryParams;
+
+    return pagination('users', users, page, perPage);
   });
   server.get('/users/:id', (schema, request) => {
     const { id } = request.params;
@@ -30,5 +35,14 @@ export default (server) => {
     const response = schema.users.create(user);
 
     return { user: response.attrs };
+  });
+  server.delete('/users/:id', (schema, request) => {
+    const { id } = request.params;
+    const user = schema.users.find(id);
+
+    if (!user) {
+      return new Response(404, {}, { errors: {} });
+    }
+    user.destroy();
   });
 };

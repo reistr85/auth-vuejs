@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader :schema="$schemas.user" />dddd
+    <PageHeader :schema="$schemas.user" />
     <PageContent>
       <DynamicListPage :schema="$schemas.user" :service="$api.users" />
     </PageContent>
