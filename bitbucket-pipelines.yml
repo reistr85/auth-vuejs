@@ -1,0 +1,19 @@
+image: node:16.15.0
+
+pipelines:
+  branches:
+    deploy-s3-static:
+      - step:
+          name: "Deploy to Production"
+          deployment: production
+          script:
+            - bash my-script.sh
+            - yarn
+            - yarn build
+            - pipe: atlassian/aws-s3-deploy:1.1.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                S3_BUCKET: $S3_BUCKET
+                LOCAL_PATH: '$(pwd)/dist'
