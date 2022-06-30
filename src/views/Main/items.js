@@ -12,7 +12,6 @@ export default [
     icon: 'allTypes',
     title: 'Tipos Gerais',
     items: [
-      { icon: 'calendarEdit', title: 'Tipo de Agendamento', route: 'typeSchedules', active: false },
       { icon: 'financial', title: 'Forma Pagamento', route: 'paymentMethods', active: false },
     ],
   },
@@ -33,6 +32,9 @@ export default [
     menuGroupName: 'schedules',
     icon: 'alarm',
     title: 'Agendamentos',
-    items: [{ icon: 'clockListOutline', title: 'Agendamentos', route: 'schedules', active: false }],
+    items: [
+      { icon: 'calendarEdit', title: 'Tipo de Agendamento', route: 'typeSchedules', active: false },
+      { icon: 'clockListOutline', title: 'Agendamentos', route: 'schedules', active: false },
+    ],
   },
 ];
