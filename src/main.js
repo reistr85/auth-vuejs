@@ -12,6 +12,7 @@ import './plugins/toasts';
 import router from './router';
 import { makeServer } from './server/index';
 
+console.log('environment', process.env.VUE_APP_NODE_ENV);
 if (process.env.VUE_APP_NODE_ENV === 'development') {
   makeServer();
 }
