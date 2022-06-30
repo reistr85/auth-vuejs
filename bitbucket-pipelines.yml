@@ -7,7 +7,7 @@ pipelines:
           name: "Deploy to Production"
           deployment: production
           script:
-            - bash my-script.sh
+            - bash environments.sh
             - yarn
             - yarn build
             - pipe: atlassian/aws-s3-deploy:1.1.0
