@@ -29,7 +29,6 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       if (sortBy) url += `&sort_by=${sortBy}&sort=${sortDesc}`;
     }
 
-
     if (!params)
       url = `${endpoint}`;
 

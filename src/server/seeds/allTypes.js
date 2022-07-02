@@ -2,6 +2,7 @@ export default (server) => {
   server.create('allType', {
     name: 'Externo',
     description: 'Agendamento Externo',
+    type: 'typeSchedule',
     value: 'external',
     situation: 'active',
     created_at: new Date(),
@@ -11,6 +12,7 @@ export default (server) => {
   server.create('allType', {
     name: 'Fora do Ar',
     description: 'Agendamento Fora do Ar',
+    type: 'typeSchedule',
     value: 'offAir',
     situation: 'active',
     created_at: new Date(),
@@ -20,6 +22,7 @@ export default (server) => {
   server.create('allType', {
     name: 'Interno',
     description: 'Agendamento Interno',
+    type: 'typeSchedule',
     value: 'internal',
     situation: 'active',
     created_at: new Date(),
@@ -29,6 +32,7 @@ export default (server) => {
   server.create('allType', {
     name: 'Vídeo',
     description: 'Agendamento por Vídeo Conferência',
+    type: 'typeSchedule',
     value: 'video',
     situation: 'active',
     created_at: new Date(),

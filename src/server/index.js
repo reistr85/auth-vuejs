@@ -1,9 +1,11 @@
 import { createServer, Model, Factory } from 'miragejs';
-import users, { factory } from './seeds/users';
+import users, { factoryUsers } from './seeds/users';
 import allTypes from './seeds/allTypes';
+import registers, { factoryRegisters } from './seeds/registers';
 import authRoutes from './routes/auth';
 import usersRoutes from './routes/users';
 import allTypesRoutes from './routes/allTypes';
+import registersRoutes from './routes/registers';
 
 export function makeServer({ environment = 'development' } = {}) {
   let server = createServer({
@@ -12,15 +14,18 @@ export function makeServer({ environment = 'development' } = {}) {
     models: {
       user: Model,
       allType: Model,
+      register: Model,
     },
 
     factories: {
-      user: Factory.extend(factory),
+      user: Factory.extend(factoryUsers),
+      register: Factory.extend(factoryRegisters),
     },
 
     seeds(server) {
       users(server);
       allTypes(server);
+      registers(server);
     },
 
     routes() {
@@ -28,6 +33,7 @@ export function makeServer({ environment = 'development' } = {}) {
       authRoutes(this);
       usersRoutes(this);
       allTypesRoutes(this);
+      registersRoutes(this);
     },
   });
 

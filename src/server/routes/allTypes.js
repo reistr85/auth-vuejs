@@ -1,12 +1,14 @@
 import { pagination } from '../pagination';
 import { softDelete } from '../softDelete';
+import { filter } from '../filter';
 
 export default (server) => {
   server.get('/allTypes', (schema, request) => {
     const allTypes = schema.allTypes.all();
     const { page, perPage } = request.queryParams;
 
-    allTypes.models = softDelete('allTypes', allTypes);
+    allTypes.models = filter(request.queryParams, allTypes);
+    allTypes.models = softDelete(allTypes);
     return pagination('allTypes', allTypes, page, perPage);
   });
   server.get('/allTypes/:id', (schema, request) => {

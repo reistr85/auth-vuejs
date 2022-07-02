@@ -77,7 +77,8 @@ export default {
 
       item.active = true;
       child.active = true;
-      this.$router.push({ name: child.route }).catch(() => {});
+
+      this.$router.push({ name: child.route, query: child.params?.query, }).catch(() => {});
     },
     drawerEvent() {
       this.drawer = !this.drawer;

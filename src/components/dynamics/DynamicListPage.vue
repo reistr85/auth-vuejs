@@ -1,6 +1,7 @@
 <template>
   <div>
     <DynamicListPageHeader
+      ref="dynamicListPageHeader"
       :schema="schema"
       :searchChips="searchChips"
       @searchItems="searchItems"
@@ -226,9 +227,9 @@ export default {
       };
 
       this.service.index(params).then((res) => {
-        const { total } = res.data;
+        const { totalItems } = res.data;
         this.localItems = res.data;
-        this.totalLocalItems = total;
+        this.totalLocalItems = totalItems;
         this.loading = false;
 
         if (this.schema.business != undefined)
@@ -270,22 +271,12 @@ export default {
           noChip: search[key].noChip
         });
       });
-
-      const payload = { params: { ...this.paramsPaginator }, filter, };
-      this.getFilters(payload);
     },
     closeChip(value) {
-      this.searchChips = this.searchChips.filter((item) => {
-        if (item.name === value.name) this.$refs.searchListPage.localItem[item.name] = '';
-        return item.name != value.name;
-      });
-
-      let payload = {};
-      this.searchChips.forEach((item) => {
-        payload[item.name] = item;
-      });
-
-      this.searchItems(payload);
+      this.searchChips = this.searchChips.filter(data => data.value != value.value);
+      this.$refs.dynamicListPageHeader.$children[0].localItem[value.name] = '';
+      this.$refs.dynamicListPageHeader.$children[0].localItem[value.formattedValue] = '';
+      delete this.$refs.dynamicListPageHeader.$children[0].form[value.name];
     },
     openDialogDestroy(item) {
       this.selected.push(item);

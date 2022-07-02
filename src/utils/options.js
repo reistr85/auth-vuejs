@@ -1,3 +1,9 @@
+const typeRegister = [
+  {id: 1, text: 'Indicação', value: 'indication'},
+  {id: 2, text: 'Cliente', value: 'customer'},
+  {id: 3, text: 'Agente', value: 'agent'},
+];
+
 const typeUser = [
   {id: 1, text: 'Administrador', value: 'admin'},
   {id: 2, text: 'Gerente', value: 'manager'},
@@ -47,6 +53,7 @@ const UF = [
 ];
 
 export {
+  typeRegister,
   typeUser,
   typeYesNo,
   typeSituation,
