@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { dateTime } from '../dateTime';
 
 export default (server) => {
   server.create('register', {
@@ -7,8 +8,8 @@ export default (server) => {
     cell_phone: '84988481941',
     type: 'customer',
     situation: 'active',
-    created_at: '2022-06-10 00:00:00',
-    updated_at: '2022-06-10 00:00:00',
+    created_at: dateTime,
+    updated_at: dateTime,
     deleted_at: null,
   });
   server.createList('register', 10);

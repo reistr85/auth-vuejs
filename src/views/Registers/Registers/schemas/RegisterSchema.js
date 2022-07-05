@@ -2,6 +2,7 @@ import { typePageOptions } from '@/utils';
 import { text, users } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeRegister } from '@/utils/options';
+import { cell_phone } from '@/utils/masks';
 
 export default {
   domain: 'registers',
@@ -120,13 +121,15 @@ export default {
           disabled: false,
         },
         {
-          type: 'text',
+          type: 'simpleMask',
           name: 'cell_phone',
           formattedName: 'cell_phone_formatted',
           label: 'Celular',
           align: '',
           md: '3',
           rules: [required],
+          inputMask: cell_phone,
+          outputMask: '###########',
           list: true,
           readonly: false,
           disabled: false,
