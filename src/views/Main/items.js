@@ -22,7 +22,8 @@ export default [
     title: 'Cadastros',
     items: [
       { icon: 'accountTie', title: 'Cadastros', route: 'registers', active: false },
-      { icon: 'certificateOutline', title: 'Certificados', route: 'indications', active: false },
+      { icon: 'certificate', title: 'Tipos de Certificado', route: 'certificateTypes', active: false },
+      { icon: 'certificateOutline', title: 'Certificados', route: 'certificates', active: false },
     ],
   },
   {

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="$schemas.typeSchedule" />
+    <PageHeader :schema="$schemas.certificateType" />
     <PageContent>
-      <DynamicListPage :schema="$schemas.typeSchedule" :service="$api.typeSchedules" fixed-filter
+      <DynamicListPage :schema="$schemas.certificateType" :service="$api.certificateTypes" fixed-filter
         :fixedFilterParams="fixedFilterParams" />
     </PageContent>
   </div>
@@ -14,11 +14,11 @@ import PageContent from '@/components/PageContent';
 import DynamicListPage from '@/components/dynamics/DynamicListPage';
 
 export default {
-  name: 'ListTypeSchedules',
+  name: 'ListCertificateTypes',
   components: { PageHeader, PageContent, DynamicListPage },
   computed: {
     fixedFilterParams () {
-      return { name: 'type', value: 'typeSchedule', fixedFilter: true };
+      return { name: 'type', value: 'certificateType', fixedFilter: true };
     }
   },
 };

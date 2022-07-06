@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="$schemas.typeSchedule" />
+    <PageHeader :schema="$schemas.certificate" />
     <PageContent>
-      <DynamicFormPage :schema="$schemas.typeSchedule" :service="$api.typeSchedules" />
+      <DynamicFormPage :schema="$schemas.certificate" :service="$api.certificates" />
     </PageContent>
   </div>
 </template>
@@ -13,7 +13,10 @@ import PageContent from '@/components/PageContent';
 import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 
 export default {
-  name: 'CreateTypeSchedule',
+  name: 'CreateCertificate',
   components: { PageHeader, PageContent, DynamicFormPage },
+  data() {
+    return {};
+  }
 };
 </script>

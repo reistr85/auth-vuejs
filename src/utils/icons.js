@@ -16,6 +16,7 @@ const calendar = 'mdi-calendar-month-outline';
 const calendarEdit = 'mdi-calendar-edit';
 const cancel = 'mdi-cancel';
 const cellPhone = 'mdi-cellphone';
+const certificate = 'mdi-certificate';
 const certificateOutline = 'mdi-certificate-outline';
 const chart = 'mdi-chart-box-outline';
 const check = 'mdi-check-bold';
@@ -83,6 +84,7 @@ export {
   calendarEdit,
   cancel,
   cellPhone,
+  certificate,
   certificateOutline,
   chart,
   check,
