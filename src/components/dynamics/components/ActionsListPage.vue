@@ -27,14 +27,8 @@
       </v-card>
     </v-menu>
 
-    <v-btn
-      v-if="!schema.listActions.noShow"
-      icon
-      class="my-1"
-      fab
-      color="secondary"
-      x-small
-      :to="{name: schema.routes.show.name, params: {id: dataListProps.item.id}}">
+    <v-btn v-if="!schema.listActions.noShow" icon class="my-1" fab color="secondary" x-small
+      :to="{ name: getRouteName, params: { id: dataListProps.item.id } }">
       <v-icon dark>{{ icons.view }}</v-icon>
     </v-btn>
 
@@ -68,5 +62,11 @@ export default {
       required: true,
     }
   },
+  computed: {
+    getRouteName () {
+      return this.$route.meta.typeAllType ? this.schema.routes[this.$route.meta.typeAllType].show.name :
+        this.schema.routes.show.name;
+    }
+  }
 };
 </script>

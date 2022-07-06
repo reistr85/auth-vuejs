@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="$schemas.typeSchedule" />
+    <PageHeader :schema="$schemas.allType" />
     <PageContent>
-      <DynamicListPage :schema="$schemas.typeSchedule" :service="$api.typeSchedules" fixed-filter
+      <DynamicListPage :schema="$schemas.allType" :service="$api.allTypes" fixed-filter
         :fixedFilterParams="fixedFilterParams" />
     </PageContent>
   </div>
@@ -18,7 +18,7 @@ export default {
   components: { PageHeader, PageContent, DynamicListPage },
   computed: {
     fixedFilterParams () {
-      return { name: 'type', value: 'paymentMethod', fixedFilter: true };
+      return { name: 'type', value: this.$route.meta.typeAllType, fixedFilter: true };
     }
   },
 };
