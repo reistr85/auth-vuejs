@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader :schema="$schemas.typeSchedule" />
+    <PageHeader :schema="$schemas.allType" />
     <PageContent>
-      <DynamicFormPage :schema="$schemas.typeSchedule" :service="$api.typeSchedules" />
+      <DynamicFormPage :schema="$schemas.allType" :service="$api.allTypes" />
     </PageContent>
   </div>
 </template>
@@ -15,8 +15,9 @@ import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 export default {
   name: 'CreateAllTypes',
   components: { PageHeader, PageContent, DynamicFormPage },
-  data() {
-    return {};
+  mounted () {
+    this.$schemas.allType.fields[0].items[0].default = 'certificateType';
+    console.log(this.$schemas.allType.fields[0].items[0].default);
   }
 };
 </script>

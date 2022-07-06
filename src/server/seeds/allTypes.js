@@ -91,4 +91,24 @@ export default (server) => {
     updated_at: dateTime,
     deleted_at: null,
   });
+  server.create('allType', {
+    name: '1 Ano',
+    description: 'Perídoro de 1 Ano',
+    type: 'certificatePeriod',
+    value: null,
+    situation: 'active',
+    created_at: dateTime,
+    updated_at: dateTime,
+    deleted_at: null,
+  });
+  server.create('allType', {
+    name: '2 Ano',
+    description: 'Perídoro de 2 Ano',
+    type: 'certificatePeriod',
+    value: null,
+    situation: 'active',
+    created_at: dateTime,
+    updated_at: dateTime,
+    deleted_at: null,
+  });
 };

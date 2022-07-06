@@ -48,7 +48,7 @@ export default {
       type: String,
       default: null
     },
-    createBtnRoute: {
+    createRouteName: {
       type: String,
       default: null
     }
@@ -66,7 +66,7 @@ export default {
       return this.createBtn || this.schema.createBtn;
     },
     createBtnRouteName() {
-      return this.createBtnRoute || this.schema.routes.create.name;
+      return this.createRouteName || this.schema.routes.create.name;
     }
   },
   mixins: [TypePageMixin, BreakPointMixin],

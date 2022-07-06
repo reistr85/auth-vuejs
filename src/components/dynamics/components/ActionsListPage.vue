@@ -28,16 +28,11 @@
     </v-menu>
 
     <v-btn v-if="!schema.listActions.noShow" icon class="my-1" fab color="secondary" x-small
-      :to="{ name: getRouteName, params: { id: dataListProps.item.id } }">
+      :to="{ name: routeName, params: { id: dataListProps.item.id } }">
       <v-icon dark>{{ icons.view }}</v-icon>
     </v-btn>
 
-    <v-btn
-      icon v-if="!schema.listActions.noDestroy"
-      class="my-1"
-      fab
-      color="red"
-      x-small
+    <v-btn icon v-if="!schema.listActions.noDestroy" class="my-1" fab color="red" x-small
       :disabled="dataListProps.item.destroyDisabled"
       @click="$emit('openDialogDestroy', dataListProps)">
       <v-icon dark>{{ icons.destroy }}</v-icon>
@@ -63,7 +58,7 @@ export default {
     }
   },
   computed: {
-    getRouteName () {
+    routeName () {
       return this.$route.meta.typeAllType ? this.schema.routes[this.$route.meta.typeAllType].show.name :
         this.schema.routes.show.name;
     }
