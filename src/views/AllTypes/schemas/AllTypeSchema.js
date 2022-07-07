@@ -1,25 +1,6 @@
 import { typePageOptions } from '@/utils';
 import { text, users } from '@/utils/icons';
 import { required } from '@/utils/rules';
-// import { typeAllType } from '@/utils/options';
-
-// const ROUTE_NAMES = {
-//   certificateType: 'tipos-certificados',
-//   certificatePeriod: 'periodos-certificados',
-//   paymentMethod: 'forma-pagamentos',
-//   typeSchedule: 'tipo-agendamento',
-// };
-
-// const getRouteName = () => {
-//   let routeName = '';
-//   Object.keys(ROUTE_NAMES).forEach((key) => {
-//     if (ROUTE_NAMES[key] === window.location.href.split('/')[3]) {
-//       console.log(12);
-//       routeName = key;
-//     }
-//   });
-//   return routeName;
-// };
 
 export default {
   domain: 'allTypes',
@@ -131,22 +112,6 @@ export default {
       icon: users,
       openGroup: true,
       items: [
-        // {
-        //   type: 'select',
-        //   name: 'type',
-        //   formattedName: 'type_formatted',
-        //   label: 'Tipo',
-        //   align: '',
-        //   md: '3',
-        //   rules: [required],
-        //   list: true,
-        //   readonly: true,
-        //   disabled: false,
-        //   items: typeAllType,
-        //   itemText: 'text',
-        //   itemValue: 'value',
-        //   default: getRouteName(),
-        // },
         {
           type: 'text',
           name: 'name',

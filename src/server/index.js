@@ -1,7 +1,7 @@
 import { createServer, Model, Factory } from 'miragejs';
 import users, { factoryUsers } from './seeds/users';
 import allTypes from './seeds/allTypes';
-import certificates,  { factoryCertificates } from './seeds/certificates';
+import certificates from './seeds/certificates';
 import registers, { factoryRegisters } from './seeds/registers';
 import usersRoutes from './routes/users';
 import authRoutes from './routes/auth';
@@ -23,7 +23,6 @@ export function makeServer({ environment = 'development' } = {}) {
     factories: {
       user: Factory.extend(factoryUsers),
       register: Factory.extend(factoryRegisters),
-      certificate: Factory.extend(factoryCertificates),
     },
 
     seeds(server) {

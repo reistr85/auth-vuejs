@@ -1,6 +1,6 @@
 import { pagination } from '../pagination';
 import { softDelete } from '../softDelete';
-import { getText, formatPhone } from '@/utils';
+import { getText, formatCurrency } from '@/utils';
 import { typeRegister } from '@/utils/options';
 import { baseFields } from '../baseFields';
 import { dateTime } from '../dateTime';
@@ -10,13 +10,12 @@ export default (server) => {
   server.get('/certificates', (schema, request) => {
     const certificates = schema.certificates.all();
     const { page, perPage } = request.queryParams;
-    console.log(certificates);
     certificates.models = softDelete(certificates);
     certificates.models = certificates.models.map((item) => {
       return {
         ...item.attrs,
         type_formatted: getText(typeRegister, item.type),
-        cell_phone_formatted: formatPhone(item.cell_phone),
+        price_formatted: formatCurrency(item.price),
       };
     });
 

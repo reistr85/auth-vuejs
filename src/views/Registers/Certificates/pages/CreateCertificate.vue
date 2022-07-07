@@ -15,8 +15,5 @@ import DynamicFormPage from '@/components/dynamics/DynamicFormPage';
 export default {
   name: 'CreateCertificate',
   components: { PageHeader, PageContent, DynamicFormPage },
-  data() {
-    return {};
-  }
 };
 </script>

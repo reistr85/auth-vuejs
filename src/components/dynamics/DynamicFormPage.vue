@@ -16,17 +16,6 @@
             </v-row>
           </v-expansion-panel-content>
 
-          <v-expansion-panel-content v-if="group.type === 'dataTable'">
-            <!-- <DataTable
-              show-select
-              single-select
-              :headers="[]"
-              :items="{data: []}"
-              :loading="false" /> -->
-              <!-- {{ getItemsChildren(group) }} -->
-              {{ itemsChildren[group.service.items] }}
-          </v-expansion-panel-content>
-
           <v-expansion-panel-content v-if="group.type === 'address'">
             <AddressFormPage :address="address" @setAddressByZipCode="setAddressByZipCode" />
           </v-expansion-panel-content>
@@ -63,6 +52,10 @@ export default {
     service: {
       type: Object,
       required: true
+    },
+    fixedPayload: {
+      type: Object,
+      default: () => {}
     }
   },
   directives: { mask },
@@ -143,7 +136,7 @@ export default {
     },
     create() {
       if (this.schema.formAddress) this.localItem.address = this.address;
-      this.service.create(this.localItem).then(() => {
+      this.service.create({ ...this.localItem, ...this.fixedPayload }).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.createdRegister);
         this.$router.back();
         this.loadingSave = false;
@@ -157,7 +150,7 @@ export default {
       const { id } = this.$route.params;
       if (this.schema.formAddress) this.localItem.address = this.address;
 
-      this.service.update(id, this.localItem).then(() => {
+      this.service.update(id, { ...this.localItem, ...this.fixedPayload }).then(() => {
         this.$noty.success(this.$locales.pt.default.alerts.updatedRegister);
         this.$router.back();
         this.loadingSave = false;
@@ -182,10 +175,10 @@ export default {
 
           if (item.type === 'select' && item.service?.has) {
             axios[item.service.verb](`${item.service.endpoint}?${item.service.queryParams}`).then((res) => {
-              const items = res.data.data.map((i) => {
+              const items = res.data[item.service.domain].map((i) => {
                 return { [item.itemText]: i[item.itemText], [item.itemValue]: i[item.itemValue] };
               });
-              items.unshift({ [item.itemText]: '', [item.itemValue]: 0 });
+              if (item.service.optional) items.unshift({ [item.itemText]: '', [item.itemValue]: 0 });
               this.$set(this.itemsSelect, item.name, items);
             }).catch(() => {
             });

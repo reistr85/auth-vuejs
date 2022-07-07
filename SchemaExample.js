@@ -117,7 +117,9 @@ export default {
           items: [],
           service: {
             has: true,
+            optional: false,
             verb: 'get',
+            domain: 'allTypes',
             endpoint: 'filters',
             queryParams: 'domain=all-types&filter[type]=category',
           },

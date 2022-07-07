@@ -1,8 +1,6 @@
 import { typePageOptions } from '@/utils';
-import { text, users } from '@/utils/icons';
+import { text, certificate } from '@/utils/icons';
 import { required } from '@/utils/rules';
-import { typeRegister } from '@/utils/options';
-import { cell_phone } from '@/utils/masks';
 
 export default {
   domain: 'certificates',
@@ -40,16 +38,6 @@ export default {
     has: true,
     items: [
       {
-        type: 'select',
-        name: 'type',
-        label: 'Tipo Usuário',
-        icon: text,
-        md: 6,
-        items: {
-          data: typeRegister
-        }
-      },
-      {
         type: 'text',
         name: 'name',
         label: 'Nome',
@@ -76,24 +64,56 @@ export default {
   },
   fields: [
     {
-      title: 'Dados do Cadastro',
-      icon: users,
+      title: 'Dados do Certificado',
+      icon: certificate,
       openGroup: true,
       items: [
         {
           type: 'select',
-          name: 'type',
-          formattedName: 'type_formatted',
-          label: 'Tipo Usuário',
+          name: 'certificate_type_id',
+          formattedName: 'certificate_type_formatted',
+          label: 'Tipo',
           align: '',
           md: '4',
           rules: [required],
           list: true,
           readonly: false,
           disabled: false,
-          items: typeRegister,
-          itemText: 'text',
-          itemValue: 'value'
+          items: [],
+          service: {
+            has: true,
+            optional: false,
+            verb: 'get',
+            domain: 'allTypes',
+            endpoint: 'allTypes',
+            queryParams: 'type=certificateType',
+          },
+          itemText: 'name',
+          itemValue: 'id'
+        },
+        {
+          type: 'select',
+          name: 'certificate_period_id',
+          formattedName: 'certificate_period_formatted',
+          label: 'Período',
+          noSortable: true,
+          align: '',
+          md: '4',
+          rules: [required],
+          list: true,
+          readonly: false,
+          disabled: false,
+          items: [],
+          service: {
+            has: true,
+            optional: false,
+            verb: 'get',
+            domain: 'allTypes',
+            endpoint: 'allTypes',
+            queryParams: 'type=certificatePeriod',
+          },
+          itemText: 'name',
+          itemValue: 'id'
         },
         {
           type: 'text',
@@ -110,26 +130,24 @@ export default {
         },
         {
           type: 'text',
-          name: 'email',
-          formattedName: 'email',
-          label: 'E-mail',
+          name: 'description',
+          formattedName: 'description',
+          label: 'Descrição',
           align: '',
           md: '4',
-          rules: [required],
+          rules: [],
           list: true,
           readonly: false,
           disabled: false,
         },
         {
-          type: 'simpleMask',
-          name: 'cell_phone',
-          formattedName: 'cell_phone_formatted',
-          label: 'Celular',
+          type: 'money',
+          name: 'price',
+          formattedName: 'price_formatted',
+          label: 'Preço',
           align: '',
           md: '3',
           rules: [required],
-          inputMask: cell_phone,
-          outputMask: '###########',
           list: true,
           readonly: false,
           disabled: false,
@@ -137,12 +155,5 @@ export default {
       ],
     },
   ],
-  footer: [
-    {
-      name: 'total_devolutions',
-      label: 'Valor Devolvido',
-      class: 'customfootervalue',
-      md: 2,
-    },
-  ]
+  footer: []
 };
