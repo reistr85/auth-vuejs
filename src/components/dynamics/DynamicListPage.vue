@@ -1,6 +1,7 @@
 <template>
   <div>
     <DynamicListPageHeader
+      ref="dynamicListPageHeader"
       :schema="schema"
       :searchChips="searchChips"
       @searchItems="searchItems"
@@ -121,6 +122,7 @@ export default {
       loading: false,
       loadingDestroy: false,
       searches: {},
+      simpleSearch: [],
       searchChips: [],
       headers: [],
       options: {},
@@ -217,19 +219,27 @@ export default {
         });
       }
     },
-    getAll() {
+    getAll(filters = undefined) {
       this.loading = true;
 
       const params = {
         ...this.paramsPaginator,
+        ...filters && { filters },
         customSearch: this.search,
       };
 
       this.service.index(params).then((res) => {
-        const { total } = res.data;
+        const { totalItems } = res.data;
+
         this.localItems = res.data;
-        this.totalLocalItems = total;
+        this.totalLocalItems = totalItems;
         this.loading = false;
+
+        if (!this.schema.showInactive) {
+          this.localItems[this.schema.domain] = this.localItems[this.schema.domain].filter((item) => {
+            return item.situation === this.$enums.situation.ACTIVE;
+          });
+        }
 
         if (this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
@@ -242,8 +252,9 @@ export default {
     getFilters(payload) {
       payload = { ...payload, ...this.paramsPaginator, };
       this.service.filters(payload).then((res) => {
+        const { totalItems } = res.data;
         this.localItems = res.data;
-        this.totalLocalItems = res.data.total;
+        this.totalLocalItems = totalItems;
         this.loading = false;
 
         if (this.schema.business != undefined)
@@ -255,37 +266,30 @@ export default {
       });
     },
     searchItems(search) {
-      if (this.fixedFilter) search[this.fixedFilterParams.name] = { ...this.fixedFilterParams };
+      if (this.fixedFilter) search[this.fixedFilterParams.name] = this.fixedFilterParams;
 
       this.searches = search;
       this.searchChips = [];
       let filter = {};
       Object.keys(search).forEach((key) => {
         filter[key] = search[key].value;
-        this.searchChips.push({
-          name: search[key].name,
-          label: search[key].label,
-          value: search[key].value,
-          formattedValue: search[key].formattedValue,
-          noChip: search[key].noChip
-        });
+        if (!search[key].fixedFilter) {
+          this.searchChips.push({
+            name: search[key].name,
+            label: search[key].label,
+            value: search[key].value,
+            formattedValue: search[key].formattedValue,
+            noChip: search[key].noChip
+          });
+        }
       });
-
-      const payload = { params: { ...this.paramsPaginator }, filter, };
-      this.getFilters(payload);
+      this.getAll(filter);
     },
     closeChip(value) {
-      this.searchChips = this.searchChips.filter((item) => {
-        if (item.name === value.name) this.$refs.searchListPage.localItem[item.name] = '';
-        return item.name != value.name;
-      });
-
-      let payload = {};
-      this.searchChips.forEach((item) => {
-        payload[item.name] = item;
-      });
-
-      this.searchItems(payload);
+      this.searchChips = this.searchChips.filter(data => data.value != value.value);
+      this.$refs.dynamicListPageHeader.$children[0].localItem[value.name] = '';
+      this.$refs.dynamicListPageHeader.$children[0].localItem[value.formattedValue] = '';
+      delete this.$refs.dynamicListPageHeader.$children[0].form[value.name];
     },
     openDialogDestroy(item) {
       this.selected.push(item);
@@ -326,12 +330,11 @@ export default {
       this.loading = true;
       let situation = this.types.typeSituation[0].value;
       item.dataListProps.item.situation === this.types.typeSituation[0].value ? situation = this.types.typeSituation[1].value : situation = this.types.typeSituation[0].value;
-      console.log('situation', situation);
+
       this.service.update(item.dataListProps.item.id, { situation: situation }).then(() => {
         this.getAll();
         this.loading = false;
-      }).catch((err) => {
-        console.log('err', err);
+      }).catch(() => {
         this.loading = false;
         this.$noty.error('Erro ao atualizar a situação.');
       });

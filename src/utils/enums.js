@@ -3,6 +3,12 @@ const typeYesNo = Object.freeze({
   NO: 'no',
 });
 
+const situation = Object.freeze({
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+});
+
 export {
   typeYesNo,
+  situation,
 };

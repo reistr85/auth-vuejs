@@ -1,3 +1,16 @@
+const typeRegister = [
+  {id: 1, text: 'Funcionário', value: 'employee'},
+  {id: 2, text: 'Cliente', value: 'customer'},
+  {id: 3, text: 'Fornecedor', value: 'provider'},
+];
+
+const typeAllType = [
+  {id: 1, text: 'Tipo de Certificado', value: 'certificateType'},
+  {id: 2, text: 'Período do Certificado', value: 'certificatePeriod'},
+  {id: 3, text: 'Forma de Pagamento', value: 'paymentMethod'},
+  {id: 4, text: 'Tipo de Agendamento', value: 'typeSchedule'},
+];
+
 const typeUser = [
   {id: 1, text: 'Administrador', value: 'admin'},
   {id: 2, text: 'Gerente', value: 'manager'},
@@ -12,7 +25,7 @@ const typeYesNo = [
 
 const typeSituation = [
   {id: 1, text: 'Ativo', value: 'active'},
-  {id: 2, text: 'Desativado', value: 'disabled'}
+  {id: 2, text: 'Inativo', value: 'inactive'}
 ];
 
 const UF = [
@@ -47,6 +60,8 @@ const UF = [
 ];
 
 export {
+  typeRegister,
+  typeAllType,
   typeUser,
   typeYesNo,
   typeSituation,

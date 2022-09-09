@@ -13,7 +13,7 @@
             <v-list-item-icon>
               <v-icon class="icon-side-bar">{{ icons.check }}</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="text-side-bar">Ativar/Desativar</v-list-item-title>
+            <v-list-item-title class="text-side-bar">{{getLabelSituation(dataListProps.item.situation)}}</v-list-item-title>
           </v-list-item>
         </v-list>
         <v-list v-for="(i, index) in schema.listActions.more.items" :key="index" dense>
@@ -27,23 +27,12 @@
       </v-card>
     </v-menu>
 
-    <v-btn
-      v-if="!schema.listActions.noShow"
-      icon
-      class="my-1"
-      fab
-      color="secondary"
-      x-small
-      :to="{name: schema.routes.show.name, params: {id: dataListProps.item.id}}">
+    <v-btn v-if="!schema.listActions.noShow" icon class="my-1" fab color="secondary" x-small
+      :to="{ name: routeName, params: { id: dataListProps.item.id } }">
       <v-icon dark>{{ icons.view }}</v-icon>
     </v-btn>
 
-    <v-btn
-      icon v-if="!schema.listActions.noDestroy"
-      class="my-1"
-      fab
-      color="red"
-      x-small
+    <v-btn icon v-if="!schema.listActions.noDestroy" class="my-1" fab color="red" x-small
       :disabled="dataListProps.item.destroyDisabled"
       @click="$emit('openDialogDestroy', dataListProps)">
       <v-icon dark>{{ icons.destroy }}</v-icon>
@@ -68,5 +57,16 @@ export default {
       required: true,
     }
   },
+  computed: {
+    routeName () {
+      return this.$route.meta.typeAllType ? this.schema.routes[this.$route.meta.typeAllType].show.name :
+        this.schema.routes.show.name;
+    }
+  },
+  methods: {
+    getLabelSituation (situationItem) {
+      return situationItem === this.$enums.situation.ACTIVE ? 'Desativar' : 'Ativar';
+    }
+  }
 };
 </script>

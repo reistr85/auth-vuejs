@@ -87,7 +87,9 @@ export default {
         name: field.name,
         label: field.label,
         value: field.type === 'simpleMask' ? onlyNumbers(this.localItem[field.name]) : this.localItem[field.name],
-        formattedValue: this.localItem[field.name],
+        ...field.type === 'select' && { formattedValue: getText(field.items.data, this.localItem[field.name]) },
+        ...field.type === 'text' && { formattedValue: this.localItem[field.name] },
+        ...field.type === 'simpleMask' && { formattedValue: this.localItem[field.name] },
       });
     },
     getFormattedValues(field, value) {

@@ -13,11 +13,10 @@ export const pagination = (domain, data, page, perPage) => {
 
   return {
     [domain]: filtered,
-    total: data.models.length,
-    page,
-    perPage,
-    lastPage: Math.ceil(data.models.length / perPage),
-    from,
-    to
+    totalItems: data.models.length,
+    itemCount: filtered.length,
+    itemsPerPage: perPage,
+    totalPages: Math.ceil(data.models.length / perPage),
+    currentPage: page,
   };
 };
