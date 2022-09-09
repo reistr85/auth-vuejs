@@ -230,9 +230,16 @@ export default {
 
       this.service.index(params).then((res) => {
         const { totalItems } = res.data;
+
         this.localItems = res.data;
         this.totalLocalItems = totalItems;
         this.loading = false;
+
+        if (!this.schema.showInactive) {
+          this.localItems[this.schema.domain] = this.localItems[this.schema.domain].filter((item) => {
+            return item.situation === this.$enums.situation.ACTIVE;
+          });
+        }
 
         if (this.schema.business != undefined)
           this.schema.business.beforeList(this.localItems, this.schema);
@@ -323,12 +330,11 @@ export default {
       this.loading = true;
       let situation = this.types.typeSituation[0].value;
       item.dataListProps.item.situation === this.types.typeSituation[0].value ? situation = this.types.typeSituation[1].value : situation = this.types.typeSituation[0].value;
-      console.log('situation', situation);
+
       this.service.update(item.dataListProps.item.id, { situation: situation }).then(() => {
         this.getAll();
         this.loading = false;
-      }).catch((err) => {
-        console.log('err', err);
+      }).catch(() => {
         this.loading = false;
         this.$noty.error('Erro ao atualizar a situação.');
       });

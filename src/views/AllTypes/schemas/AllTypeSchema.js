@@ -8,6 +8,7 @@ export default {
   title: 'Tipos Gerais',
   description: 'Lista de cadastros gerais do sistema',
   createBtn: 'Novo Tipo',
+  showInactive: true,
   routes: {
     certificateType: {
       list: {
@@ -82,8 +83,9 @@ export default {
     has: true,
     noShow: false,
     noDestroy: false,
+    situation: true,
     more: {
-      has: false,
+      has: true,
       items: []
     },
   },

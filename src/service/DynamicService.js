@@ -39,10 +39,12 @@ const DynamicService = (endpoint, schema, options = {}) => ({
       if (options.formatResponse && typeof options.formatResponse === 'function') {
         if (res.data?.data) {
           res.data.data.forEach((item) => {
+            item.name = '123';
             options.formatResponse(item);
           });
         } else {
           res.data.forEach((item) => {
+            item.name = '123';
             options.formatResponse(item);
           });
         }

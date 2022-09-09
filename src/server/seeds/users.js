@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { baseFields } from '../utils//baseFields';
 
 export default (server) => {
   server.create('user', {
@@ -6,10 +7,7 @@ export default (server) => {
     email: 'admin@mail.com',
     password: '12345678',
     type: 'admin',
-    situation: 'active',
-    created_at: '2022-06-10 00:00:00',
-    updated_at: '2022-06-10 00:00:00',
-    deleted_at: null,
+    ...baseFields,
   });
   server.createList('user', 30);
 };

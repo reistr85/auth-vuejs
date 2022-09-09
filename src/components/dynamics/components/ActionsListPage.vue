@@ -13,7 +13,7 @@
             <v-list-item-icon>
               <v-icon class="icon-side-bar">{{ icons.check }}</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="text-side-bar">Ativar/Desativar</v-list-item-title>
+            <v-list-item-title class="text-side-bar">{{getLabelSituation(dataListProps.item.situation)}}</v-list-item-title>
           </v-list-item>
         </v-list>
         <v-list v-for="(i, index) in schema.listActions.more.items" :key="index" dense>
@@ -61,6 +61,11 @@ export default {
     routeName () {
       return this.$route.meta.typeAllType ? this.schema.routes[this.$route.meta.typeAllType].show.name :
         this.schema.routes.show.name;
+    }
+  },
+  methods: {
+    getLabelSituation (situationItem) {
+      return situationItem === this.$enums.situation.ACTIVE ? 'Desativar' : 'Ativar';
     }
   }
 };

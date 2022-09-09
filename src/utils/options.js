@@ -1,7 +1,7 @@
 const typeRegister = [
-  {id: 1, text: 'Indicação', value: 'indication'},
+  {id: 1, text: 'Funcionário', value: 'employee'},
   {id: 2, text: 'Cliente', value: 'customer'},
-  {id: 3, text: 'Agente', value: 'agent'},
+  {id: 3, text: 'Fornecedor', value: 'provider'},
 ];
 
 const typeAllType = [
@@ -25,7 +25,7 @@ const typeYesNo = [
 
 const typeSituation = [
   {id: 1, text: 'Ativo', value: 'active'},
-  {id: 2, text: 'Desativado', value: 'disabled'}
+  {id: 2, text: 'Inativo', value: 'inactive'}
 ];
 
 const UF = [

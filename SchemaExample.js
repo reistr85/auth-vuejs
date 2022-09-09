@@ -1,5 +1,5 @@
 import { typePageOptions } from '@/utils';
-import { check, text, calendar, users } from '@/utils/icons';
+import { text, calendar, users } from '@/utils/icons';
 import { required } from '@/utils/rules';
 import { typeUser } from '@/utils/options';
 
@@ -8,6 +8,7 @@ export default {
   title: 'Usuários',
   description: 'Lista de todos os usuários cadastrados no sistema',
   createBtn: 'Novo Usuário',
+  showInactive: true,
   routes: {
     list: {
       name: 'users',
@@ -231,5 +232,5 @@ export default {
       class: 'customfootervalue',
       md: 2,
     },
-  ]
-}
+  ],
+};
